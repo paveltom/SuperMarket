@@ -1,4 +1,4 @@
-package com.company;
+package com.company.BusinessLogicLayer;
 
 public class Branch {
     private int branchID;

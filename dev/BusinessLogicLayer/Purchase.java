@@ -1,4 +1,4 @@
-package com.company;
+package com.company.BusinessLogicLayer;
 
 import java.util.Date;
 import java.util.Map;
