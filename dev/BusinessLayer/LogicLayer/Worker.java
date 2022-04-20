@@ -1,5 +1,6 @@
 package com.company.BusinessLayer.LogicLayer;
 
+import java.text.SimpleDateFormat;
 import java.time.chrono.ChronoLocalDateTime;
 import java.util.Date;
 
@@ -14,9 +15,17 @@ public class Worker {
     public Double Pay;
     public Date StartDate;
 
-    public Worker(String _Id)
+    public Worker(String _Id,String _StartDate)
     {
         if(_Id.length() != 9 )
             throw new IllegalArgumentException("Id has to be 9 numbers");
+        try{
+            SimpleDateFormat format1 = new SimpleDateFormat("dd/MM/yyyy");
+            Date d = format1.parse(_StartDate);
+        }
+        catch (Exception e)
+        {
+            throw new IllegalArgumentException("Date isn't valid");
+        }
     }
 }
