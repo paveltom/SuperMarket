@@ -1,5 +1,9 @@
 package com.company.ServiceLayer;
 
+import com.company.BusinessLogicLayer.Type;
+
+import java.util.Date;
+
 public class Service
 {
     StockControllerService scs;
@@ -8,7 +12,7 @@ public class Service
         //Requirement 2
     }
 
-    public void getPurchasesHistoryReport(){
+    public void getPurchasesHistoryReport(int branchID){
         //Requirement 3
     }
 
@@ -16,55 +20,51 @@ public class Service
         //Requirement 4
     }
 
-    public void getCategories(){
+    public void getCategories(int branchID){
         //Requirement 5
     }
 
-    public void getStockReport(){
+    public void getStockReport(int branchID){
         //Requirement 6
     }
 
-    public void getStockReportByCategory(){
+    public void getStockReportByCategory(int branchID, int CategoryID){
         //Requirement 7
     }
 
-    public void getUnusableProductsReport(){
+    public void getUnusableProductsReport(int branchID){
         //Requirement 8+9
     }
 
-    public void insertNewProduct(){
+    public void insertNewProduct(int branchID, String productName, String productManufacturer, int categoryID, Date supplyTime, int demand){
 
     }
 
-    public void insertNewCategory(){
+    public void insertNewCategory(int branchID,String categoryName){
 
     }
 
-    public void insertNewDiscount(){
+    public void insertNewDiscount(int branchID, int productID, Date startDate, Date endDate, int amount, Type t){
 
     }
 
-    public void insertNewPurchase(){
+    public void insertNewPurchase(int branchID, Date purchaseDate, Map m){
 
     }
 
-    public void deleteProduct(){
+    public void deleteProduct(int branchID, int productID){
 
     }
 
-    public void deleteCategory(){
+    public void deleteCategory(int branchID, int categoryID){
 
     }
 
-    public void deleteDiscount(){
+    public void deleteDiscount(int branchID, int discountID){
 
     }
 
-    public void deletePurchase(){
+    public void deletePurchase(int branchID, int purchaseID){
 
     }
-
-
-
-
 }
