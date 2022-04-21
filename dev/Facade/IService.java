@@ -1,5 +1,5 @@
-package BusinessLayer.Facade;
-import BusinessLayer.DeliveryRecipe;
+package com.company.Facade;
+
 import java.util.Date;
 import java.util.List;
 

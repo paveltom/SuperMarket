@@ -1,4 +1,4 @@
-package BusinessLayer.Facade;
+package com.company.Facade;
 
 public class ResponseT<T> extends Response
 {
