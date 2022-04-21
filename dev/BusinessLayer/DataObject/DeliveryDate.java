@@ -1,24 +1,42 @@
 package BusinessLayer.DataObject;
 
-public class DeliveryDate
+public class DeliveryDate implements Comparable<DeliveryDate>
 {
-    public final int Day, Month, Shift;
-    public final int Year;
-    public final byte MONTH = 13, DAYS = 32, SHIFT = 4;
+    public final int Shift;
+    public final Date Date;
     private final String[] Shifts = {"06:00-09:00", "09:00-12:00", "12:00-15:00", "15:00-18:00"};
 
     public DeliveryDate(int day, int month, int year, int shift)
     {
-        Day = day % 32;
-        Month = month % MONTH;
-        Year = year;
-        Shift = shift % 4;
+        Date = new Date(day, month, year);
+        Shift = shift;
     }
 
     @Override
     public String toString()
     {
-        return String.format("%d/%d/%d %s", Day, Month, Year, Shifts[Shift]);
+        return String.format("%s %s", Date, Shifts[Shift]);
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if(this == obj)
+            return true;
+        if(!(obj instanceof DeliveryDate))
+            return false;
+        else
+        {
+            DeliveryDate other = (DeliveryDate) obj;
+            return Date.equals(other.Date) && Shift == other.Shift;
+        }
+    }
+
+    @Override
+    public int compareTo(DeliveryDate o)
+    {
+        boolean dateEquals = Date.equals(o.Date);
+        return dateEquals ? Shift - o.Shift : Date.compareTo(o.Date);
     }
 
 }

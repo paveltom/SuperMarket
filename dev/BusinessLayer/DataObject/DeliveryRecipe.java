@@ -5,13 +5,13 @@ import java.util.Map;
 public class DeliveryRecipe
 {
     public final int OrderId, DeliveryId;
-    public final Map<Integer, Integer> UnDeliveredProducts; /* Enumerate remaining amount to supply for each product. */
-
     /*
     * If an order request can not be shipped within one delivery, this flag will be set.
     * Delivery caller is responsible to demand shipment of UnDeliveredProduct.
     */
     public final boolean IsPartitioned;
+    /* Enumerate remaining amount to supply for each product. */
+    public final Map<Integer, Integer> UnDeliveredProducts;
     public final DeliveryDate DueDate;
     public final Driver DeliveryPerson;
     public final Truck DeliveryTruck;
