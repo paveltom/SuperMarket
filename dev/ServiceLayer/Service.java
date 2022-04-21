@@ -32,8 +32,37 @@ public class Service
         //Requirement 8+9
     }
 
+    public void insertNewProduct(){
 
+    }
 
+    public void insertNewCategory(){
+
+    }
+
+    public void insertNewDiscount(){
+
+    }
+
+    public void insertNewPurchase(){
+
+    }
+
+    public void deleteProduct(){
+
+    }
+
+    public void deleteCategory(){
+
+    }
+
+    public void deleteDiscount(){
+
+    }
+
+    public void deletePurchase(){
+
+    }
 
 
 
