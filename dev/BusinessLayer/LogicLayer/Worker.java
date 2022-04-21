@@ -30,8 +30,9 @@ public class Worker {
         return Pay;
     }
 
-    public Date getStartDate() {
-        return StartDate;
+    public String getStartDate() {
+        SimpleDateFormat format1 = new SimpleDateFormat("dd/MM/yyyy");
+        return format1.format(this.StartDate);
     }
 
     public String getSocialConditions() {
@@ -155,4 +156,8 @@ public class Worker {
 
     }
 
+    public String toString()
+    {
+        return "Id:"+this.Id+"\nName:"+this.Name+"\nJob:"+this.Job+"\nSMQualification:Yes\nBank Details:"+this.BankDetails+"\nPay:"+this.Pay+"\nStartDate"+this.getStartDate()+"\nSocial Conditions:"+this.SocialConditions;
+    }
 }

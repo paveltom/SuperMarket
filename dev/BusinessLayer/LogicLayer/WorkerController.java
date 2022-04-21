@@ -156,5 +156,31 @@ public class WorkerController {
         AllWorkers.replace(_Id,changeWorker);
     }
 
+    /**
+     * Function to get toString of a worker via his Id
+     * @param _Id - Id of the worker we want to get
+     * @return A string of the worker or an Exception if no such worker exists
+     */
+    public String GetWorkerToString(String _Id)
+    {
+        if (!AllWorkers.containsKey(_Id))
+            throw new IllegalArgumentException("There is no worker with id "+_Id);
+        return AllWorkers.get(_Id).toString();
+    }
+
+    /**
+     * Function to get all workers toString
+     * @return A string of all the workers details
+     */
+    public String GetAllWorkersToString()
+    {
+        String allWorkersString = "";
+        for (String key:
+             AllWorkers.keySet()) {
+            allWorkersString += AllWorkers.get(key).toString();
+        }
+        return allWorkersString;
+    }
+
 
 }

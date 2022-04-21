@@ -31,7 +31,7 @@ public class WorkerService {
         }
         catch (Exception e)
         {
-
+            System.out.println(e.getMessage());
         }
     }
 
@@ -46,7 +46,7 @@ public class WorkerService {
         }
         catch (Exception e)
         {
-
+            System.out.println(e.getMessage());
         }
     }
 
@@ -62,7 +62,7 @@ public class WorkerService {
         }
         catch (Exception e)
         {
-
+            System.out.println(e.getMessage());
         }
     }
 
@@ -78,7 +78,7 @@ public class WorkerService {
         }
         catch(Exception e)
         {
-
+            System.out.println(e.getMessage());
         }
     }
 
@@ -94,7 +94,7 @@ public class WorkerService {
         }
         catch(Exception e)
         {
-
+            System.out.println(e.getMessage());
         }
     }
 
@@ -110,7 +110,7 @@ public class WorkerService {
         }
         catch(Exception e)
         {
-
+            System.out.println(e.getMessage());
         }
     }
 
@@ -126,7 +126,7 @@ public class WorkerService {
         }
         catch(Exception e)
         {
-
+            System.out.println(e.getMessage());
         }
     }
 
@@ -142,7 +142,7 @@ public class WorkerService {
         }
         catch(Exception e)
         {
-
+            System.out.println(e.getMessage());
         }
     }
 
@@ -158,7 +158,7 @@ public class WorkerService {
         }
         catch(Exception e)
         {
-
+            System.out.println(e.getMessage());
         }
     }
 
@@ -174,7 +174,32 @@ public class WorkerService {
         }
         catch(Exception e)
         {
-
+            System.out.println(e.getMessage());
         }
+    }
+
+    /**
+     * Function to get a workers details by his Id
+     * @param _Id - The id of the worker
+     * @return A string of the worker's details or a error msg
+     */
+    public String getWorkerString(String _Id)
+    {
+        try{
+            return wController.GetWorkerToString(_Id);
+        }
+        catch (Exception e)
+        {
+           return e.getMessage();
+        }
+    }
+
+    /**
+     * Function to get all the workers details
+     * @return A string of all the workers details
+     */
+    public String GetAllWorkersString()
+    {
+        return wController.GetAllWorkersToString();
     }
 }

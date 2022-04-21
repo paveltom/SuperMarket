@@ -1,5 +1,6 @@
 package com.company.BusinessLayer.LogicLayer;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -38,5 +39,27 @@ public class Shift {
 
     public HashMap<JobEnum, LinkedList<Worker>> getWorkers() {
         return workers;
+    }
+
+    public String toString() {
+        String s="[\n" +
+                "Date: "+new SimpleDateFormat("dd/MM/yyyy").format(date)+
+                "\nShift type: ";
+        if(this.shiftType == 0) s=s+"Morning";
+        else s=s+"Evening";
+        s+="\nManager: "+this.manager.Name+" ("+this.manager.Id+")+" +
+                "\nWorkers:\n";
+        for (JobEnum j:
+                workers.keySet()) {
+            s+="\t"+j+": ";
+            for (Worker w:
+                    workers.get(j)) {
+                s+=w.Name+" ("+w.Id+"), ";
+            }
+            s=s.substring(0,s.length()-2);
+            s+="\n";
+        }
+        s+="]";
+        return s;
     }
 }
