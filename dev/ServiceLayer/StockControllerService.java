@@ -1,84 +1,149 @@
 package com.company.ServiceLayer;
 
-import com.company.BusinessLogicLayer.Branch;
-import com.company.BusinessLogicLayer.BranchController;
-import com.company.BusinessLogicLayer.Type;
+import com.company.BusinessLogicLayer.*;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class StockControllerService
 {
     BranchController bc;
 
-    public void addNewBranch(String name){
-        bc.addNewBranch(name);
+    public Response addNewBranch(String name){
+        try{
+            bc.addNewBranch(name);
+            return new Response();
+        }
+        catch (Exception e)
+        {
+            return new Response(e.getMessage());
+        }
+
     }
 
-    public void getProductsInStock(int branchID){
+    public ResponseT<List<Product>> getProductsInStock(int branchID){
         //Requirement 2
-        bc.getProductsInStock(branchID);
+        return ResponseT.FromValue(bc.getProductsInStock(branchID));
     }
 
-    public void getPurchasesHistoryReport(int branchID){
+    public ResponseT<List<Purchase>> getPurchasesHistoryReport(int branchID){
         //Requirement 3
-        bc.getPurchasesHistoryReport(branchID);
+        return  ResponseT.FromValue(bc.getPurchasesHistoryReport(branchID));
     }
 
-    public void getCurrentDiscounts(int branchID){
+    public ResponseT<List<Discount>> getCurrentDiscounts(int branchID){
         //Requirement 4
-        bc.getCurrentDiscounts(branchID);
+        return ResponseT.FromValue(bc.getCurrentDiscounts(branchID));
     }
 
-    public void getCategories(int branchID){
+    public ResponseT<List<Category>> getCategories(int branchID){
         //Requirement 5
-        bc.getCategories(branchID);
+        return ResponseT.FromValue(bc.getCategories(branchID));
     }
 
-    public void getStockReport(int branchID){
+    public ResponseT<List<Item>> getStockReport(int branchID){
         //Requirement 6
-        bc.getStockReport(branchID);
+        return ResponseT.FromValue(bc.getStockReport(branchID));
     }
 
-    public void getStockReportByCategory(int branchID, int categoryID){
+    public ResponseT<List<Item>> getStockReportByCategory(int branchID, int categoryID){
         //Requirement 7
-        bc.getStockReportByCategory(branchID,categoryID);
+        return ResponseT.FromValue(bc.getStockReportByCategory(branchID,categoryID));
     }
 
-    public void getUnusableProductsReport(int branchID){
+    public ResponseT<List<Product>> getUnusableProductsReport(int branchID){
         //Requirement 8+9
-        bc.getUnusableProductsReport(branchID);
+        return ResponseT.FromValue(bc.getUnusableProductsReport(branchID));
     }
 
-    public void insertNewProduct(int branchID, String productName, String productManufacturer, int categoryID, Date supplyTime, int demand){
-        bc.insertNewProduct(branchID,productName,productManufacturer,categoryID,supplyTime,demand);
+    public Response insertNewProduct(int branchID, String productName, String productManufacturer, int categoryID, Date supplyTime, int demand){
+        try
+        {
+            bc.insertNewProduct(branchID, productName, productManufacturer, categoryID, supplyTime, demand);
+            return new Response();
+        }
+        catch (Exception e)
+        {
+            return new Response(e.getMessage());
+        }
     }
 
-    public void insertNewCategory(int branchID,String categoryName){
-        bc.insertNewCategory(branchID,categoryName);
+    public Response insertNewCategory(int branchID,String categoryName){
+        try
+        {
+            bc.insertNewCategory(branchID, categoryName);
+            return new Response();
+        }
+        catch (Exception e)
+        {
+            return new Response(e.getMessage());
+        }
     }
 
-    public void insertNewDiscount(int branchID, int productID, Date startDate, Date endDate, int amount, Type t){
-        bc.insertNewDiscount(branchID, productID, startDate, endDate, amount, t);
+    public Response insertNewDiscount(int branchID, int productID, Date startDate, Date endDate, int amount, Type t){
+        try
+        {
+            bc.insertNewDiscount(branchID, productID, startDate, endDate, amount, t);
+            return new Response();
+        }
+        catch (Exception e)
+        {
+            return new Response(e.getMessage());
+        }
+
     }
 
     //public void insertNewPurchase(int branchID, Date purchaseDate, Map m){
 
     //}
 
-    public void deleteProduct(int branchID, int productID){
-        bc.deleteProduct(branchID, productID);
+    public Response deleteProduct(int branchID, int productID){
+        try
+        {
+            bc.deleteProduct(branchID, productID);
+            return new Response();
+        }
+        catch (Exception e)
+        {
+            return new Response(e.getMessage());
+        }
     }
 
-    public void deleteCategory(int branchID, int categoryID){
-        bc.deleteCategory(branchID, categoryID);
+    public Response deleteCategory(int branchID, int categoryID) {
+        try
+        {
+            bc.deleteCategory(branchID, categoryID);
+            return new Response();
+        }
+        catch (Exception e)
+        {
+            return new Response(e.getMessage());
+        }
     }
 
-    public void deleteDiscount(int branchID, int discountID){
-        bc.deleteDiscount(branchID, discountID);
+    public Response deleteDiscount(int branchID, int discountID){
+        try
+        {
+            bc.deleteDiscount(branchID, discountID);
+            return new Response();
+        }
+        catch (Exception e)
+        {
+            return new Response(e.getMessage());
+        }
     }
 
-    public void deletePurchase(int branchID, int purchaseID){
-        bc.deletePurchase(branchID, purchaseID);
+    public Response deletePurchase(int branchID, int purchaseID){
+        try{
+            bc.deletePurchase(branchID, purchaseID);
+            return new Response();
+        }
+        catch (Exception e)
+        {
+            return new Response(e.getMessage());
+        }
+
     }
 
 }
