@@ -1,61 +1,64 @@
 package com.company.ServiceLayer;
 
-import com.company.BusinessLogicLayer.Type;
+import com.company.BusinessLogicLayer.*;
 
+import java.time.format.ResolverStyle;
 import java.util.Date;
+import java.util.List;
 
 public class Service
 {
     StockControllerService scs;
 
-    public void addNewBranch(String name){
+    public Response addNewBranch(String name){
         scs.addNewBranch(name);
     }
 
-    public void getProductsInStock(int branchID){
+    public ResponseT<List<Product>> getProductsInStock(int branchID){
         //Requirement 2
         scs.getProductsInStock(branchID);
     }
 
-    public void getPurchasesHistoryReport(int branchID){
+    public ResponseT<List<Purchase>> getPurchasesHistoryReport(int branchID){
         //Requirement 3
         scs.getPurchasesHistoryReport(branchID);
     }
 
-    public void getCurrentDiscounts(int branchID){
+    public ResponseT<List<Discount>> getCurrentDiscounts(int branchID){
         //Requirement 4
         scs.getCurrentDiscounts(branchID);
     }
 
-    public void getCategories(int branchID){
+    public ResponseT<List<Category>> getCategories(int branchID)
+    {
         //Requirement 5
         scs.getCategories(branchID);
     }
 
-    public void getStockReport(int branchID){
+    public ResponseT<List<Item>> getStockReport(int branchID){
         //Requirement 6
         scs.getStockReport(branchID);
     }
 
-    public void getStockReportByCategory(int branchID, int categoryID){
+    public ResponseT<List<Item>> getStockReportByCategory(int branchID, int categoryID){
         //Requirement 7
         scs.getStockReportByCategory(branchID,categoryID);
     }
 
-    public void getUnusableProductsReport(int branchID){
+    public ResponseT<List<Product>> getUnusableProductsReport(int branchID){
         //Requirement 8+9
         scs.getUnusableProductsReport(branchID);
     }
 
-    public void insertNewProduct(int branchID, String productName, String productManufacturer, int categoryID, Date supplyTime, int demand){
+    public Response insertNewProduct(int branchID, String productName, String productManufacturer, int categoryID, Date supplyTime, int demand){
         scs.insertNewProduct(branchID,productName,productManufacturer,categoryID,supplyTime,demand);
     }
 
-    public void insertNewCategory(int branchID,String categoryName){
+    public Response insertNewCategory(int branchID,String categoryName){
         scs.insertNewCategory(branchID,categoryName);
     }
 
-    public void insertNewDiscount(int branchID, int productID, Date startDate, Date endDate, int amount, Type t){
+    public Response insertNewDiscount(int branchID, int productID, Date startDate, Date endDate, int amount, Type t){
         scs.insertNewDiscount(branchID, productID, startDate, endDate, amount, t);
     }
 
@@ -63,19 +66,19 @@ public class Service
 
     //}
 
-    public void deleteProduct(int branchID, int productID){
+    public Response deleteProduct(int branchID, int productID){
         scs.deleteProduct(branchID, productID);
     }
 
-    public void deleteCategory(int branchID, int categoryID){
+    public Response deleteCategory(int branchID, int categoryID){
         scs.deleteCategory(branchID, categoryID);
     }
 
-    public void deleteDiscount(int branchID, int discountID){
+    public Response deleteDiscount(int branchID, int discountID){
         scs.deleteDiscount(branchID, discountID);
     }
 
-    public void deletePurchase(int branchID, int purchaseID){
+    public Response deletePurchase(int branchID, int purchaseID){
         scs.deletePurchase(branchID, purchaseID);
     }
 }
