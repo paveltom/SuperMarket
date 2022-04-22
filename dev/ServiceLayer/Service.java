@@ -8,10 +8,13 @@ public class Service
 {
     StockControllerService scs;
 
+    public void addNewBranch(String name){
+        scs.addNewBranch(name);
+    }
+
     public void getProductsInStock(int branchID){
         //Requirement 2
         scs.getProductsInStock(branchID);
-
     }
 
     public void getPurchasesHistoryReport(int branchID){
