@@ -11,6 +11,8 @@ public class StockController {
     private int purchasesCounter;
     private List<Category> categories;
     private int categoriesCounter;
+    private List<Discount> discounts;
+    private int discountsCounter;
 
     StockController(){
         products = new ArrayList<Product>();
@@ -19,6 +21,8 @@ public class StockController {
         purchasesCounter = 0;
         categories = new ArrayList<Category>();
         categoriesCounter = 0;
+        discounts = new ArrayList<Discount>();
+        discountsCounter = 0;
     }
 
     public void getProductsInStock(){
@@ -60,7 +64,7 @@ public class StockController {
     }
 
     public void insertNewDiscount(int productID, Date startDate, Date endDate, int amount, Type t){
-
+        discounts.add(new Discount(discountsCounter, productID, startDate, endDate, amount, t));
     }
 
     /*public void insertNewPurchase(Date purchaseDate, Map m){
