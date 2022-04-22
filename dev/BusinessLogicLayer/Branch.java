@@ -1,6 +1,7 @@
 package com.company.BusinessLogicLayer;
 
 import java.util.Date;
+import java.util.List;
 
 public class Branch {
     private int branchID;
@@ -13,38 +14,38 @@ public class Branch {
         stockController = new StockController();
     }
 
-    public void getProductsInStock(){
-        stockController.getProductsInStock();
+    public List<Product> getProductsInStock(){
+        return stockController.getProductsInStock();
     }
 
-    public void getPurchasesHistoryReport(){
+    public List<Purchase> getPurchasesHistoryReport(){
         //Requirement 3
-        stockController.getPurchasesHistoryReport();
+        return stockController.getPurchasesHistoryReport();
     }
 
-    public void getCurrentDiscounts(){
+    public List<Discount> getCurrentDiscounts(){
         //Requirement 4
-        stockController.getCurrentDiscounts();
+        return stockController.getCurrentDiscounts();
     }
 
-    public void getCategories(){
+    public List<Category> getCategories(){
         //Requirement 5
-        stockController.getCategories();
+        return stockController.getCategories();
     }
 
-    public void getStockReport(){
+    public List<Item> getStockReport(){
         //Requirement 6
-        stockController.getStockReport();
+        return stockController.getStockReport();
     }
 
-    public void getStockReportByCategory(int CategoryID){
+    public List<Item> getStockReportByCategory(int CategoryID){
         //Requirement 7
-        stockController.getStockReportByCategory(CategoryID);
+        return stockController.getStockReportByCategory(CategoryID);
     }
 
-    public void getUnusableProductsReport(){
+    public List<Product> getUnusableProductsReport(){
         //Requirement 8+9
-        stockController.getUnusableProductsReport();
+        return stockController.getUnusableProductsReport();
     }
 
     public void insertNewProduct(String productName, String productManufacturer, int categoryID, Date supplyTime, int demand){
