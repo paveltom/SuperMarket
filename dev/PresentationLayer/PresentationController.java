@@ -1,6 +1,11 @@
 package PresentationLayer;
 
+import Facade.FacadeObjects.FacadeDate;
+import Facade.FacadeObjects.FacadeProduct;
+import Facade.FacadeObjects.FacadeSite;
+import Facade.Response;
 import Facade.Service;
+import java.time.LocalDate;
 import java.util.*;
 
 public class PresentationController {
@@ -11,8 +16,6 @@ public class PresentationController {
     private CallableMenu deliveryMenu;
     private CallableMenu superUserMenu;
     private Stack<CallableMenu> menuStorage;
-
-
 
     public PresentationController(){
         service = new Service();
@@ -76,6 +79,64 @@ public class PresentationController {
     }
 
     private int addDelivery(){
+        FacadeSite origin;
+        FacadeSite destination;
+        String[] deliveryParams = {"shipping zone", "address", "contact name", "cellphone"};
+        String[] userInput = new String[4];
+        operateOutput("Enter origin site parameters.");
+
+
+        // Creating origin site obj considering received parameters
+        for(int i = 0; i < deliveryParams.length; i++){
+            String outMsg = "Enter " + deliveryParams[i] + ": ";
+            userInput[i] = operateInput(outMsg);
+        }
+        origin = new FacadeSite(userInput[0], userInput[1], userInput[2], userInput[3]);
+
+
+        // Creating destination site obj considering received parameters
+        operateOutput("Enter destination site parameters.");
+        for(int i = 0; i < deliveryParams.length; i++){
+            String outMsg = "Enter " + deliveryParams[i] + ": ";
+            userInput[i] = operateInput(outMsg);
+        }
+        destination = new FacadeSite(userInput[0], userInput[1], userInput[2], userInput[3]);
+
+
+        // Creating list of products
+        operateOutput("Enter product ID and its amount. Press '0' at the end.");
+        List<FacadeProduct> productList = new ArrayList<>();
+        int productId = -1;
+        int productAmount = 0;
+        productId = Integer.parseInt(operateInput("Product ID: "));
+        productAmount = Integer.parseInt(operateInput("Amount: "));
+        Random rand = new Random();
+
+        // Receiving products parameters
+        while(productId != 0){
+            productId = Integer.parseInt(operateInput("Product ID: "));
+            productAmount = Integer.parseInt(operateInput("Amount: "));
+            double randProductWeight = rand.nextDouble(20000000); //randomized weight of a single product (double-time of a truck's maxLoadWeight)
+            randProductWeight += 1;
+
+            FacadeProduct currProduct = new FacadeProduct(productId, productAmount, randProductWeight);
+            productList.add(currProduct);
+
+            // next loop data
+            productId = Integer.parseInt(operateInput("Product ID: "));
+            productAmount = Integer.parseInt(operateInput("Amount: "));
+        }
+
+        LocalDate currTime = LocalDate.now();
+        FacadeDate facDate = new FacadeDate(currTime.getDayOfMonth(), currTime.getMonthValue(), currTime.getYear());
+
+        int id = (int) System.currentTimeMillis(); //unique order Id
+        Response res = service.deliver(origin, destination, id, productList, facDate);
+        if(res.getErrorOccured())
+            operateOutput("Couldn't create a delivery for this order.\n" + res.getErrorMessage());
+        else
+            operateOutput("Delivery for the order " + id + " was successfully created.");
+        return 0;
     }
 
     private int getDeliveriesHistory(){

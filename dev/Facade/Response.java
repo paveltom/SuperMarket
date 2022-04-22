@@ -3,7 +3,7 @@ package Facade;
 public class Response {
 
     private String errorMessage;
-    public boolean errorOccured = false;
+    private boolean errorOccured = false;
 
     Response() {
     }
@@ -15,5 +15,7 @@ public class Response {
     public boolean getErrorOccured(){
         return errorMessage != null;
     }
+
+    public String getErrorMessage(){ return this.errorMessage;}
 
 }

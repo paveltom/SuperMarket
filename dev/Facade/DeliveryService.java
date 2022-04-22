@@ -5,8 +5,6 @@ import BusinessLayer.Types.*;
 import BusinessLayer.Controller.DeliveryController;
 import Facade.FacadeObjects.*;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,14 +23,14 @@ public class DeliveryService {
 
             List<Product> products = new ArrayList<>();
             for (FacadeProduct curr : facProducts) {
-                Product temp = new Product(curr.id, curr.weight, curr.amount);
+                Product temp = new Product(curr.getId(), curr.getWeight(), curr.getAmount());
                 products.add(temp);
             }
 
-            Date delSubmissionDate = new Date(facSubDate.day, facSubDate.month, facSubDate.year);
-            ShippingZone zone = ShippingZone.valueOf(origin.zone);
-            Site supplier = new Site(zone, origin.address, origin.name, origin.cellphone);
-            Site client = new Site(ShippingZone.valueOf(destination.zone), destination.address, destination.name, destination.cellphone);
+            Date delSubmissionDate = new Date(facSubDate.getDay(), facSubDate.getMonth(), facSubDate.getYear());
+            ShippingZone zone = ShippingZone.valueOf(origin.getZone());
+            Site supplier = new Site(zone, origin.getAddress(), origin.getContactName(), origin.getCellphone());
+            Site client = new Site(ShippingZone.valueOf(destination.getZone()), destination.getAddress(), destination.getContactName(), destination.getCellphone());
             DeliveryOrder delOrder = new DeliveryOrder(supplier, client, orderId, products, delSubmissionDate, zone);
             ResponseT<DeliveryRecipe> res = new ResponseT<>(delController.Deliver(delOrder));
             return res;
