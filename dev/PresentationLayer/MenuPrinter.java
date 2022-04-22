@@ -1,37 +1,47 @@
-package com.company.PresentationLayer;
+package PresentationLayer;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.TreeMap;
+import java.util.stream.Stream;
 
 public class MenuPrinter {
 
-    private String[] options = {"exit"};
+    //private HashMap<Integer, String> options;
+    private Scanner scanner;
 
     public MenuPrinter(){
-        runPrinter();
+        scanner = new Scanner(System.in);
     }
 
     public void printMenu(String[] options){
-        for (String option : options){
-            System.out.println(option);
+        for(int i = 1; i < options.length; i++){
+            System.out.println(i + ". " + options[i]);
         }
-        System.out.print("Choose your option : ");
-    }
-    // while?
+        System.out.println(0 + ". exit");
 
-    // execute funcs depending on user choice
-
-    // parts to be presented:
-    // order a delivery, add a driver, add a truck, show drivers/trucks, show delivery history, search by parameter
-
-
-    private void runPrinter(){
-        Scanner scanner = new Scanner(System.in);
-        int option;
-        while (true){
-            printMenu(options);
-            option = scanner.nextInt();
-        }
-    }
+//        Map<Integer, String> copy = new TreeMap<>(options);
+//        for (Map.Entry<Integer, ?> opt : copy.entrySet()){
+//            System.out.println(opt + ". " + copy.get(opt));
+//        Stream<Map.Entry<Integer, String>> sortedStream = options.entrySet().stream().sorted(Map.Entry.comparingByKey());
+//        for (Integer opt : options.keySet()){
+//            System.out.println(opt + ". ");
+//        }
     }
 
+    public String takeInput(String outputMsg){
 
-    //
+        System.out.println(outputMsg);
+        String input = null;
+        if(scanner.hasNextLine())
+            input = scanner.nextLine();
+        return input;
+    }
+
+    public void takeOutput(String outMsg){
+        System.out.println(outMsg);
+        System.out.println();
+    }
+
 }

@@ -1,4 +1,4 @@
-package com.company.Facade;
+package Facade;
 
 public class ResponseT<T> extends Response
 {

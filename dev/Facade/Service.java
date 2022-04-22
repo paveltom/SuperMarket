@@ -1,8 +1,7 @@
-package com.company.Facade;
+package Facade;
 
-import BusinessLayer.DataObject.DeliveryRecipe;
-
-import java.util.Date;
+import BusinessLayer.DataObject.*;
+import Facade.FacadeObjects.*;
 import java.util.List;
 
 public class Service implements IService{
@@ -15,10 +14,23 @@ public class Service implements IService{
         deliveryResourcesService = new DeliveryResourcesService();
     }
 
-    public ResponseT<DeliveryRecipe> deliver(String[] orderParams){
-        return deliveryService.deliver(orderParams);
+    public Response deliver(FacadeSite origin, FacadeSite destination, int orderId, List<FacadeProduct> facProducts, FacadeDate facSubDate){
+        return deliveryService.deliver(origin, destination, orderId, facProducts, facSubDate);
     }
 
+    public Response getDeliveryHistory(){
+        return deliveryService.getDeliveryHistory();
+    }
+
+    public Response addDriver(String[] driverParams){
+        return deliveryResourcesService.addDriver(driverParams);
+    }
+
+    public Response addTruck(String[] truckParams){
+        return deliveryResourcesService.addTruck(truckParams);
+    }
+
+    /*
     public ResponseT<String> getDeliveryHistoryBySupplierId(String supplierId){
         return deliveryService.getDeliveryHistoryBySupplierId(supplierId);
     }
@@ -30,17 +42,6 @@ public class Service implements IService{
     public ResponseT<String> getDeliveryHistoryByZone(String zone){
         return deliveryService.getDeliveryHistoryByZone(zone);
     }
-
-    public ResponseT<List<String[]>> getDeliveryHistory(){
-        return deliveryService.getDeliveryHistory();
-    }
-
-    public ResponseT<Boolean> addDriver(String[] driverParams){
-        return deliveryResourcesService.addDriver(driverParams);
-    }
-
-    public ResponseT<Boolean> addTruck(String[] truckParams){
-        return deliveryResourcesService.addTruck(truckParams);
-    }
+     */
 
 }
