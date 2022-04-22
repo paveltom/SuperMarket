@@ -9,4 +9,13 @@ public class Discount {
     private Date discountStartDate;
     private Date discountEndDate;
     private Map<Integer, Type> discount;
+
+    Discount(int _productID,int _discountID,Date _discountStartDate, Date _discountEndDate,Map<Integer,Type> _discount){
+        productID = _productID;
+        discountID = _discountID;
+        discountStartDate = _discountStartDate;
+        discountEndDate = _discountEndDate;
+        discount = _discount;
+    }
+
 }
