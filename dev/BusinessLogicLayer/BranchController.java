@@ -18,40 +18,39 @@ public class BranchController{
         counterBranches++;
     }
 
-    public void getProductsInStock(int branchID){
+    public List<Product> getProductsInStock(int branchID){
         //Requirement 2
-        branches.get(branchID).getProductsInStock();
+        return branches.get(branchID).getProductsInStock();
     }
 
-    public void getPurchasesHistoryReport(int branchID){
+    public List<Purchase> getPurchasesHistoryReport(int branchID){
         //Requirement 3
-        branches.get(branchID).getPurchasesHistoryReport();
-
+        return branches.get(branchID).getPurchasesHistoryReport();
     }
 
-    public void getCurrentDiscounts(int branchID){
+    public List<Discount> getCurrentDiscounts(int branchID){
         //Requirement 4
-        branches.get(branchID).getCurrentDiscounts();
+        return branches.get(branchID).getCurrentDiscounts();
     }
 
-    public void getCategories(int branchID){
+    public List<Category> getCategories(int branchID){
         //Requirement 5
-        branches.get(branchID).getCategories();
+        return branches.get(branchID).getCategories();
     }
 
-    public void getStockReport(int branchID){
+    public List<Item> getStockReport(int branchID){
         //Requirement 6
-        branches.get(branchID).getStockReport();
+        return branches.get(branchID).getStockReport();
     }
 
-    public void getStockReportByCategory(int branchID, int CategoryID){
+    public List<Item> getStockReportByCategory(int branchID, int CategoryID){
         //Requirement 7
-        branches.get(branchID).getStockReportByCategory(CategoryID);
+        return branches.get(branchID).getStockReportByCategory(CategoryID);
     }
 
-    public void getUnusableProductsReport(int branchID){
+    public List<Product> getUnusableProductsReport(int branchID){
         //Requirement 8+9
-        branches.get(branchID).getUnusableProductsReport();
+        return branches.get(branchID).getUnusableProductsReport();
     }
 
     public void insertNewProduct(int branchID, String productName, String productManufacturer, int categoryID, Date supplyTime, int demand){
@@ -84,12 +83,5 @@ public class BranchController{
     public void deletePurchase(int branchID, int purchaseID){
         branches.get(branchID).deletePurchase(purchaseID);
     }
-
-
-
-
-
-
-
 
 }
