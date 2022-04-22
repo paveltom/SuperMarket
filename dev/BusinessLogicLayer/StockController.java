@@ -25,32 +25,37 @@ public class StockController {
         discountsCounter = 0;
     }
 
-    public void getProductsInStock(){
-
+    public List<Product> getProductsInStock(){
+        //Requirement 2
+        return products;
     }
 
-    public void getPurchasesHistoryReport(){
+    public List<Purchase> getPurchasesHistoryReport(){
         //Requirement 3
-
+        return purchases;
     }
 
-    public void getCurrentDiscounts(){
+    public List<Discount> getCurrentDiscounts(){
         //Requirement 4
+        return discounts;
+
     }
 
-    public void getCategories(){
+    public List<Category> getCategories(){
         //Requirement 5
+        return categories;
     }
 
-    public void getStockReport(){
+    public List<Item> getStockReport(){
         //Requirement 6
+        return null;
     }
 
-    public void getStockReportByCategory(int CategoryID){
+    public List<Item> getStockReportByCategory(int CategoryID){
         //Requirement 7
     }
 
-    public void getUnusableProductsReport(){
+    public List<Product> getUnusableProductsReport(){
         //Requirement 8+9
     }
 
@@ -79,7 +84,7 @@ public class StockController {
     }
 
     public void deleteDiscount(int discountID){
-
+        discounts.remove(discountID);
     }
 
     public void deletePurchase(int purchaseID){
