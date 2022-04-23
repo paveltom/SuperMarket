@@ -17,6 +17,10 @@ public class Item {
         this.amount = 0;
     }
 
+    public String toString(){
+        return "Product ID : " + productID + " , Location : " + location + " , Expire Date : " + expireDate+ " , Amount : "+amount + (!isUsable ? "This item is not usable." : "");
+    }
+
     public void reduce(int amountToReduce){
         this.amount -= amountToReduce;
     }
