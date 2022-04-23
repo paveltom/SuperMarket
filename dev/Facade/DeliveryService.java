@@ -1,7 +1,7 @@
 package Facade;
 
-import BusinessLayer.DataObject.*;
-import BusinessLayer.Types.*;
+import BusinessLayer.Element.*;
+import BusinessLayer.Type.*;
 import BusinessLayer.Controller.DeliveryController;
 import Facade.FacadeObjects.*;
 

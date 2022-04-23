@@ -1,13 +1,10 @@
 package Facade;
 
 import BusinessLayer.Controller.DeliveryController;
-import BusinessLayer.Types.VehicleLicenseCategory;
-import BusinessLayer.Types.ShippingZone;
+import BusinessLayer.Type.VehicleLicenseCategory;
+import BusinessLayer.Type.ShippingZone;
 import Facade.FacadeObjects.FacadeDriver;
 import Facade.FacadeObjects.FacadeTruck;
-
-import java.util.Date;
-import java.util.List;
 
 public class DeliveryResourcesService {
 

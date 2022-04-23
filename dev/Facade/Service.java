@@ -1,6 +1,6 @@
 package Facade;
 
-import BusinessLayer.DataObject.*;
+import BusinessLayer.Element.*;
 import Facade.FacadeObjects.*;
 import java.util.List;
 
