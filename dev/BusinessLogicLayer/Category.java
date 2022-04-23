@@ -18,6 +18,10 @@ public class Category {
         subCategories = new LinkedList<Category>();
     }
 
+    public String toString(){
+        return "Category ID : " + ID + " , Category name : " + name + " ";
+    }
+
     Category(int _ID,String _name,Category _parentCategory)
     {//Constructor for non 1st-degree category
         this(_ID, _name);
