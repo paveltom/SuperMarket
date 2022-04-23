@@ -18,7 +18,7 @@ public class Main {
         service.AddWorker("444444444","Worker4","Usher","no","Bank 003 111111",32.00,"22/9/2020","...");
         service.AddWorker("555555555","Worker5","LogisticsManager","no","Bank 003 111111",38.00,"22/9/2020","...");
         service.AddWorker("666666666","Worker6","Driver","no","Bank 003 111111",33.50,"22/9/2020","...");
-
+        service.addShift("12/04/2022",0,"111111111","PersonnelManager 111111111|Cashier 222222222|StoreKeeper 333333333|Usher 444444444|LogisticsManager 555555555|Driver 666666666");
     }
     public static void main(String[] args) {
         Init();
@@ -54,7 +54,7 @@ public class Main {
                 case "ChangePay":
                     System.out.println(service.ChangePay(data[1],Double.parseDouble(data[2])));
                     break;
-                case "ChangeStart":
+                    case "ChangeStart":
                     System.out.println(service.ChangeStart(data[1],data[2]));
                     break;
                 case "ChangeSocial":

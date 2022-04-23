@@ -42,10 +42,14 @@ public class Service {
                 return "Incorrect jobs";
             LinkedList<Worker> wls=new LinkedList<>();
             for(int i=1; i< jLs.length; i++) {
-                try{wls.add(wService.GetWorker(jLs[i]));}catch (Exception e){return e.getMessage();}
+                try{
+                    if(wls.contains(wService.GetWorker(jLs[i]))) return "Can't add the same worker more then once to the same shift";
+                    wls.add(wService.GetWorker(jLs[i]));
+                }catch (Exception e){return e.getMessage();}
             }
             if(wls.size()==0)
                 return "Job must have at least 1 worker";
+            if(wList.containsKey(jLs[0])) return "Shift cant contain the same job type more then once";
             wList.put(jLs[0], wls);
         }
         try {

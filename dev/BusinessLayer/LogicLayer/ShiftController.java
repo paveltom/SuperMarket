@@ -35,6 +35,10 @@ public class ShiftController {
             if(s.equals("LogisticsManager")) wLs.put(JobEnum.LogisticsManager, workersList.get(s));
             if(s.equals("Driver")) wLs.put(JobEnum.Driver, workersList.get(s));
         }
+        for (Shift s:
+                shifts) {
+            if(s.getDate().equals(d) && s.getShiftType() == shiftType) throw new IllegalArgumentException("This shift already exists");
+        }
         Shift s = new Shift(d,shiftType,manager,wLs);
         shifts.add(s);
     }
