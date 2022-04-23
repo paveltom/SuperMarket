@@ -45,9 +45,9 @@ public class Service
         return scs.getStockReportByCategory(branchID,categoryID);
     }
 
-    public ResponseT<List<Product>> getUnusableProductsReport(int branchID){
+    public ResponseT<List<Item>> getUnusableProductsReport(int branchID){
         //Requirement 8+9
-        return scs.getUnusableProductsReport(branchID);
+        return scs.getUnusableItemsReport(branchID);
     }
 
     public Response insertNewProduct(int branchID, String productName, String productManufacturer, int categoryID, Date supplyTime, int demand){
