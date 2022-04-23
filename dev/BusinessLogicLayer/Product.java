@@ -1,5 +1,6 @@
 package com.company.BusinessLogicLayer;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -35,6 +36,24 @@ public class Product {
         for(Item i : items){
             amount += i.getAmount();
         }
+    }
+
+    public List<Item> getItems(){
+        return items;
+    }
+
+    public int getCategoryID(){
+        return categoryID;
+    }
+
+    public List<Item> getUnusableItems(){
+        List<Item> output = new ArrayList<>();
+        for(Item i : items){
+            if(i.isUsable()){
+                output.add(i);
+            }
+        }
+        return output;
     }
 
 
