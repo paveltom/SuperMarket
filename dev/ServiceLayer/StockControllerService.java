@@ -9,6 +9,10 @@ public class StockControllerService
 {
     BranchController bc;
 
+    StockControllerService(){
+        bc = new BranchController();
+    }
+
     public Response addNewBranch(String name){
         try{
             bc.addNewBranch(name);
