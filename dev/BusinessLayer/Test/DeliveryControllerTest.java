@@ -48,10 +48,37 @@ class DeliveryControllerTest implements Testable
         assertEquals(exptected, deliveryRecipe_6.DueDate);
     }
 
+    /*
+     * init: Create a delivery order exceeds max load weight of heaviest truck (license C).
+     * Step: apply Deliver
+     * Expect: delivery order to be partitioned
+     * */
+    @Test
+    void deliver_exceedsMaxLoadWeight()
+    {
+        var supplier = new Site(ShippingZone.Shfela_JerusalemMountains, "Ashdod Rotshield 25", "Nir Malka", "0548826400");
+        var client = new Site(ShippingZone.Sharon, "Neve Tzedek", "Pavel tomshin", "0545555555");
+        var order_1 = 0;
+        var products = Arrays.asList(new Product(12,1754.314,5500), new Product(1789,217.19313,4056), new Product(777,3441.111,2500));
+        var submissionDate = new Date(31, cal.get(Calendar.MONTH) + 1, cal.get(Calendar.YEAR));
+        var shippingZone = ShippingZone.Shfela_JerusalemMountains;
+        var deliveryOrder_1 = new DeliveryOrder(supplier, client, order_1, products, submissionDate, shippingZone);
+
+        var deliveryRecipe_1 = testObject.Deliver(deliveryOrder_1);
+
+        //System.out.println(deliveryOrder_1);
+        //System.out.println(deliveryRecipe_1);
+
+        assertTrue(deliveryRecipe_1.IsPartitioned);
+        assertNotNull(deliveryRecipe_1.UnDeliveredProducts);
+    }
+
     @Override
     public void ExecTest()
     {
+
         deliver();
+        deliver_exceedsMaxLoadWeight();
     }
 
     @Override
