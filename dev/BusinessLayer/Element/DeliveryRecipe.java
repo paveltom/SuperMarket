@@ -1,4 +1,6 @@
-package BusinessLayer.DataObject;
+package BusinessLayer.Element;
+
+import BusinessLayer.Type.Truck;
 
 import java.util.Map;
 

@@ -1,5 +1,5 @@
-package BusinessLayer.DataObject;
-import BusinessLayer.Types.VehicleLicenseCategory;
+package BusinessLayer.Element;
+import BusinessLayer.Type.VehicleLicenseCategory;
 
 public class Driver
 {
@@ -29,5 +29,25 @@ public class Driver
     {
         return Dairy.GetAvailableShift(month, day);
     }
+
+    public void SetOccupied(DeliveryDate occupiedDate)
+    {
+        Dairy.SetOccupied(occupiedDate);
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if(this == obj)
+            return true;
+        if(!(obj instanceof Driver))
+            return false;
+        else
+        {
+            Driver other = (Driver) obj;
+            return Id == other.Id;
+        }
+    }
+
 
 }
