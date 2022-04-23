@@ -27,36 +27,55 @@ public class StockController {
 
     public List<Product> getProductsInStock(){
         //Requirement 2
-        return products;
+        return new ArrayList<>(products);
     }
 
     public List<Purchase> getPurchasesHistoryReport(){
         //Requirement 3
-        return purchases;
+        return new ArrayList<>(purchases);
     }
 
     public List<Discount> getCurrentDiscounts(){
         //Requirement 4
-        return discounts;
-
+        return new ArrayList<>(discounts);
     }
 
     public List<Category> getCategories(){
         //Requirement 5
-        return categories;
+        return new ArrayList<>(categories);
     }
 
     public List<Item> getStockReport(){
         //Requirement 6
-        return null;
+        List<Item> output = new ArrayList<>();
+        for(Product p : products)
+        {
+            output.addAll(p.getItems());
+        }
+        return output;
     }
 
     public List<Item> getStockReportByCategory(int CategoryID){
         //Requirement 7
+        List<Item> output = new ArrayList<>();
+        for(Product p : products)
+        {
+            if(isAncestorOf(p.getCategoryID(),CategoryID))
+            {
+                output.addAll(p.getItems());
+            }
+        }
+        return output;
     }
 
-    public List<Product> getUnusableProductsReport(){
+    public List<Item> getUnusableItemsReport(){
         //Requirement 8+9
+        List<Item> output = new ArrayList<>();
+        for (Product p:products)
+        {
+            output.addAll(p.getUnusableItems());
+        }
+        return output;
     }
 
     public void insertNewProduct(String productName, String productManufacturer, int categoryID, Date supplyTime, int demand){
@@ -69,7 +88,7 @@ public class StockController {
     }
 
     public void insertNewDiscount(int productID, Date startDate, Date endDate, int amount, Type t){
-        discounts.add(new Discount(discountsCounter, productID, startDate, endDate, amount, t));
+        //discounts.add(new Discount(discountsCounter, productID, startDate, endDate, amount, t));
     }
 
     /*public void insertNewPurchase(Date purchaseDate, Map m){
@@ -91,6 +110,20 @@ public class StockController {
         purchases.remove(purchaseID);
     }
 
+    public boolean isAncestorOf(int childCategoryID,int parentCategoryID)
+    {
+        Category child = categories.get(childCategoryID);
+        Category parent = categories.get(parentCategoryID);
+
+        if(child == parent)
+            return true;
+
+        if(child.getParentCategory()==null)
+            return false;
+
+        return isAncestorOf(child.getParentCategory().getID(), parentCategoryID);
+
+    }
 
 
 }
