@@ -43,9 +43,9 @@ public class Branch {
         return stockController.getStockReportByCategory(CategoryID);
     }
 
-    public List<Product> getUnusableProductsReport(){
+    public List<Item> getUnusableItemsReport(){
         //Requirement 8+9
-        return stockController.getUnusableProductsReport();
+        return stockController.getUnusableItemsReport();
     }
 
     public void insertNewProduct(String productName, String productManufacturer, int categoryID, Date supplyTime, int demand){
