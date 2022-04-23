@@ -8,10 +8,16 @@ public class Branch {
     private String name;
     private StockController stockController;
 
+
+
     Branch(int _branchID,String _name){
         branchID = _branchID;
         name = _name;
         stockController = new StockController();
+    }
+
+    public String toString(){
+        return "Branch ID : " + branchID + " , Branch name : " + name;
     }
 
     public List<Product> getProductsInStock(){
