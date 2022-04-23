@@ -40,13 +40,13 @@ public class DeliveryService {
         }
     }
 
-    public Response getDeliveryHistory(){
+    public ResponseT<String> getDeliveryHistory(){
         try {
             ResponseT<String> res = new ResponseT<>(delController.GetDeliveriesHistory());
             return res;
         }
         catch (Exception e){
-            return new Response(e.getMessage());
+            return new ResponseT<>(e.getMessage());
         }
     }
 

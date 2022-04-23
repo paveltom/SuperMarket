@@ -4,6 +4,7 @@ import Facade.FacadeObjects.FacadeDate;
 import Facade.FacadeObjects.FacadeProduct;
 import Facade.FacadeObjects.FacadeSite;
 import Facade.Response;
+import Facade.ResponseT;
 import Facade.Service;
 import java.time.LocalDate;
 import java.util.*;
@@ -54,7 +55,6 @@ public class PresentationController {
                             tempCallMenu.getMethod().call();
                         }catch (Exception e) {
                             operateOutput("An unhandled exception occurred: " + e.getMessage());
-                            exit();
                         }
                     }
                     else {
@@ -140,7 +140,13 @@ public class PresentationController {
     }
 
     private int getDeliveriesHistory(){
-
+        Response res = service.getDeliveryHistory();
+        if(res.getErrorOccured()){
+            operateOutput("Couldn't display a delivery history. " + res.getErrorMessage());
+            return 1;
+        }
+        operateOutput(res.);
+        return 0;
     }
 
     private int addTruck(){

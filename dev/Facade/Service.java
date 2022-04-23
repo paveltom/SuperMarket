@@ -18,7 +18,7 @@ public class Service implements IService{
         return deliveryService.deliver(origin, destination, orderId, facProducts, facSubDate);
     }
 
-    public Response getDeliveryHistory(){
+    public ResponseT<String> getDeliveryHistory(){
         return deliveryService.getDeliveryHistory();
     }
 
