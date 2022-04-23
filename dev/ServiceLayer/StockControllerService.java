@@ -2,7 +2,6 @@ package com.company.ServiceLayer;
 
 import com.company.BusinessLogicLayer.*;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -52,9 +51,9 @@ public class StockControllerService
         return ResponseT.FromValue(bc.getStockReportByCategory(branchID,categoryID));
     }
 
-    public ResponseT<List<Product>> getUnusableProductsReport(int branchID){
+    public ResponseT<List<Item>> getUnusableItemsReport(int branchID){
         //Requirement 8+9
-        return ResponseT.FromValue(bc.getUnusableProductsReport(branchID));
+        return ResponseT.FromValue(bc.getUnusableItemsReport(branchID));
     }
 
     public Response insertNewProduct(int branchID, String productName, String productManufacturer, int categoryID, Date supplyTime, int demand){
