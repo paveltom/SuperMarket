@@ -1,8 +1,6 @@
 package PresentationLayer;
 
-import Facade.FacadeObjects.FacadeDate;
-import Facade.FacadeObjects.FacadeProduct;
-import Facade.FacadeObjects.FacadeSite;
+import Facade.FacadeObjects.*;
 import Facade.Response;
 import Facade.ResponseT;
 import Facade.Service;
@@ -140,30 +138,46 @@ public class PresentationController {
     }
 
     private int getDeliveriesHistory(){
-        Response res = service.getDeliveryHistory();
+        ResponseT<String> res = service.getDeliveryHistory();
         if(res.getErrorOccured()){
             operateOutput("Couldn't display a delivery history. " + res.getErrorMessage());
             return 1;
         }
-        operateOutput(res.);
+        operateOutput(res.value);
         return 0;
     }
 
     private int addTruck(){
-
+        operateOutput("Please enter trucks details.");
+        String[] details = {"License Plate", "Model", "Parking area", "Net weight", "Max load weight"};
+        for(int i = 0; i < details.length; i++){
+            details[i] = operateInput(details[i] + ": ");
+        }
+        FacadeTruck facTruck = new FacadeTruck(Integer.parseInt(details[0]), details[1], details[2], Double.parseDouble(details[3]), Double.parseDouble(details[4]));
+        Response res = service.addTruck(facTruck);
+        if(res.getErrorOccured()) {
+            operateOutput("Couldn't add a new truck. " + res.getErrorMessage());
+            return 1;
+        }
+        operateOutput("Truck added successfully.");
+        return 0;
     }
 
     private int addDriver(){
-
+        operateOutput("Please enter drivers details.");
+        String[] details = {"ID", "First Name", "Last Name", "Cellphone", "Vehicle Category", "Living Area"};
+        for(int i = 0; i < details.length; i++){
+            details[i] = operateInput(details[i] + ": ");
+        }
+        FacadeDriver facDriver = new FacadeDriver(Integer.parseInt(details[0]), details[1], details[2], details[3], details[4], details[5]);
+        Response res = service.addDriver(facDriver);
+        if(res.getErrorOccured()) {
+            operateOutput("Couldn't add a new driver. " + res.getErrorMessage());
+            return 1;
+        }
+        operateOutput("Driver added successfully.");
+        return 0;
     }
-
-//    private int showDrivers(){
-//
-//    }
-
-//    private int showTrucks(){
-//
-//    }
 
     private int exit(){
         System.out.println("exiting...");
@@ -202,4 +216,13 @@ public class PresentationController {
         }};
         superUserMenu = new CallableMenu(superUserMenuOpts, superUserMenuStrings);
     }
+
+//    private int showDrivers(){
+//
+//    }
+
+//    private int showTrucks(){
+//
+//    }
+
 }

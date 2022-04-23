@@ -22,13 +22,11 @@ public class Service implements IService{
         return deliveryService.getDeliveryHistory();
     }
 
-    public Response addDriver(String[] driverParams){
-        return deliveryResourcesService.addDriver(driverParams);
+    public Response addDriver(FacadeDriver facadeDriver){
+        return deliveryResourcesService.addDriver(facadeDriver);
     }
 
-    public Response addTruck(String[] truckParams){
-        return deliveryResourcesService.addTruck(truckParams);
-    }
+    public Response addTruck(FacadeTruck facadeTruck){ return deliveryResourcesService.addTruck(facadeTruck); }
 
     /*
     public ResponseT<String> getDeliveryHistoryBySupplierId(String supplierId){

@@ -9,9 +9,9 @@ public interface IService {
 
     public Response getDeliveryHistory();
 
-    public Response addDriver(String[] driverParams);
+    public Response addDriver(FacadeDriver facadeDriver);
 
-    public Response addTruck(String[] truckParams);
+    public Response addTruck(FacadeTruck facadeTruck);
 
 }
 
