@@ -18,8 +18,10 @@ public class Worker {
         return Job;
     }
 
-    public Boolean getSMQualification() {
-        return SMQualification;
+    public String getSMQualification() {
+        if(SMQualification)
+            return "yes";
+        else return "no";
     }
 
     public String getBankDetails() {
@@ -74,7 +76,7 @@ public class Worker {
     }
 
     public void setPay(Double pay) {
-        if(pay >= 29.12)
+        if(pay <= 29.12)
             throw new IllegalArgumentException("Pay cannot be below 29.12");
         else Pay = pay;
     }
@@ -133,7 +135,7 @@ public class Worker {
             throw new IllegalArgumentException("SMQualification cannot be null");
         if(_Bank == null)
             throw new IllegalArgumentException("Bank Details cannot be null");
-        if(_Pay >= 29.12)
+        if(_Pay <= 29.12)
             throw new IllegalArgumentException("Pay cannot be below 29.12");
         try{
             SimpleDateFormat format1 = new SimpleDateFormat("dd/MM/yyyy");
@@ -158,6 +160,7 @@ public class Worker {
 
     public String toString()
     {
-        return "Id:"+this.Id+"\nName:"+this.Name+"\nJob:"+this.Job+"\nSMQualification:Yes\nBank Details:"+this.BankDetails+"\nPay:"+this.Pay+"\nStartDate"+this.getStartDate()+"\nSocial Conditions:"+this.SocialConditions;
+        return "Id:"+this.Id+"\nName:"+this.Name+"\nJob:"+this.Job+"\nSMQualification:"+this.getSMQualification()+"\nBank Details:"+this.BankDetails+"\nPay:"+this.Pay+"\nStartDate"+this.getStartDate()+"\nSocial Conditions:"+this.SocialConditions;
     }
+
 }

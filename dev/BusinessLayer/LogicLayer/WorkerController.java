@@ -51,7 +51,7 @@ public class WorkerController {
         if(!AllWorkers.containsKey(_oldId))
             throw new IllegalArgumentException("There is no worker with id "+_oldId);
         if(AllWorkers.containsKey(_newId))
-            throw new IllegalArgumentException("A worker with id :"+_newId+"Already Exist, Change failed");
+            throw new IllegalArgumentException("A worker with id :"+_newId+" Already Exist, Change failed");
         Worker changeWorker = AllWorkers.get(_oldId);
         changeWorker.setId(_newId);
         AllWorkers.remove(_oldId);
@@ -174,13 +174,61 @@ public class WorkerController {
      */
     public String GetAllWorkersToString()
     {
+        Boolean first = true;
         String allWorkersString = "";
         for (String key:
              AllWorkers.keySet()) {
-            allWorkersString += AllWorkers.get(key).toString();
+            if(first)
+            {
+                allWorkersString += AllWorkers.get(key).toString();
+                first = false;
+            }
+            else {
+                allWorkersString += "\n"+AllWorkers.get(key).toString();
+
+            }
         }
         return allWorkersString;
     }
 
+    /**
+     * Function to get a worker
+     * @param _Id - the id of the worker
+     * @return The worker object or an error
+     */
+    public Worker getWorker(String _Id)
+    {
+        if(!AllWorkers.containsKey(_Id))
+            throw new IllegalArgumentException("There is no worker with id "+_Id );
+        return AllWorkers.get(_Id);
+    }
+
+    /**
+     * Function to get all workers with a certain job
+     * @param _Job - the job
+     * @return a string of all the workers that work in the required job
+     */
+    public String getWorkerByJov(String _Job)
+    {
+        Boolean first = true;
+        String AllWorkersInJob = "";
+        for (String key:
+             AllWorkers.keySet()) {
+            if(first)
+            {
+                if(AllWorkers.get(key).getJob().equals(_Job)) {
+                    AllWorkersInJob += AllWorkers.get(key).getId() +" "+ AllWorkers.get(key).getName();
+                    first = false;
+                }
+            }
+            else {
+                if(AllWorkers.get(key).getJob().equals(_Job)) {
+                    AllWorkersInJob +="\n"+ AllWorkers.get(key).getId() + " " + AllWorkers.get(key).getName();
+                }
+
+            }
+        }
+        return AllWorkersInJob;
+    }
 
 }

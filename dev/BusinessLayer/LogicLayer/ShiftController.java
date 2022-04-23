@@ -14,7 +14,7 @@ public class ShiftController {
         this.availability = new HashMap<String,String>();
     }
 
-    public void addShift(String date, Integer shiftType, Worker manager, HashMap<JobEnum, LinkedList<Worker>> workersList){
+    public void addShift(String date, Integer shiftType, Worker manager, HashMap<String, LinkedList<Worker>> workersList){
         Date d;
         try{
             SimpleDateFormat format1 = new SimpleDateFormat("dd/MM/yyyy");
@@ -25,8 +25,28 @@ public class ShiftController {
         {
             throw new IllegalArgumentException("Date isn't valid");
         }
-        Shift s = new Shift(d,shiftType,manager,workersList);
+        HashMap<JobEnum, LinkedList<Worker>> wLs=new HashMap<>();
+        for (String s:
+                workersList.keySet()) {
+            if(s.equals("PersonnelManager")) wLs.put(JobEnum.PersonnelManager, workersList.get(s));
+            if(s.equals("Cashier")) wLs.put(JobEnum.Cashier, workersList.get(s));
+            if(s.equals("StoreKeeper")) wLs.put(JobEnum.StoreKeeper, workersList.get(s));
+            if(s.equals("Usher")) wLs.put(JobEnum.Usher, workersList.get(s));
+            if(s.equals("LogisticsManager")) wLs.put(JobEnum.LogisticsManager, workersList.get(s));
+            if(s.equals("Driver")) wLs.put(JobEnum.Driver, workersList.get(s));
+        }
+        Shift s = new Shift(d,shiftType,manager,wLs);
         shifts.add(s);
+    }
+
+    public void changeId(String o, String n){
+        if(availability.containsKey(o)) {
+            String s = availability.get(o);
+            availability.remove(o);
+            availability.put(n,s);
+        }
+        else
+            throw new IllegalArgumentException("The Id to change doesn't exists");
     }
 
     public void changeAvailability(String w, String a){

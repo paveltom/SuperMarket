@@ -1,14 +1,62 @@
 package com.company.BusinessLayer.ServiceLayer;
 
+import com.company.BusinessLayer.LogicLayer.Worker;
+
+import java.util.HashMap;
+import java.util.LinkedList;
+
 public class Service {
 
+    private ShiftService sService;
     private WorkerService wService;
 
     public Service()
     {
         wService = new WorkerService();
+        sService = new ShiftService();
     }
 
+
+    public String changeAvailability(String w, String a){
+        try{sService.changeAvailability(w, a);}catch (Exception e){return e.getMessage(); }
+        return "Changed availability successfully";
+    }
+
+
+    public String addShift(String date, Integer shiftType, String manager, String workersList){
+        Worker m;
+        try {
+            m=wService.GetWorker(manager);
+        }catch (Exception e){
+            return e.getMessage();
+        }
+        String[] ls = workersList.split("#");
+        HashMap<String,LinkedList<Worker>> wList = new HashMap<>();
+        for (String s:
+                ls) {
+            String[] jLs=s.split(" ");
+            if(!jLs[0].equals("PersonnelManager") && !jLs[0].equals("Cashier") && !jLs[0].equals("StoreKeeper")
+                    && !jLs[0].equals("Usher") && !jLs[0].equals("LogisticsManager") && !jLs[0].equals("Driver"))
+                return "Incorrect jobs";
+            LinkedList<Worker> wls=new LinkedList<>();
+            for(int i=1; i< jLs.length; i++) {
+                try{wls.add(wService.GetWorker(jLs[i]));}catch (Exception e){return e.getMessage();}
+            }
+            if(wls.size()==0)
+                return "Job must have at least 1 worker";
+            wList.put(jLs[0], wls);
+        }
+        try {
+            sService.addShift(date, shiftType, m, wList);
+        }catch (Exception e){
+            return e.getMessage();
+        }
+        return "Added shift successfully";
+    }
+
+    public String shiftHistory(){
+        return sService.shiftHistory();
+    }
 
     /**
      * Public Function to make a new Worker and Add him
@@ -21,9 +69,17 @@ public class Service {
      * @param _StartDate - The start date of the worker
      * @param _Social - Social conditions
      */
-    public void AddWorker(String _Id,String _Name,String _Job,Boolean _Qual,String _Bank,Double _Pay, String _StartDate,String _Social)
+    public String AddWorker(String _Id,String _Name,String _Job,String _Qual,String _Bank,Double _Pay, String _StartDate,String _Social)
     {
-        wService.AddWorker(_Id,_Name,_Job,_Qual,_Bank,_Pay,_StartDate,_Social);
+        try{
+            wService.AddWorker(_Id,_Name,_Job,_Qual,_Bank,_Pay,_StartDate,_Social);
+            sService.addWorker(_Id);
+            return "Added worker successfully";
+        }
+        catch (Exception e)
+        {
+            return e.getMessage();
+        }
     }
 
 
@@ -31,9 +87,17 @@ public class Service {
      * Function to delete a worker
      * @param _Id - The id of the worker we want to delete
      */
-    public void DeleteWorker(String _Id)
+    public String DeleteWorker(String _Id)
     {
-        wService.DeleteWorker(_Id);
+        try{
+            wService.DeleteWorker(_Id);
+            sService.removeWorker(_Id);
+            return "Deleted worker successfully";
+        }
+        catch (Exception e)
+        {
+            return e.getMessage();
+        }
     }
 
     /**
@@ -41,9 +105,18 @@ public class Service {
      * @param _oldId - Old and incorrect Id
      * @param _newId - New and correct Id
      */
-    public void ChangeId(String _oldId,String _newId)
+    public String ChangeId(String _oldId,String _newId)
     {
-        wService.ChangeId(_oldId,_newId);
+        try {
+            wService.ChangeId(_oldId, _newId);
+            sService.changeId(_oldId, _newId);
+            return "Changed Id successfully";
+        }
+        catch (Exception e)
+        {
+            return e.getMessage();
+        }
+
     }
 
     /**
@@ -51,9 +124,9 @@ public class Service {
      * @param _Id - The id of the worker
      * @param _newJob - The Job we want to change to
      */
-    public void ChangeJob(String _Id,String _newJob)
+    public String ChangeJob(String _Id,String _newJob)
     {
-        wService.ChangeJob(_Id,_newJob);
+        return wService.ChangeJob(_Id,_newJob);
     }
 
     /**
@@ -61,9 +134,9 @@ public class Service {
      * @param _Id - The id of the worker
      * @param _newQual - The new qualification
      */
-    public void ChangeQual(String _Id,boolean _newQual)
+    public String ChangeQual(String _Id,boolean _newQual)
     {
-        wService.ChangeQual(_Id,_newQual);
+        return wService.ChangeQual(_Id,_newQual);
     }
 
     /**
@@ -71,9 +144,9 @@ public class Service {
      * @param _Id - The id of the worker
      * @param _newBank - The new Bank details
      */
-    public void ChangeBank(String _Id,String _newBank)
+    public String ChangeBank(String _Id,String _newBank)
     {
-        wService.ChangeBank(_Id,_newBank);
+        return wService.ChangeBank(_Id,_newBank);
     }
 
     /**
@@ -81,9 +154,9 @@ public class Service {
      * @param _Id - The id of the worker
      * @param _newPay - The new salary per hour
      */
-    public void ChangePay(String _Id,double _newPay)
+    public String ChangePay(String _Id,double _newPay)
     {
-        wService.ChangePay(_Id,_newPay);
+        return wService.ChangePay(_Id,_newPay);
     }
 
     /**
@@ -91,9 +164,9 @@ public class Service {
      * @param _Id - The id of the worker
      * @param _newStart - The new start date
      */
-    public void ChangeStart(String _Id,String _newStart)
+    public String ChangeStart(String _Id,String _newStart)
     {
-        wService.ChangeStart(_Id,_newStart);
+        return wService.ChangeStart(_Id,_newStart);
     }
 
     /**
@@ -101,25 +174,35 @@ public class Service {
      * @param _Id - The id of the worker
      * @param _newSocial - The new social conditions
      */
-    public void ChangeSocial(String _Id,String _newSocial)
+    public String ChangeSocial(String _Id,String _newSocial)
     {
-        wService.ChangeSocial(_Id,_newSocial);
+        return wService.ChangeSocial(_Id,_newSocial);
     }
 
     /**
      * Function to get details on a specific worker and print them
      * @param _Id - The id of the worker
      */
-    public void GetWorkerString(String _Id)
+    public String GetWorkerString(String _Id)
     {
-        System.out.println(wService.getWorkerString(_Id));
+        return wService.getWorkerString(_Id);
     }
 
     /**
      * Function to print all workers details
      */
-    public void GetAllWorkersString()
+    public String GetAllWorkersString()
     {
-        System.out.println(wService.GetAllWorkersString());
+        return wService.GetAllWorkersString();
+    }
+
+    /**
+     * Function to get a string of workers in a certain job
+     * @param _Job - the job we want
+     * @return - a string of the workers id and name
+     */
+    public String GetWorkersByJob(String _Job)
+    {
+        return wService.GetWorkerByJob(_Job);
     }
 }
