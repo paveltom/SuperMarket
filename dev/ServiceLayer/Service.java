@@ -10,6 +10,10 @@ public class Service
 {
     StockControllerService scs;
 
+    public Service(){
+        scs = new StockControllerService();
+    }
+
     public Response addNewBranch(String name){
         return scs.addNewBranch(name);
     }
