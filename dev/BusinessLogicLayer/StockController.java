@@ -85,10 +85,12 @@ public class StockController {
 
     public void insertNewCategory(String categoryName){
         categories.add(new Category(categoriesCounter,categoryName));
+        categoriesCounter++;
     }
 
     public void insertNewDiscount(int productID, Date startDate, Date endDate, int amount, Type t){
         //discounts.add(new Discount(discountsCounter, productID, startDate, endDate, amount, t));
+        //discountsCounter++;
     }
 
     /*public void insertNewPurchase(Date purchaseDate, Map m){
