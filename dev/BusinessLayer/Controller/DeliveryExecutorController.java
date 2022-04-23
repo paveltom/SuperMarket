@@ -1,7 +1,8 @@
 package BusinessLayer.Controller;
 
-import BusinessLayer.DataObject.*;
-import BusinessLayer.Types.VehicleLicenseCategory;
+import BusinessLayer.Element.*;
+import BusinessLayer.Type.Truck;
+import BusinessLayer.Type.VehicleLicenseCategory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,7 +42,7 @@ public class DeliveryExecutorController
             }
         }
         var date = deliveryOrder.SubmissionDate;
-        Tuple<Driver, Truck, DeliveryDate> resourceOrder =DeliveryController.GetInstance().GetDeliveryDate(deliveryOrder.SubmissionDate, deliveryOrder.Zone, CargoWeight);
+        Tuple<Driver, Truck, DeliveryDate> resourceOrder =DeliveryController.GetInstance().GetDeliveryDate(deliveryOrder.SubmissionDate, deliveryOrder.Supplier.Zone, CargoWeight);
         var output = new DeliveryRecipe(deliveryOrder.OrderId, deliverId, isPartitioned, resourceOrder.Third, resourceOrder.First, resourceOrder.Second, unDelivered);
         Deliveries.put(deliverId, deliveryOrder);
         return output;

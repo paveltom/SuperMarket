@@ -1,5 +1,5 @@
-package BusinessLayer.DataObject;
-import BusinessLayer.Types.ShippingZone;
+package BusinessLayer.Element;
+import BusinessLayer.Type.ShippingZone;
 
 public class Site
 {

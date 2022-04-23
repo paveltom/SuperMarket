@@ -1,4 +1,4 @@
-package BusinessLayer.DataObject;
+package BusinessLayer.Element;
 
 public class DeliveryDate implements Comparable<DeliveryDate>
 {
@@ -35,6 +35,8 @@ public class DeliveryDate implements Comparable<DeliveryDate>
     @Override
     public int compareTo(DeliveryDate o)
     {
+        if(o == null)
+            return -1;
         boolean dateEquals = Date.equals(o.Date);
         return dateEquals ? Shift - o.Shift : Date.compareTo(o.Date);
     }

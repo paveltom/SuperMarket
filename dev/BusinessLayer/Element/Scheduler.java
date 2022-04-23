@@ -1,4 +1,4 @@
-package BusinessLayer.DataObject;
+package BusinessLayer.Element;
 
 public class Scheduler
 {
@@ -6,17 +6,16 @@ public class Scheduler
     private final int February = 1;
     private final int Year = 2022;
 
-    /* Dairy[nextMonth] represent month number (nextMonth + 1), i.e Dairy[3] represents April */
     private Month[] Dairy;
 
     public Scheduler()
     {
-        Dairy = new Month[NumOfMonths];
-        byte january = 0;
-        Dairy[january] = new Month(31);
+        Dairy = new Month[NumOfMonths + 1];
+        final int January = 1, February = 2;
+        Dairy[January] = new Month(31);
         Dairy[February] = new Month(28);;
         int numOfdays = 31;
-        for(int month = 2; month<NumOfMonths; month++)
+        for(int month = 3; month <= NumOfMonths; month++)
         {
             Dairy[month] = new Month(numOfdays);
             /* Odd month has 31 days, whereas even month has 30 days excludes February which initialize before */
@@ -32,15 +31,13 @@ public class Scheduler
     {
         final int DAY = 0, SHIFT = 1;
         int i = month, j = day;
-        while(i < NumOfMonths)
+        while(i <= NumOfMonths)
         {
             /* Month i has available slot on day >= j */
             var shift = Dairy[i].GetAvailableShift(j);
             if(shift != null)
             {
-                var dDate = new DeliveryDate(shift[DAY], i, Year, shift[SHIFT]);
-                SetOccupied(dDate);
-                return dDate;
+                return new DeliveryDate(shift[DAY], i, Year, shift[SHIFT]);
             }
             /* Month i has no available slot
             * Proceed to successive month from day 1 */
@@ -53,8 +50,8 @@ public class Scheduler
         return null;
     }
 
-    private void SetOccupied(DeliveryDate deliveryDate)
+    public void SetOccupied(DeliveryDate occupiedDate)
     {
-        Dairy[deliveryDate.Date.Month].setOccupied(deliveryDate);
+        Dairy[occupiedDate.Date.Month].setOccupied(occupiedDate.Date.Day, occupiedDate.Shift);
     }
 }

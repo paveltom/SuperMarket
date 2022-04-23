@@ -1,4 +1,4 @@
-package BusinessLayer.Types;
+package BusinessLayer.Type;
 
 public enum VehicleLicenseCategory
 {
