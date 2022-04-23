@@ -27,7 +27,7 @@ public class DeliveryResourcesService {
             ShippingZone shipZone = ShippingZone.valueOf(facDriver.getLivingArea());
             delController.AddDriver(id, licCategory, firstName, lastName, cellphone, shipZone);
             String strId = id + "";
-            return new ResponseT<Boolean>(true, strId);
+            return new ResponseT<String>(strId ,true);
         }
         catch (Exception e){
             return new Response(e.getMessage());
@@ -43,7 +43,7 @@ public class DeliveryResourcesService {
             ShippingZone parkingArea = ShippingZone.valueOf(facTruck.getParkingArea());
             delController.AddTruck(maxLoadWeight, netWeight, licensePlate, model, parkingArea);
             String strLicPlate = licensePlate + "";
-            return new ResponseT<Boolean>(true, strLicPlate);
+            return new ResponseT<String>(strLicPlate, true);
         }
         catch (Exception e){
             return new Response(e.getMessage());

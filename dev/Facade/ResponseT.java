@@ -8,7 +8,8 @@ public class ResponseT<T> extends Response
         super(msg);
     }
 
-    public ResponseT(T value){
+    // To create a response with value, when no error has occurred.
+    public ResponseT(T value, boolean notError){
         this.value = value;
     }
 

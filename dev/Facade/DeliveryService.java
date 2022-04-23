@@ -32,7 +32,7 @@ public class DeliveryService {
             Site supplier = new Site(zone, origin.getAddress(), origin.getContactName(), origin.getCellphone());
             Site client = new Site(ShippingZone.valueOf(destination.getZone()), destination.getAddress(), destination.getContactName(), destination.getCellphone());
             DeliveryOrder delOrder = new DeliveryOrder(supplier, client, orderId, products, delSubmissionDate, zone);
-            ResponseT<DeliveryRecipe> res = new ResponseT<>(delController.Deliver(delOrder));
+            ResponseT<DeliveryRecipe> res = new ResponseT<>(delController.Deliver(delOrder), true);
             return res;
         }
         catch(Exception e) {
@@ -42,8 +42,7 @@ public class DeliveryService {
 
     public ResponseT<String> getDeliveryHistory(){
         try {
-            ResponseT<String> res = new ResponseT<>(delController.GetDeliveriesHistory());
-            return res;
+            return new ResponseT<>(delController.GetDeliveriesHistory(), true);
         }
         catch (Exception e){
             return new ResponseT<>(e.getMessage());

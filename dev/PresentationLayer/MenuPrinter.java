@@ -41,7 +41,6 @@ public class MenuPrinter {
 
     public void takeOutput(String outMsg){
         System.out.println(outMsg);
-        System.out.println();
     }
 
 }

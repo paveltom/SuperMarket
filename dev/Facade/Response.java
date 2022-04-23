@@ -3,19 +3,20 @@ package Facade;
 public class Response {
 
     private String errorMessage;
-    private boolean errorOccured = false;
+    public boolean errorOccurred = false;
 
     Response() {
     }
 
     Response(String msg){
         errorMessage = msg;
+        errorOccurred = true;
     }
 
-    public boolean getErrorOccured(){
-        return errorMessage != null;
+    public boolean getErrorOccurred(){
+        return errorOccurred;
     }
 
-    public String getErrorMessage(){ return this.errorMessage;}
+    public String getErrorMessage(){return errorMessage;}
 
 }
