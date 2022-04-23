@@ -8,7 +8,7 @@ public class BranchController{
     private List<Branch> branches;
     private int counterBranches;
 
-    BranchController(){
+    public BranchController(){
         branches = new ArrayList<Branch>();
         counterBranches = 0;
     }
