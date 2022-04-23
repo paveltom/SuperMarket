@@ -36,4 +36,7 @@ public class ShiftService {
     public void changeId(String o, String n){
         sController.changeId(o,n);
     }
+    public String showAvailability(){
+        return sController.showAvailability();
+    }
 }

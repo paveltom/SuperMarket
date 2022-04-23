@@ -5,7 +5,7 @@ import com.company.BusinessLayer.LogicLayer.WorkerController;
 
 public class WorkerService {
 
-    private WorkerController wController;
+    public WorkerController wController;
 
     /**
      * Constructor for Worker Service

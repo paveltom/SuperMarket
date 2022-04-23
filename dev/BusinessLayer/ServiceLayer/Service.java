@@ -8,7 +8,7 @@ import java.util.LinkedList;
 public class Service {
 
     private ShiftService sService;
-    private WorkerService wService;
+    public WorkerService wService;
 
     public Service()
     {
@@ -16,7 +16,9 @@ public class Service {
         sService = new ShiftService();
     }
 
-
+    public String showAvailability(){
+        return sService.showAvailability();
+    }
     public String changeAvailability(String w, String a){
         try{sService.changeAvailability(w, a);}catch (Exception e){return e.getMessage(); }
         return "Changed availability successfully";
@@ -30,7 +32,7 @@ public class Service {
         }catch (Exception e){
             return e.getMessage();
         }
-        String[] ls = workersList.split("#");
+        String[] ls = workersList.split("\\|");
         HashMap<String,LinkedList<Worker>> wList = new HashMap<>();
         for (String s:
                 ls) {
@@ -118,6 +120,16 @@ public class Service {
         }
 
     }
+    /**
+     * Function to change a workers name
+     * @param _Id - The id of the worker
+     * @param _newName - The name we want to change to
+     * @return A message if the change was successful or an explanation why it wasn't
+     */
+    public String ChangeName(String _Id,String _newName)
+    {
+        return wService.ChangeName(_Id,_newName);
+    }
 
     /**
      * Function to change a workers Job
@@ -134,9 +146,13 @@ public class Service {
      * @param _Id - The id of the worker
      * @param _newQual - The new qualification
      */
-    public String ChangeQual(String _Id,boolean _newQual)
+    public String ChangeQual(String _Id,String _newQual)
     {
-        return wService.ChangeQual(_Id,_newQual);
+        if(_newQual.equals("yes"))
+            return wService.ChangeQual(_Id,true);
+        else if(_newQual.equals("no"))
+            return wService.ChangeQual(_Id,false);
+        else return "SMQualification bad format(Only 'yes' or 'no')";
     }
 
     /**

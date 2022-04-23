@@ -29,7 +29,7 @@ public class Shift {
             LinkedList<String> lnk = new LinkedList<>();
             for (Worker w:
                     workersList.get(j)) {
-                if(!w.getJob().equals(j))
+                if(!w.getJob().equals(j.toString()))
                     throw new IllegalArgumentException("Some workers can't work in their assigned role");
                 lnk.add(w.getId());
             }

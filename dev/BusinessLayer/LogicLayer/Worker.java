@@ -14,8 +14,8 @@ public class Worker {
         return Name;
     }
 
-    public JobEnum getJob() {
-        return Job;
+    public String getJob() {
+        return Job.toString();
     }
 
     public String getSMQualification() {

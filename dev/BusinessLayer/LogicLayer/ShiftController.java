@@ -94,4 +94,12 @@ public class ShiftController {
     public HashMap<String, String> getAvailability() {
         return availability;
     }
+    public String showAvailability(){
+        String s = "";
+        for (String id:
+                availability.keySet()) {
+            s+=id+": "+availability.get(id)+"\n";
+        }
+        return s.substring(0,s.length()-1);
+    }
 }
