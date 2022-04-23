@@ -37,4 +37,8 @@ public class Category {
         this.parentCategory = Parent;
         Parent.subCategories.add(this);
     }
+
+    public int getID(){
+        return ID;
+    }
 }
