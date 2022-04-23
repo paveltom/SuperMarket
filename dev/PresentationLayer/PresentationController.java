@@ -1,6 +1,7 @@
 package PresentationLayer;
 
 import Facade.FacadeObjects.*;
+import Facade.IService;
 import Facade.Response;
 import Facade.ResponseT;
 import Facade.Service;
@@ -8,7 +9,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 public class PresentationController {
-    private final Service service;
+    private final IService service;
     private final MenuPrinter menuPrinter;
     private CallableMenu mainMenu;
     private CallableMenu resourceMenu;
@@ -125,11 +126,12 @@ public class PresentationController {
         while(productId != 0){
             double randProductWeight = rand.nextDouble(20000000); //randomized weight of a single product (double-time of a truck's maxLoadWeight)
             randProductWeight += 1;
-
+            operateOutput("Product weight: " + randProductWeight);
             FacadeProduct currProduct = new FacadeProduct(productId, productAmount, randProductWeight);
             productList.add(currProduct);
 
             // next loop data
+            operateOutput("");
             productId = Integer.parseInt(operateInput("Product ID: "));
             if(productId == 0) break;
             productAmount = Integer.parseInt(operateInput("Amount: "));
@@ -155,7 +157,7 @@ public class PresentationController {
             operateOutput("Couldn't display a delivery history. " + res.getErrorMessage());
             return 1;
         }
-        operateOutput(res.value);
+        operateOutput(res.getValue());
         operateOutput("");
         return 0;
     }

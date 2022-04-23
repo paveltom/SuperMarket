@@ -8,7 +8,6 @@ import java.util.stream.Stream;
 
 public class MenuPrinter {
 
-    //private HashMap<Integer, String> options;
     private Scanner scanner;
 
     public MenuPrinter(){
@@ -20,14 +19,6 @@ public class MenuPrinter {
             System.out.println(i + ". " + options[i]);
         }
         System.out.println(0 + ". exit");
-
-//        Map<Integer, String> copy = new TreeMap<>(options);
-//        for (Map.Entry<Integer, ?> opt : copy.entrySet()){
-//            System.out.println(opt + ". " + copy.get(opt));
-//        Stream<Map.Entry<Integer, String>> sortedStream = options.entrySet().stream().sorted(Map.Entry.comparingByKey());
-//        for (Integer opt : options.keySet()){
-//            System.out.println(opt + ". ");
-//        }
     }
 
     public String takeInput(String outputMsg){

@@ -7,7 +7,7 @@ public interface IService {
 
     public Response deliver(FacadeSite origin, FacadeSite destination, int orderId, List<FacadeProduct> facProducts, FacadeDate facSubDate);
 
-    public Response getDeliveryHistory();
+    public ResponseT<String> getDeliveryHistory();
 
     public Response addDriver(FacadeDriver facadeDriver);
 

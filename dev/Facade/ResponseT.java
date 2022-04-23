@@ -2,7 +2,7 @@ package Facade;
 
 public class ResponseT<T> extends Response
 {
-    public T value;
+    private T value;
 
     public ResponseT(String msg){
         super(msg);
@@ -16,5 +16,9 @@ public class ResponseT<T> extends Response
     public ResponseT(T value, String msg){
         super(msg);
         this.value = value;
+    }
+
+    public T getValue() {
+        return value;
     }
 }
