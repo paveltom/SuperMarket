@@ -30,6 +30,10 @@ public class Product {
 
     }
 
+    public String toString(){
+        return "Product Name : " + name + " , Manufacturer : " + manufacturer + " , Amount : " + amount + " , Category ID : " + categoryID + " , Supply Time : " + supplyTime + " , Demand : " + demand;
+    }
+
     public void updateAmount()
     {
         amount = 0;
