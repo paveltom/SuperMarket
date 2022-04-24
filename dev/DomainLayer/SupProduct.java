@@ -1,12 +1,12 @@
-package DomainLayer;
+package com.company.DomainLayer;
 
 public class SupProduct {
-    private String id;
+    private String catalogNum;
     private String name;
     private float price;
 
-    public SupProduct(String id, String name, float price){
-        this.id = id;
+    public SupProduct(String catalogNum, String name, float price){
+        this.catalogNum = catalogNum;
         this.name = name;
         this.price = price;
     }
@@ -19,11 +19,18 @@ public class SupProduct {
         return price;
     }
 
-    public String getId() {
-        return id;
+    public String getCatalogNum() {
+        return catalogNum;
     }
 
+    public void setCatalogNum(String catalogNum) { this.catalogNum = catalogNum; }
+
+    public void setName(String name) { this.name = name;}
+
     public void setPrice(float price) {
+        if (price < 0 )
+            throw new IllegalArgumentException("product price cannot be negative");
+
         this.price = price;
     }
 }

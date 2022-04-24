@@ -1,4 +1,4 @@
-package Service;
+package com.company.Service;
 
 public class Response {
     private String ErrorMessage = null;
@@ -11,6 +11,5 @@ public class Response {
         ErrorMessage = msg;
     }
 
-
-    public boolean ErrorOccured(){return ErrorMessage != null;};
+    public boolean ErrorOccurred(){return ErrorMessage != null;};
 }

@@ -1,4 +1,4 @@
-package DomainLayer;
+package com.company.DomainLayer;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
