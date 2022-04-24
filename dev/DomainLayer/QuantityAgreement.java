@@ -13,6 +13,7 @@ public class QuantityAgreement {
     }
 
     public void addDiscountPerItem(String productID, int quantity, float discount){
+        validParams(quantity, discount);
         if(!hasItemInperItem(productID)){
             createItemDictInperItem(productID);
         }
@@ -47,42 +48,63 @@ public class QuantityAgreement {
 
 
     public void updateDiscountPerItem(String productID, int quantity, float discount){
-//        if(!hasItemInperItem(productID))
-//            throw new Exception("element ot found");
+        hasItemInperItem(productID);
 
-        removeDiscountPerItem(productID, quantity, discount);
+        removeDiscountPerItem(productID, quantity);
         addDiscountPerItem(productID, quantity, discount);
     }
 
-    public void removeDiscountPerItem(String productID, int quantity, float discount){
-//        if(!hasItemInperItem(productID))
-//            throw new Exception("element ot found");
+    public void removeDiscountPerItem(String productID, int quantity){
+        if(!hasItemInperItem(productID))
+            throw new IllegalArgumentException("element ot found");
 
         perItem.get(productID).remove(quantity);
     }
 
 
     public void updateDiscountPerOrder(String productID, int quantity, float discount){
-//        if(!hasItemInperItem(productID))
-//            throw new Exception("element ot found");
+        if(!hasItemInperOrder(productID))
+            throw new IllegalArgumentException("element ot found");
 
-        removeDiscountPerOrder(productID, quantity, discount);
+        removeDiscountPerOrder(productID, quantity);
         addDiscountPerOrder(productID, quantity, discount);
     }
 
-    public void removeDiscountPerOrder(String productID, int quantity, float discount){
-//        if(!hasItemInperItem(productID))
-//            throw new Exception("element ot found");
+    public void removeDiscountPerOrder(String productID, int quantity){
+        if(!hasItemInperOrder(productID))
+            throw new IllegalArgumentException("element ot found");
 
         perOrder.get(productID).remove(quantity);
     }
 
 
     public Dictionary<Integer,Float> getDiscountsForProductPerItem(String productID){
+        if(!hasItemInperItem(productID))
+            throw new IllegalArgumentException("element ot found");
+
         return perItem.get(productID);
     }
 
     public Dictionary<Integer,Float> getDiscountsForProductPerOrder(String productID){
+        if(!hasItemInperOrder(productID))
+            throw new IllegalArgumentException("element ot found");
         return perOrder.get(productID);
+    }
+
+    private void validParams(int q, float d){
+        validQuantity(q);
+        validDiscount(d);
+    }
+
+    private void validQuantity(int q) {
+        if (q <= 0){
+            throw new IllegalArgumentException("quantity must be greater than 0");
+        }
+    }
+
+    private void validDiscount(float d) {
+        if (d <= 0){
+            throw new IllegalArgumentException("discount must be greater than 0");
+        }
     }
 }
