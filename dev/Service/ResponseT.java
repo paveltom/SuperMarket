@@ -1,4 +1,4 @@
-package Service;
+package com.company.Service;
 
 public class ResponseT <T> extends Response{
     private T value;
@@ -11,11 +11,11 @@ public class ResponseT <T> extends Response{
         super(msg);
     }
 
-    public static <T> ResponseT<T> fromValue(T val){
+    public static <T> ResponseT<T> FromValue(T val){
         return new ResponseT<T>(val);
     }
 
-    public static <T> ResponseT<T> fromError(String msg){
+    public static <T> ResponseT<T> FromError(String msg){
         return new ResponseT<T>(msg);
     }
 }

@@ -1,37 +1,36 @@
-package DomainLayer;
+package com.company.DomainLayer;
 
 public class SupProduct {
-    private String id;
+    private String catalogNum;
     private String name;
     private float price;
 
-    public SupProduct(String id, String name, float price){
-        this.id = id;
-        this.name = name;
-        this.price = price;
+    public SupProduct(String catalogNum, String name, float price){
+        setCatalogNum(catalogNum);
+        setName(name);
+        setPrice(price);
     }
 
     public String getName() {
         return name;
     }
 
-    public float getPrice() { return price; }
-
-    public String getId() {
-        return id;
+    public float getPrice() {
+        return price;
     }
+
+    public String getCatalogNum() {
+        return catalogNum;
+    }
+
+    public void setCatalogNum(String catalogNum) { this.catalogNum = catalogNum; }
+
+    public void setName(String name) { this.name = name;}
 
     public void setPrice(float price) {
-        if(price <= 0)
-            throw new IllegalArgumentException("price must be > 0");
+        if (price < 0 )
+            throw new IllegalArgumentException("product price cannot be negative");
+
         this.price = price;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 }
