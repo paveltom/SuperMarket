@@ -1,4 +1,4 @@
-package com.company.DomainLayer;
+package DomainLayer;
 
 import java.util.*;
 

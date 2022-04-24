@@ -1,4 +1,6 @@
-package com.company.DomainLayer;
+package DomainLayer;
+
+import DomainLayer.QuantityAgreement;
 
 import java.util.*;
 

@@ -1,4 +1,4 @@
-package com.company.DomainLayer;
+package DomainLayer;
 
 public class SupProduct {
     private String catalogNum;
