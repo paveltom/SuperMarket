@@ -219,7 +219,7 @@ public class PresentationController {
         return 0;
     }
 
-    public int removeTruck(){
+    private int removeTruck(){
         int input = Integer.parseInt(operateInput("Truck's license plate (enter '0' to cancel): "));
         if(input == 0) return 0;
         Response res = service.removeTruck(input);
@@ -231,7 +231,7 @@ public class PresentationController {
         return 0;
     }
 
-    public int removeDriver(){
+    private int removeDriver(){
         int input = Integer.parseInt(operateInput("Driver's ID (enter '0' to cancel): "));
         if(input == 0) return 0;
         Response res = service.removeDriver(input);
@@ -243,26 +243,26 @@ public class PresentationController {
         return 0;
     }
 
-    public int getDriverById(){
+    private int getDriverById(){
         int input = Integer.parseInt(operateInput("Driver's ID (enter '0' to cancel): "));
         if(input == 0) return 0;
         operateOutput(service.getDriverById(input).getValue().toString());
         return 0;
     }
 
-    public int getTruckByPlate(){
+    private int getTruckByPlate(){
         int input = Integer.parseInt(operateInput("Truck's license plate (enter '0' to cancel): "));
         if(input == 0) return 0;
         operateOutput(service.getTruckByPlate(input).getValue().toString());
         return 0;
     }
 
-    public int showDrivers(){
+    private int showDrivers(){
         operateOutput(service.showDrivers().getValue());
         return 0;
     }
 
-    public int showTrucks(){
+    private int showTrucks(){
         operateOutput(service.showTrucks().getValue());
         return 0;
     }
@@ -312,12 +312,12 @@ public class PresentationController {
     }
 
 
-    public int showShippingZones(){
+    private int showShippingZones(){
         operateOutput(service.showShippingZones().getValue());
         return 0;
     }
 
-    public int showLicenseCategories(){
+    private int showLicenseCategories(){
         operateOutput("License categories: " + service.showLicenseCategories().getValue());
         return 0;
     }

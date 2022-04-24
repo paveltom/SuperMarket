@@ -8,8 +8,6 @@ import BusinessLayer.Type.ShippingZone;
 import Facade.FacadeObjects.FacadeDriver;
 import Facade.FacadeObjects.FacadeTruck;
 
-import java.util.Arrays;
-
 public class DeliveryResourcesService {
 
     private final DeliveryController delController;

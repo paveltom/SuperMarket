@@ -1,25 +1,29 @@
 package PresentationLayer.Tests;
 
+import BusinessLayer.Test.Testable;
+import PresentationLayer.PresentationController;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 
-// copy same test environment as Nir
-
-public class PresentationControllerTest {
+public class PresentationControllerTest implements Testable {
 
     @Test
-    public void givenRadius_whenCalculateArea_thenReturnArea() {
-        //double actualArea = Circle.calculateArea(1d);
-        double expectedArea = 3.141592653589793;
-        //Assert.assertEquals(expectedArea, actualArea);
+    public void testDeliver(PresentationController pcState) {
+        InputStream sysInBackup = System.in; // backup System.in to restore it later
+        ByteArrayInputStream in = new ByteArrayInputStream("2".getBytes());
+        pcState.run();
+        System.setIn(in);
+        //System.setIn(in);
+        //System.setIn(sysInBackup);
+
     }
 
-    // addDriver success: add 2 drivers whilst hitting 'cancel' after first
-    //    "    fail: enter bad zone; enter bad vehicle category;
-    // addTruck success / fail
-    // getHistory empty / several deliveries
-    // new delivery success / fail
-    //
-
+    @Override
+    public void ExecTest() {
+        PresentationController pcState = new PresentationController();
+        testDeliver(pcState);
+    }
 
 }
