@@ -15,6 +15,10 @@ public class FacadeTruck {
         this.maxLoadWeight = maxLoadWeight;
     }
 
+    public String toString(){
+        return licensePlate + ", " + model + ", " + parkingArea + ", net weight - " + netWeight + ", max load weight - " + maxLoadWeight;
+    }
+
     public int getLicensePlate() {
         return licensePlate;
     }

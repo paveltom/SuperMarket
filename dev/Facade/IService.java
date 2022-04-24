@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface IService {
 
-    public Response deliver(FacadeSite origin, FacadeSite destination, int orderId, List<FacadeProduct> facProducts, FacadeDate facSubDate);
+    public ResponseT<String> deliver(FacadeSite origin, FacadeSite destination, int orderId, List<FacadeProduct> facProducts, FacadeDate facSubDate);
 
     public ResponseT<String> getDeliveryHistory();
 
@@ -13,17 +13,21 @@ public interface IService {
 
     public Response addTruck(FacadeTruck facadeTruck);
 
-    public Response getDriverById(int id);
+    public Response removeTruck(int licensePlate);
 
-    public Response getTruckByPlate(int licPlate);
+    public Response removeDriver(int id);
 
-    public Response showDrivers();
+    public ResponseT<FacadeDriver> getDriverById(int id);
 
-    public Response showTrucks();
+    public ResponseT<FacadeTruck> getTruckByPlate(int licPlate);
 
-    public Response showShippingZones();
+    public ResponseT<String> showDrivers();
 
-    public Response showLicenseCategories();
+    public ResponseT<String> showTrucks();
+
+    public ResponseT<String> showShippingZones();
+
+    public ResponseT<String> showLicenseCategories();
 
 
 }

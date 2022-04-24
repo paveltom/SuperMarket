@@ -1,14 +1,18 @@
 package Facade;
 
 import BusinessLayer.Controller.DeliveryController;
+import BusinessLayer.Element.Driver;
+import BusinessLayer.Type.Truck;
 import BusinessLayer.Type.VehicleLicenseCategory;
 import BusinessLayer.Type.ShippingZone;
 import Facade.FacadeObjects.FacadeDriver;
 import Facade.FacadeObjects.FacadeTruck;
 
+import java.util.Arrays;
+
 public class DeliveryResourcesService {
 
-    private DeliveryController delController;
+    private final DeliveryController delController;
 
     public DeliveryResourcesService(){
         delController = DeliveryController.GetInstance();
@@ -45,5 +49,52 @@ public class DeliveryResourcesService {
         catch (Exception e){
             return new Response(e.getMessage());
         }
+    }
+
+    public Response removeTruck(int licensePlate){
+        try {
+            delController.RemoveTruck(licensePlate);
+            return new Response();
+        }catch (Exception e){
+            return new Response(e.getMessage());
+        }
+    }
+
+    public Response removeDriver(int id){
+        try {
+            delController.RemoveDriver(id);
+            return new Response();
+        }catch (Exception e){
+            return new Response(e.getMessage());
+        }
+    }
+
+    public ResponseT<FacadeDriver> getDriverById(int id){
+        Driver tempDriver = delController.GetDriver(id);
+        return new ResponseT<>(new FacadeDriver( id, tempDriver.FirstName, tempDriver.LastName, tempDriver.Cellphone, tempDriver.License.toString(), ""), true);
+    }
+
+    public ResponseT<FacadeTruck> getTruckByPlate(int licPlate){
+        Truck tempTruck = delController.GetTruck(licPlate);
+        return new ResponseT<>(new FacadeTruck(licPlate, tempTruck.Model, "", tempTruck.NetWeight, tempTruck.MaxLoadWeight), true);
+    }
+
+    public ResponseT<String> showDrivers(){
+        return new ResponseT<>(delController.GetDrivers(), true);
+    }
+
+    public ResponseT<String> showTrucks(){
+        return new ResponseT<>(delController.GetTrucks(), true);
+    }
+
+    public ResponseT<String> showShippingZones(){
+        return new ResponseT<>(delController.ShowShippingZone(), true);
+    }
+
+    public ResponseT<String> showLicenseCategories(){
+        VehicleLicenseCategory[] cats = VehicleLicenseCategory.values();
+        String names = VehicleLicenseCategory.GetVehicleLicenseCategoryName(cats[0]);
+        for (int i = 1; i < cats.length; i++) { names += ", " +  VehicleLicenseCategory.GetVehicleLicenseCategoryName(cats[i]); }
+        return new ResponseT<>(names, true);
     }
 }

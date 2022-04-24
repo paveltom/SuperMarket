@@ -89,6 +89,7 @@ public class PresentationController {
         String[] userInput = new String[4];
         operateOutput("-----------Enter origin site parameters----------");
         operateOutput("-----------Enter 0 at any field to cancel----------");
+        showShippingZones();
         // Creating origin site obj considering received parameters
         for(int i = 0; i < deliveryParams.length; i++){
             String outMsg = "Enter " + deliveryParams[i] + ": ";
@@ -114,26 +115,35 @@ public class PresentationController {
         // Creating list of products
         operateOutput("-----------Enter product ID and its amount.-----------");
         operateOutput("-----------Enter 0 at any Product Id to FINISH----------");
-        operateOutput("-----------Enter 0 at any Amount to cancel----------");
+        operateOutput("-----------Enter 0 at any Amount to CANCEL----------");
         List<FacadeProduct> productList = new ArrayList<>();
         int productId = -1;
         int productAmount = -1;
-        productId = Integer.parseInt(operateInput("Product ID: "));
+        productId = Integer.parseInt(operateInput("Product ID (only Milk - 123): "));
+        while (productId != 123) {
+            operateOutput("No such product...");
+            productId = Integer.parseInt(operateInput("Product ID (only Milk - 123): "));
+        }
         productAmount = Integer.parseInt(operateInput("Amount: "));
-        Random rand = new Random();
+        //Random rand = new Random();
 
         // Receiving products parameters
         while(productId != 0){
-            double randProductWeight = rand.nextDouble(20000000); //randomized weight of a single product (double-time of a truck's maxLoadWeight)
-            randProductWeight += 1;
-            operateOutput("Product weight: " + randProductWeight);
-            FacadeProduct currProduct = new FacadeProduct(productId, productAmount, randProductWeight);
+            //double randProductWeight = rand.nextDouble(20000000); //randomized weight of a single product (double-time of a truck's maxLoadWeight)
+            //randProductWeight += 1;
+            //operateOutput("Product weight: " + randProductWeight);
+            operateOutput("Product weight: " + 153);
+            FacadeProduct currProduct = new FacadeProduct(productId, productAmount, 153);
             productList.add(currProduct);
 
             // next loop data
             operateOutput("");
             productId = Integer.parseInt(operateInput("Product ID: "));
             if(productId == 0) break;
+            while (productId != 123) {
+                operateOutput("No such product...");
+                productId = Integer.parseInt(operateInput("Product ID (only Milk - 123): "));
+            }
             productAmount = Integer.parseInt(operateInput("Amount: "));
             if(productAmount == 0) return 0;
         }
@@ -142,11 +152,12 @@ public class PresentationController {
         FacadeDate facDate = new FacadeDate(currTime.getDayOfMonth(), currTime.getMonthValue(), currTime.getYear());
 
         int id = (int) System.currentTimeMillis(); //unique order Id
-        Response res = service.deliver(origin, destination, id, productList, facDate);
+        ResponseT<String> res = service.deliver(origin, destination, id, productList, facDate);
         if(res.getErrorOccurred())
             operateOutput("Couldn't create a delivery for this order.\n" + res.getErrorMessage());
         else
             operateOutput("Delivery for the order " + id + " was successfully created.");
+        operateOutput(res.getValue());
         operateOutput("");
         return 0;
     }
@@ -165,6 +176,8 @@ public class PresentationController {
     private int addTruck(){
         operateOutput("----------Please enter trucks details----------");
         operateOutput("----------Enter '0' at any field to cancel----------");
+        showShippingZones();
+        showLicenseCategories();
         String[] details = {"License Plate", "Model", "Parking area", "Net weight", "Max load weight"};
         for(int i = 0; i < details.length; i++){
             String input = operateInput(details[i] + ": ");
@@ -186,6 +199,8 @@ public class PresentationController {
     private int addDriver(){
         operateOutput("----------Please enter drivers details----------");
         operateOutput("----------Enter '0' at any field to cancel----------");
+        showShippingZones();
+        showLicenseCategories();
         String[] details = {"ID", "First Name", "Last Name", "Cellphone", "Vehicle Category", "Living Area"};
         for(int i = 0; i < details.length; i++){
             String input = operateInput(details[i] + ": ");
@@ -204,6 +219,54 @@ public class PresentationController {
         return 0;
     }
 
+    public int removeTruck(){
+        int input = Integer.parseInt(operateInput("Truck's license plate (enter '0' to cancel): "));
+        if(input == 0) return 0;
+        Response res = service.removeTruck(input);
+        if(res.getErrorOccurred()) {
+            operateOutput("Couldn't remove a truck " + input + ". " + res.getErrorMessage());
+            return 1;
+        }
+        operateOutput("Truck " + input + " was removed successfully.");
+        return 0;
+    }
+
+    public int removeDriver(){
+        int input = Integer.parseInt(operateInput("Driver's ID (enter '0' to cancel): "));
+        if(input == 0) return 0;
+        Response res = service.removeDriver(input);
+        if(res.getErrorOccurred()) {
+            operateOutput("Couldn't remove a driver " + input + ". " + res.getErrorMessage());
+            return 1;
+        }
+        operateOutput("Driver " + input + " was removed successfully.");
+        return 0;
+    }
+
+    public int getDriverById(){
+        int input = Integer.parseInt(operateInput("Driver's ID (enter '0' to cancel): "));
+        if(input == 0) return 0;
+        operateOutput(service.getDriverById(input).getValue().toString());
+        return 0;
+    }
+
+    public int getTruckByPlate(){
+        int input = Integer.parseInt(operateInput("Truck's license plate (enter '0' to cancel): "));
+        if(input == 0) return 0;
+        operateOutput(service.getTruckByPlate(input).getValue().toString());
+        return 0;
+    }
+
+    public int showDrivers(){
+        operateOutput(service.showDrivers().getValue());
+        return 0;
+    }
+
+    public int showTrucks(){
+        operateOutput(service.showTrucks().getValue());
+        return 0;
+    }
+
     private int exit(){
         System.out.println("exiting...");
         System.exit(0);
@@ -211,10 +274,16 @@ public class PresentationController {
     }
 
     private void setMenus(){
-        String[] resourcesMenuStrings = {"Exit", "Back", "Add driver", "Add truck"};
+        String[] resourcesMenuStrings = {"Exit", "Back", "Add driver", "Add truck", "Remove driver", "Remove truck", "Show all drivers", "Show all trucks", "Get driver by ID", "Get truck by license plate"};
         Map<Integer, CallableMenu> resourceOpts = new HashMap<>(){{
             put(2, new CallableMenu(() -> addDriver()));
             put(3, new CallableMenu(() -> addTruck()));
+            put(4, new CallableMenu(() -> removeDriver()));
+            put(5, new CallableMenu(() -> removeTruck()));
+            put(6, new CallableMenu(() -> showDrivers()));
+            put(7, new CallableMenu(() -> showTrucks()));
+            put(8, new CallableMenu(() -> getDriverById()));
+            put(9, new CallableMenu(() -> getTruckByPlate()));
         }};
         resourceMenu = new CallableMenu(resourceOpts, resourcesMenuStrings);
 
@@ -242,12 +311,16 @@ public class PresentationController {
         superUserMenu = new CallableMenu(superUserMenuOpts, superUserMenuStrings);
     }
 
-//    private int showDrivers(){
-//
-//    }
 
-//    private int showTrucks(){
-//
-//    }
+    public int showShippingZones(){
+        operateOutput(service.showShippingZones().getValue());
+        return 0;
+    }
+
+    public int showLicenseCategories(){
+        operateOutput("License categories: " + service.showLicenseCategories().getValue());
+        return 0;
+    }
+
 
 }

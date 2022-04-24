@@ -15,6 +15,10 @@ public class FacadeDriver {
         this.livingArea = livingArea;
     }
 
+    public String toString(){
+        return id + ", " + firstName + " " + lastName + ", " + cellphone + ", " + vehicleCategory + ", " + livingArea;
+    }
+
     public String getFirstName() {
         return firstName;
     }

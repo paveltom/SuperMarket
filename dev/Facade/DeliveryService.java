@@ -18,7 +18,7 @@ public class DeliveryService {
 
 
     //orderParams: siteId, clientId, orderId, products<productId, quantity>, submissionDate
-    public Response deliver(FacadeSite origin, FacadeSite destination, int orderId, List<FacadeProduct> facProducts, FacadeDate facSubDate){
+    public ResponseT<String> deliver(FacadeSite origin, FacadeSite destination, int orderId, List<FacadeProduct> facProducts, FacadeDate facSubDate){
         try {
 
             List<Product> products = new ArrayList<>();
@@ -32,11 +32,11 @@ public class DeliveryService {
             Site supplier = new Site(zone, origin.getAddress(), origin.getContactName(), origin.getCellphone());
             Site client = new Site(ShippingZone.valueOf(destination.getZone()), destination.getAddress(), destination.getContactName(), destination.getCellphone());
             DeliveryOrder delOrder = new DeliveryOrder(supplier, client, orderId, products, delSubmissionDate, zone);
-            ResponseT<DeliveryRecipe> res = new ResponseT<>(delController.Deliver(delOrder), true);
+            ResponseT<String> res = new ResponseT<>(delController.Deliver(delOrder).toString(), true);
             return res;
         }
         catch(Exception e) {
-           return new Response(e.getMessage());
+           return new ResponseT<String>(e.getMessage());
         }
     }
 
