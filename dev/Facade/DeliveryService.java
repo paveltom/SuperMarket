@@ -25,7 +25,7 @@ public class DeliveryService {
 
 
     //orderParams: siteId, clientId, orderId, products<productId, quantity>, submissionDate
-    public ResponseT<String> deliver(FacadeSite origin, FacadeSite destination, int orderId, List<FacadeProduct> facProducts, FacadeDate facSubDate){
+    public ResponseT<FacadeRecipe> deliver(FacadeSite origin, FacadeSite destination, int orderId, List<FacadeProduct> facProducts, FacadeDate facSubDate){
         try {
 
             List<Product> products = new ArrayList<>();
@@ -39,11 +39,15 @@ public class DeliveryService {
             Site supplier = new Site(zone, origin.getAddress(), origin.getContactName(), origin.getCellphone());
             Site client = new Site(ShippingZone.valueOf(destination.getZone()), destination.getAddress(), destination.getContactName(), destination.getCellphone());
             DeliveryOrder delOrder = new DeliveryOrder(supplier, client, orderId, products, delSubmissionDate, zone);
-            ResponseT<String> res = new ResponseT<>(delController.Deliver(delOrder).toString(), true);
-            return res;
+            DeliveryRecipe delRec = delController.Deliver(delOrder);
+            FacadeDriver facadeDriver = new FacadeDriver(delRec.DeliveryPerson);
+            FacadeTruck facadeTruck = new FacadeTruck(delRec.DeliveryTruck);
+            FacadeDate facadeDate = new FacadeDate(delRec.DueDate);
+            FacadeRecipe facadeRecipe = new FacadeRecipe(delRec.OrderId, delRec.DeliveryId, delRec.IsPartitioned, facadeDate, facadeDriver, facadeTruck, delRec.UnDeliveredProducts);
+            return new ResponseT<>(facadeRecipe, true);
         }
         catch(Exception e) {
-           return new ResponseT<String>(e.getMessage());
+           return new ResponseT<>(e.getMessage());
         }
     }
 

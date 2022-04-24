@@ -14,7 +14,7 @@ public class Service implements IService{
         deliveryResourcesService = new DeliveryResourcesService();
     }
 
-    public ResponseT<String> deliver(FacadeSite origin, FacadeSite destination, int orderId, List<FacadeProduct> facProducts, FacadeDate facSubDate){
+    public ResponseT<FacadeRecipe> deliver(FacadeSite origin, FacadeSite destination, int orderId, List<FacadeProduct> facProducts, FacadeDate facSubDate){
         return deliveryService.deliver(origin, destination, orderId, facProducts, facSubDate);
     }
 

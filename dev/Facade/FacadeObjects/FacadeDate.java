@@ -1,5 +1,9 @@
 package Facade.FacadeObjects;
 
+
+import BusinessLayer.Element.Date;
+import BusinessLayer.Element.DeliveryDate;
+
 public class FacadeDate {
 
     private int month;
@@ -7,6 +11,19 @@ public class FacadeDate {
     private int year;
 
     public FacadeDate(){}
+
+    public FacadeDate(Date date){
+        this.day = date.Day;
+        this.month = date.Month;
+        this.year = date.Year;
+    }
+
+    public FacadeDate(DeliveryDate date){
+        this.day = date.Date.Day;
+        this.month = date.Date.Month;
+        this.year = date.Date.Year;
+    }
+
 
     public FacadeDate(int day, int month, int year){
         this.day = day;
@@ -18,23 +35,12 @@ public class FacadeDate {
         return month;
     }
 
-    public void setMonth(int month) {
-        this.month = month;
-    }
-
     public int getDay() {
         return day;
-    }
-
-    public void setDay(int day) {
-        this.day = day;
     }
 
     public int getYear() {
         return year;
     }
 
-    public void setYear(int year) {
-        this.year = year;
-    }
 }

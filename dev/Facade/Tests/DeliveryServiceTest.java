@@ -30,15 +30,15 @@ public class DeliveryServiceTest implements Testable {
         facProducts.add(new FacadeProduct(123, 1000000, 153));
         FacadeDate facadeDate = new FacadeDate(20, 4, 2022);
 
-        ResponseT<String> resDelivery = drService.deliver(origin, dest, orderId, facProducts, facadeDate);
+        ResponseT<FacadeRecipe> resDelivery = drService.deliver(origin, dest, orderId, facProducts, facadeDate);
 
-        String result = resDelivery.getValue();
+        FacadeRecipe result = resDelivery.getValue();
 
         String deliveries = drService.getDeliveryHistory().getValue();
-        assertTrue(deliveries.contains(result));
+        assertTrue(deliveries.contains(result.toString()));
 
-        assertTrue(result.contains(orderId + ""));
-        assertTrue(result.contains("Missing amount: 111111"));
+        assertTrue(result.toString().contains(orderId + ""));
+        assertTrue(result.toString().contains("Missing amount: 111111"));
     }
 
     @Test
@@ -54,11 +54,10 @@ public class DeliveryServiceTest implements Testable {
         String strResHistory = drService.getDeliveryHistory().getValue();
         assertFalse(strResHistory.contains(orderId + ""));
 
-        ResponseT<String> resDelivery = drService.deliver(origin, dest, orderId, facProducts, facadeDate);
+        ResponseT<FacadeRecipe> resDelivery = drService.deliver(origin, dest, orderId, facProducts, facadeDate);
 
         strResHistory = drService.getDeliveryHistory().getValue();
         assertTrue(strResHistory.contains(orderId + ""));
-
 
     }
 

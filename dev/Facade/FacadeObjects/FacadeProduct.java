@@ -17,23 +17,11 @@ public class FacadeProduct {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public double getWeight() {
         return weight;
     }
 
-    public void setWeight(double weight) {
-        this.weight = weight;
-    }
-
     public int getAmount() {
         return amount;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
     }
 }

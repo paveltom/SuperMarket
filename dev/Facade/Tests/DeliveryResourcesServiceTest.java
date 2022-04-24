@@ -109,7 +109,6 @@ public class DeliveryResourcesServiceTest implements Testable {
         FacadeTruck facadeTruck = getTempTruck();
 
         String allTrucks = drService.showTrucks().getValue();
-        System.out.println(allTrucks);
         assertFalse(allTrucks.contains(facadeTruck.getModel()));
 
         drService.addTruck(facadeTruck);

@@ -25,7 +25,7 @@ public class DeliveryResourcesService {
 
     public Response addDriver(FacadeDriver facDriver){
         try {
-            int id = facDriver.getId();
+            long id = facDriver.getId();
             String firstName = facDriver.getFirstName();
             String lastName = facDriver.getLastName();
             String cellphone = facDriver.getCellphone();
@@ -56,7 +56,7 @@ public class DeliveryResourcesService {
         }
     }
 
-    public Response removeTruck(int licensePlate){
+    public Response removeTruck(long licensePlate){
         try {
             delController.RemoveTruck(licensePlate);
             return new Response();
@@ -65,7 +65,7 @@ public class DeliveryResourcesService {
         }
     }
 
-    public Response removeDriver(int id){
+    public Response removeDriver(long id){
         try {
             delController.RemoveDriver(id);
             return new Response();
@@ -74,12 +74,12 @@ public class DeliveryResourcesService {
         }
     }
 
-    public ResponseT<FacadeDriver> getDriverById(int id){
+    public ResponseT<FacadeDriver> getDriverById(long id){
         Driver tempDriver = delController.GetDriver(id);
         return new ResponseT<>(new FacadeDriver( id, tempDriver.FirstName, tempDriver.LastName, tempDriver.Cellphone, tempDriver.License.toString(), ""), true);
     }
 
-    public ResponseT<FacadeTruck> getTruckByPlate(int licPlate){
+    public ResponseT<FacadeTruck> getTruckByPlate(long licPlate){
         Truck tempTruck = delController.GetTruck(licPlate);
         return new ResponseT<>(new FacadeTruck(licPlate, tempTruck.Model, "", tempTruck.NetWeight, tempTruck.MaxLoadWeight), true);
     }

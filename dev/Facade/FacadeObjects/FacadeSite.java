@@ -17,31 +17,17 @@ public class FacadeSite {
         return cellphone;
     }
 
-    public void setCellphone(String cellphone) {
-        this.cellphone = cellphone;
-    }
-
     public String getContactName() {
         return contactName;
     }
 
-    public void setContactName(String contactName) {
-        this.contactName = contactName;
-    }
 
     public String getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
 
     public String getZone() {
         return zone;
-    }
-
-    public void setZone(String zone) {
-        this.zone = zone;
     }
 }

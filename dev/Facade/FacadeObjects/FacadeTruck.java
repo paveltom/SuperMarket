@@ -1,13 +1,23 @@
 package Facade.FacadeObjects;
 
+import BusinessLayer.Type.Truck;
+
 public class FacadeTruck {
-    private int licensePlate;
+    private long licensePlate;
     private String model, parkingArea;
     private double netWeight, maxLoadWeight;
 
     public  FacadeTruck(){}
 
-    public FacadeTruck(int licensePlate, String model, String parkingArea, double netWeight, double maxLoadWeight){
+    public FacadeTruck(Truck truck){
+        this.licensePlate = truck.VehicleLicenseNumber;
+        this.model = truck.Model;
+        this.netWeight = truck.NetWeight;
+        this.maxLoadWeight = truck.MaxLoadWeight;
+        this.parkingArea = "";
+    }
+
+    public FacadeTruck(long licensePlate, String model, String parkingArea, double netWeight, double maxLoadWeight){
         this.licensePlate = licensePlate;
         this.model = model;
         this.parkingArea = parkingArea;
@@ -19,43 +29,23 @@ public class FacadeTruck {
         return licensePlate + ", " + model + ", " + parkingArea + ", net weight - " + netWeight + ", max load weight - " + maxLoadWeight;
     }
 
-    public int getLicensePlate() {
+    public long getLicensePlate() {
         return licensePlate;
-    }
-
-    public void setLicensePlate(int licensePlate) {
-        this.licensePlate = licensePlate;
     }
 
     public String getModel() {
         return model;
     }
 
-    public void setModel(String model) {
-        this.model = model;
-    }
-
     public String getParkingArea() {
         return parkingArea;
-    }
-
-    public void setParkingArea(String parkingArea) {
-        this.parkingArea = parkingArea;
     }
 
     public double getNetWeight() {
         return netWeight;
     }
 
-    public void setNetWeight(double netWeight) {
-        this.netWeight = netWeight;
-    }
-
     public double getMaxLoadWeight() {
         return maxLoadWeight;
-    }
-
-    public void setMaxLoadWeight(double maxLoadWeight) {
-        this.maxLoadWeight = maxLoadWeight;
     }
 }
