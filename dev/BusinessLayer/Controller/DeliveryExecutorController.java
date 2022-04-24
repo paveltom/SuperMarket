@@ -1,7 +1,8 @@
 package BusinessLayer.Controller;
 
 import BusinessLayer.Element.*;
-import BusinessLayer.Type.Truck;
+import BusinessLayer.Element.Truck;
+import BusinessLayer.Type.Tuple;
 import BusinessLayer.Type.VehicleLicenseCategory;
 
 import java.util.HashMap;
@@ -55,6 +56,11 @@ public class DeliveryExecutorController
         for(var delivery: Deliveries.values())
             sb.append(delivery);
         return sb.toString();
+    }
+
+    public void Clear()
+    {
+        Deliveries.clear();
     }
 
 }

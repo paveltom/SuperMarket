@@ -1,7 +1,5 @@
 package BusinessLayer.Element;
 
-import BusinessLayer.Type.Truck;
-
 import java.util.Map;
 
 public class DeliveryRecipe

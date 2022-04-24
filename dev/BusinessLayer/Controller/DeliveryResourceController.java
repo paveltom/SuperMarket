@@ -3,27 +3,37 @@ package BusinessLayer.Controller;
 import BusinessLayer.Element.*;
 import BusinessLayer.Type.Pair;
 import BusinessLayer.Type.ShippingZone;
-import BusinessLayer.Type.Truck;
+import BusinessLayer.Element.Truck;
+import BusinessLayer.Type.Tuple;
 import BusinessLayer.Type.VehicleLicenseCategory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DeliveryResourceController {
 
-    //Drivers[zone][license] = Delivery drivers of param zone, owner of param license.
-    private List<Driver>[][] Drivers;
+    //Drivers[zone][license] = Delivery driver's ID of param zone, owner of param license.
+    private List<Long>[][] DriversDistribution;
+    // Map driver's id to its representative object in the system.
+    private Map<Long, Driver> Drivers;
 
-    //Trucks[zone][license] = Trucks belongs to param zone, with maximal load restriction of param license.
-    private List<Truck>[][] Trucks;
+    //Trucks[zone][license] = Truck's vehicle license numbers (vln) belongs to param zone, with maximal load restriction of param license.
+    private List<Long>[][] TrucksDistribution;
+    // Map truck's vehicle license number to its representative object in the system.
+    private Map<Long, Truck> Trucks;
 
     private final int ZONES = 9;
     private final int LICENSES = 3;
 
+
     public DeliveryResourceController()
     {
-        Drivers = new ArrayList[ZONES][LICENSES];
-        Trucks = new ArrayList[ZONES][LICENSES];
+        DriversDistribution = new ArrayList[ZONES][LICENSES];
+        TrucksDistribution = new ArrayList[ZONES][LICENSES];
+        Drivers = new HashMap<>();
+        Trucks = new HashMap<>();
         Init();
     }
 
@@ -40,7 +50,7 @@ public class DeliveryResourceController {
 
     private void InitDrivers()
     {
-        final long DUMMY_ID = 999999999;
+        long DUMMY_ID = 0;
         final String DUMMY_FNAME = "DUMMY_FNAME";
         final String DUMMY_LNAME = "DUMMY_LNAME";
         final String DUMMY_CELLPHONE = "DUMMY_CELLPHONE";
@@ -48,9 +58,12 @@ public class DeliveryResourceController {
         for (ShippingZone zone : ShippingZone.values()) {
             for (VehicleLicenseCategory licenseCategory : VehicleLicenseCategory.values())
             {
-                var driversList = new ArrayList<Driver>();
-                driversList.add(new Driver(DUMMY_ID, licenseCategory, DUMMY_FNAME, DUMMY_LNAME, DUMMY_CELLPHONE));
-                Drivers[zone.ordinal()][licenseCategory.ordinal()] = driversList;
+                var driversList = new ArrayList<Long>();
+                var driver = new Driver(DUMMY_ID, licenseCategory, DUMMY_FNAME, DUMMY_LNAME, DUMMY_CELLPHONE, zone);
+                driversList.add(DUMMY_ID);
+                Drivers.put(DUMMY_ID, driver);
+                DriversDistribution[zone.ordinal()][licenseCategory.ordinal()] = driversList;
+                DUMMY_ID++;
             }
         }
     }
@@ -58,15 +71,18 @@ public class DeliveryResourceController {
     private void InitTrucks()
     {
         final double DUMMY_NW = 10000000.00;
-        final long DUMMY_VEHICLE_NUMBER = 5555555;
+        long DUMMY_VEHICLE_NUMBER = 5555555;
         final String DUMMY_TRUCK_MODEL = "DUMMY_TRUCK_MODEL";
 
         for (ShippingZone zone : ShippingZone.values()) {
             for (VehicleLicenseCategory licenseCategory : VehicleLicenseCategory.values())
             {
-                var trucksList = new ArrayList<Truck>();
-                trucksList.add(new Truck(VehicleLicenseCategory.MaxLoadWeightByLicense(licenseCategory), DUMMY_NW, DUMMY_VEHICLE_NUMBER, DUMMY_TRUCK_MODEL));
-                Trucks[zone.ordinal()][licenseCategory.ordinal()] = trucksList;
+                var trucksList = new ArrayList<Long>();
+                var truck = new Truck(VehicleLicenseCategory.MaxLoadWeightByLicense(licenseCategory), DUMMY_NW, DUMMY_VEHICLE_NUMBER, DUMMY_TRUCK_MODEL, zone);
+                trucksList.add(DUMMY_VEHICLE_NUMBER);
+                Trucks.put(DUMMY_VEHICLE_NUMBER, truck);
+                TrucksDistribution[zone.ordinal()][licenseCategory.ordinal()] = trucksList;
+                DUMMY_VEHICLE_NUMBER++;
             }
         }
     }
@@ -76,7 +92,7 @@ public class DeliveryResourceController {
     {
         /* Find the Driver & Truck capable to deliver cargo of param weight one closest day */
         var pDriver = FindDriver(date, zone, weight);
-        var pTruck = FindTruck(date, zone,weight);
+        var pTruck = FindTruck(date, zone, weight);
         int deliveryDateDiff = pDriver.Second.compareTo(pTruck.Second);
         /* Choose the latest delivery date */
         DeliveryDate deliveryDate = (deliveryDateDiff > 0) ? pDriver.Second : pTruck.Second;
@@ -90,11 +106,12 @@ public class DeliveryResourceController {
     private Pair<Driver, DeliveryDate> FindDriver(Date date, ShippingZone zone, double weight)
     {
         var matchingLicense = VehicleLicenseCategory.FindLicense(weight);
-        var drivers = Drivers[zone.ordinal()][matchingLicense.ordinal()];
+        var driverIds = DriversDistribution[zone.ordinal()][matchingLicense.ordinal()];
         Driver resDriver = null;
         DeliveryDate resDate = null;
-        for(Driver driver : drivers)
+        for(Long driverId : driverIds)
         {
+            var driver = Drivers.get(driverId);
             if(resDriver != null)
             {
                 var d = driver.GetAvailableShift(date.Month, date.Day);
@@ -121,11 +138,12 @@ public class DeliveryResourceController {
     private Pair<Truck, DeliveryDate> FindTruck(Date date, ShippingZone zone, double weight)
     {
         var matchingLicense = VehicleLicenseCategory.FindLicense(weight);
-        var trucks = Trucks[zone.ordinal()][matchingLicense.ordinal()];
+        var trucksIds = TrucksDistribution[zone.ordinal()][matchingLicense.ordinal()];
         Truck resTruck = null;
         DeliveryDate resDate = null;
-        for(Truck truck : trucks)
+        for(Long truckId : trucksIds)
         {
+            var truck = Trucks.get(truckId);
             if(resTruck != null)
             {
                 var d = truck.GetAvailableShift(date.Month, date.Day);
@@ -149,98 +167,72 @@ public class DeliveryResourceController {
     }
 
 
-    public void AddDriver(long id, VehicleLicenseCategory license, String fname, String lname, String cellphone, ShippingZone zone)
+    public boolean AddDriver(long id, VehicleLicenseCategory license, String fname, String lname, String cellphone, ShippingZone zone)
     {
-        var newDriver = new Driver(id, license, fname, lname, cellphone);
-        Drivers[zone.ordinal()][license.ordinal()].add(newDriver);
-    }
-
-    public void AddTruck(double mlw, double nw, long vln, String m, ShippingZone zone)
-    {
-        var newTruck = new Truck(mlw, nw, vln, m);
-        Trucks[zone.ordinal()][VehicleLicenseCategory.FindLicense(mlw).ordinal()].add(newTruck);
-    }
-
-    public void RemoveDriver(long id)
-    {
-        for (ShippingZone zone : ShippingZone.values())
+        if(!Drivers.containsKey(id))
         {
-            for (List<Driver> drivers : Drivers[zone.ordinal()]) {
-                for(Driver driver : drivers)
-                {
-                    if(driver.Id == id)
-                    {
-                        drivers.remove(driver);
-                        return;
-                    }
-                }
-            }
+            var newDriver = new Driver(id, license, fname, lname, cellphone, zone);
+            Drivers.put(id, newDriver);
+            DriversDistribution[zone.ordinal()][license.ordinal()].add(id);
+            return true;
         }
+        return false;
     }
 
-    public void RemoveTruck(long vln)
+    public boolean AddTruck(double mlw, double nw, long vln, String m, ShippingZone zone)
     {
-        for (ShippingZone zone : ShippingZone.values())
+        if(!Trucks.containsKey(vln))
         {
-            for (List<Truck> trucks : Trucks[zone.ordinal()]) {
-                for(Truck truck : trucks)
-                {
-                    if(truck.VehicleLicenseNumber == vln)
-                    {
-                        trucks.remove(truck);
-                        return;
-                    }
-                }
-            }
+            var newTruck = new Truck(mlw, nw, vln, m, zone);
+            Trucks.put(vln, newTruck);
+            TrucksDistribution[zone.ordinal()][VehicleLicenseCategory.FindLicense(mlw).ordinal()].add(vln);
+            return true;
         }
+        return false;
+    }
+
+    public Driver RemoveDriver(long id)
+    {
+        var removedDriver = Drivers.remove(id);
+        if(removedDriver != null)
+        {
+            var zone = removedDriver.Zone.ordinal();
+            var licenseCategory = removedDriver.License;
+            TrucksDistribution[zone][licenseCategory.ordinal()].remove(id);
+            return removedDriver;
+        }
+        return null;
+    }
+
+    public Truck RemoveTruck(long vln)
+    {
+        var removedTruck = Trucks.remove(vln);
+        if(removedTruck != null)
+        {
+            var zone = removedTruck.Zone.ordinal();
+            var licenseCategory = VehicleLicenseCategory.FindLicense(removedTruck.MaxLoadWeight);
+            TrucksDistribution[zone][licenseCategory.ordinal()].remove(vln);
+            return removedTruck;
+        }
+        return null;
     }
 
     public Driver GetDriver(long id)
     {
-        for (ShippingZone zone : ShippingZone.values())
-        {
-            for (List<Driver> drivers : Drivers[zone.ordinal()]) {
-                for(Driver driver : drivers)
-                {
-                    if(driver.Id == id)
-                        return driver;
-                }
-            }
-        }
-        return null;
+        return Drivers.getOrDefault(id, null);
     }
 
     public Truck GetTruck(long vln)
     {
-        for (ShippingZone zone : ShippingZone.values())
-        {
-            for (List<Truck> trucks : Trucks[zone.ordinal()]) {
-                for(Truck truck : trucks)
-                {
-                    if(truck.VehicleLicenseNumber == vln)
-                    {
-                        return truck;
-                    }
-                }
-            }
-        }
-        return null;
+        return Trucks.getOrDefault(vln, null);
     }
 
     public String GetDrivers()
     {
         StringBuilder sb = new StringBuilder();
-        sb.append("------------------------------ Drivers ------------------------------\n");
-        for (ShippingZone zone : ShippingZone.values())
-        {
-            sb.append(String.format("--------------------Zone: %s--------------------\n", ShippingZone.GetShippingZoneName(zone)));
-            for (List<Driver> drivers : Drivers[zone.ordinal()])
-            {
-                for(Driver driver : drivers)
-                    sb.append(driver.toString());
-            }
-            sb.append("\n");
-        }
+        sb.append("------------------------------ Trucks ------------------------------\n");
+        for(Driver driver : Drivers.values())
+            sb.append(String.format("%s\n", driver));
         return sb.toString();
     }
 
@@ -248,16 +240,8 @@ public class DeliveryResourceController {
     {
         StringBuilder sb = new StringBuilder();
         sb.append("------------------------------ Trucks ------------------------------\n");
-        for (ShippingZone zone : ShippingZone.values())
-        {
-            sb.append(String.format("-------------------- Zone: %s --------------------\n", ShippingZone.GetShippingZoneName(zone)));
-            for (List<Truck> trucks : Trucks[zone.ordinal()])
-            {
-                for(Truck truck : trucks)
-                    sb.append(truck.toString());
-            }
-
-        }
+        for (Truck truck :Trucks.values())
+            sb.append(String.format("%s\n", truck));
         return sb.toString();
     }
 
@@ -270,5 +254,19 @@ public class DeliveryResourceController {
             sb.append(String.format("%s\n", zone));
         sb.append("------------------------------ North ------------------------------\n");
         return sb.toString();
+    }
+
+    public void Clear()
+    {
+        Drivers.clear();
+        Trucks.clear();
+        for(var zone : ShippingZone.values())
+        {
+            for(var licenseCategory : VehicleLicenseCategory.values())
+            {
+                DriversDistribution[zone.ordinal()][licenseCategory.ordinal()].clear();
+                TrucksDistribution[zone.ordinal()][licenseCategory.ordinal()].clear();
+            }
+        }
     }
 }

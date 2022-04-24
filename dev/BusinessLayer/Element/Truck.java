@@ -1,28 +1,29 @@
-package BusinessLayer.Type;
+package BusinessLayer.Element;
 
-import BusinessLayer.Element.DeliveryDate;
-import BusinessLayer.Element.Scheduler;
+import BusinessLayer.Type.ShippingZone;
 
 public class Truck
 {
     public final double MaxLoadWeight,NetWeight;
     public final long VehicleLicenseNumber;
     public final String Model;
+    public final ShippingZone Zone;
     private Scheduler Dairy;
 
-    public Truck(double mlw, double nw, long vln, String m)
+    public Truck(double mlw, double nw, long vln, String m, ShippingZone z)
     {
         MaxLoadWeight = mlw;
         NetWeight = nw;
         VehicleLicenseNumber = vln;
         Model = m;
+        Zone = z;
         Dairy = new Scheduler();
     }
 
     @Override
     public String toString()
     {
-        return String.format("Truck\nModel: %s\nVehicleLicenseNumber: %d\nMaxLoadWeight: %f\nNetWeight: %f\n", Model, VehicleLicenseNumber, MaxLoadWeight, NetWeight);
+        return String.format("Truck\nModel: %s\nVehicleLicenseNumber: %d\nZone: %s\nMaxLoadWeight: %f\nNetWeight: %f\n", Model, VehicleLicenseNumber, Zone, MaxLoadWeight, NetWeight);
     }
 
     public DeliveryDate GetAvailableShift(int month, int day)

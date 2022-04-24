@@ -1,4 +1,4 @@
-package BusinessLayer.Element;
+package BusinessLayer.Type;
 
 public class Tuple<T, E, U>
 {

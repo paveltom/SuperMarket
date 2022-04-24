@@ -11,7 +11,7 @@ public class TestsExecutor {
         {
             sb.append(String.format("Check unit: %s\n", test));
             test.ExecTest();
-            /* If one the test applied in ExecTest is failed, the process will terminate. */
+            /* If one of the test applied in ExecTest() is failed, the process will terminate. */
             sb.append(String.format("Unit: %s pass all tests\n", test));
         }
         sb.append("------------------------------ Tests end ------------------------------\n");

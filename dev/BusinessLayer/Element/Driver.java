@@ -1,4 +1,5 @@
 package BusinessLayer.Element;
+import BusinessLayer.Type.ShippingZone;
 import BusinessLayer.Type.VehicleLicenseCategory;
 
 public class Driver
@@ -6,9 +7,11 @@ public class Driver
     public final long Id;
     public final VehicleLicenseCategory License;
     public final String FirstName, LastName, Cellphone;
+    public final ShippingZone Zone;
     private Scheduler Dairy;
 
-    public Driver(long id, VehicleLicenseCategory license, String fname, String lname, String cellphone)
+
+    public Driver(long id, VehicleLicenseCategory license, String fname, String lname, String cellphone, ShippingZone zone)
     {
         Id = id;
         License = license;
@@ -16,13 +19,14 @@ public class Driver
         LastName = lname;
         Cellphone = cellphone;
         Dairy = new Scheduler();
+        Zone = zone;
     }
 
     @Override
     public String toString()
     {
-        return String.format("Driver: %s %s\nID: %d\nLicense: %s\nCellphone: %s\n",
-                FirstName, LastName, Id, VehicleLicenseCategory.GetVehicleLicenseCategoryName(License), Cellphone);
+        return String.format("Driver: %s %s\nID: %d\nLicense: %s\nZone: %s\nCellphone: %s\n",
+                FirstName, LastName, Id, VehicleLicenseCategory.GetVehicleLicenseCategoryName(License), Zone, Cellphone);
     }
 
     public DeliveryDate GetAvailableShift(int month, int day)

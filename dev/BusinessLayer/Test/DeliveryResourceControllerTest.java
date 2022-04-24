@@ -3,7 +3,7 @@ package BusinessLayer.Test;
 import BusinessLayer.Controller.DeliveryResourceController;
 import BusinessLayer.Element.Date;
 import BusinessLayer.Element.Driver;
-import BusinessLayer.Type.Truck;
+import BusinessLayer.Element.Truck;
 import BusinessLayer.Type.ShippingZone;
 import BusinessLayer.Type.VehicleLicenseCategory;
 import org.junit.jupiter.api.Test;
@@ -53,7 +53,7 @@ class DeliveryResourceControllerTest implements Testable{
 
         testObject.AddDriver(ID, VehicleLicenseCategory.E, FNAME, LNAME,CELLPHONE, ShippingZone.JezreelValley);
         var actual = testObject.GetDriver(ID);
-        var expected = new Driver(ID, VehicleLicenseCategory.E, FNAME, LNAME,CELLPHONE);
+        var expected = new Driver(ID, VehicleLicenseCategory.E, FNAME, LNAME,CELLPHONE, ShippingZone.JezreelValley);
 
         assertEquals(expected, actual);
 
@@ -76,7 +76,7 @@ class DeliveryResourceControllerTest implements Testable{
         testObject.AddTruck(NET_WEIGHT, MAXIMAL_LOAD_WEIGHT, VEHICLE_NUMBER, TRUCK_MODEL, ShippingZone.Galilee);
         var actual = testObject.GetTruck(VEHICLE_NUMBER);
 
-        var expected = new Truck(NET_WEIGHT, MAXIMAL_LOAD_WEIGHT, VEHICLE_NUMBER, TRUCK_MODEL);
+        var expected = new Truck(NET_WEIGHT, MAXIMAL_LOAD_WEIGHT, VEHICLE_NUMBER, TRUCK_MODEL, ShippingZone.Galilee);
 
         assertEquals(expected, actual);
     }

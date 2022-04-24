@@ -2,7 +2,8 @@ package BusinessLayer.Controller;
 
 import BusinessLayer.Element.*;
 import BusinessLayer.Type.ShippingZone;
-import BusinessLayer.Type.Truck;
+import BusinessLayer.Element.Truck;
+import BusinessLayer.Type.Tuple;
 import BusinessLayer.Type.VehicleLicenseCategory;
 
 /* Major controller
@@ -47,20 +48,20 @@ public class DeliveryController {
         return Resource.GetTrucks();
     }
 
-    public void AddDriver(long id, VehicleLicenseCategory license, String fname, String lname, String cellphone, ShippingZone zone) {
-        Resource.AddDriver(id, license, fname, lname, cellphone, zone);
+    public boolean AddDriver(long id, VehicleLicenseCategory license, String fname, String lname, String cellphone, ShippingZone zone) {
+        return Resource.AddDriver(id, license, fname, lname, cellphone, zone);
     }
 
-    public void AddTruck(double mlw, double nw, long vln, String m, ShippingZone zone) {
-        Resource.AddTruck(mlw, nw, vln, m, zone);
+    public boolean AddTruck(double mlw, double nw, long vln, String m, ShippingZone zone) {
+        return Resource.AddTruck(mlw, nw, vln, m, zone);
     }
 
-    public void RemoveDriver(long id) {
-        Resource.RemoveDriver(id);
+    public Driver RemoveDriver(long id) {
+       return Resource.RemoveDriver(id);
     }
 
-    public void RemoveTruck(long vln) {
-        Resource.RemoveTruck(vln);
+    public Truck RemoveTruck(long vln) {
+        return Resource.RemoveTruck(vln);
     }
 
     public Driver GetDriver(long id) {
@@ -75,11 +76,17 @@ public class DeliveryController {
         return Resource.ShowShippingZone();
     }
 
-    public static DeliveryController newInstanceForTests(String code){
-        if(code.equals("sudo"))
-            return new DeliveryController();
-        else
-            return GetInstance();
+	public static DeliveryController newInstanceForTests(String code){
+	if(code.equals("sudo"))
+		return new DeliveryController();
+	else
+		return GetInstance();
+    }
+
+    public void Clear()
+    {
+        Resource.Clear();
+        Executor.Clear();
     }
 
 }
