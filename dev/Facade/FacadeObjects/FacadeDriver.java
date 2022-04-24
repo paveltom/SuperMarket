@@ -13,8 +13,8 @@ public class FacadeDriver {
         this.firstName = driver.FirstName;
         this.lastName = driver.LastName;
         this.cellphone = driver.Cellphone;
-        this.vehicleCategory = "";
-        this.livingArea = "";
+        this.vehicleCategory = driver.License.name();
+        this.livingArea = driver.Zone.name();
     }
 
     public FacadeDriver(long id, String firstName, String lastName, String cellphone, String vehicleCategory, String livingArea){

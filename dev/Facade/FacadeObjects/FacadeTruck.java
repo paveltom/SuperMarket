@@ -1,6 +1,7 @@
 package Facade.FacadeObjects;
 
-import BusinessLayer.Type.Truck;
+
+import BusinessLayer.Element.Truck;
 
 public class FacadeTruck {
     private long licensePlate;
@@ -14,7 +15,7 @@ public class FacadeTruck {
         this.model = truck.Model;
         this.netWeight = truck.NetWeight;
         this.maxLoadWeight = truck.MaxLoadWeight;
-        this.parkingArea = "";
+        this.parkingArea = truck.Zone.name();
     }
 
     public FacadeTruck(long licensePlate, String model, String parkingArea, double netWeight, double maxLoadWeight){

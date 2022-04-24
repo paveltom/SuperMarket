@@ -1,8 +1,6 @@
 package Facade;
 
 import BusinessLayer.Controller.DeliveryController;
-import BusinessLayer.Element.Driver;
-import BusinessLayer.Type.Truck;
 import BusinessLayer.Type.VehicleLicenseCategory;
 import BusinessLayer.Type.ShippingZone;
 import Facade.FacadeObjects.FacadeDriver;
@@ -31,9 +29,13 @@ public class DeliveryResourcesService {
             String cellphone = facDriver.getCellphone();
             VehicleLicenseCategory licCategory = VehicleLicenseCategory.valueOf(facDriver.getVehicleCategory());
             ShippingZone shipZone = ShippingZone.valueOf(facDriver.getLivingArea());
-            delController.AddDriver(id, licCategory, firstName, lastName, cellphone, shipZone);
-            String strId = id + "";
-            return new ResponseT<String>(strId ,true);
+            boolean added = delController.AddDriver(id, licCategory, firstName, lastName, cellphone, shipZone);
+            if(added) {
+                String strId = id + "";
+                return new ResponseT<String>(strId, true);
+            }
+            else
+                return new Response("System cannot allow to perform this action.");
         }
         catch (Exception e){
             return new Response(e.getMessage());
@@ -47,9 +49,13 @@ public class DeliveryResourcesService {
             double netWeight = facTruck.getNetWeight();
             double maxLoadWeight = facTruck.getMaxLoadWeight();
             ShippingZone parkingArea = ShippingZone.valueOf(facTruck.getParkingArea());
-            delController.AddTruck(maxLoadWeight, netWeight, licensePlate, model, parkingArea);
-            String strLicPlate = licensePlate + "";
-            return new ResponseT<String>(strLicPlate, true);
+            boolean added = delController.AddTruck(maxLoadWeight, netWeight, licensePlate, model, parkingArea);
+            if(added) {
+                String strLicPlate = licensePlate + "";
+                return new ResponseT<String>(strLicPlate, true);
+            }
+            else
+                return new Response("System cannot allow to perform this action.");
         }
         catch (Exception e){
             return new Response(e.getMessage());
@@ -75,13 +81,13 @@ public class DeliveryResourcesService {
     }
 
     public ResponseT<FacadeDriver> getDriverById(long id){
-        Driver tempDriver = delController.GetDriver(id);
-        return new ResponseT<>(new FacadeDriver( id, tempDriver.FirstName, tempDriver.LastName, tempDriver.Cellphone, tempDriver.License.toString(), ""), true);
+        FacadeDriver facadeDriver = new FacadeDriver(delController.GetDriver(id));
+        return new ResponseT<>(facadeDriver, true);
     }
 
     public ResponseT<FacadeTruck> getTruckByPlate(long licPlate){
-        Truck tempTruck = delController.GetTruck(licPlate);
-        return new ResponseT<>(new FacadeTruck(licPlate, tempTruck.Model, "", tempTruck.NetWeight, tempTruck.MaxLoadWeight), true);
+        FacadeTruck facadeTruck = new FacadeTruck(delController.GetTruck(licPlate));
+        return new ResponseT<>(facadeTruck, true);
     }
 
     public ResponseT<String> showDrivers(){
