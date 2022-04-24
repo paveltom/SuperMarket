@@ -1,7 +1,7 @@
-package com.company.BusinessLayer.ServiceLayer;
+package BusinessLayer.ServiceLayer;
 
-import com.company.BusinessLayer.LogicLayer.Worker;
-import com.company.BusinessLayer.LogicLayer.WorkerController;
+import BusinessLayer.LogicLayer.Worker;
+import BusinessLayer.LogicLayer.WorkerController;
 
 public class WorkerService {
 

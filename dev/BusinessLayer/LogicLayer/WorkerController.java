@@ -1,4 +1,4 @@
-package com.company.BusinessLayer.LogicLayer;
+package BusinessLayer.LogicLayer;
 
 import java.util.HashMap;
 import java.util.Map;

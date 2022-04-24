@@ -1,6 +1,6 @@
-package com.company.PresentationLayer;
+package PresentationLayer;
 
-import com.company.BusinessLayer.ServiceLayer.Service;
+import BusinessLayer.ServiceLayer.Service;
 
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -18,6 +18,12 @@ public class Main {
         service.AddWorker("444444444","Worker4","Usher","no","Bank 003 111111",32.00,"22/9/2020","...");
         service.AddWorker("555555555","Worker5","LogisticsManager","no","Bank 003 111111",38.00,"22/9/2020","...");
         service.AddWorker("666666666","Worker6","Driver","no","Bank 003 111111",33.50,"22/9/2020","...");
+        service.changeAvailability("111111111","sun - Morning, tue - Morning");
+        service.changeAvailability("222222222","sun - Morning Evening, mon - Evening, tue - Morning");
+        service.changeAvailability("333333333","tue - Morning");
+        service.changeAvailability("444444444","tue - Morning, wed - Morning Evening");
+        service.changeAvailability("555555555","tue - Morning, wed - Evening");
+        service.changeAvailability("666666666","tue - Morning, wed - Evening");
         service.addShift("12/04/2022",0,"111111111","PersonnelManager 111111111|Cashier 222222222|StoreKeeper 333333333|Usher 444444444|LogisticsManager 555555555|Driver 666666666");
     }
     public static void main(String[] args) {
@@ -73,7 +79,19 @@ public class Main {
                     System.out.println(service.changeAvailability(data[1],data[2]));
                     break;
                 case "addShift":
-                    System.out.println(service.addShift(data[1],Integer.parseInt(data[2]),data[3],data[4]));
+                    System.out.println(service.showAvailability());
+                    String command2 = scan.nextLine();
+                    String[] d = command2.split("#");
+                    while(!d[0].equals("x")){
+                        String ans = service.addShift(d[0],Integer.parseInt(d[1]),d[2],d[3]);
+                        System.out.println(ans);
+                        if(ans.equals("Added shift successfully")) break;
+                        else{
+                            System.out.println("Try again");
+                            command2 = scan.nextLine();
+                            d = command2.split("#");
+                        }
+                    }
                     break;
                 case "shiftHistory":
                     System.out.println(service.shiftHistory());

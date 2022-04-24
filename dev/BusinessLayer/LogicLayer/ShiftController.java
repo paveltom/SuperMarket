@@ -1,4 +1,4 @@
-package com.company.BusinessLayer.LogicLayer;
+package BusinessLayer.LogicLayer;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -99,10 +99,10 @@ public class ShiftController {
         return availability;
     }
     public String showAvailability(){
-        String s = "";
+        String s = "Availability:\n";
         for (String id:
                 availability.keySet()) {
-            s+=id+": "+availability.get(id)+"\n";
+            s+="\t"+id+": "+availability.get(id)+"\n";
         }
         return s.substring(0,s.length()-1);
     }

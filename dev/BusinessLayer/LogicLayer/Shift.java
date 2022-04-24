@@ -1,4 +1,4 @@
-package com.company.BusinessLayer.LogicLayer;
+package BusinessLayer.LogicLayer;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

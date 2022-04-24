@@ -1,7 +1,7 @@
-package com.company.Tests;
+package Tests;
 
-import com.company.BusinessLayer.ServiceLayer.Service;
-import com.company.BusinessLayer.ServiceLayer.WorkerService;
+import BusinessLayer.ServiceLayer.Service;
+import BusinessLayer.ServiceLayer.WorkerService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

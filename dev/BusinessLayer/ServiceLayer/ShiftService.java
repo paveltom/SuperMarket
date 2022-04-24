@@ -1,7 +1,7 @@
-package com.company.BusinessLayer.ServiceLayer;
+package BusinessLayer.ServiceLayer;
 
-import com.company.BusinessLayer.LogicLayer.ShiftController;
-import com.company.BusinessLayer.LogicLayer.Worker;
+import BusinessLayer.LogicLayer.ShiftController;
+import BusinessLayer.LogicLayer.Worker;
 
 import java.util.HashMap;
 import java.util.LinkedList;
