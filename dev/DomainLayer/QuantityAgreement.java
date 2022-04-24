@@ -107,4 +107,20 @@ public class QuantityAgreement {
             throw new IllegalArgumentException("discount must be greater than 0");
         }
     }
+
+    public void removeProduct(String productID){
+        if(hasItemInperItem(productID))
+            perItem.remove(productID);
+        if(hasItemInperOrder(productID))
+            perOrder.remove(productID);
+    }
+
+    public void updateProductCatalogNum(String old, String newNum){
+        if(hasItemInperItem(old))
+            perItem.put(newNum, perItem.get(old));
+        if(hasItemInperOrder(old))
+            perOrder.put(newNum, perOrder.get(old));
+
+        removeProduct(old);
+    }
 }
