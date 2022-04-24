@@ -13,6 +13,19 @@ public interface IService {
 
     public Response addTruck(FacadeTruck facadeTruck);
 
+    public Response getDriverById(int id);
+
+    public Response getTruckByPlate(int licPlate);
+
+    public Response showDrivers();
+
+    public Response showTrucks();
+
+    public Response showShippingZones();
+
+    public Response showLicenseCategories();
+
+
 }
 
 
