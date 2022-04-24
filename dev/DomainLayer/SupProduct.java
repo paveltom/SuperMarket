@@ -6,9 +6,9 @@ public class SupProduct {
     private float price;
 
     public SupProduct(String catalogNum, String name, float price){
-        this.catalogNum = catalogNum;
-        this.name = name;
-        this.price = price;
+        setCatalogNum(catalogNum);
+        setName(name);
+        setPrice(price);
     }
 
     public String getName() {
