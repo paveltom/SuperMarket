@@ -75,6 +75,11 @@ public class DeliveryController {
         return Resource.ShowShippingZone();
     }
 
-    public static DeliveryController newInstanceForTests(){ return new DeliveryController(); }
+    public static DeliveryController newInstanceForTests(String code){
+        if(code.equals("sudo"))
+            return new DeliveryController();
+        else
+            return GetInstance();
+    }
 
 }

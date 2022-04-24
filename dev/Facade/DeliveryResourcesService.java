@@ -18,7 +18,7 @@ public class DeliveryResourcesService {
 
     public DeliveryResourcesService(String code){
         if(code.equals("sudo"))
-            delController = DeliveryController.newInstanceForTests();
+            delController = DeliveryController.newInstanceForTests("sudo");
         else
             delController = DeliveryController.GetInstance();
     }
