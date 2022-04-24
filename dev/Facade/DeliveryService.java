@@ -16,6 +16,13 @@ public class DeliveryService {
         delController = DeliveryController.GetInstance();
     }
 
+    public DeliveryService(String code){
+        if(code.equals("sudo"))
+            delController = DeliveryController.newInstanceForTests();
+        else
+            delController = DeliveryController.GetInstance();
+    }
+
 
     //orderParams: siteId, clientId, orderId, products<productId, quantity>, submissionDate
     public ResponseT<String> deliver(FacadeSite origin, FacadeSite destination, int orderId, List<FacadeProduct> facProducts, FacadeDate facSubDate){

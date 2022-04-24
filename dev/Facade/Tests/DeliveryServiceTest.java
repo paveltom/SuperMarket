@@ -5,6 +5,7 @@ import BusinessLayer.Type.ShippingZone;
 import Facade.DeliveryService;
 import Facade.FacadeObjects.*;
 import Facade.ResponseT;
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class DeliveryServiceTest implements Testable {
 
-    private DeliveryService drService;
+    private DeliveryService drService = new DeliveryService("sudo");
+
+    @Before
+    public void tearDown(){
+        drService = new DeliveryService("sudo");
+    }
+
     public void testDeliver() {
         drService = new DeliveryService();
         FacadeSite origin = new FacadeSite(ShippingZone.values()[0].toString(), "Rager 120", "Israel Israeli", "0123456789");

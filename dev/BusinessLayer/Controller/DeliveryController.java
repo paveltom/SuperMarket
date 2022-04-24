@@ -75,4 +75,6 @@ public class DeliveryController {
         return Resource.ShowShippingZone();
     }
 
+    public static DeliveryController newInstanceForTests(){ return new DeliveryController(); }
+
 }

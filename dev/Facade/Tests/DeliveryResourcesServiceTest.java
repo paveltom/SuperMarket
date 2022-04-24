@@ -1,11 +1,9 @@
 package Facade.Tests;
 
-import BusinessLayer.Controller.DeliveryController;
 import BusinessLayer.Test.Testable;
 import BusinessLayer.Type.ShippingZone;
 import BusinessLayer.Type.VehicleLicenseCategory;
 import Facade.DeliveryResourcesService;
-import Facade.DeliveryService;
 import Facade.FacadeObjects.FacadeDriver;
 import Facade.FacadeObjects.FacadeTruck;
 import Facade.ResponseT;
@@ -16,8 +14,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class DeliveryResourcesServiceTest implements Testable {
 
-    private DeliveryResourcesService drService;
+    private DeliveryResourcesService drService = new DeliveryResourcesService("sudo");
 
+    @Before
+    public void tearDown(){
+        drService = new DeliveryResourcesService("sudo");
+    }
 
     @Test
     public void testAddDriver() {
@@ -28,6 +30,8 @@ public class DeliveryResourcesServiceTest implements Testable {
         assertFalse(allDrivers.contains(charSequence));
 
         drService.addDriver(facadeDriver);
+
+        allDrivers = drService.showDrivers().getValue();
 
         assertTrue(allDrivers.contains(charSequence));
 
@@ -80,6 +84,8 @@ public class DeliveryResourcesServiceTest implements Testable {
         assertFalse(allTrucks.contains(charSequence));
 
         drService.addTruck(facadeTruck);
+
+        allTrucks = drService.showTrucks().getValue();
 
         assertTrue(allTrucks.contains(charSequence));
     }

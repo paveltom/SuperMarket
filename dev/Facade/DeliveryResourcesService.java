@@ -16,6 +16,13 @@ public class DeliveryResourcesService {
         delController = DeliveryController.GetInstance();
     }
 
+    public DeliveryResourcesService(String code){
+        if(code.equals("sudo"))
+            delController = DeliveryController.newInstanceForTests();
+        else
+            delController = DeliveryController.GetInstance();
+    }
+
     public Response addDriver(FacadeDriver facDriver){
         try {
             int id = facDriver.getId();
