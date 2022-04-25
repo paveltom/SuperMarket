@@ -10,17 +10,16 @@ public class Purchase {
     private Date purchaseDate;
     private Map<Integer, Map<Integer, Integer>> products; //<ProductID, <Fixed price, Actual Price (discount?)>>
 
-    public Purchase(Date _purchaseDate,int _productID,int _fixedPrice,int _actualPrice)
+    public Purchase(int _purchaseID, Date _purchaseDate, Map<Integer, Map<Integer, Integer>> _products)
     {
-        //purchaseID =;
+        purchaseID = _purchaseID;
         purchaseDate = _purchaseDate;
-        products = new HashMap<Integer,Map<Integer,Integer>>();
-
-
+        products = new HashMap<>();
+        products.putAll(_products);
     }
 
     public String toString(){
-        return "Purchase ID : " + purchaseID + " , Purchase Date : " + purchaseDate+ "\n";
+        return "Purchase ID : " + purchaseID + " , Purchase Date : " + purchaseDate + "\n";
     }
 
 }

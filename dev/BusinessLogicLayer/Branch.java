@@ -2,6 +2,7 @@ package com.company.BusinessLogicLayer;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class Branch {
     private int branchID;
@@ -79,8 +80,8 @@ public class Branch {
         stockController.insertNewDiscount(productID, startDate, endDate, amount, t);
     }
 
-    public void insertNewPurchase(Date purchaseDate, int productID, int fixedPrice, int actualPrice){
-        stockController.insertNewPurchase(purchaseDate, productID, fixedPrice, actualPrice);
+    public void insertNewPurchase(Date purchaseDate, Map<Integer, Map<Integer, Integer>> products){
+        stockController.insertNewPurchase(purchaseDate, products);
     }
 
     public void deleteProduct(int productID){

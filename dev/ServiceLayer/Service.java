@@ -3,9 +3,7 @@ package com.company.ServiceLayer;
 import com.company.BusinessLogicLayer.*;
 
 import java.time.format.ResolverStyle;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class Service
 {
@@ -90,8 +88,8 @@ public class Service
         return scs.insertNewDiscount(branchID, productID, startDate, endDate, amount, t);
     }
 
-    public Response insertNewPurchase(int branchID, Date purchaseDate, int productID, int fixedPrice, int actualPrice){
-        return scs.insertNewPurchase(branchID, purchaseDate, productID, fixedPrice, actualPrice);
+    public Response insertNewPurchase(int branchID, Date purchaseDate, Map<Integer, Map<Integer, Integer>> products){
+        return scs.insertNewPurchase(branchID, purchaseDate, products);
     }
 
     public Response deleteProduct(int branchID, int productID){
@@ -153,8 +151,9 @@ public class Service
         insertNewDiscount(0, 3, new Date(2022, 4, 3), new Date(2022, 5, 3), 30, Type.PERCENT);
         insertNewDiscount(1, 3, new Date(2022, 4, 3), new Date(2022, 5, 3), 30, Type.PERCENT);
 
-        insertNewPurchase(0, new Date(2022, 4, 25), 2, 30, 25);
-        insertNewPurchase(1, new Date(2022, 4, 25), 2, 30, 25);
+        Map<Integer, Map<Integer, Integer>> products = (Map<Integer, Map<Integer, Integer>>) new HashMap<>().put(2, new HashMap<>().put(30, 25));
+        insertNewPurchase(0, new Date(2022, 4, 25), products);
+        insertNewPurchase(1, new Date(2022, 4, 25), products);
     }
 
 }

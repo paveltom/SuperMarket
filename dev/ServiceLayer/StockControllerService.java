@@ -4,6 +4,7 @@ import com.company.BusinessLogicLayer.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class StockControllerService
 {
@@ -202,10 +203,10 @@ public class StockControllerService
 
     }
 
-    public Response insertNewPurchase(int branchID, Date purchaseDate, int productID, int fixedPrice, int actualPrice){
+    public Response insertNewPurchase(int branchID, Date purchaseDate, Map<Integer, Map<Integer, Integer>> products){
         try
         {
-            bc.insertNewPurchase(branchID, purchaseDate, productID, fixedPrice, actualPrice);
+            bc.insertNewPurchase(branchID, purchaseDate, products);
             return new Response();
         }
         catch (Exception e)

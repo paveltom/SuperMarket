@@ -3,6 +3,7 @@ package com.company.BusinessLogicLayer;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class StockController {
     private List<Product> products;
@@ -106,8 +107,8 @@ public class StockController {
         discountsCounter++;
     }
 
-    public void insertNewPurchase(Date purchaseDate, int productID, int fixedPrice, int actualPrice){
-        purchases.add(new Purchase(purchaseDate,productID,fixedPrice,actualPrice));
+    public void insertNewPurchase(Date purchaseDate, Map<Integer, Map<Integer, Integer>> products){
+        purchases.add(new Purchase(purchasesCounter, purchaseDate, products));
         purchasesCounter++;
     }
 

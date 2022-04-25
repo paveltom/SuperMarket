@@ -5,6 +5,7 @@ import com.company.ServiceLayer.Response;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class BranchController{
     private List<Branch> branches;
@@ -80,8 +81,8 @@ public class BranchController{
         branches.get(branchID).insertNewDiscount(productID, startDate, endDate, amount, t);
     }
 
-    public void insertNewPurchase(int branchID, Date purchaseDate, int productID, int fixedPrice, int actualPrice){
-        branches.get(branchID).insertNewPurchase(purchaseDate, productID, fixedPrice, actualPrice);
+    public void insertNewPurchase(int branchID, Date purchaseDate, Map<Integer, Map<Integer, Integer>> products){
+        branches.get(branchID).insertNewPurchase(purchaseDate, products);
     }
 
     public void deleteProduct(int branchID, int productID){

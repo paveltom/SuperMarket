@@ -4,9 +4,7 @@ import com.company.BusinessLogicLayer.Type;
 import com.company.ServiceLayer.Service;
 
 import java.net.SocketOption;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
 
@@ -183,7 +181,8 @@ public class Main {
                 int fixedPrice = toRead.nextInt();
                 System.out.println("Enter actual price of product : ");
                 int actualPrice = toRead.nextInt();
-                if(!s.insertNewPurchase(SelectedBranchID,new Date(year,month-1,day),productID,fixedPrice,actualPrice).ErrorOccured())
+                Map<Integer, Map<Integer, Integer>> products = (Map<Integer, Map<Integer, Integer>>) new HashMap<>().put(productID, new HashMap<>().put(fixedPrice, actualPrice));
+                if(!s.insertNewPurchase(SelectedBranchID,new Date(year,month-1,day), products).ErrorOccured())
                     System.out.print("Added purchase successfully.");
             }
             else if(msg.equals("RemovePurchase"))
