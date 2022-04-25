@@ -2,6 +2,7 @@ package Service;
 
 import DomainLayer.QuantityAgreement;
 import DomainLayer.SupProduct;
+import DomainLayer.Supplier;
 import DomainLayer.SupplierController;
 
 import java.util.Dictionary;
@@ -13,6 +14,14 @@ public class SupplierServices {
 
     public SupplierServices(){
         sc = new SupplierController();
+    }
+
+    public ResponseT<List<Supplier>> getSuppliers(){
+        try{
+            return ResponseT.FromValue(sc.getSuppliers());
+        }catch (Exception e){
+            return ResponseT.FromError(e.getMessage());
+        }
     }
 
     public Response addSupplier(String bankAccount, boolean cash, boolean credit, String contactName, String contactNum){
@@ -234,7 +243,7 @@ public class SupplierServices {
         }
     }
 
-    public ResponseT<List<SupProduct>> searhhProduct(String name){
+    public ResponseT<List<SupProduct>> searchProduct(String name){
         try{
             return ResponseT.FromValue(sc.searchProduct(name));
         }catch (Exception e){

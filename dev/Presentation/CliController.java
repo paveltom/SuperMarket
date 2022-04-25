@@ -1,7 +1,11 @@
 package Presentation;
 
+import DomainLayer.Supplier;
 import Service.Response;
+import Service.ResponseT;
 import Service.SupplierServices;
+
+import java.util.List;
 import java.util.Scanner;
 
 public class CliController {
@@ -68,18 +72,85 @@ public class CliController {
                 }
             }
         }
-
     }
 
-    private void showSuppliersWindow(){
-
-
+    private void showSuppliersWindow() {
+        ResponseT<List<Supplier>> r = ss.getSuppliers();
+        if (r.ErrorOccurred()) {
+            System.out.println("action failed, " + r.getErrorMessage() + "\n");
+            displayMainMenu();
+        } else {
+            for (Supplier supp : r.getValue()) {
+                System.out.println(supp.toString());
+            }
+            System.out.println("insert supplier id to display its info");
+            String input = in.nextLine();
+            switch (input) {
+                case "$", "b" -> displayMainMenu();
+                default -> {
+                    List<Supplier> matchedSupp = r.getValue().stream().filter(supplier -> supplier.getSid().equals(input)).toList();
+                    if (r.getValue().stream().filter(supplier -> supplier.getSid().equals(input)).toList().isEmpty()) {
+                        System.out.println("incorrect input\n");
+                        showSuppliersWindow();
+                    } else {
+                        supplierInfoWindow(input);
+                    }
+                }
+            }
+        }
     }
 
     private void searchProductWindow() {
 
     }
 
+    private void supplierInfoWindow(String suppId){
+        System.out.println("""
+                            1. display products
+                            2. display quantity agreement
+                            3. display contract
+                            4. display contacts
+                            5. delete supplier""");
+
+        String input = in.nextLine();
+        switch (input) {
+            case "1" -> displayProductsWindow(suppId);
+            case "2" -> displayQuantityAgreementWindow(suppId);
+            case "3" -> displayContractWindow(suppId);
+            case "4" -> displayContactsWindow(suppId);
+            case "5" -> {
+                Response r = ss.removeSupplier(suppId);
+                if (r.ErrorOccurred()) {
+                    System.out.println("action failed, " + r.getErrorMessage() + "\n");
+                    supplierInfoWindow(suppId);
+                } else {
+                    System.out.println("action succeed\n");
+                    showSuppliersWindow();
+                }
+            }
+            case "$" -> displayMainMenu();
+            case "b" -> showSuppliersWindow();
+            default -> {
+                System.out.println("incorrect input\n");
+                supplierInfoWindow(suppId);
+            }
+        }
+
+    }
+
+    private void displayProductsWindow(String suppId){
+
+    }
+    private void displayQuantityAgreementWindow(String suppId) {
+    }
+
+    private void displayContractWindow(String suppId) {
+
+    }
+
+    private void displayContactsWindow(String suppId) {
+
+    }
 
 }
 

@@ -7,12 +7,17 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class SupplierController {
+
     List<Supplier> suppliers;
     private int supIds;
 
     public SupplierController(){
         suppliers = new LinkedList<>();
         supIds = 0;
+    }
+
+    public List<Supplier> getSuppliers() {
+        return suppliers;
     }
 
     public void addSupplier(String bankAccount, boolean cash, boolean credit, String contactName, String contactNum){

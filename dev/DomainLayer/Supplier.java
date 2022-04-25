@@ -4,9 +4,11 @@ import java.util.*;
 
 public class Supplier {
     private String sid;
+
     private String bankAccount;
     private boolean[] paymentMethods;
     private Map<String,String> contacts;
+
     private Contract contract;
 
     public Supplier(String sid, String bankAccount, boolean cash, boolean credit, String contactName, String phoneNum){
@@ -21,6 +23,22 @@ public class Supplier {
 
     public String getSid(){
         return sid;
+    }
+
+    public String getBankAccount() {
+        return bankAccount;
+    }
+
+    public boolean hasCashPayment() {
+        return paymentMethods[0];
+    }
+
+    public boolean hasCreditPayment() {
+        return paymentMethods[1];
+    }
+
+    public Map<String, String> getContacts() {
+        return contacts;
     }
 
     public void addContact(String contactName, String phoneNum){
@@ -115,5 +133,18 @@ public class Supplier {
 
     public List<SupProduct> searchProduct(String name){
         return contract.searchProduct(name);
+    }
+
+    public String toString(){
+        String cash, credit;
+        if (hasCashPayment())
+            cash = "y";
+        else cash = "n";
+        if (hasCreditPayment())
+            credit = "y";
+        else credit = "n";
+
+        return "supplier id: " + getSid() + " | Bank Account: " + getBankAccount() +
+               " | payments: cash-" + cash + " credit-" + credit + " | contacts:\n" + getContacts().toString();
     }
 }
