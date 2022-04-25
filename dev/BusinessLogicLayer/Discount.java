@@ -1,31 +1,33 @@
 package com.company.BusinessLogicLayer;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 public class Discount
 {
-    private int productID;
     private int discountID;
+    private int productID;
     private Date discountStartDate;
     private Date discountEndDate;
     private Map<Integer, Type> discount;
 
-    Discount(int _productID, int _discountID, Date _discountStartDate, Date _discountEndDate, Map<Integer, Type> _discount)
+    Discount(int _productID, int _discountID, Date _discountStartDate, Date _discountEndDate,int _amount,Type _t)
     {
         productID = _productID;
         discountID = _discountID;
         discountStartDate = _discountStartDate;
         discountEndDate = _discountEndDate;
-        discount = _discount;
+        discount = new HashMap<>();
+        discount.put(_amount, _t);
 
     }
+
+
 
     public String toString(){
-        return "Discount ID : " + discountID + " , Product ID : " + productID + " , Start Date : " + discountStartDate + " , End Date : " + discountEndDate + " , Amount : NEED TO FIX";
-    }
-
-    public Map<Integer, Type> getType() {
-        return this.discount;
+        Integer amount = (Integer) discount.keySet().toArray()[0];
+        Type t = discount.get(amount);
+        return "Discount ID : " + discountID + " , Product ID : " + productID + " , Start Date : " + discountStartDate + " , End Date : " + discountEndDate + " , Amount : " + amount + " " + t+ "\n";
     }
 }
