@@ -160,7 +160,7 @@ public class CliController {
         }
 
         System.out.println("""
-                        products: \n""" + products + "\n");
+                        products: \n""" + productsString + "\n");
     }
 
     private void displayProductsWindow(List<SupProduct> products){
