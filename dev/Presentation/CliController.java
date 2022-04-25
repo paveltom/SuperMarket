@@ -103,8 +103,7 @@ public class CliController {
 
     private void searchProductWindow() {
         System.out.println("""
-                        insert product name
-                        e.g 6456684 n y yossi 0524679565""");
+                        insert product name""");
 
         String input = in.nextLine();
         switch (input) {
@@ -159,7 +158,7 @@ public class CliController {
     private void showProducts(List<SupProduct> products){
         String productsString = "";
         for(SupProduct  sp: products){
-            productsString += sp.toString() + "\n";
+            productsString = productsString + sp.toString() + "\n";
         }
 
         System.out.println("""
@@ -170,7 +169,7 @@ public class CliController {
         showProducts(products);
 
         System.out.println("""
-                        products: \n""" + products + "\n");
+                        products: \n""" + "\n");
 
         String input = in.nextLine();
         String[] splitted = input.split(" ");
