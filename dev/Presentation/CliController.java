@@ -18,7 +18,13 @@ public class CliController {
     }
 
     private void loadData(){
-        LoadDataForTesting ld = new LoadDataForTesting(ss);
+        LoadDataForTesting ld;
+        System.out.println("load testind data? y/n");
+        String input = in.nextLine();
+        if(input.equals("y")){
+            ld = new LoadDataForTesting(ss);
+        }
+
     }
 
     public void displayMainMenu() {
@@ -181,7 +187,14 @@ public class CliController {
         if (!p.ErrorOccurred())
             showProducts(p.getValue());
 
-        System.out.println("Supplier id: " + sid + "\n");
+        System.out.print("Supplier id: " + sid + "\n");
+        System.out.println("""
+                            to add product insert 1 and <catalog number, name, price” => page refreshed with product added            
+                            insert 2 and product catalog number to remove it
+                            insert 3 and product catalog number and product price to update price
+                            insert 4 and product catalog number and product name to update name
+                            insert 5 and product catalog number and new catalog number to update catalog number""");
+
 
         String input = in.nextLine();
         String[] splitted = input.split(" ");
@@ -191,13 +204,28 @@ public class CliController {
 
             default -> {
 
-                if (splitted.length != 3) {
-                    System.out.println("action failed, invalid argumets" + "\n");
-                    displayProductsWindow(sid);
-                } else {
+
                     Response r;
                     switch (splitted[0]) {
                         case "1" -> {
+                            r = ss.addProduct(sid, splitted[1], splitted[2], Float.valueOf(splitted[3]));
+                            if (!r.ErrorOccurred()) {
+                                displayProductsWindow(sid);
+                            } else {
+                                System.out.println("action failed, " + r.getErrorMessage() + "\n");
+                                displayProductsWindow(sid);
+                            }
+                        }
+                        case "2" -> {
+                            r = ss.removeProduct(sid, splitted[1]);
+                            if (!r.ErrorOccurred()) {
+                                displayProductsWindow(sid);
+                            } else {
+                                System.out.println("action failed, " + r.getErrorMessage() + "\n");
+                                displayProductsWindow(sid);
+                            }
+                        }
+                        case "3" -> {
                             if (!isStringFloat(splitted[2])) {
                                 System.out.println("action failed, price must be float" + "\n");
                                 displayProductsWindow(sid);
@@ -211,7 +239,7 @@ public class CliController {
                             }
 
                         }
-                        case "2" -> {
+                        case "4" -> {
                             r = ss.updateProductName(sid, splitted[1], splitted[2]);
                             if (!r.ErrorOccurred()) {
                                 displayProductsWindow(sid);
@@ -220,7 +248,7 @@ public class CliController {
                                 displayProductsWindow(sid);
                             }
                         }
-                        case "3" -> {
+                        case "5" -> {
                             r = ss.updateProductCatalogNum(sid, splitted[1], splitted[2]);
                             if (!r.ErrorOccurred()) {
                                 displayProductsWindow(sid);
@@ -235,7 +263,7 @@ public class CliController {
                         }
                     }
 
-                }
+
             }
         }
     }
