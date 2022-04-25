@@ -30,4 +30,8 @@ public class Discount
         Type t = discount.get(amount);
         return "Discount ID : " + discountID + " , Product ID : " + productID + " , Start Date : " + discountStartDate + " , End Date : " + discountEndDate + " , Amount : " + amount + " " + t+ "\n";
     }
+
+    public Map<Integer, Type> getType() {
+        return this.discount;
+    }
 }

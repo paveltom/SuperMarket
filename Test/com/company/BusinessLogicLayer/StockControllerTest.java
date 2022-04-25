@@ -59,8 +59,8 @@ class StockControllerTest {
 
     @Test
     void deletePurchase() {
-        controller.insertNewPurchase(1, new Date(2022, Calendar.APRIL, 25), new Date(2022, Calendar.APRIL, 26), 10, Type.FIXED);
-        controller.deletePurchase(controller.getPurchases().size() - 1);
-        assertEquals(0, controller.getPurchases().size());
+        controller.insertNewPurchase(new Date(2022, Calendar.APRIL, 25), 1, 10, 10);
+        controller.deletePurchase(controller.getPurchasesHistoryReport().size() - 1);
+        assertEquals(0, controller.getPurchasesHistoryReport().size());
     }
 }

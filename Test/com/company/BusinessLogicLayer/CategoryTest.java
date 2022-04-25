@@ -20,7 +20,7 @@ class CategoryTest {
 
     @Test
     void getSubCategories() {
-        LinkedList<Category> subcategories = parent_category.getSubCategories();
+        LinkedList<Category> subcategories = (LinkedList<Category>) parent_category.getSubCategories();
         assertEquals(1, subcategories.size());
         assertEquals(subcategory, subcategories.get(0));
     }

@@ -45,4 +45,8 @@ public class Category {
     public int getID(){
         return ID;
     }
+
+    public String getName() {
+        return this.name;
+    }
 }
