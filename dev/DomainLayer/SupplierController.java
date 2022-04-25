@@ -18,6 +18,10 @@ public class SupplierController {
         return suppliers;
     }
 
+    public Contract getSupplierContract(String suppId){
+        return getSupplier(suppId).getContract();
+    }
+
     public void addSupplier(String supId, String bankAccount, boolean cash, boolean credit, String contactName, String contactNum){
         if(!suppliers.stream().filter(supplier -> supplier.getSid().equals(supId)).toList().isEmpty())
             throw new IllegalArgumentException("trying to add supplier with already existing id");
@@ -142,6 +146,14 @@ public class SupplierController {
             products.addAll(s.searchProduct(name));
         }
         return products;
+    }
+
+    private Supplier getSupplier(String suppId){
+        List<Supplier> matchedSupp = suppliers.stream().filter(supplier -> supplier.getSid().equals(suppId)).toList();
+        if(matchedSupp.isEmpty())
+            throw new IllegalArgumentException("there is no supplier with that id");
+
+        return matchedSupp.get(0);
     }
 
 

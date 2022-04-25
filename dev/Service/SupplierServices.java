@@ -1,9 +1,6 @@
 package Service;
 
-import DomainLayer.QuantityAgreement;
-import DomainLayer.SupProduct;
-import DomainLayer.Supplier;
-import DomainLayer.SupplierController;
+import DomainLayer.*;
 
 import java.util.Dictionary;
 import java.util.List;
@@ -19,6 +16,14 @@ public class SupplierServices {
     public ResponseT<List<Supplier>> getSuppliers(){
         try{
             return ResponseT.FromValue(sc.getSuppliers());
+        }catch (Exception e){
+            return ResponseT.FromError(e.getMessage());
+        }
+    }
+
+    public ResponseT<Contract> getSupplierContract(String suppId){
+        try{
+            return ResponseT.FromValue(sc.getSupplierContract(suppId));
         }catch (Exception e){
             return ResponseT.FromError(e.getMessage());
         }

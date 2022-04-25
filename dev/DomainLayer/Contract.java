@@ -150,4 +150,12 @@ public class Contract {
         }
         return p;
     }
+
+    public String toString(){
+        String suppDays = "";
+        for (boolean day : getSupplyDays()) {
+            //if ()
+        }
+        return "supply days: " + getSupplyMaxDays();
+    }
 }

@@ -40,6 +40,10 @@ public class Supplier {
         return contacts;
     }
 
+    public Contract getContract() {
+        return contract;
+    }
+
     public void addContact(String contactName, String phoneNum){
         contacts.put(contactName, phoneNum);
     }
