@@ -10,12 +10,12 @@ public class ResponseT<T> extends Response
         this.Value = value;
     }
 
-    static <T>Response FromValue(T value)
+    static <T>ResponseT FromValue(T value)
     {
         return new ResponseT<T>(value, null);
     }
 
-    static <T>Response FromError(String msg)
+    static <T>ResponseT FromError(String msg)
     {
         return new ResponseT<T>(null, msg);
     }
