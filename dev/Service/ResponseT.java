@@ -1,4 +1,4 @@
-package com.company.Service;
+package Service;
 
 public class ResponseT <T> extends Response{
     private T value;

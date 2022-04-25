@@ -19,6 +19,10 @@ public class Supplier {
         addContact(contactName, phoneNum);
     }
 
+    public String getSid(){
+        return sid;
+    }
+
     public void addContact(String contactName, String phoneNum){
         contacts.put(contactName, phoneNum);
     }
