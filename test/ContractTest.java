@@ -2,6 +2,8 @@ import DomainLayer.Contract;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Objects;
+
 import static org.junit.Assert.*;
 
 public class ContractTest {
@@ -17,18 +19,55 @@ public class ContractTest {
     @Test
     public void addSupplyDay() {
         contract.addSupplyDay(2);
-        assert(contract.getSupplyDays()[1]);
+        try {
+            assert(contract.getSupplyDays()[1]);
+        } catch (Exception e) {
+            assert false;
+        }
     }
 
     @Test
     public void setSupplyMaxDays() {
+        contract.setSupplyMaxDays(5);
+        try {
+            assert(contract.getSupplyMaxDays() == 5);
+        } catch (Exception e) {
+            assert false;
+        }
+
+        try {
+            contract.setSupplyMaxDays(-5);
+            assert false;
+        } catch (Exception e) {
+            assert true;
+        }
     }
 
     @Test
     public void addProduct() {
+        contract.addProduct("5", "milk", 9.99f);
+        try {
+            assert(contract.getCatalog().size() == 1);
+        } catch (Exception e) {
+            assert false;
+        }
+
+        try {
+            contract.addProduct("5", "sugar", 12.99f);
+            assert false;
+        } catch (Exception e) {
+            assert true;
+        }
     }
 
     @Test
     public void updateProductCatalogNum() {
+        contract.addProduct("2", "coffee", 20.05f);
+        contract.updateProductCatalogNum("2","5");
+        try {
+            assert(Objects.equals(contract.getCatalog().get(0).getCatalogNum(), "5"));
+        } catch (Exception e) {
+            assert false;
+        }
     }
 }

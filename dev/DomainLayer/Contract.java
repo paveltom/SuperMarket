@@ -48,14 +48,14 @@ public class Contract {
         if (day > 7 || day < 1)
             throw new IllegalArgumentException("day out of range");
 
-        supplyDays[day] = true;
+        supplyDays[day-1] = true;
     }
 
     public void removeSupplyDay(int day) {
         if (day > 7 || day < 1)
             throw new IllegalArgumentException("day out of range");
 
-        supplyDays[day] = false;
+        supplyDays[day-1] = false;
     }
 
     public void setSupplyMaxDays(int supplyMaxDays) {
