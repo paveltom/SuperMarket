@@ -33,4 +33,8 @@ public class SupProduct {
 
         this.price = price;
     }
+
+    public String toString(){
+        return "catalogNum: " + catalogNum + " name: " + name + " price: " + price;
+    }
 }

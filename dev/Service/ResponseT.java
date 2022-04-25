@@ -18,4 +18,8 @@ public class ResponseT <T> extends Response{
     public static <T> ResponseT<T> FromError(String msg){
         return new ResponseT<T>(msg);
     }
+
+    public T getValue(){
+        return value;
+    }
 }

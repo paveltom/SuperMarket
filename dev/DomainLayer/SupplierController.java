@@ -17,6 +17,7 @@ public class SupplierController {
 
     public void addSupplier(String bankAccount, boolean cash, boolean credit, String contactName, String contactNum){
         suppliers.add(new Supplier(supIds + "", bankAccount, cash, credit, contactName, contactNum));
+        supIds++;
     }
 
     public void removeSupplier(String sid){

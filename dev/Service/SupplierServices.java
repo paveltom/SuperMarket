@@ -234,7 +234,7 @@ public class SupplierServices {
         }
     }
 
-    public ResponseT<List<SupProduct>> searhhProduct(String name){
+    public ResponseT<List<SupProduct>> searchProduct(String name){
         try{
             return ResponseT.FromValue(sc.searchProduct(name));
         }catch (Exception e){
