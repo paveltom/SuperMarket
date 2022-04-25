@@ -7,17 +7,22 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class SupplierController {
+
     List<Supplier> suppliers;
-    private int supIds;
 
     public SupplierController(){
         suppliers = new LinkedList<>();
-        supIds = 0;
     }
 
-    public void addSupplier(String bankAccount, boolean cash, boolean credit, String contactName, String contactNum){
-        suppliers.add(new Supplier(supIds + "", bankAccount, cash, credit, contactName, contactNum));
-        supIds++;
+    public List<Supplier> getSuppliers() {
+        return suppliers;
+    }
+
+    public void addSupplier(String supId, String bankAccount, boolean cash, boolean credit, String contactName, String contactNum){
+        if(!suppliers.stream().filter(supplier -> supplier.getSid().equals(supId)).toList().isEmpty())
+            throw new IllegalArgumentException("trying to add supplier with already existing id");
+
+        suppliers.add(new Supplier(supId + "", bankAccount, cash, credit, contactName, contactNum));
     }
 
     public void removeSupplier(String sid){
