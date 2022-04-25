@@ -8,6 +8,8 @@ public class Branch {
     private String name;
     private StockController stockController;
 
+
+
     Branch(int _branchID,String _name){
         branchID = _branchID;
         name = _name;
@@ -15,7 +17,7 @@ public class Branch {
     }
 
     public String toString(){
-        return "Branch ID : " + branchID + " , Branch name : " + name;
+        return "Branch ID : " + branchID + " , Branch name : " + name + "\n";
     }
 
     public List<Product> getProductsInStock(){
@@ -56,6 +58,19 @@ public class Branch {
         stockController.insertNewProduct(productName,productManufacturer,categoryID,supplyTime,demand);
     }
 
+    public void setSubCategory(int subCategoryID,int parentID){
+        stockController.setSubCategory(subCategoryID,parentID);
+    }
+
+    public void insertNewItem(int productID, String location, Date expireDate, boolean isUsable, int amount)
+    {
+        stockController.insertNewItem(productID, location, expireDate, isUsable, amount);
+    }
+    public void reduceItemAmount(int productID, int itemID, int amountToReduce) throws Exception
+    {
+        stockController.reduceItemAmount(productID, itemID, amountToReduce);
+    }
+
     public void insertNewCategory(String categoryName){
         stockController.insertNewCategory(categoryName);
     }
@@ -64,8 +79,9 @@ public class Branch {
         stockController.insertNewDiscount(productID, startDate, endDate, amount, t);
     }
 
-    /*public void insertNewPurchase(Date purchaseDate, Map m){
-    }*/
+    public void insertNewPurchase(Date purchaseDate, int productID, int fixedPrice, int actualPrice){
+        stockController.insertNewPurchase(purchaseDate, productID, fixedPrice, actualPrice);
+    }
 
     public void deleteProduct(int productID){
         stockController.deleteProduct(productID);
@@ -83,15 +99,8 @@ public class Branch {
         stockController.deletePurchase(purchaseID);
     }
 
-    public int getBranchID() {
-        return branchID;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public StockController getStockController() {
-        return stockController;
+    public void deleteItem(int productID,int itemID) throws Exception
+    {
+        stockController.deleteItem(productID, itemID);
     }
 }
