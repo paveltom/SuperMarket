@@ -1,10 +1,11 @@
-import Service.SupplierServices;
+import Presentation.CliController;
 
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        CliController cc = new CliController();
+        //cc.loadData();
+        cc.displayMainMenu();
     }
-
 
 }

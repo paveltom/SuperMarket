@@ -1,24 +1,24 @@
 package Presentation;
 
 import Service.SupplierServices;
-
 import java.util.Scanner;
 
 public class CliController {
 
-    private static final Scanner in = new Scanner(System.in);
+    private final Scanner in;
+    private final SupplierServices ss;
 
-    public static void main(String[] args) {
-        SupplierServices ss = new SupplierServices();
-        loadData();
-        displayMainMenu();
+    public CliController(){
+        in = new Scanner(System.in);
+        ss = new SupplierServices();
+        //loadData();
     }
 
-    private static void loadData(){
+    public void loadData(){
         //TODO
     }
 
-    private static void displayMainMenu() {
+    public void displayMainMenu() {
         System.out.println("""
                 at any stage insert “$” to roll back to the main menu
                 at any stage insert “b” to go back to the previous window
@@ -30,51 +30,53 @@ public class CliController {
 
         String input = in.nextLine();
         switch (input) {
-            case "1":
-                addingSupplierWindow();
-                break;
-            case "2":
-                showSuppliersWindow();
-                break;
-            case "3":
-                searchProductWindow();
-                break;
-            case "$":
-            case "b":
-                displayMainMenu();
-                break;
-            default:
+            case "1" -> addingSupplierWindow();
+            case "2" -> showSuppliersWindow();
+            case "3" -> searchProductWindow();
+            case "$", "b" -> displayMainMenu();
+            default -> {
                 System.out.println("incorrect input\n");
                 displayMainMenu();
+            }
         }
     }
 
-    private static void addingSupplierWindow(){
+    private void addingSupplierWindow(){
         System.out.println("""
                         insert bank account, using cash?, using credit?, contact name, contact phone-number
                         e.g 6456684 n y yossi 0524679565""");
 
         String input = in.nextLine();
         switch (input) {
-            case "$":
-            case "b":
-                displayMainMenu();
-                break;
-            default:
+            case "$", "b" -> displayMainMenu();
+            default -> {
                 String[] splitted = input.split(" ");
-                if(splitted.length != 5){
+                if (splitted.length != 5) {
                     System.out.println("incorrect input\n");
                     addingSupplierWindow();
-                }
-                else{
-                    //ss.addSup
+                } else {
+                    String bankAcc = splitted[0];
+                    boolean cash = splitted[1]=="y";
+                    ss.addSupplier(s)
                     //give info about the action
                     //repeat if neccessery
                     //or go back to mm
                 }
+            }
         }
+
+    }
+
+    private void showSuppliersWindow(){
+
+
+    }
+
+    private void searchProductWindow() {
 
     }
 
 
 }
+
+
