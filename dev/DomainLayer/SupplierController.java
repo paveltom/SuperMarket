@@ -8,13 +8,15 @@ import java.util.List;
 
 public class SupplierController {
     List<Supplier> suppliers;
+    private int supIds;
 
     public SupplierController(){
         suppliers = new LinkedList<>();
+        supIds = 0;
     }
 
-    public void addSupplier(String sid, String bankAccount, boolean cash, boolean credit, String contactName, String contactNum){
-        suppliers.add(new Supplier(sid, bankAccount, cash, credit, contactName, contactNum));
+    public void addSupplier(String bankAccount, boolean cash, boolean credit, String contactName, String contactNum){
+        suppliers.add(new Supplier(supIds + "", bankAccount, cash, credit, contactName, contactNum));
     }
 
     public void removeSupplier(String sid){
@@ -112,12 +114,12 @@ public class SupplierController {
         findSupplier(sid).updateDiscountPerOrder(productID, quantity, discount);
     }
 
-    public void removeDiscountPerItem(String sid, String productID, int quantity, float discount){
-        findSupplier(sid).addDiscountPerItem(productID, quantity, discount);
+    public void removeDiscountPerItem(String sid, String productID, int quantity){
+        findSupplier(sid).removeDiscountPerItem(productID, quantity);
     }
 
-    public void removeDiscountPerOrder(String sid, String productID, int quantity, float discount) {
-        findSupplier(sid).removeDiscountPerOrder(productID, quantity, discount);
+    public void removeDiscountPerOrder(String sid, String productID, int quantity) {
+        findSupplier(sid).removeDiscountPerOrder(productID, quantity);
     }
 
     public Dictionary<Integer,Float> getDiscountsForProductPerItem(String sid, String productID){

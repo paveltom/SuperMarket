@@ -97,12 +97,12 @@ public class Supplier {
         contract.updateDiscountPerOrder(productID, quantity, discount);
     }
 
-    public void removeDiscountPerItem(String productID, int quantity, float discount){
-        contract.addDiscountPerItem(productID, quantity, discount);
+    public void removeDiscountPerItem(String productID, int quantity){
+        contract.removeDiscountPerItem(productID, quantity);
     }
 
-    public void removeDiscountPerOrder(String productID, int quantity, float discount) {
-        contract.removeDiscountPerOrder(productID, quantity, discount);
+    public void removeDiscountPerOrder(String productID, int quantity) {
+        contract.removeDiscountPerOrder(productID, quantity);
     }
 
     public Dictionary<Integer,Float> getDiscountsForProductPerItem(String productID){

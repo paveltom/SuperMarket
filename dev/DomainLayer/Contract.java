@@ -109,11 +109,11 @@ public class Contract {
         qa.updateDiscountPerOrder(productID, quantity, discount);
     }
 
-    public void removeDiscountPerItem(String productID, int quantity, float discount){
+    public void removeDiscountPerItem(String productID, int quantity){
         qa.removeDiscountPerItem(productID, quantity);
     }
 
-    public void removeDiscountPerOrder(String productID, int quantity, float discount) {
+    public void removeDiscountPerOrder(String productID, int quantity) {
         qa.removeDiscountPerOrder(productID, quantity);
     }
 
