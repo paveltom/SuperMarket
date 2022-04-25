@@ -3,6 +3,7 @@ package com.company.ServiceLayer;
 import com.company.BusinessLogicLayer.*;
 
 import java.time.format.ResolverStyle;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -17,11 +18,24 @@ public class Service
     public Response addNewBranch(String name){
         return scs.addNewBranch(name);
     }
+    public Response deleteBranch(int branchID){
+        return scs.deleteBranch(branchID);
+    }
+
+    public Response setSubCategory(int branchID,int subCategoryID,int parentID){
+        return scs.setSubCategory(branchID,subCategoryID,parentID);
+    }
+
+    public  ResponseT<List<Branch>> getBranches(){
+        return scs.getBranches();
+    }
 
     public ResponseT<List<Product>> getProductsInStock(int branchID){
         //Requirement 2
         return scs.getProductsInStock(branchID);
     }
+
+
 
     public ResponseT<List<Purchase>> getPurchasesHistoryReport(int branchID){
         //Requirement 3
@@ -58,6 +72,16 @@ public class Service
         return scs.insertNewProduct(branchID,productName,productManufacturer,categoryID,supplyTime,demand);
     }
 
+    public Response insertNewItem(int branchID, int productID, String location, Date expireDate, boolean isUsable, int amount){
+        return scs.insertNewItem(branchID,productID,location,expireDate,isUsable,amount);
+
+    }
+
+    public Response reduceItemAmount(int branchID, int productID,int itemID,int amountToReduce)
+    {
+        return scs.reduceItemAmount(branchID, productID, itemID, amountToReduce);
+    }
+
     public Response insertNewCategory(int branchID,String categoryName){
         return scs.insertNewCategory(branchID,categoryName);
     }
@@ -66,9 +90,9 @@ public class Service
         return scs.insertNewDiscount(branchID, productID, startDate, endDate, amount, t);
     }
 
-    //public void insertNewPurchase(int branchID, Date purchaseDate, Map m){
-
-    //}
+    public Response insertNewPurchase(int branchID, Date purchaseDate, int productID, int fixedPrice, int actualPrice){
+        return scs.insertNewPurchase(branchID, purchaseDate, productID, fixedPrice, actualPrice);
+    }
 
     public Response deleteProduct(int branchID, int productID){
         return scs.deleteProduct(branchID, productID);
@@ -85,4 +109,52 @@ public class Service
     public Response deletePurchase(int branchID, int purchaseID){
         return scs.deletePurchase(branchID, purchaseID);
     }
+
+    public Response deleteItem(int branchID, int productID,int itemID){
+        return scs.deleteItem(branchID,productID,itemID);
+    }
+
+    public void LoadDefaultData()
+    {
+        addNewBranch("Shop-Eilat");
+        addNewBranch("Shop-Netivot");
+
+        insertNewCategory(0, "Electricity");
+        insertNewCategory(0, "Milk");
+        insertNewCategory(0, "Drinks");
+
+        insertNewCategory(1, "Electricity");
+        insertNewCategory(1, "Milk");
+        insertNewCategory(1, "Drinks");
+
+        insertNewProduct(0, "Dark Chocolate 60%", "Strauss", 1, new Date(2020,2,2), 40);
+        insertNewProduct(0, "Milk Chocolate", "Strauss", 1, new Date(2001, 1, 25), 40);
+        insertNewProduct(0, "Batteries AA", "GP Ultra", 0, new Date(2004, 5, 14), 65);
+        insertNewProduct(0, "Orange juice", "Primor", 2, new Date(2014, 7, 30), 65);
+
+        insertNewProduct(1, "Dark Chocolate 60%", "Strauss", 1, new Date(2020,2,2), 40);
+        insertNewProduct(1, "Milk Chocolate", "Strauss", 1, new Date(2001, 1, 25), 40);
+        insertNewProduct(1, "Batteries AA", "GP Ultra", 0, new Date(2004, 5, 14), 65);
+        insertNewProduct(1, "Orange juice", "Primor", 2, new Date(2014, 7, 30), 65);
+
+        insertNewItem(0, 0, "L5A4", new Date(2021, 4, 5), false, 30);
+        insertNewItem(0, 0, "L2A17", new Date(2022, 4, 5), true, 42);
+        insertNewItem(0, 1, "L6A8", new Date(2022, 4, 15), true, 50);
+        insertNewItem(0, 2, "L1A2", new Date(2022, 2, 3), true, 130);
+        insertNewItem(0, 3, "L9A4", new Date(2022, 1, 15), false, 280);
+
+
+        insertNewItem(1, 0, "L5A4", new Date(2021, 4, 5), false, 30);
+        insertNewItem(1, 0, "L2A17", new Date(2022, 4, 5), true, 42);
+        insertNewItem(1, 1, "L6A8", new Date(2022, 4, 15), true, 50);
+        insertNewItem(1, 2, "L1A2", new Date(2022, 2, 3), true, 130);
+        insertNewItem(1, 3, "L9A4", new Date(2022, 1, 15), false, 280);
+
+        insertNewDiscount(0, 3, new Date(2022, 4, 3), new Date(2022, 5, 3), 30, Type.PERCENT);
+        insertNewDiscount(1, 3, new Date(2022, 4, 3), new Date(2022, 5, 3), 30, Type.PERCENT);
+
+        insertNewPurchase(0, new Date(2022, 4, 25), 2, 30, 25);
+        insertNewPurchase(1, new Date(2022, 4, 25), 2, 30, 25);
+    }
+
 }
