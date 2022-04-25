@@ -160,4 +160,12 @@ public class Contract {
         return "delivery service: "  + hasDeliveryService() + "supply days:" + suppDays +
                " | max days for delivery " + getSupplyMaxDays() + " | number of item in catalog: " + getCatalog().size();
     }
+
+    public Dictionary<String, Dictionary<Integer, Float>> getPerItem() {
+        return qa.getPerItem();
+    }
+
+    public Dictionary<String, Dictionary<Integer, Float>> getPerOrder() {
+        return qa.getPerOrder();
+    }
 }

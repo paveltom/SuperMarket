@@ -183,4 +183,12 @@ public class Supplier {
     public void removeContact(String name){
         contacts.remove(name);
     }
+
+    public Dictionary<String, Dictionary<Integer, Float>> getPerItem() {
+        return contract.getPerItem();
+    }
+
+    public Dictionary<String, Dictionary<Integer, Float>> getPerOrder() {
+        return contract.getPerOrder();
+    }
 }

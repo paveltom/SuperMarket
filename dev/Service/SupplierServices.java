@@ -282,4 +282,20 @@ public class SupplierServices {
             return new Response(e.getMessage());
         }
     }
+
+    public ResponseT<Dictionary<String, Dictionary<Integer, Float>>> getPerItem(String sid) {
+        try{
+            return ResponseT.FromValue(sc.getPerItem(sid));
+        }catch (Exception e){
+            return ResponseT.FromError(e.getMessage());
+        }
+    }
+
+    public ResponseT<Dictionary<String, Dictionary<Integer, Float>>> getPerOrder(String sid) {
+        try{
+            return ResponseT.FromValue(sc.getPerOrder(sid));
+        }catch (Exception e){
+            return ResponseT.FromError(e.getMessage());
+        }
+    }
 }

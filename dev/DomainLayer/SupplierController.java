@@ -174,4 +174,17 @@ public class SupplierController {
         getSupplier(sid).removeContact(name);
     }
 
+    public Dictionary<String, Dictionary<Integer, Float>> getPerItem(String sid) {
+        if(!supExsist(sid))
+            throw new IllegalArgumentException("supplier doesntExsists");
+
+        return getSupplier(sid).getPerItem();
+    }
+
+    public Dictionary<String, Dictionary<Integer, Float>> getPerOrder(String sid) {
+        if(!supExsist(sid))
+            throw new IllegalArgumentException("supplier doesntExsists");
+
+        return getSupplier(sid).getPerOrder();
+    }
 }
