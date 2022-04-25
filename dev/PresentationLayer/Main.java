@@ -11,7 +11,6 @@ public class Main {
 
     public static void Init()
     {
-        service = new Service();
         service.AddWorker("111111111","Worker1","PersonnelManager","yes","Bank 003 111111",40.00,"22/9/2020","...");
         service.AddWorker("222222222","Worker2","Cashier","yes","Bank 003 111111",35.00,"22/9/2020","...");
         service.AddWorker("333333333","Worker3","StoreKeeper","no","Bank 003 111111",33.00,"22/9/2020","...");
@@ -27,7 +26,8 @@ public class Main {
         service.addShift("12/04/2022",0,"111111111","PersonnelManager 111111111|Cashier 222222222|StoreKeeper 333333333|Usher 444444444|LogisticsManager 555555555|Driver 666666666");
     }
     public static void main(String[] args) {
-        Init();
+        //Init();
+        service = new Service();
         Scanner scan = new Scanner(System.in);
         System.out.println("Program Initiated");
         System.out.println("Please Enter Next Command");
@@ -36,6 +36,10 @@ public class Main {
         {
             String[] data = command.split("#");
             switch (data[0]){
+                case "Init":
+                    Init();
+                    System.out.println("Initialised successfully");
+                    break;
                 case "AddWorker":
                     System.out.println(service.AddWorker(data[1],data[2],data[3],data[4],data[5],Double.parseDouble(data[6]),data[7],data[8]));
                     break;

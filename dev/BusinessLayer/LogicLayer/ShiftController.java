@@ -75,6 +75,7 @@ public class ShiftController {
     }
 
     public String shiftHistory(){
+        if(shifts.size()==0) return "No shifts found";
         String s="";
         for (Shift i:
              shifts) {
