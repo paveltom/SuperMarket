@@ -2,7 +2,7 @@ package com.company.ServiceLayer;
 
 public class Response
 {
-    public String ErrorMessage;
+    public String ErrorMessage = "";
     public Boolean ErrorOccured;
 
     Response(){
@@ -16,6 +16,6 @@ public class Response
 
     public Boolean ErrorOccured()
     {
-        return ErrorMessage != null;
+        return !ErrorMessage.equals("");
     }
 }
