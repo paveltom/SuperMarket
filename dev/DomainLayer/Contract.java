@@ -1,7 +1,5 @@
 package DomainLayer;
 
-import DomainLayer.QuantityAgreement;
-
 import java.util.*;
 
 public class Contract {
@@ -44,6 +42,20 @@ public class Contract {
             throw new IllegalArgumentException("trying to set supply days with incorrect format");
 
         this.supplyDays = supplyDays;
+    }
+
+    public void addSupplyDay(int day) {
+        if (day > 7 || day < 1)
+            throw new IllegalArgumentException("day out of range");
+
+        supplyDays[day] = true;
+    }
+
+    public void removeSupplyDay(int day) {
+        if (day > 7 || day < 1)
+            throw new IllegalArgumentException("day out of range");
+
+        supplyDays[day] = false;
     }
 
     public void setSupplyMaxDays(int supplyMaxDays) {
