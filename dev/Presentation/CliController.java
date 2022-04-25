@@ -216,7 +216,7 @@ public class CliController {
                         }
                         default -> {
                             System.out.println("action failed, invalid argumets" + "\n");
-                            displayProductsWindow(products, sid);
+                            displayProductsWindow(sid);
                         }
                     }
 
