@@ -1,5 +1,6 @@
 package Presentation;
 
+import Service.Response;
 import Service.SupplierServices;
 import java.util.Scanner;
 
@@ -51,16 +52,19 @@ public class CliController {
             case "$", "b" -> displayMainMenu();
             default -> {
                 String[] splitted = input.split(" ");
-                if (splitted.length != 5) {
+                if (splitted.length != 5 || (!splitted[1].equals("y") && !splitted[1].equals("n")) || (!splitted[2].equals("y") && !splitted[2].equals("n")) ) {
                     System.out.println("incorrect input\n");
                     addingSupplierWindow();
                 } else {
-                    String bankAcc = splitted[0];
-                    boolean cash = splitted[1]=="y";
-                    ss.addSupplier(s)
-                    //give info about the action
-                    //repeat if neccessery
-                    //or go back to mm
+                    Response r = ss.addSupplier(splitted[0], splitted[1].equals("y"), splitted[2].equals("y"), splitted[3], splitted[4]);
+                    if(r.ErrorOccurred()){
+                        System.out.println("action failed, " + r.getErrorMessage() + "\n");
+                        addingSupplierWindow();
+                    }
+                    else{
+                        System.out.println("action succeed\n");
+                        displayMainMenu();
+                    }
                 }
             }
         }
