@@ -234,4 +234,12 @@ public class SupplierServices {
         }
     }
 
+    public ResponseT<List<SupProduct>> searhhProduct(String name){
+        try{
+            return ResponseT.FromValue(sc.searchProduct(name));
+        }catch (Exception e){
+            return ResponseT.FromError(e.getMessage());
+        }
+    }
+
 }

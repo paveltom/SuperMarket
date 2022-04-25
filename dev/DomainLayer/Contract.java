@@ -142,4 +142,12 @@ public class Contract {
         return catalog.stream().anyMatch(supProduct -> supProduct.getCatalogNum().equals(catalogNum));
     }
 
+    public List<SupProduct> searchProduct(String name){
+        List<SupProduct> p = new LinkedList<>();
+        for(SupProduct  sp :catalog){
+            if(sp.getName().equals(name))
+                p.add(sp);
+        }
+        return p;
+    }
 }
