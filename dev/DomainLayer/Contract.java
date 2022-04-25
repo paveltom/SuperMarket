@@ -6,8 +6,6 @@ public class Contract {
     private boolean[] supplyDays; //|7|
     private int supplyMaxDays; // 0+ or -1
     private boolean deliveryService;
-
-    //private Dictionary<Integer,SupProduct> products;
     private final List<SupProduct> catalog;
     private final QuantityAgreement qa;
 
