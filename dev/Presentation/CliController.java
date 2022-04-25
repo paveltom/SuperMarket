@@ -3,9 +3,7 @@ package Presentation;
 import DomainLayer.*;
 import Service.*;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class CliController {
 
@@ -242,8 +240,116 @@ public class CliController {
         }
     }
 
-    private void displayQuantityAgreementWindow(String suppId) {
+    private void printQuantityAgreementMap(Dictionary<String, Dictionary<Integer, Float>> m){
+        if(m == null) {
+            System.out.print("no discounts");
+        } else {
+            Enumeration<String> e1 = m.keys();
+            while(e1.hasMoreElements()) {
+                String k = e1.nextElement();
+                System.out.print(k + "\n\t");
+                Dictionary<Integer, Float> d = m.get(k);
 
+                if(d == null) {
+                    System.out.print("no discounts for this product\n");
+                } else {
+                    Enumeration<Integer> e2 = d.keys();
+                    while(e2.hasMoreElements()) {
+                        int i = e2.nextElement();
+                        System.out.print("quantity: " + i + " discount: " + d.get(i) + "\n\t");
+                    }
+                }
+                System.out.println();
+            }
+        }
+    }
+
+    private void displayQuantityAgreementWindow(String suppId) {
+        ResponseT<Dictionary<String, Dictionary<Integer, Float>>> m1 = ss.getPerItem(suppId);
+        ResponseT<Dictionary<String, Dictionary<Integer, Float>>> m2 = ss.getPerOrder(suppId);
+
+        if(m1.ErrorOccurred()){
+            System.out.println("action failed: " + m1.getErrorMessage());
+            supplierInfoWindow(suppId);
+        }
+        if(m2.ErrorOccurred()){
+            System.out.println("action failed: " + m2.getErrorMessage());
+            supplierInfoWindow(suppId);
+        }
+
+        System.out.println("""
+                        1. discount by order size list : """);
+        //print map 1
+        printQuantityAgreementMap(m1.getValue());
+        System.out.println("""
+                        2. discount by item quantity list : """);
+        //print map 2
+        printQuantityAgreementMap(m2.getValue());
+
+        System.out.println("""
+                to add a discount press 1 or 2 and enter item id and quantity and discount
+                to delete a discount press -1 or -2 and enter item id and quantity
+                to add a discount press *1 or *2 and enter item id and quantity and discount
+                 e.g “2 5 100 20””
+                 """ + "\n");
+
+        String input = in.nextLine();
+        String[] splitted = input.split(" ");
+        switch (input) {
+            case "$" -> displayMainMenu();
+            case "b" -> displayMainMenu();
+            default -> {
+                if(splitted.length == 4) {
+                    if (splitted[0].equals("1")) {
+                        Response action = ss.addDiscountPerItem(suppId, splitted[1], Integer.valueOf(splitted[2]), Float.valueOf(splitted[3]));
+                        if (action.ErrorOccurred()) {
+                            System.out.println("action faild: " + action.getErrorMessage());
+                        }
+                        displayQuantityAgreementWindow(suppId);
+                    } else if (splitted[0].equals("2")) {
+                        Response action = ss.addDiscountPerOrder(suppId, splitted[1], Integer.valueOf(splitted[2]), Float.valueOf(splitted[3]));
+                        if (action.ErrorOccurred()) {
+                            System.out.println("action faild: " + action.getErrorMessage());
+                        }
+                        displayQuantityAgreementWindow(suppId);
+                    }
+                    else if (splitted[0].equals("*1")) {
+                        Response action = ss.updateDiscountPerItem(suppId, splitted[1], Integer.valueOf(splitted[2]), Float.valueOf(splitted[3]));
+                        if (action.ErrorOccurred()) {
+                            System.out.println("action faild: " + action.getErrorMessage());
+                        }
+                        displayQuantityAgreementWindow(suppId);
+                    }
+                    else if (splitted[0].equals("*2")) {
+                        Response action = ss.updateDiscountPerOrder(suppId, splitted[1], Integer.valueOf(splitted[2]), Float.valueOf(splitted[3]));
+                        if (action.ErrorOccurred()) {
+                            System.out.println("action faild: " + action.getErrorMessage());
+                        }
+                        displayQuantityAgreementWindow(suppId);
+                    }
+                }
+                else if(splitted.length == 3){
+                    if(splitted[0].equals("-1")){
+                        Response action = ss.removeDiscountPerItem(suppId, splitted[1], Integer.valueOf(splitted[2]));
+                        if(action.ErrorOccurred()){
+                            System.out.println("action faild: " + action.getErrorMessage());
+                        }
+                        displayQuantityAgreementWindow(suppId);
+                    }
+                    if(splitted[0].equals("-2")){
+                        Response action = ss.removeDiscountPerOrder(suppId, splitted[1], Integer.valueOf(splitted[2]));
+                        if(action.ErrorOccurred()){
+                            System.out.println("action faild: " + action.getErrorMessage());
+                        }
+                        displayQuantityAgreementWindow(suppId);
+                    }
+                }else {
+                    System.out.println("Invalid action");
+                    displayQuantityAgreementWindow(suppId);
+                }
+
+            }
+        }
     }
 
     private void displayContractWindow(String suppId) {

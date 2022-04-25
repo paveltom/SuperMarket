@@ -123,4 +123,12 @@ public class QuantityAgreement {
 
         removeProduct(old);
     }
+
+    public Dictionary<String, Dictionary<Integer, Float>> getPerItem() {
+        return perItem;
+    }
+
+    public Dictionary<String, Dictionary<Integer, Float>> getPerOrder() {
+        return perOrder;
+    }
 }
