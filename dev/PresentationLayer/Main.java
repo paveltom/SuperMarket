@@ -1,0 +1,334 @@
+package com.company.PresentationLayer;
+
+import com.company.BusinessLogicLayer.Type;
+import com.company.ServiceLayer.Service;
+
+import java.net.SocketOption;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Scanner;
+
+public class Main {
+
+
+    static int SelectedBranchID = -1;
+    static boolean branchSelected = false;
+    public static void main(String[] args) {
+
+        Service s = new Service();
+
+        Scanner toRead = new Scanner(System.in);
+
+        String message = "";
+        System.out.println("Hello user welcome to our shop.");
+        System.out.println("You can always type 'Help' in order to get list of available commands.");
+        System.out.println("To quit, type 'Quit'");
+        while(!message.equals("Quit"))
+        {
+            message = toRead.next();
+            Protocol(message,s,toRead);
+        }
+        System.out.println("Ok, bye.");
+
+
+
+    }
+
+    public static void Protocol(String msg,Service s,Scanner toRead){
+
+        if(msg.equals("Help")){
+            System.out.println("List of commands : ");
+            System.out.println(" 'LoadData' - Loads default data.");
+            System.out.println(" 'NewBranch' - Add new branch.");
+            System.out.println(" 'RemoveBranch' - Deletes branch.");
+            System.out.println(" 'SelectBranch' - Use a branch to control data on.");
+
+            if(branchSelected){
+                System.out.println(" 'QuitBranch' - Deselects the selected branch.");
+                System.out.println(" 'AddCategory' - Inserts new category.");
+                System.out.println(" 'SetSubCategory' - Sets category as subcategory of other category.");
+                System.out.println(" 'RemoveCategory' - Deletes category.");
+                System.out.println(" 'AddProduct' - Inserts new product.");
+                System.out.println(" 'RemoveProduct' - Deletes category.");
+                System.out.println(" 'AddPurchase' - Inserts new purchase.");
+                System.out.println(" 'RemovePurchase' - Deletes purchase.");
+                System.out.println(" 'AddDiscount' - Inserts new discount.");
+                System.out.println(" 'RemoveDiscount' - Deletes discount.");
+                System.out.println(" 'AddItem' - Inserts new item.");
+                System.out.println(" 'ReduceItemAmount' - Reduce amount of existing item.");
+                System.out.println(" 'RemoveItem' - Deletes item.");
+                System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                System.out.println("'ShowProducts' - Prints products report.");
+                System.out.println("'ShowPurchases' - Prints purchases report.");
+                System.out.println("'ShowDiscount' - Prints discount report.");
+                System.out.println("'ShowCategories' - Prints categories report.");
+                System.out.println("'ShowItems' - Prints stock report.");
+                System.out.println("'ShowItemsByCategory' - Prints stock report only on a specific category.");
+                System.out.println("'ShowUnusableItems' - Prints stock report of unusable products.");
+
+
+
+
+            }
+
+        }
+
+        else if(msg.equals("LoadData")){
+            s.LoadDefaultData();
+            System.out.println("Data loaded successfully.");
+        }
+
+        else if(msg.equals("NewBranch")){
+            System.out.println("Enter the branch name : ");
+            if(!s.addNewBranch(toRead.next()).ErrorOccured());
+                System.out.println("New branch created successfully.");
+        }
+        else if(msg.equals("RemoveBranch")){
+            System.out.println("Enter Branch ID to delete : ");
+            int toDeleteBranch = toRead.nextInt();
+            if(!s.deleteBranch(toDeleteBranch).ErrorOccured())
+                System.out.println("Branch removed successfully.");
+            if(SelectedBranchID==toDeleteBranch)
+            {
+                branchSelected = false;
+                SelectedBranchID = -1;
+                System.out.println("Left branch successfully.");
+            }
+
+        }
+        else if(msg.equals("SelectBranch")){
+            System.out.println("Current available branches : ");
+            System.out.println(s.getBranches().Value);
+            System.out.println("Enter the branch number : ");
+            int tempBranchID = toRead.nextInt();
+            if (s.getBranches().Value.size() > tempBranchID)
+            {
+                SelectedBranchID = tempBranchID;
+                branchSelected = true;
+                System.out.println("Branch selected successfully.");
+            }
+            else
+            {
+                System.out.println("Branch does not exist, please try again.");
+            }
+
+        }
+        else if(branchSelected){
+            if(msg.equals("QuitBranch"))
+            {
+                branchSelected = false;
+                SelectedBranchID = -1;
+                System.out.println("Left branch successfully.");
+            }
+            else if(msg.equals("AddCategory"))
+            {
+                System.out.println("Enter new category name : ");
+                if(!s.insertNewCategory(SelectedBranchID, toRead.next()).ErrorOccured())
+                    System.out.println("Added category successfully.");
+
+            }
+            else if(msg.equals("SetSubCategory"))
+            {
+                System.out.println("Enter categoryID you want to set as subcategory : ");
+                int subCategoryID = toRead.nextInt();
+                System.out.println("Enter categoryID you want to set as parent : ");
+                int parentID = toRead.nextInt();
+                if(!s.setSubCategory(SelectedBranchID,subCategoryID,parentID).ErrorOccured())
+                    System.out.println("Subcategory set successfully.");
+
+            }
+            else if(msg.equals("RemoveCategory"))
+            {
+                System.out.println("Enter category ID to delete :");
+                if(!s.deleteCategory(SelectedBranchID, toRead.nextInt()).ErrorOccured())
+                    System.out.println("Removed category successfully.");
+            }
+            else if(msg.equals("AddProduct"))
+            {
+                System.out.println("Enter new product name :");
+                String productName = toRead.next();
+                System.out.println("Enter new product manufacturer :");
+                String productManufacturer = toRead.next();
+                System.out.println("Enter the ID of the category which the product will belong :");
+                int categoryID = toRead.nextInt();
+                System.out.println("Enter on which date the product will be supplied :");
+                System.out.println("Year :");
+                int year = toRead.nextInt();
+                System.out.println("Month :");
+                int month = toRead.nextInt();
+                System.out.println("Day :");
+                int day = toRead.nextInt();
+                System.out.println("Enter the minimum demand for this product.");
+                int demand = toRead.nextInt();
+                System.out.println(s.insertNewProduct(SelectedBranchID, productName, productManufacturer, categoryID, new Date(year, month-1, day), demand).ErrorMessage);
+            }
+            else if(msg.equals("RemoveProduct"))
+            {
+                System.out.print("Enter product ID to remove : ");
+                if(!s.deleteProduct(SelectedBranchID, toRead.nextInt()).ErrorOccured())
+                    System.out.print("Product removed successfully.");
+            }
+            else if(msg.equals("AddPurchase"))
+            {
+                System.out.println("Enter date of purchase : ");
+                System.out.println("Year :");
+                int year = toRead.nextInt();
+                System.out.println("Month :");
+                int month = toRead.nextInt();
+                System.out.println("Day :");
+                int day = toRead.nextInt();
+                System.out.println("Enter product ID : ");
+                int productID = toRead.nextInt();
+                System.out.println("Enter fixed price of product : ");
+                int fixedPrice = toRead.nextInt();
+                System.out.println("Enter actual price of product : ");
+                int actualPrice = toRead.nextInt();
+                if(!s.insertNewPurchase(SelectedBranchID,new Date(year,month-1,day),productID,fixedPrice,actualPrice).ErrorOccured())
+                    System.out.print("Added purchase successfully.");
+            }
+            else if(msg.equals("RemovePurchase"))
+            {
+                System.out.println("Enter purchase ID to remove : ");
+                if(!s.deletePurchase(SelectedBranchID,toRead.nextInt()).ErrorOccured())
+                    System.out.print("Removed purchase successfully.");
+            }
+            else if(msg.equals("AddDiscount"))
+            {
+                System.out.println("Enter ID of product to add discount to : ");
+                int ProductID = toRead.nextInt();
+                System.out.println("Enter start date of discount : ");
+                System.out.println("Year :");
+                int year = toRead.nextInt();
+                System.out.println("Month :");
+                int month = toRead.nextInt();
+                System.out.println("Day :");
+                int day = toRead.nextInt();
+                Date startDate = new Date(year, month-1, day);
+
+                System.out.println("Enter end date of discount : ");
+                System.out.println("Year :");
+                int year2 = toRead.nextInt();
+                System.out.println("Month :");
+                int month2 = toRead.nextInt();
+                System.out.println("Day :");
+                int day2 = toRead.nextInt();
+                Date endDate = new Date(year2, month2-1, day2);
+                System.out.println("Enter amount of discount : ");
+                int amount = toRead.nextInt();
+                System.out.print("Enter type of discount : 'PERCENT' or 'FIXED'");
+                Type t;
+                while(true){
+                    String type = toRead.next();
+                    if(type.equals("PERCENT"))
+                    {
+                        t = Type.PERCENT;
+                        break;
+                    }
+                    else if(type.equals("FIXED"))
+                    {
+                        t = Type.FIXED;
+                        break;
+                    }
+                    else
+                        System.out.println("Wrong value, enter 'PERCENT' or 'FIXED'");
+
+                }
+                System.out.println(s.insertNewDiscount(SelectedBranchID,ProductID,startDate,endDate,amount,t).ErrorMessage);
+            }
+            else if(msg.equals("RemoveDiscount"))
+            {
+                System.out.println("Enter ID of discount to remove : ");
+                if(!s.deleteDiscount(SelectedBranchID,toRead.nextInt()).ErrorOccured())
+                    System.out.print("Removed discount successfully.");
+            }
+            else if(msg.equals("AddItem"))
+            {
+                System.out.println("Enter ID of product of item to add : ");
+                int ProductID = toRead.nextInt();
+                System.out.println("Enter location of item : ");
+                String Location = toRead.next();
+                System.out.println("Enter expire date : ");
+                System.out.println("Year :");
+                int year = toRead.nextInt();
+                System.out.println("Month :");
+                int month = toRead.nextInt();
+                System.out.println("Day :");
+                int day = toRead.nextInt();
+                Date expireDate = new Date(year, month - 1, day);
+                System.out.println("Is the item usable ? enter 'Yes' or 'No' ");
+                String isUsable = toRead.next();
+                while(true)
+                {
+                    if(isUsable.equals("Yes") || isUsable.equals("No")){
+                        break;
+                    }
+                    System.out.println("Please enter 'Yes' or 'No'.");
+                    isUsable = toRead.next();
+
+                }
+                System.out.println("Enter amount of items : ");
+                int amount = toRead.nextInt();
+                if(!s.insertNewItem(SelectedBranchID,ProductID,Location,expireDate,isUsable.equals("Yes"),amount).ErrorOccured())
+                    System.out.print("Added item successfully.");
+            }
+            else if(msg.equals("ReduceItemAmount"))
+            {
+                System.out.println("Enter ProductID of the item : ");
+                int ProductID = toRead.nextInt();
+                System.out.println("Enter ID of the item : ");
+                int itemID = toRead.nextInt();
+                System.out.println("Enter how much do you want to reduce : ");
+                int amountToReduce = toRead.nextInt();
+                System.out.println(s.reduceItemAmount(SelectedBranchID, ProductID, itemID, amountToReduce).ErrorMessage);
+
+            }
+            else if(msg.equals("RemoveItem"))
+            {
+                System.out.println("Enter product ID : ");
+                int ProductID = toRead.nextInt();
+                System.out.println("Enter item ID : ");
+                int ItemID = toRead.nextInt();
+                System.out.println(s.deleteItem(SelectedBranchID, ProductID, ItemID).ErrorMessage);
+
+            }
+            else if(msg.equals("ShowProducts"))
+            {
+                System.out.println(s.getProductsInStock(SelectedBranchID).Value);
+            }
+            else if(msg.equals("ShowPurchases"))
+            {
+                System.out.println(s.getPurchasesHistoryReport(SelectedBranchID).Value);
+            }
+            else if(msg.equals("ShowDiscount"))
+            {
+                System.out.println(s.getCurrentDiscounts(SelectedBranchID).Value);
+            }
+            else if(msg.equals("ShowCategories"))
+            {
+                System.out.println(s.getCategories(SelectedBranchID).Value);
+            }
+            else if(msg.equals("ShowItems"))
+            {
+                System.out.println(s.getStockReport(SelectedBranchID).Value);
+            }
+            else if(msg.equals("ShowItemsByCategory"))
+            {
+                System.out.println("Enter product ID to filter : ");
+                System.out.println(s.getStockReportByCategory(SelectedBranchID, toRead.nextInt()).Value);
+            }
+            else if(msg.equals("ShowUnusableItems"))
+            {
+                System.out.println(s.getUnusableProductsReport(SelectedBranchID).Value);
+            }
+            else
+            {
+                System.out.println("Enter a valid command.");
+            }
+        }
+        else
+        {
+            System.out.println("Enter a valid command.");
+        }
+    }
+
+}
