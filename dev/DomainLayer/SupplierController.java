@@ -130,5 +130,13 @@ public class SupplierController {
         return findSupplier(sid).getDiscountsForProductPerOrder(productID);
     }
 
+    public List<SupProduct> searchProduct(String name){
+        List<SupProduct> products = new LinkedList<>();
+        for(Supplier s:suppliers){
+            products.addAll(s.searchProduct(name));
+        }
+        return products;
+    }
+
 
 }

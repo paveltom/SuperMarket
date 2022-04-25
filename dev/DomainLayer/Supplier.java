@@ -112,4 +112,8 @@ public class Supplier {
     public Dictionary<Integer,Float> getDiscountsForProductPerOrder(String productID){
         return contract.getDiscountsForProductPerOrder(productID);
     }
+
+    public List<SupProduct> searchProduct(String name){
+        return contract.searchProduct(name);
+    }
 }
