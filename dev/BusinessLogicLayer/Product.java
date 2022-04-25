@@ -31,15 +31,20 @@ public class Product {
     }
 
     public String toString(){
-        return "Product Name : " + name + " , Manufacturer : " + manufacturer + " , Amount : " + amount + " , Category ID : " + categoryID + " , Supply Time : " + supplyTime + " , Demand : " + demand;
+        return "Product Name : " + name + " , Manufacturer : " + manufacturer + " , Amount : " + amount + " , Category ID : " + categoryID + " , Supply Time : " + supplyTime + " , Demand : " + demand+ "\n";
     }
 
-    public void updateAmount()
+    public void updateAmount() throws Exception
     {
         amount = 0;
         for(Item i : items){
             amount += i.getAmount();
         }
+        if(amount<demand)
+        {
+            throw new Exception("PLEASE NOTICE : Current amount is lower than product's demand. Please refill stock.");
+        }
+
     }
 
     public List<Item> getItems(){
@@ -53,11 +58,26 @@ public class Product {
     public List<Item> getUnusableItems(){
         List<Item> output = new ArrayList<>();
         for(Item i : items){
-            if(i.isUsable()){
+            if(!i.isUsable()){
                 output.add(i);
             }
         }
         return output;
     }
+    public void addItem(String location, Date expireDate, boolean isUsable, int amount){
+        items.add(new Item(location,ID,expireDate,isUsable,amount));
+    }
+
+    public void deleteItem(int itemID) throws Exception
+    {
+        items.remove(itemID);
+        updateAmount();
+    }
+    public void reduceItemAmount(int itemID,int amountToReduce) throws Exception
+    {
+        items.get(itemID).reduce(amountToReduce);
+        updateAmount();
+    }
+
 }
 
