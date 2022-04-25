@@ -1,5 +1,7 @@
 package com.company.BusinessLogicLayer;
 
+import com.company.ServiceLayer.Response;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,9 +15,22 @@ public class BranchController{
         counterBranches = 0;
     }
 
+    public List<Branch> getBranches(){
+        return new ArrayList<>(branches);
+    }
+
     public void addNewBranch(String name){
         branches.add(new Branch(counterBranches,name));
         counterBranches++;
+    }
+
+    public void deleteBranch(int branchID){
+        branches.remove(branchID);
+
+    }
+
+    public void setSubCategory(int branchID,int subCategoryID,int parentID){
+        branches.get(branchID).setSubCategory(subCategoryID,parentID);
     }
 
     public List<Product> getProductsInStock(int branchID){
@@ -65,11 +80,20 @@ public class BranchController{
         branches.get(branchID).insertNewDiscount(productID, startDate, endDate, amount, t);
     }
 
-    /*public void insertNewPurchase(int branchID, Date purchaseDate, Map m){
-    }*/
+    public void insertNewPurchase(int branchID, Date purchaseDate, int productID, int fixedPrice, int actualPrice){
+        branches.get(branchID).insertNewPurchase(purchaseDate, productID, fixedPrice, actualPrice);
+    }
 
     public void deleteProduct(int branchID, int productID){
         branches.get(branchID).deleteProduct(productID);
+    }
+
+    public void insertNewItem(int branchID, int productID, String location, Date expireDate, boolean isUsable, int amount){
+        branches.get(branchID).insertNewItem(productID, location, expireDate, isUsable, amount);
+    }
+    public void reduceItemAmount(int branchID, int productID, int itemID, int amountToReduce) throws Exception
+    {
+        branches.get(branchID).reduceItemAmount(productID, itemID, amountToReduce);
     }
 
     public void deleteCategory(int branchID, int categoryID){
@@ -82,6 +106,11 @@ public class BranchController{
 
     public void deletePurchase(int branchID, int purchaseID){
         branches.get(branchID).deletePurchase(purchaseID);
+    }
+
+    public void deleteItem(int branchID, int productID,int itemID) throws Exception
+    {
+        branches.get(branchID).deleteItem(productID, itemID);
     }
 
 }
