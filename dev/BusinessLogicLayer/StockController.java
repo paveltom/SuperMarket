@@ -108,6 +108,7 @@ public class StockController {
 
     public void insertNewPurchase(Date purchaseDate, int productID, int fixedPrice, int actualPrice){
         purchases.add(new Purchase(purchaseDate,productID,fixedPrice,actualPrice));
+        purchasesCounter++;
     }
 
     public void deleteProduct(int productID){
