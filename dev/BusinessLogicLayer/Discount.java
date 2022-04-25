@@ -24,4 +24,8 @@ public class Discount
     public String toString(){
         return "Discount ID : " + discountID + " , Product ID : " + productID + " , Start Date : " + discountStartDate + " , End Date : " + discountEndDate + " , Amount : NEED TO FIX";
     }
+
+    public Map<Integer, Type> getType() {
+        return this.discount;
+    }
 }

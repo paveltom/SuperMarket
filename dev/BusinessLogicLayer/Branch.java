@@ -8,8 +8,6 @@ public class Branch {
     private String name;
     private StockController stockController;
 
-
-
     Branch(int _branchID,String _name){
         branchID = _branchID;
         name = _name;
@@ -83,5 +81,17 @@ public class Branch {
 
     public void deletePurchase(int purchaseID){
         stockController.deletePurchase(purchaseID);
+    }
+
+    public int getBranchID() {
+        return branchID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public StockController getStockController() {
+        return stockController;
     }
 }

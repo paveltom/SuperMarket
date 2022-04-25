@@ -112,20 +112,19 @@ public class StockController {
         purchases.remove(purchaseID);
     }
 
-    public boolean isAncestorOf(int childCategoryID,int parentCategoryID)
+    public boolean isAncestorOf(int childCategoryID, int parentCategoryID)
     {
         Category child = categories.get(childCategoryID);
         Category parent = categories.get(parentCategoryID);
 
-        if(child == parent)
+        if(child == parent) {
             return true;
+        }
 
-        if(child.getParentCategory()==null)
+        if(child.getParentCategory() == null) {
             return false;
+        }
 
         return isAncestorOf(child.getParentCategory().getID(), parentCategoryID);
-
     }
-
-
 }

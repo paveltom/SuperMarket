@@ -7,15 +7,16 @@ public class Category {
     private final int ID;
     private String name;
     private Category parentCategory;
-    private List<Category> subCategories;
+    private LinkedList<Category> subCategories;
 
 
     Category(int _ID,String _name)
-    {//Constructor for 1st-degree category
+    {
+        //Constructor for 1st-degree category
         ID = _ID;
         name = _name;
         parentCategory = null;
-        subCategories = new LinkedList<Category>();
+        subCategories = new LinkedList<>();
     }
 
     public String toString(){
@@ -23,12 +24,13 @@ public class Category {
     }
 
     Category(int _ID,String _name,Category _parentCategory)
-    {//Constructor for non 1st-degree category
+    {
+        //Constructor for non 1st-degree category
         this(_ID, _name);
-        parentCategory=_parentCategory;
+        parentCategory = _parentCategory;
     }
 
-    public List<Category> getSubCategories(){
+    public LinkedList<Category> getSubCategories(){
         return subCategories;
     }
     public Category getParentCategory()
@@ -44,5 +46,9 @@ public class Category {
 
     public int getID(){
         return ID;
+    }
+
+    public String getName() {
+        return this.name;
     }
 }

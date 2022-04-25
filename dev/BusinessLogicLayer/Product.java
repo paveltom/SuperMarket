@@ -59,8 +59,5 @@ public class Product {
         }
         return output;
     }
-
-
-
 }
 
