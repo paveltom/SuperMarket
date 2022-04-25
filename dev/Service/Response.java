@@ -1,4 +1,4 @@
-package com.company.Service;
+package Service;
 
 public class Response {
     private String ErrorMessage = null;
