@@ -153,9 +153,11 @@ public class Contract {
 
     public String toString(){
         String suppDays = "";
-        for (boolean day : getSupplyDays()) {
-            //if ()
+        for (int i=0; i<getSupplyDays().length; i++) {
+            if (getSupplyDays()[i])
+                suppDays += suppDays + " " +  i;
         }
-        return "supply days: " + getSupplyMaxDays();
+        return "delivery service: "  + hasDeliveryService() + "supply days:" + suppDays +
+               " | max days for delivery " + getSupplyMaxDays() + " | number of item in catalog: " + getCatalog().size();
     }
 }

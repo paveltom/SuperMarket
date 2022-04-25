@@ -243,6 +243,7 @@ public class CliController {
     }
 
     private void displayQuantityAgreementWindow(String suppId) {
+
     }
 
     private void displayContractWindow(String suppId) {
@@ -252,7 +253,86 @@ public class CliController {
             supplierInfoWindow(suppId);
         }
         else{
+            System.out.println(r.getValue().toString());
+            System.out.println("""
+                    insert a number and a following info to update
+                    e.g 2 5 will change the max delivery days to 5
+                    
+                    1. change delivery day (expecting a day in the week as a number between 1-7 and y/n)
+                    2. change max delivery days (any not negative number or -1 for no max delivery days)
+                    3. change delivery service status (y/n)""");
+            String input = in.nextLine();
+            String[] splitted = input.split(" ");
+            switch (splitted[0]) {
+                case "1" -> {
+                    try {
+                        if (!splitted[2].equals("y") && !splitted[2].equals("n")) {
+                            System.out.println("incorrect input\n");
+                            displayContractWindow(suppId);
+                        } else {
+                            boolean[] days = new boolean[7];
+                            days[Integer.parseInt(splitted[1]) - 1] = splitted[2].equals("y");
+                            Response r2 = ss.setSupplyDays(suppId, days);
+                            if (r2.ErrorOccurred()) {
+                                System.out.println("incorrect input\n");
+                                displayContractWindow(suppId);
+                            } else {
+                                System.out.println("action succeed\n");
+                                displayContractWindow(suppId);
+                            }
+                        }
+                    }
+                    catch(Exception e){
+                            System.out.println("incorrect input\n");
+                            displayContractWindow(suppId);
+                    }
+                }
+                case "2" -> {
+                    try {
+                        Response r2 = ss.setSupplyMaxDays(suppId, Integer.parseInt(splitted[1]));
+                        if(r2.ErrorOccurred()){
+                            System.out.println("incorrect input\n");
+                            displayContractWindow(suppId);
+                        }
+                        else {
+                            System.out.println("action succeed\n");
+                            displayContractWindow(suppId);
+                        }
+                    }
+                    catch (Exception e){
+                        System.out.println("incorrect input\n");
+                        displayContractWindow(suppId);
+                    }
+                }
+                case "3" -> {
+                    try {
+                        if (!splitted[1].equals("y") && !splitted[1].equals("n")) {
+                            System.out.println("incorrect input\n");
+                            displayContractWindow(suppId);
+                        } else {
+                            Response r2 = ss.setDeliveryService(suppId, splitted[1].equals("y"));
+                            if (r2.ErrorOccurred()) {
+                                System.out.println("incorrect input\n");
+                                displayContractWindow(suppId);
+                            } else {
+                                System.out.println("action succeed\n");
+                                displayContractWindow(suppId);
+                            }
+                        }
+                    }
+                    catch(Exception e){
+                            System.out.println("incorrect input\n");
+                            displayContractWindow(suppId);
+                    }
 
+                }
+                case "$" -> displayMainMenu();
+                case "b" -> supplierInfoWindow(suppId);
+                default -> {
+                    System.out.println("incorrect input\n");
+                    displayContractWindow(suppId);
+                }
+            }
         }
 
 
