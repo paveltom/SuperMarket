@@ -37,7 +37,8 @@ public class StockController {
 
     public List<Discount> getCurrentDiscounts(){
         //Requirement 4
-        return new ArrayList<>(discounts);
+        //return new ArrayList<>(discounts);
+        return discounts;
     }
 
     public List<Category> getCategories(){
@@ -82,19 +83,32 @@ public class StockController {
         products.add(new Product(productsCounter, productName, productManufacturer, categoryID, supplyTime, demand));
         productsCounter++;
     }
+    public void setSubCategory(int subCategoryID,int parentID){
+        Category subCategory = categories.get(subCategoryID);
+        Category parent = categories.get(parentID);
+        subCategory.setAsParent(parent);
+    }
 
+    public void insertNewItem(int productID, String location, Date expireDate, boolean isUsable, int amount){
+        products.get(productID).addItem(location, expireDate, isUsable, amount);
+    }
+    public void reduceItemAmount(int productID, int itemID, int amountToReduce) throws Exception
+    {
+        products.get(productID).reduceItemAmount(itemID, amountToReduce);
+    }
     public void insertNewCategory(String categoryName){
         categories.add(new Category(categoriesCounter,categoryName));
         categoriesCounter++;
     }
 
     public void insertNewDiscount(int productID, Date startDate, Date endDate, int amount, Type t){
-        //discounts.add(new Discount(discountsCounter, productID, startDate, endDate, amount, t));
-        //discountsCounter++;
+        discounts.add(new Discount(discountsCounter, productID, startDate, endDate, amount, t));
+        discountsCounter++;
     }
 
-    /*public void insertNewPurchase(Date purchaseDate, Map m){
-    }*/
+    public void insertNewPurchase(Date purchaseDate, int productID, int fixedPrice, int actualPrice){
+        purchases.add(new Purchase(purchaseDate,productID,fixedPrice,actualPrice));
+    }
 
     public void deleteProduct(int productID){
         products.remove(productID);
@@ -112,19 +126,25 @@ public class StockController {
         purchases.remove(purchaseID);
     }
 
-    public boolean isAncestorOf(int childCategoryID, int parentCategoryID)
+    public void deleteItem(int productID,int itemID) throws Exception
+    {
+        products.get(productID).deleteItem(itemID);
+    }
+
+    public boolean isAncestorOf(int childCategoryID,int parentCategoryID)
     {
         Category child = categories.get(childCategoryID);
         Category parent = categories.get(parentCategoryID);
 
-        if(child == parent) {
+        if(child == parent)
             return true;
-        }
 
-        if(child.getParentCategory() == null) {
+        if(child.getParentCategory()==null)
             return false;
-        }
 
         return isAncestorOf(child.getParentCategory().getID(), parentCategoryID);
+
     }
+
+
 }
