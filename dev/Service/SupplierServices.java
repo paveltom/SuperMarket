@@ -4,6 +4,7 @@ import DomainLayer.*;
 
 import java.util.Dictionary;
 import java.util.List;
+import java.util.Map;
 
 public class SupplierServices {
 
@@ -256,4 +257,29 @@ public class SupplierServices {
         }
     }
 
+
+
+
+
+
+
+
+
+
+    public ResponseT<Map<String,String>> getSupplierContacts(String sid){
+        try{
+            return ResponseT.FromValue(sc.getSupplierContacts(sid));
+        }catch (Exception e){
+            return ResponseT.FromError(e.getMessage());
+        }
+    }
+
+    public Response removeContact(String sid, String name){
+        try{
+            sc.removeContact(sid, name);
+            return new Response();
+        }catch (Exception e){
+            return new Response(e.getMessage());
+        }
+    }
 }

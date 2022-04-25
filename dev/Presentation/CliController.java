@@ -2,8 +2,10 @@ package Presentation;
 
 import DomainLayer.*;
 import Service.*;
+import jdk.javadoc.doclet.Reporter;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class CliController {
@@ -339,7 +341,38 @@ public class CliController {
     }
 
     private void displayContactsWindow(String suppId) {
+        System.out.println("""
+                            to add "1" and contact insert name and phone number
+                            to delete a contact enter "2" and contacts name
+                            """);
 
+        ResponseT<Map<String,String>> p = ss.getSupplierContacts(suppId);
+        if (p.ErrorOccurred())
+            supplierInfoWindow(suppId);
+
+        String input = in.nextLine();
+        String[] splitted = input.split(" ");
+        switch (input) {
+            case "$" -> displayMainMenu();
+            case "b" -> showSuppliersWindow();
+            default -> {
+                if(splitted[0].equals("1")){
+                    if(splitted.length != 3){
+                        System.out.println("Invalid input");
+                        displayContactsWindow(suppId);
+                    }
+                    Response action = ss.addContact(suppId, splitted[1], splitted[2]);
+                    if(action.ErrorOccurred())
+                        System.out.println("action failed: " + action.getErrorMessage());
+                }
+                else if(splitted[0].equals("2") && splitted.length == 2){
+                    Response action = ss.removeContact(suppId, splitted[1]);
+                    if(action.ErrorOccurred())
+                        System.out.println("action failed: " + action.getErrorMessage());
+                }
+                displayContactsWindow(suppId);
+            }
+        }
     }
 
 

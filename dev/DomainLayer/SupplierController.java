@@ -1,10 +1,12 @@
 package DomainLayer;
 
 import Service.Response;
+import Service.ResponseT;
 
 import java.util.Dictionary;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class SupplierController {
 
@@ -156,5 +158,20 @@ public class SupplierController {
         return matchedSupp.get(0);
     }
 
+
+
+    public Map<String,String> getSupplierContacts(String sid){
+        if(!supExsist(sid))
+            throw new IllegalArgumentException("supplier doesntExsists");
+
+        return getSupplier(sid).getContacts();
+    }
+
+    public void removeContact(String sid, String name){
+        if(!supExsist(sid))
+            throw new IllegalArgumentException("supplier doesntExsists");
+
+        getSupplier(sid).removeContact(name);
+    }
 
 }
