@@ -9,20 +9,27 @@ public class Item {
     private boolean isUsable;
     private int amount;
 
-    public Item(String _location,int productID, Date expireDate)
+    public Item(String _location,int _productID, Date _expireDate,boolean _isUsable,int _amount)
     {
-        this.productID = productID;
-        this.expireDate = expireDate;
-        this.isUsable = true;
-        this.amount = 0;
+        location = _location;
+        productID = _productID;
+        expireDate = _expireDate;
+        isUsable = _isUsable;
+        amount = _amount;
     }
 
     public String toString(){
-        return "Product ID : " + productID + " , Location : " + location + " , Expire Date : " + expireDate+ " , Amount : "+amount + (!isUsable ? "This item is not usable." : "");
+        return "Product ID : " + productID + " , Location : " + location + " , Expire Date : " + expireDate + " , Amount : " + amount + " " + (!isUsable ? "This item is not usable." : "")+ "\n";
     }
 
-    public void reduce(int amountToReduce){
-        this.amount -= amountToReduce;
+    public void reduce(int amountToReduce) throws Exception
+    {
+        int newAmount = amount - amountToReduce;
+        if(newAmount<0)
+        {
+            throw new Exception("Can't reduce more than amount in stock. Reduce declined.");
+        }
+        amount = newAmount;
     }
     public void addToStock(int amountToAdd){
         this.amount += amountToAdd;
