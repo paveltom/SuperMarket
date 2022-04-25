@@ -24,9 +24,9 @@ public class SupplierServices {
         }
     }
 
-    public Response addSupplier(String bankAccount, boolean cash, boolean credit, String contactName, String contactNum){
+    public Response addSupplier(String supId, String bankAccount, boolean cash, boolean credit, String contactName, String contactNum){
         try{
-            sc.addSupplier(bankAccount, cash, credit, contactName, contactNum);
+            sc.addSupplier(supId, bankAccount, cash, credit, contactName, contactNum);
             return new Response();
         }catch (Exception e){
             return new Response(e.getMessage());

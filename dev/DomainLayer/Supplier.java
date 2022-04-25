@@ -4,7 +4,6 @@ import java.util.*;
 
 public class Supplier {
     private String sid;
-
     private String bankAccount;
     private boolean[] paymentMethods;
     private Map<String,String> contacts;

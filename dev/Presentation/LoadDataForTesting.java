@@ -6,7 +6,7 @@ public class LoadDataForTesting {
     public LoadDataForTesting(SupplierServices ss){
         boolean[] noSupplydays = {false,false,false,false,false,false,false};
 
-        ss.addSupplier("000", true, true, "yosi", "0000000000");
+        ss.addSupplier("345tf","000", true, true, "yosi", "0000000000");
         ss.addContract("0", noSupplydays, -1, false);
 
         ss.addProduct("0", "1", "tomato", 0.2f);
