@@ -41,7 +41,101 @@ public class Main {
                     System.out.println("Initialised successfully");
                     break;
                 case "AddWorker":
-                    System.out.println(service.AddWorker(data[1],data[2],data[3],data[4],data[5],Double.parseDouble(data[6]),data[7],data[8]));
+                    System.out.println("Choose the type of the worker:\n1. PersonnelManager\n2. Cashier\n3. StoreKeeper\n4. Usher\n5. LogisticsManager\n6. Driver");
+                    String c1 = scan.nextLine();
+                    switch (c1){
+                        case "1":
+                            System.out.println("Type the worker details in the following order:\n<Id>#<Name>#<SMQualification>#<BankDetails>#<Pay>#<StartDate>#<SocialDetails>");
+                            String c12 = scan.nextLine();
+                            String[] d12 = c12.split("#");
+                            while(!d12[0].equals("x")){
+                                String ans = service.AddWorker(d12[0],d12[1],"PersonnelManager",d12[2],d12[3],Double.parseDouble(d12[4]),d12[5],d12[6]);
+                                System.out.println(ans);
+                                if(ans.equals("Added worker successfully")) break;
+                                else{
+                                    System.out.println("Try again");
+                                    c12 = scan.nextLine();
+                                    d12 = c12.split("#");
+                                }
+                            }
+                            break;
+                        case "2":
+                            System.out.println("Type the worker details in the following order:\n<Id>#<Name>#<SMQualification>#<BankDetails>#<Pay>#<StartDate>#<SocialDetails>");
+                            String c22 = scan.nextLine();
+                            String[] d22 = c22.split("#");
+                            while(!d22[0].equals("x")){
+                                String ans = service.AddWorker(d22[0],d22[1],"Cashier",d22[2],d22[3],Double.parseDouble(d22[4]),d22[5],d22[6]);
+                                System.out.println(ans);
+                                if(ans.equals("Added worker successfully")) break;
+                                else{
+                                    System.out.println("Try again");
+                                    c22 = scan.nextLine();
+                                    d22 = c22.split("#");
+                                }
+                            }
+                            break;
+                        case "3":
+                            System.out.println("Type the worker details in the following order:\n<Id>#<Name>#<SMQualification>#<BankDetails>#<Pay>#<StartDate>#<SocialDetails>");
+                            String c32 = scan.nextLine();
+                            String[] d32 = c32.split("#");
+                            while(!d32[0].equals("x")){
+                                String ans = service.AddWorker(d32[0],d32[1],"StoreKeeper",d32[2],d32[3],Double.parseDouble(d32[4]),d32[5],d32[6]);
+                                System.out.println(ans);
+                                if(ans.equals("Added worker successfully")) break;
+                                else{
+                                    System.out.println("Try again");
+                                    c32 = scan.nextLine();
+                                    d32 = c32.split("#");
+                                }
+                            }
+                            break;
+                        case "4":
+                            System.out.println("Type the worker details in the following order:\n<Id>#<Name>#<SMQualification>#<BankDetails>#<Pay>#<StartDate>#<SocialDetails>");
+                            String c42 = scan.nextLine();
+                            String[] d42 = c42.split("#");
+                            while(!d42[0].equals("x")){
+                                String ans = service.AddWorker(d42[0],d42[1],"Usher",d42[2],d42[3],Double.parseDouble(d42[4]),d42[5],d42[6]);
+                                System.out.println(ans);
+                                if(ans.equals("Added worker successfully")) break;
+                                else{
+                                    System.out.println("Try again");
+                                    c42 = scan.nextLine();
+                                    d42 = c42.split("#");
+                                }
+                            }
+                            break;
+                        case "5":
+                            System.out.println("Type the worker details in the following order:\n<Id>#<Name>#<SMQualification>#<BankDetails>#<Pay>#<StartDate>#<SocialDetails>");
+                            String c52 = scan.nextLine();
+                            String[] d52 = c52.split("#");
+                            while(!d52[0].equals("x")){
+                                String ans = service.AddWorker(d52[0],d52[1],"LogisticsManager",d52[2],d52[3],Double.parseDouble(d52[4]),d52[5],d52[6]);
+                                System.out.println(ans);
+                                if(ans.equals("Added worker successfully")) break;
+                                else{
+                                    System.out.println("Try again");
+                                    c52 = scan.nextLine();
+                                    d52 = c52.split("#");
+                                }
+                            }
+                            break;
+                        case "6":
+                            System.out.println("Type the worker details in the following order:\n<Id>#<Name>#<SMQualification>#<BankDetails>#<Pay>#<StartDate>#<SocialDetails>#<DeliveryZone>#<license>");
+                            String c62 = scan.nextLine();
+                            String[] d62 = c62.split("#");
+                            while(!d62[0].equals("x")){
+                                String ans = service.AddDriver(d62[0],d62[1],"Driver",d62[2],d62[3],Double.parseDouble(d62[4]),d62[5],d62[6],d62[7],d62[8]);
+                                System.out.println(ans);
+                                if(ans.equals("Added worker successfully")) break;
+                                else{
+                                    System.out.println("Try again");
+                                    c62 = scan.nextLine();
+                                    d62 = c62.split("#");
+                                }
+                            }
+                            break;
+                    }
+
                     break;
                 case "DeleteWorker":
                     System.out.println(service.DeleteWorker(data[1]));

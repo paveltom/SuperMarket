@@ -88,6 +88,20 @@ public class Service {
         }
     }
 
+    public String AddDriver(String _Id,String _Name,String _Job,String _Qual,String _Bank,Double _Pay, String _StartDate,String _Social, String zone, String license)
+    {
+        try{
+            wService.AddWorker(_Id,_Name,_Job,_Qual,_Bank,_Pay,_StartDate,_Social);
+            sService.addWorker(_Id);
+            //TODO: send the data to Delivery Module
+            return "Added worker successfully";
+        }
+        catch (Exception e)
+        {
+            return e.getMessage();
+        }
+    }
+
 
     /**
      * Function to delete a worker
