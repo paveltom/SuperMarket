@@ -3,8 +3,8 @@ package DeliveryModule.Facade.FacadeObjects;
 import DeliveryModule.BusinessLayer.Element.Driver;
 
 public class FacadeDriver {
-    private long id;
-    private String firstName, lastName, cellphone, vehicleCategory, livingArea;
+    private String id;
+    private String Name, vehicleCategory, livingArea;
 
     public  FacadeDriver(){}
 
