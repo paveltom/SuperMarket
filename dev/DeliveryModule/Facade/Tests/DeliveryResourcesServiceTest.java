@@ -35,13 +35,7 @@ public class DeliveryResourcesServiceTest implements Testable {
 
         assertTrue(allDrivers.contains(charSequence));
 
-        charSequence = facadeDriver.getFirstName();
-        assertTrue(allDrivers.contains(charSequence));
-
-        charSequence = facadeDriver.getLastName();
-        assertTrue(allDrivers.contains(charSequence));
-
-        charSequence = facadeDriver.getCellphone();
+        charSequence = facadeDriver.getName();
         assertTrue(allDrivers.contains(charSequence));
     }
 
@@ -51,10 +45,8 @@ public class DeliveryResourcesServiceTest implements Testable {
         FacadeDriver facadeDriver = getTempDriver();
 
         drService.addDriver(facadeDriver);
-        ResponseT<FacadeDriver> resDriver = drService.getDriverById(facadeDriver.getId());
-        assertEquals(facadeDriver.getFirstName(), resDriver.getValue().getFirstName());
-        assertEquals(facadeDriver.getLastName(), resDriver.getValue().getLastName());
-        assertEquals(facadeDriver.getCellphone(), resDriver.getValue().getCellphone());
+        ResponseT<FacadeDriver> resDriver = drService.getDriverById(Long.parseLong(facadeDriver.getId())); //has to be changed after the update of BL.Driver -> remove parsing of long
+        assertEquals(facadeDriver.getName(), resDriver.getValue().getName());
         assertEquals(facadeDriver.getVehicleCategory(), resDriver.getValue().getVehicleCategory());
     }
 
@@ -68,7 +60,7 @@ public class DeliveryResourcesServiceTest implements Testable {
         CharSequence charSequence = facadeDriver.getId() + "";
         assertTrue(allDrivers.contains(charSequence));
 
-        drService.removeDriver(facadeDriver.getId());
+        drService.removeDriver(Long.parseLong(facadeDriver.getId())); //has to be changed after the update of BL.Driver -> remove parsing of long
 
         allDrivers = drService.showDrivers().getValue();
 
@@ -125,13 +117,11 @@ public class DeliveryResourcesServiceTest implements Testable {
     }
 
     private FacadeDriver getTempDriver(){
-        int id = 326971249;
-        String firstName = "testFirstName";
-        String lastName = "testLastName";
-        String cellphone = "0501234567";
+        String id = "326971249";
+        String name = "testName";
         VehicleLicenseCategory vLicCat = VehicleLicenseCategory.values()[0];
         ShippingZone sZone = ShippingZone.values()[0];
-        FacadeDriver facDriver = new FacadeDriver(id, firstName, lastName, cellphone, vLicCat.toString(), sZone.toString());
+        FacadeDriver facDriver = new FacadeDriver(id, name, vLicCat.toString(), sZone.toString());
         return facDriver;
     }
 

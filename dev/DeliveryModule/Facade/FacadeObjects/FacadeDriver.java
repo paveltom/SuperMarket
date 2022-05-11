@@ -4,43 +4,33 @@ import DeliveryModule.BusinessLayer.Element.Driver;
 
 public class FacadeDriver {
     private String id;
-    private String Name, vehicleCategory, livingArea;
+    private String name, vehicleCategory, livingArea;
 
     public  FacadeDriver(){}
 
+    //waiting for Business layer Driver changes...
     public  FacadeDriver(Driver driver){
-        this.id = (int)driver.Id;
-        this.firstName = driver.FirstName;
-        this.lastName = driver.LastName;
-        this.cellphone = driver.Cellphone;
+        this.id = Long.toString(driver.Id);
+        this.name = driver.FirstName + " " + driver.LastName;
         this.vehicleCategory = driver.License.name();
         this.livingArea = driver.Zone.name();
     }
 
-    public FacadeDriver(long id, String firstName, String lastName, String cellphone, String vehicleCategory, String livingArea){
+    public FacadeDriver(String id, String name, String vehicleCategory, String livingArea){
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.cellphone = cellphone;
+        this.name = name;
         this.vehicleCategory = vehicleCategory;
         this.livingArea = livingArea;
     }
 
     public String toString(){
-        return id + ", " + firstName + " " + lastName + ", " + cellphone + ", " + vehicleCategory + ", " + livingArea;
+        return id + ", " + name + ", " + vehicleCategory + ", " + livingArea + ".";
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getName() {
+        return name;
     }
 
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getCellphone() {
-        return cellphone;
-    }
 
     public String getVehicleCategory() {
         return vehicleCategory;
@@ -50,7 +40,7 @@ public class FacadeDriver {
         return livingArea;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 

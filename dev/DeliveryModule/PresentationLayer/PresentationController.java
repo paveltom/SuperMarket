@@ -201,13 +201,13 @@ public class PresentationController {
         operateOutput("----------Enter '0' at any field to cancel----------");
         showShippingZones();
         showLicenseCategories();
-        String[] details = {"ID", "First Name", "Last Name", "Cellphone", "Vehicle Category", "Living Area"};
+        String[] details = {"ID", "Name", "Vehicle Category", "Living Area"};
         for(int i = 0; i < details.length; i++){
             String input = operateInput(details[i] + ": ");
             if(input.equals("0")) return 0;
             details[i] = input;
         }
-        FacadeDriver facDriver = new FacadeDriver(Integer.parseInt(details[0]), details[1], details[2], details[3], details[4], details[5]);
+        FacadeDriver facDriver = new FacadeDriver(details[0], details[1], details[2], details[3]);
         Response res = service.addDriver(facDriver);
         if(res.getErrorOccurred()) {
             operateOutput("Couldn't add a new driver. " + res.getErrorMessage());

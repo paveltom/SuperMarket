@@ -23,13 +23,12 @@ public class DeliveryResourcesService {
 
     public Response addDriver(FacadeDriver facDriver){
         try {
-            long id = facDriver.getId();
-            String firstName = facDriver.getFirstName();
-            String lastName = facDriver.getLastName();
-            String cellphone = facDriver.getCellphone();
+            String id = facDriver.getId();
+            String name = facDriver.getName();
             VehicleLicenseCategory licCategory = VehicleLicenseCategory.valueOf(facDriver.getVehicleCategory());
             ShippingZone shipZone = ShippingZone.valueOf(facDriver.getLivingArea());
-            boolean added = delController.AddDriver(id, licCategory, firstName, lastName, cellphone, shipZone);
+            // Has to be changed after update of the BusinessLayer Driver -> remove Long.parse, remove lastName, remove cellphone
+            boolean added = delController.AddDriver(Long.parseLong(id), licCategory, name, "", "", shipZone);
             if(added) {
                 String strId = id + "";
                 return new ResponseT<String>(strId, true);
