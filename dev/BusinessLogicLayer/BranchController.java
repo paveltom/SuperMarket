@@ -12,7 +12,7 @@ public class BranchController{
     private int counterBranches;
 
     public BranchController(){
-        branches = new ArrayList<Branch>();
+        branches = new ArrayList<>();
         counterBranches = 0;
     }
 
@@ -64,9 +64,13 @@ public class BranchController{
         return branches.get(branchID).getStockReportByCategory(CategoryID);
     }
 
-    public List<Item> getUnusableItemsReport(int branchID){
+    public List<Item> getDefectedItemsReport(int branchID){
         //Requirement 8+9
-        return branches.get(branchID).getUnusableItemsReport();
+        return branches.get(branchID).getDefectedItemsReport();
+    }
+
+    public List<Item> getExpiredItemsReport(int branchID) {
+        return branches.get(branchID).getExpiredItemsReport();
     }
 
     public void insertNewProduct(int branchID, String productName, String productManufacturer, int categoryID, Date supplyTime, int demand){
@@ -89,8 +93,8 @@ public class BranchController{
         branches.get(branchID).deleteProduct(productID);
     }
 
-    public void insertNewItem(int branchID, int productID, String location, Date expireDate, boolean isUsable, int amount){
-        branches.get(branchID).insertNewItem(productID, location, expireDate, isUsable, amount);
+    public void insertNewItem(int branchID, int productID, String location, Date expireDate, boolean isDefect, int amount){
+        branches.get(branchID).insertNewItem(productID, location, expireDate, isDefect, amount);
     }
     public void reduceItemAmount(int branchID, int productID, int itemID, int amountToReduce) throws Exception
     {
@@ -109,9 +113,7 @@ public class BranchController{
         branches.get(branchID).deletePurchase(purchaseID);
     }
 
-    public void deleteItem(int branchID, int productID,int itemID) throws Exception
-    {
+    public void deleteItem(int branchID, int productID,int itemID) throws Exception {
         branches.get(branchID).deleteItem(productID, itemID);
     }
-
 }

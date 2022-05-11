@@ -128,12 +128,23 @@ public class StockControllerService
 
     }
 
-    public ResponseT<List<Item>> getUnusableItemsReport(int branchID)
+    public ResponseT<List<Item>> getDefectedItemsReport(int branchID)
     {
         //Requirement 8+9
         try
         {
-            return ResponseT.FromValue(bc.getUnusableItemsReport(branchID));
+            return ResponseT.FromValue(bc.getDefectedItemsReport(branchID));
+        }
+        catch (Exception e)
+        {
+            return ResponseT.FromError(e.getMessage());
+        }
+    }
+
+    public ResponseT<List<Item>> getExpiredItemsReport(int branchID) {
+        try
+        {
+            return ResponseT.FromValue(bc.getExpiredItemsReport(branchID));
         }
         catch (Exception e)
         {
@@ -281,5 +292,4 @@ public class StockControllerService
             return ResponseT.FromError(e.getMessage());
         }
     }
-
 }

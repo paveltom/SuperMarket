@@ -1,9 +1,6 @@
 package com.company.BusinessLogicLayer;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class Product {
     private int ID;
@@ -26,7 +23,7 @@ public class Product {
         this.categoryID = categoryID;
         this.supplyTime = supplyTime;
         this.demand = demand;
-        this.items = new LinkedList<Item>();
+        this.items = new LinkedList<>();
 
     }
 
@@ -55,17 +52,28 @@ public class Product {
         return categoryID;
     }
 
-    public List<Item> getUnusableItems(){
+    public List<Item> getDefectedItems(){
         List<Item> output = new ArrayList<>();
         for(Item i : items){
-            if(!i.isUsable()){
+            if(i.isDefect()){
                 output.add(i);
             }
         }
         return output;
     }
-    public void addItem(String location, Date expireDate, boolean isUsable, int amount){
-        items.add(new Item(location,ID,expireDate,isUsable,amount));
+
+    public List<Item> getExpiredItems() {
+        List<Item> output = new ArrayList<>();
+        for(Item i : items){
+            if(i.isExpired()){
+                output.add(i);
+            }
+        }
+        return output;
+    }
+
+    public void addItem(String location, Date expireDate, boolean isDefect , int amount){
+        items.add(new Item(location, ID, expireDate, isDefect, amount));
     }
 
     public void deleteItem(int itemID) throws Exception
@@ -78,6 +86,5 @@ public class Product {
         items.get(itemID).reduce(amountToReduce);
         updateAmount();
     }
-
 }
 

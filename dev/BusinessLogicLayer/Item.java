@@ -6,20 +6,22 @@ public class Item {
     private int productID;
     private String location;
     private Date expireDate;
-    private boolean isUsable;
+    private boolean isDefect;
+    private boolean isExpired;
     private int amount;
 
-    public Item(String _location,int _productID, Date _expireDate,boolean _isUsable,int _amount)
+    public Item(String _location, int _productID, Date _expireDate, boolean _isDefect, int _amount)
     {
         location = _location;
         productID = _productID;
         expireDate = _expireDate;
-        isUsable = _isUsable;
+        isDefect = _isDefect;
+        checkIfExpired();
         amount = _amount;
     }
 
     public String toString(){
-        return "Product ID : " + productID + " , Location : " + location + " , Expire Date : " + expireDate + " , Amount : " + amount + " " + (!isUsable ? "This item is not usable." : "")+ "\n";
+        return "Product ID : " + productID + " , Location : " + location + " , Expire Date : " + expireDate + " , Amount : " + amount + ", " + (!isDefect ? "This item is not defected." : "") + ", " + (!isExpired ? "This item is not expired." : "") + "\n";
     }
 
     public void reduce(int amountToReduce) throws Exception
@@ -31,28 +33,32 @@ public class Item {
         }
         amount = newAmount;
     }
+
     public void addToStock(int amountToAdd){
         this.amount += amountToAdd;
     }
-    public void setAsUnusable(){
-        this.isUsable = false;
+
+    public void setOk(){
+        this.isDefect = false;
     }
-    public void setAsUsable(){
-        this.isUsable = true;
+
+    public void setDefect(){
+        this.isDefect = true;
     }
-    public boolean isUsable(){
-        return isUsable;
+
+    public boolean isDefect(){
+        return isDefect;
     }
+
     public void checkIfExpired(){
-        if((new Date()).compareTo(expireDate) > 0)
-        {
-            setAsUnusable();
-        }
+        isExpired = ((new Date()).compareTo(expireDate) > 0);
     }
+
+    public boolean isExpired() {
+        return isExpired;
+    }
+
     public int getAmount(){
         return amount;
     }
-
-
-
 }

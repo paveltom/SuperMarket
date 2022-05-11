@@ -50,9 +50,13 @@ public class Branch {
         return stockController.getStockReportByCategory(CategoryID);
     }
 
-    public List<Item> getUnusableItemsReport(){
+    public List<Item> getDefectedItemsReport(){
         //Requirement 8+9
-        return stockController.getUnusableItemsReport();
+        return stockController.getDefectedItemsReport();
+    }
+
+    public List<Item> getExpiredItemsReport() {
+        return stockController.getExpiredItemsReport();
     }
 
     public void insertNewProduct(String productName, String productManufacturer, int categoryID, Date supplyTime, int demand){
@@ -63,9 +67,9 @@ public class Branch {
         stockController.setSubCategory(subCategoryID,parentID);
     }
 
-    public void insertNewItem(int productID, String location, Date expireDate, boolean isUsable, int amount)
+    public void insertNewItem(int productID, String location, Date expireDate, boolean isDefect, int amount)
     {
-        stockController.insertNewItem(productID, location, expireDate, isUsable, amount);
+        stockController.insertNewItem(productID, location, expireDate, isDefect, amount);
     }
     public void reduceItemAmount(int productID, int itemID, int amountToReduce) throws Exception
     {

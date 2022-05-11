@@ -16,13 +16,13 @@ public class StockController {
     private int discountsCounter;
 
     StockController(){
-        products = new ArrayList<Product>();
+        products = new ArrayList<>();
         productsCounter = 0;
-        purchases = new ArrayList<Purchase>();
+        purchases = new ArrayList<>();
         purchasesCounter = 0;
-        categories = new ArrayList<Category>();
+        categories = new ArrayList<>();
         categoriesCounter = 0;
-        discounts = new ArrayList<Discount>();
+        discounts = new ArrayList<>();
         discountsCounter = 0;
     }
 
@@ -70,12 +70,21 @@ public class StockController {
         return output;
     }
 
-    public List<Item> getUnusableItemsReport(){
+    public List<Item> getDefectedItemsReport(){
         //Requirement 8+9
         List<Item> output = new ArrayList<>();
-        for (Product p:products)
+        for (Product p : products)
         {
-            output.addAll(p.getUnusableItems());
+            output.addAll(p.getDefectedItems());
+        }
+        return output;
+    }
+
+    public List<Item> getExpiredItemsReport() {
+        List<Item> output = new ArrayList<>();
+        for (Product p : products)
+        {
+            output.addAll(p.getExpiredItems());
         }
         return output;
     }
@@ -90,8 +99,8 @@ public class StockController {
         subCategory.setAsParent(parent);
     }
 
-    public void insertNewItem(int productID, String location, Date expireDate, boolean isUsable, int amount){
-        products.get(productID).addItem(location, expireDate, isUsable, amount);
+    public void insertNewItem(int productID, String location, Date expireDate, boolean isDefect, int amount){
+        products.get(productID).addItem(location, expireDate, isDefect, amount);
     }
     public void reduceItemAmount(int productID, int itemID, int amountToReduce) throws Exception
     {

@@ -61,9 +61,13 @@ public class Service
         return scs.getStockReportByCategory(branchID,categoryID);
     }
 
-    public ResponseT<List<Item>> getUnusableProductsReport(int branchID){
+    public ResponseT<List<Item>> getDefectedProductsReport(int branchID){
         //Requirement 8+9
-        return scs.getUnusableItemsReport(branchID);
+        return scs.getDefectedItemsReport(branchID);
+    }
+
+    public ResponseT<List<Item>> getExpiredProductsReport(int branchID) {
+        return scs.getExpiredItemsReport(branchID);
     }
 
     public Response insertNewProduct(int branchID, String productName, String productManufacturer, int categoryID, Date supplyTime, int demand){
@@ -155,5 +159,4 @@ public class Service
         insertNewPurchase(0, new Date(2022, 4, 25), products);
         insertNewPurchase(1, new Date(2022, 4, 25), products);
     }
-
 }
