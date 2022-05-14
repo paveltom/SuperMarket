@@ -24,7 +24,7 @@ public class DeliveryService {
     }
 
 
-    //orderParams: siteId, clientId, orderId, products<productId, quantity>, submissionDate
+    //orderParams: siteId, clientId, ordFSerId, products<productId, quantity>, submissionDate
     public ResponseT<FacadeRecipe> deliver(FacadeSite origin, FacadeSite destination, int orderId, List<FacadeProduct> facProducts, FacadeDate facSubDate){
         try {
 

@@ -29,6 +29,8 @@ public interface IService {
 
     public ResponseT<String> showLicenseCategories();
 
+    public String[] addConstraints();
+
 
 }
 

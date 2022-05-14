@@ -21,6 +21,15 @@ public class DeliveryResourcesService {
             delController = DeliveryController.GetInstance();
     }
 
+    public Response addConstraints() {
+        try {
+            return new ResponseT<>(delController.addConstraints(), true);
+        }
+        catch (Exception e){
+            return new ResponseT<>(e.getMessage());
+        }
+    }
+
     public Response addDriver(FacadeDriver facDriver){
         try {
             String id = facDriver.getId();
@@ -31,7 +40,7 @@ public class DeliveryResourcesService {
             boolean added = delController.AddDriver(Long.parseLong(id), licCategory, name, "", "", shipZone);
             if(added) {
                 String strId = id + "";
-                return new ResponseT<String>(strId, true);
+                return new ResponseT<>(strId, true);
             }
             else
                 return new Response("System cannot allow to perform this action.");
