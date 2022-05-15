@@ -1,4 +1,4 @@
-package DeliveryModule.BusinessLayer.Element;
+package BusinessLayer.Element;
 
 public class Date implements Comparable<Date>
 {

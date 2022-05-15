@@ -1,4 +1,4 @@
-package DeliveryModule.BusinessLayer.Element;
+package BusinessLayer.Element;
 
 public class DeliveryDate implements Comparable<DeliveryDate>
 {
@@ -6,10 +6,10 @@ public class DeliveryDate implements Comparable<DeliveryDate>
     public final Date Date;
     private final String[] Shifts = {"06:00-09:00", "09:00-12:00", "12:00-15:00", "15:00-18:00"};
 
-    public DeliveryDate(int day, int month, int year, int shift)
+    public DeliveryDate(int month, int year, Shift shift)
     {
-        Date = new Date(day, month, year);
-        Shift = shift;
+        Date = new Date(shift.Day, month, year);
+        Shift = shift.Shift;
     }
 
     @Override

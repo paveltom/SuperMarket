@@ -1,5 +1,5 @@
-package DeliveryModule.BusinessLayer.Element;
-import DeliveryModule.BusinessLayer.Type.ShippingZone;
+package BusinessLayer.Element;
+import BusinessLayer.Type.ShippingZone;
 
 public class Site
 {

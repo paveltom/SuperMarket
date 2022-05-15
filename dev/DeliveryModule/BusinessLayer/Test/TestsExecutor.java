@@ -1,4 +1,4 @@
-package DeliveryModule.BusinessLayer.Test;
+package BusinessLayer.Test;
 
 
 public class TestsExecutor {

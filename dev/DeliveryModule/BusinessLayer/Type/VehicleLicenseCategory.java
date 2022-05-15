@@ -1,4 +1,4 @@
-package DeliveryModule.BusinessLayer.Type;
+package BusinessLayer.Type;
 
 public enum VehicleLicenseCategory
 {

@@ -1,6 +1,6 @@
-package DeliveryModule.BusinessLayer.Element;
+package BusinessLayer.Element;
 
-import DeliveryModule.BusinessLayer.Type.ShippingZone;
+import BusinessLayer.Type.ShippingZone;
 
 import java.util.List;
 
