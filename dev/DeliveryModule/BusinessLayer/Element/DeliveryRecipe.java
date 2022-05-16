@@ -2,7 +2,7 @@ package DeliveryModule.BusinessLayer.Element;
 
 import java.util.Map;
 
-public class DeliveryRecipe
+public class DeliveryRecipe implements Recipe
 {
     public final int OrderId, DeliveryId;
     /*
@@ -13,17 +13,17 @@ public class DeliveryRecipe
     /* Enumerate remaining amount to supply for each product. */
     public final Map<Integer, Integer> UnDeliveredProducts;
     public final DeliveryDate DueDate;
-    public final Driver DeliveryPerson;
+    public final Driver DeliveryDriver;
     public final Truck DeliveryTruck;
 
-    public DeliveryRecipe(int supplierOrderId, int deliveryId, boolean isPartitioned, DeliveryDate dueDate, Driver deliveryPerson, Truck deliveryTruck, Map<Integer, Integer> unDeliveredProduct)
+    public DeliveryRecipe(int supplierOrderId, int deliveryId, boolean isPartitioned, DeliveryResources deliveryResources, Map<Integer, Integer> unDeliveredProduct)
     {
         OrderId = supplierOrderId;
         DeliveryId = deliveryId;
         IsPartitioned = isPartitioned;
-        DueDate = dueDate;
-        DeliveryPerson = deliveryPerson;
-        DeliveryTruck = deliveryTruck;
+        DueDate = deliveryResources.DueDate;
+        DeliveryDriver = deliveryResources.DeliveryDriver;
+        DeliveryTruck = deliveryResources.DeliveryTruck;
         UnDeliveredProducts = unDeliveredProduct;
     }
 
@@ -32,7 +32,7 @@ public class DeliveryRecipe
     {
         StringBuilder sb = new StringBuilder();
         sb.append("---------- Delivery Recipe ----------\n");
-        sb.append(String.format("Delivery: %d\nOrder: %d\nDue Date: %s\n\n%s\n%s\n", DeliveryId, OrderId, DueDate, DeliveryPerson, DeliveryTruck));
+        sb.append(String.format("Delivery: %d\nOrder: %d\nDue Date: %s\n\n%s\n%s\n", DeliveryId, OrderId, DueDate, DeliveryDriver, DeliveryTruck));
         if(IsPartitioned)
         {
             sb.append("\nMissing products: show missing per product id\n");

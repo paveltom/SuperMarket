@@ -26,9 +26,9 @@ public class Truck
         return String.format("Truck\nModel: %s\nVehicleLicenseNumber: %d\nZone: %s\nMaxLoadWeight: %f\nNetWeight: %f\n", Model, VehicleLicenseNumber, Zone, MaxLoadWeight, NetWeight);
     }
 
-    public DeliveryDate GetAvailableShift(int month, int day)
+    public DeliveryDate GetAvailableDeliveryDate(int month, int day)
     {
-        return Dairy.GetAvailableShift(month, day);
+        return Dairy.GetAvailableDeliveryDate(month, day);
     }
 
     public void SetOccupied(DeliveryDate occupiedDate)

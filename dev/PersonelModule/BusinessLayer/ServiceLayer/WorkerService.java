@@ -53,10 +53,10 @@ public class WorkerService {
      * @param _newId - New and correct Id
      * @return A message if the change was successful or an explanation why it wasn't
      */
-    public void ChangeId(String _oldId,String _newId)
+   /* public void ChangeId(String _oldId,String _newId)
     {
         wController.ChangeId(_oldId,_newId);
-    }
+    }*/
 
     /**
      * Function to change a workers name

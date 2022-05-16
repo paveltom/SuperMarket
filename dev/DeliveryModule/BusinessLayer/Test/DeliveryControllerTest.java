@@ -28,7 +28,7 @@ class DeliveryControllerTest implements Testable
         var client = new Site(ShippingZone.Sharon, "Neve Tzedek", "Pavel tomshin", "0545555555");
         var order_1 = 0;
         var products = Arrays.asList(new Product(12,354.123,7896), new Product(1789,17.19313,14), new Product(777,32441.111,32));
-        var submissionDate = new Date(31, cal.get(Calendar.MONTH) + 1, cal.get(Calendar.YEAR));
+        var submissionDate = new Date(cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.YEAR));
         var shippingZone = ShippingZone.Shfela_JerusalemMountains;
         var deliveryOrder_1 = new DeliveryOrder(supplier, client, order_1, products, submissionDate, shippingZone);
         var deliveryOrder_2 = new DeliveryOrder(supplier, client, order_1 + 1, products, submissionDate, shippingZone);
@@ -44,8 +44,14 @@ class DeliveryControllerTest implements Testable
         var deliveryRecipe_5 = testObject.Deliver(deliveryOrder_5);
         var deliveryRecipe_6 = testObject.Deliver(deliveryOrder_6);
 
-        var exptected = new DeliveryDate(1,5,2022, 1);
-        assertEquals(exptected, deliveryRecipe_6.DueDate);
+        assert(deliveryRecipe_5 instanceof DeliveryRecipe);
+        assert(deliveryRecipe_6 instanceof DeliveryRecipe);
+
+
+
+
+        var exptected = new DeliveryDate(submissionDate.Month,submissionDate.Year, new Shift(submissionDate.Day+1,((DeliveryRecipe)deliveryRecipe_5).DueDate.Shift + 1));
+        assertEquals(exptected, ((DeliveryRecipe)deliveryRecipe_6).DueDate);
     }
 
     /*
@@ -68,9 +74,10 @@ class DeliveryControllerTest implements Testable
 
         //System.out.println(deliveryOrder_1);
         //System.out.println(deliveryRecipe_1);
+        assert(deliveryRecipe_1 instanceof  DeliveryRecipe);
 
-        assertTrue(deliveryRecipe_1.IsPartitioned);
-        assertNotNull(deliveryRecipe_1.UnDeliveredProducts);
+        assertTrue(((DeliveryRecipe)deliveryRecipe_1).IsPartitioned);
+        assertNotNull(((DeliveryRecipe)deliveryRecipe_1).UnDeliveredProducts);
     }
 
     @Override

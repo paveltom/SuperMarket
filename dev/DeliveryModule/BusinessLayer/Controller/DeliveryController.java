@@ -3,13 +3,12 @@ package DeliveryModule.BusinessLayer.Controller;
 import DeliveryModule.BusinessLayer.Element.*;
 import DeliveryModule.BusinessLayer.Type.ShippingZone;
 import DeliveryModule.BusinessLayer.Element.Truck;
-import DeliveryModule.BusinessLayer.Type.Tuple;
 import DeliveryModule.BusinessLayer.Type.VehicleLicenseCategory;
 
 /* Major controller
 * Implemented using Singelton pattern.
-* Provide communication between DeliveryModule.BusinessLayer controllers.
-* DeliveryModule.Facade layer communicate with DeliveryModule.BusinessLayer through DeliveryController API'S.
+* Provide communication between BusinessLayer controllers.
+* Facade layer communicate with BusinessLayer through DeliveryController API'S.
 */
 public class DeliveryController {
     private DeliveryExecutorController Executor;
@@ -28,7 +27,7 @@ public class DeliveryController {
         return DeliveryControllerHolder.instance;
     }
 
-    public DeliveryRecipe Deliver(DeliveryOrder deliveryOrder) {
+    public Recipe Deliver(DeliveryOrder deliveryOrder) {
         return Executor.Deliver(deliveryOrder);
     }
 
@@ -36,8 +35,8 @@ public class DeliveryController {
         return Executor.GetDeliveriesHistory();
     }
 
-    public Tuple<Driver, Truck, DeliveryDate> GetDeliveryDate(Date date, ShippingZone zone, double weight) {
-        return Resource.GetDeliveryDate(date, zone, weight);
+    public DeliveryResources GetDeliveryResources(Date date, ShippingZone zone, double weight) {
+        return Resource.GetDeliveryResources(date, zone, weight);
     }
 
     public String GetDrivers() {
@@ -48,15 +47,15 @@ public class DeliveryController {
         return Resource.GetTrucks();
     }
 
-    public boolean AddDriver(long id, VehicleLicenseCategory license, String fname, String lname, String cellphone, ShippingZone zone) {
-        return Resource.AddDriver(id, license, fname, lname, cellphone, zone);
+    public boolean AddDriver(String id, VehicleLicenseCategory license, String fname, String lname, String cellphone, ShippingZone zone) {
+        return Resource.AddDriver(id, license, zone);
     }
 
     public boolean AddTruck(double mlw, double nw, long vln, String m, ShippingZone zone) {
         return Resource.AddTruck(mlw, nw, vln, m, zone);
     }
 
-    public Driver RemoveDriver(long id) {
+    public Driver RemoveDriver(String id) {
        return Resource.RemoveDriver(id);
     }
 
@@ -64,7 +63,7 @@ public class DeliveryController {
         return Resource.RemoveTruck(vln);
     }
 
-    public Driver GetDriver(long id) {
+    public Driver GetDriver(String id) {
         return Resource.GetDriver(id);
     }
 
@@ -75,6 +74,8 @@ public class DeliveryController {
     public String ShowShippingZone() {
         return Resource.ShowShippingZone();
     }
+
+    public boolean IsDriverOccupied(String driverId, int month, int day){ return Resource.IsDriverOccupied(driverId, month, day);}
 
 	public static DeliveryController newInstanceForTests(String code){
 	if(code.equals("sudo"))
@@ -87,6 +88,11 @@ public class DeliveryController {
     {
         Resource.Clear();
         Executor.Clear();
+    }
+
+    public void SetConstraint(String id, Constraint constraint)
+    {
+        Resource.SetConstraint(id, constraint);
     }
 
 }

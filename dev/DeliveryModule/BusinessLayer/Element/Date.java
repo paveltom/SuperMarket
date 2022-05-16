@@ -11,6 +11,7 @@ public class Date implements Comparable<Date>
     private final int[] KEY_VALUE_METHOD_MONTH_ORDIANL = {0, 1,	4, 4, 0,	2,	5,	0,	3,	6,	1,	4, 6};
     private final String[] MONTHS_NAME = {"PIVOT", "January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December"};
+    private final String Delimiter = " ";
 
     public Date(int day, int month, int year)
     {
@@ -18,6 +19,16 @@ public class Date implements Comparable<Date>
         Month = month;
         Year = year;
         KeyValueMethod();
+    }
+
+    public Date(String encoded)
+    {
+        final int NAME_INDEX = 0, MONTH_INDEX = 1, DAY_INDEX = 2, YEAR_INDEX = 3;
+        String[] tokens = encoded.split(Delimiter);
+        Name = tokens[NAME_INDEX];
+        Month = Integer.parseInt(tokens[MONTH_INDEX]);
+        Day = Integer.parseInt(tokens[DAY_INDEX]);
+        Year = Integer.parseInt(tokens[YEAR_INDEX]);
     }
 
     /*
@@ -36,6 +47,12 @@ public class Date implements Comparable<Date>
         x = x % 7;
         Name = KEY_VALUE_METHOD_DAY_REMINDER[x];
     }
+
+    public String Encode()
+    {
+        return String.format("%s %d %d %d", Name, Month, Day, Year);
+    }
+
 
     @Override
     public String toString()

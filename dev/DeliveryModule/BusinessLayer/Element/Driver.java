@@ -4,39 +4,53 @@ import DeliveryModule.BusinessLayer.Type.VehicleLicenseCategory;
 
 public class Driver
 {
-    public final long Id;
+    public final String Id;
     public final VehicleLicenseCategory License;
-    public final String FirstName, LastName, Cellphone;
     public final ShippingZone Zone;
     private Scheduler Dairy;
 
-
-    public Driver(long id, VehicleLicenseCategory license, String fname, String lname, String cellphone, ShippingZone zone)
+    public Driver(String id, VehicleLicenseCategory license, ShippingZone zone)
     {
         Id = id;
         License = license;
-        FirstName = fname;
-        LastName = lname;
-        Cellphone = cellphone;
         Dairy = new Scheduler();
         Zone = zone;
+    }
+
+    public Driver(String id, VehicleLicenseCategory license, ShippingZone zone, Constraint constraint)
+    {
+        Id = id;
+        License = license;
+        Dairy = new Scheduler();
+        Zone = zone;
+        SetConstraint(constraint);
     }
 
     @Override
     public String toString()
     {
-        return String.format("Driver: %s %s\nID: %d\nLicense: %s\nZone: %s\nCellphone: %s\n",
-                FirstName, LastName, Id, VehicleLicenseCategory.GetVehicleLicenseCategoryName(License), Zone, Cellphone);
+        return String.format("Driver: %s\nLicense: %s\nZone: %s\n", Id, VehicleLicenseCategory.GetVehicleLicenseCategoryName(License), Zone);
     }
 
-    public DeliveryDate GetAvailableShift(int month, int day)
+    public DeliveryDate GetAvailableDeliveryDate(int month, int day)
     {
-        return Dairy.GetAvailableShift(month, day);
+        return Dairy.GetAvailableDeliveryDate(month, day);
     }
 
     public void SetOccupied(DeliveryDate occupiedDate)
     {
         Dairy.SetOccupied(occupiedDate);
+    }
+
+    public void SetConstraint(Constraint constraint)
+    {
+        Dairy.SetConstraint(constraint);
+    }
+
+    /* Return true iff exists occupied shift from param month at param day */
+    public boolean IsOccupied(int month, int day)
+    {
+        return Dairy.IsOccupied(month, day);
     }
 
     @Override
@@ -49,7 +63,7 @@ public class Driver
         else
         {
             Driver other = (Driver) obj;
-            return Id == other.Id;
+            return Id.equals(other.Id);
         }
     }
 

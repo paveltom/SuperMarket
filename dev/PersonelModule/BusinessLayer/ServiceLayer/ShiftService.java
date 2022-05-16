@@ -33,9 +33,9 @@ public class ShiftService {
         return sController.shiftHistory();
     }
 
-    public void changeId(String o, String n){
+    /*public void changeId(String o, String n){
         sController.changeId(o,n);
-    }
+    }*/
     public String showAvailability(){
         return sController.showAvailability();
     }

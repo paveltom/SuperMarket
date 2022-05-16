@@ -1,8 +1,6 @@
 package DeliveryModule.BusinessLayer.Controller;
 
 import DeliveryModule.BusinessLayer.Element.*;
-import DeliveryModule.BusinessLayer.Element.Truck;
-import DeliveryModule.BusinessLayer.Type.Tuple;
 import DeliveryModule.BusinessLayer.Type.VehicleLicenseCategory;
 
 import java.util.HashMap;
@@ -15,19 +13,26 @@ public class DeliveryExecutorController
     private final int INCREMENT = 1;
     private Map<Integer, DeliveryOrder> Deliveries;
 
+    private final int NO_AVAILABLE_DRIVER = 0;
+    private final int NO_AVAILABLE_TRUCK = 1;
+
+
     public DeliveryExecutorController()
     {
         DeliveryIds = new AtomicInteger(-1);
         Deliveries = new HashMap<>();
     }
 
-    public DeliveryRecipe Deliver(DeliveryOrder deliveryOrder)
+    public Recipe Deliver(DeliveryOrder deliveryOrder)
     {
         int deliverId = DeliveryIds.addAndGet(INCREMENT);
         double CargoWeight = 0;
         final double MaxCargoWeight = VehicleLicenseCategory.GetMaxLoadWeight();
-        var unDelivered = new HashMap<Integer, Integer>(); // delivered[productId] = amount shall be supplied in another delivery
+
+        // delivered[productId] = amount of productId missing in current delivery
+        var unDelivered = new HashMap<Integer, Integer>();
         boolean isPartitioned = false;
+        // Validate if the order need to be partitioned
         for(var product : deliveryOrder.RequestedProducts)
         {
             double totalProductWeight = product.Amount * product.WeightPerUnit;
@@ -42,11 +47,23 @@ public class DeliveryExecutorController
                 unDelivered.put(product.Id, suppliedAmount);
             }
         }
-        var date = deliveryOrder.SubmissionDate;
-        Tuple<Driver, Truck, DeliveryDate> resourceOrder =DeliveryController.GetInstance().GetDeliveryDate(deliveryOrder.SubmissionDate, deliveryOrder.Supplier.Zone, CargoWeight);
-        var output = new DeliveryRecipe(deliveryOrder.OrderId, deliverId, isPartitioned, resourceOrder.Third, resourceOrder.First, resourceOrder.Second, unDelivered);
-        Deliveries.put(deliverId, deliveryOrder);
+
+        // Find available driver & truck
+        DeliveryResources deliveryResources = DeliveryController.GetInstance().GetDeliveryResources(deliveryOrder.SubmissionDate, deliveryOrder.Supplier.Zone, CargoWeight);
+
+        // if either driver or truck are unavailable, an error recipe will be returned
+        Recipe output = deliveryResources.DeliveryDriver == null ? new ErrorRecipe(deliveryOrder.OrderId, NO_AVAILABLE_DRIVER) :
+                 deliveryResources.DeliveryTruck == null ? new ErrorRecipe (deliveryOrder.OrderId, NO_AVAILABLE_TRUCK) :
+                 new DeliveryRecipe(deliveryOrder.OrderId, deliverId, isPartitioned, deliveryResources , unDelivered);
+        //
+        DocumentDelivery(deliverId, deliveryOrder);
         return output;
+    }
+
+    private void DocumentDelivery(int deliverId, DeliveryOrder deliveryOrder)
+    {
+        Deliveries.put(deliverId, deliveryOrder);
+        //insert to DB
     }
 
     public String GetDeliveriesHistory()

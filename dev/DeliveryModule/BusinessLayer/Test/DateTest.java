@@ -95,6 +95,24 @@ class DateTest implements Testable{
 
     }
 
+    @Test
+    void test_encode()
+    {
+        testObject1 = new Date(13, 9, 2022);
+        String actual = testObject1.Encode();
+        String expected = "Tuesday 9 13 2022";
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void test_decode()
+    {
+        String encoded = "Tuesday 9 13 2022";
+        Date actual = new Date(encoded);
+        Date expected = new Date(13, 9, 2022);
+        assertEquals(expected, actual);
+    }
+
     @Override
     public void ExecTest()
     {
@@ -103,6 +121,8 @@ class DateTest implements Testable{
         compareTo_later();
         compareTo_earlier();
         validateDayName();
+        test_encode();
+        test_decode();
     }
 
     @Override

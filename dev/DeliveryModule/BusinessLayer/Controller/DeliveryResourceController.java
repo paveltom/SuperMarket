@@ -3,8 +3,6 @@ package DeliveryModule.BusinessLayer.Controller;
 import DeliveryModule.BusinessLayer.Element.*;
 import DeliveryModule.BusinessLayer.Type.Pair;
 import DeliveryModule.BusinessLayer.Type.ShippingZone;
-import DeliveryModule.BusinessLayer.Element.Truck;
-import DeliveryModule.BusinessLayer.Type.Tuple;
 import DeliveryModule.BusinessLayer.Type.VehicleLicenseCategory;
 
 import java.util.ArrayList;
@@ -15,14 +13,14 @@ import java.util.Map;
 public class DeliveryResourceController {
 
     //Drivers[zone][license] = Delivery driver's ID of param zone, owner of param license.
-    private List<Long>[][] DriversDistribution;
+    private final List<String>[][] DriversDistribution;
     // Map driver's id to its representative object in the system.
-    private Map<Long, Driver> Drivers;
+    private final Map<String, Driver> Drivers;
 
     //Trucks[zone][license] = Truck's vehicle license numbers (vln) belongs to param zone, with maximal load restriction of param license.
-    private List<Long>[][] TrucksDistribution;
+    private final List<Long>[][] TrucksDistribution;
     // Map truck's vehicle license number to its representative object in the system.
-    private Map<Long, Truck> Trucks;
+    private final Map<Long, Truck> Trucks;
 
     private final int ZONES = 9;
     private final int LICENSES = 3;
@@ -50,18 +48,16 @@ public class DeliveryResourceController {
 
     private void InitDrivers()
     {
-        long DUMMY_ID = 0;
-        final String DUMMY_FNAME = "DUMMY_FNAME";
-        final String DUMMY_LNAME = "DUMMY_LNAME";
-        final String DUMMY_CELLPHONE = "DUMMY_CELLPHONE";
+       long DUMMY_ID = 0;
 
         for (ShippingZone zone : ShippingZone.values()) {
             for (VehicleLicenseCategory licenseCategory : VehicleLicenseCategory.values())
             {
-                var driversList = new ArrayList<Long>();
-                var driver = new Driver(DUMMY_ID, licenseCategory, DUMMY_FNAME, DUMMY_LNAME, DUMMY_CELLPHONE, zone);
-                driversList.add(DUMMY_ID);
-                Drivers.put(DUMMY_ID, driver);
+                String id = String.valueOf(DUMMY_ID);
+                var driversList = new ArrayList<String>();
+                var driver = new Driver(id, licenseCategory, zone);
+                driversList.add(id);
+                Drivers.put(id, driver);
                 DriversDistribution[zone.ordinal()][licenseCategory.ordinal()] = driversList;
                 DUMMY_ID++;
             }
@@ -88,33 +84,35 @@ public class DeliveryResourceController {
     }
 
     // return closest delivery day.
-    public Tuple<Driver, Truck, DeliveryDate> GetDeliveryDate(Date date, ShippingZone zone, double weight)
+    public DeliveryResources GetDeliveryResources(Date date, ShippingZone zone, double weight)
     {
         /* Find the Driver & Truck capable to deliver cargo of param weight one closest day */
-        var pDriver = FindDriver(date, zone, weight);
-        var pTruck = FindTruck(date, zone, weight);
+        var matchingLicense = VehicleLicenseCategory.FindLicense(weight);
+
+        var pDriver = FindAvailableDriver(date, zone, weight);
+        var pTruck = FindAvailableTruck(date, zone, weight);
         int deliveryDateDiff = pDriver.Second.compareTo(pTruck.Second);
         /* Choose the latest delivery date */
         DeliveryDate deliveryDate = (deliveryDateDiff > 0) ? pDriver.Second : pTruck.Second;
         /* Update deliveryDate for both driver and truck */
         pDriver.First.SetOccupied(deliveryDate);
         pTruck.First.SetOccupied(deliveryDate);
-        return new Tuple<>(pDriver.First, pTruck.First, deliveryDate);
+        return new DeliveryResources(pDriver.First, pTruck.First, deliveryDate);
     }
 
     // return a Driver works at param zone, certified to transport a cargo of param weight at the closest day to param date.
-    private Pair<Driver, DeliveryDate> FindDriver(Date date, ShippingZone zone, double weight)
+    private Pair<Driver, DeliveryDate> FindAvailableDriver(Date date, ShippingZone zone, double weight)
     {
         var matchingLicense = VehicleLicenseCategory.FindLicense(weight);
         var driverIds = DriversDistribution[zone.ordinal()][matchingLicense.ordinal()];
         Driver resDriver = null;
         DeliveryDate resDate = null;
-        for(Long driverId : driverIds)
+        for(String driverId : driverIds)
         {
             var driver = Drivers.get(driverId);
             if(resDriver != null)
             {
-                var d = driver.GetAvailableShift(date.Month, date.Day);
+                var d = driver.GetAvailableDeliveryDate(date.Month, date.Day);
                 int diff = resDate.compareTo(d);
                 if(diff > 0)
                 {
@@ -127,7 +125,7 @@ public class DeliveryResourceController {
             {
                 /* initialize res at first iteration */
                 resDriver = driver;
-                resDate = driver.GetAvailableShift(date.Month, date.Day);
+                resDate = driver.GetAvailableDeliveryDate(date.Month, date.Day);
             }
 
         }
@@ -135,7 +133,7 @@ public class DeliveryResourceController {
     }
 
     // return a Driver works at param zone, certified to transport a cargo of param weight at the closest day to param date.
-    private Pair<Truck, DeliveryDate> FindTruck(Date date, ShippingZone zone, double weight)
+    private Pair<Truck, DeliveryDate> FindAvailableTruck(Date date, ShippingZone zone, double weight)
     {
         var matchingLicense = VehicleLicenseCategory.FindLicense(weight);
         var trucksIds = TrucksDistribution[zone.ordinal()][matchingLicense.ordinal()];
@@ -146,7 +144,7 @@ public class DeliveryResourceController {
             var truck = Trucks.get(truckId);
             if(resTruck != null)
             {
-                var d = truck.GetAvailableShift(date.Month, date.Day);
+                var d = truck.GetAvailableDeliveryDate(date.Month, date.Day);
                 int diff = resDate.compareTo(d);
                 if(diff > 0)
                 {
@@ -159,7 +157,7 @@ public class DeliveryResourceController {
             {
                 /* initialize res at first iteration */
                 resTruck = truck;
-                resDate = truck.GetAvailableShift(date.Month, date.Day);
+                resDate = truck.GetAvailableDeliveryDate(date.Month, date.Day);
             }
 
         }
@@ -167,11 +165,11 @@ public class DeliveryResourceController {
     }
 
 
-    public boolean AddDriver(long id, VehicleLicenseCategory license, String fname, String lname, String cellphone, ShippingZone zone)
+    public boolean AddDriver(String id, VehicleLicenseCategory license, ShippingZone zone)
     {
         if(!Drivers.containsKey(id))
         {
-            var newDriver = new Driver(id, license, fname, lname, cellphone, zone);
+            var newDriver = new Driver(id, license, zone);
             Drivers.put(id, newDriver);
             DriversDistribution[zone.ordinal()][license.ordinal()].add(id);
             return true;
@@ -191,14 +189,14 @@ public class DeliveryResourceController {
         return false;
     }
 
-    public Driver RemoveDriver(long id)
+    public Driver RemoveDriver(String id)
     {
         var removedDriver = Drivers.remove(id);
         if(removedDriver != null)
         {
             var zone = removedDriver.Zone.ordinal();
             var licenseCategory = removedDriver.License;
-            TrucksDistribution[zone][licenseCategory.ordinal()].remove(id);
+            DriversDistribution[zone][licenseCategory.ordinal()].remove(id);
             return removedDriver;
         }
         return null;
@@ -217,7 +215,15 @@ public class DeliveryResourceController {
         return null;
     }
 
-    public Driver GetDriver(long id)
+    public boolean IsDriverOccupied(String driverId, int month, int day)
+    {
+        Driver driver = Drivers.get(driverId);
+        if(driver != null)
+            return driver.IsOccupied(month, day);
+        return false;
+    }
+
+    public Driver GetDriver(String id)
     {
         return Drivers.getOrDefault(id, null);
     }
@@ -268,5 +274,12 @@ public class DeliveryResourceController {
                 TrucksDistribution[zone.ordinal()][licenseCategory.ordinal()].clear();
             }
         }
+    }
+
+    public void SetConstraint(String id, Constraint constraint)
+    {
+        var driver = Drivers.get(id);
+        if(driver != null)
+            driver.SetConstraint(constraint);
     }
 }

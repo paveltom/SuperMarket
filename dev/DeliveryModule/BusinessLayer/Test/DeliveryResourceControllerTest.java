@@ -31,9 +31,9 @@ class DeliveryResourceControllerTest implements Testable{
 
         for(VehicleLicenseCategory licenseCategory : VehicleLicenseCategory.values())
         {
-            var res = testObject.GetDeliveryDate(DATE, ZONE, deliveryWeights[i]);
-            assertEquals(res.First.License, licenseCategory);
-            assertTrue(res.Second.MaxLoadWeight >= deliveryWeights[i]);
+            var res = testObject.GetDeliveryResources(DATE, ZONE, deliveryWeights[i]);
+            assertEquals(res.DeliveryDriver.License, licenseCategory);
+            assertTrue(res.DeliveryTruck.MaxLoadWeight >= deliveryWeights[i]);
             i++;
         }
     }
@@ -47,13 +47,11 @@ class DeliveryResourceControllerTest implements Testable{
     void addDriver()
     {
         final long ID = 123456789;
-        final String FNAME = "ADDED_DRIVER_FNAME";
-        final String LNAME = "ADDED_DRIVER_LNAME";
-        final String CELLPHONE = "ADDED_DRIVER_CELLPHONE";
+        String id = String.valueOf(ID);
 
-        testObject.AddDriver(ID, VehicleLicenseCategory.E, FNAME, LNAME,CELLPHONE, ShippingZone.JezreelValley);
-        var actual = testObject.GetDriver(ID);
-        var expected = new Driver(ID, VehicleLicenseCategory.E, FNAME, LNAME,CELLPHONE, ShippingZone.JezreelValley);
+        testObject.AddDriver(id, VehicleLicenseCategory.E, ShippingZone.JezreelValley);
+        var actual = testObject.GetDriver(id);
+        var expected = new Driver(id, VehicleLicenseCategory.E, ShippingZone.JezreelValley);
 
         assertEquals(expected, actual);
 
@@ -93,15 +91,16 @@ class DeliveryResourceControllerTest implements Testable{
         final String FNAME = "ADDED_DRIVER_FNAME";
         final String LNAME = "ADDED_DRIVER_LNAME";
         final String CELLPHONE = "ADDED_DRIVER_CELLPHONE";
+        String id = String.valueOf(ID);
 
-        testObject.AddDriver(ID, VehicleLicenseCategory.E, FNAME, LNAME,CELLPHONE, ShippingZone.JezreelValley);
-        var actual = testObject.GetDriver(ID);
+        testObject.AddDriver(id, VehicleLicenseCategory.E, ShippingZone.JezreelValley);
+        var actual = testObject.GetDriver(id);
 
         assertNotNull(actual);
 
-        testObject.RemoveDriver(ID);
+        testObject.RemoveDriver(id);
 
-        actual = testObject.GetDriver(ID);
+        actual = testObject.GetDriver(id);
 
         assertNull(actual);
     }

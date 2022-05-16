@@ -1,5 +1,8 @@
 package DeliveryModule.BusinessLayer.Type;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public enum VehicleLicenseCategory
 {
     E,  //Above 3.5e6 grams. adding trailer is allowed.
@@ -30,4 +33,16 @@ public enum VehicleLicenseCategory
                 weight <= MaxLoadWeights[C1.ordinal()] ? C1:
                         C;
     }
-};
+
+    private static Map<String, VehicleLicenseCategory> Name2VehicleLicenseCategory;
+    static {
+        Name2VehicleLicenseCategory = new HashMap<>();
+        for(VehicleLicenseCategory licenseCategory : VehicleLicenseCategory.values())
+            Name2VehicleLicenseCategory.put(GetVehicleLicenseCategoryName(licenseCategory), licenseCategory);
+    }
+
+    public VehicleLicenseCategory CreateShippingZoneByName(String zoneName)
+    {
+        return Name2VehicleLicenseCategory.getOrDefault(zoneName, null);
+    }
+}

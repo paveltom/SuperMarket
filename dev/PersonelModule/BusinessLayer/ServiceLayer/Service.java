@@ -125,7 +125,7 @@ public class Service {
      * @param _oldId - Old and incorrect Id
      * @param _newId - New and correct Id
      */
-    public String ChangeId(String _oldId,String _newId)
+   /* public String ChangeId(String _oldId,String _newId)
     {
         try {
             wService.ChangeId(_oldId, _newId);
@@ -137,7 +137,7 @@ public class Service {
             return e.getMessage();
         }
 
-    }
+    }*/
     /**
      * Function to change a workers name
      * @param _Id - The id of the worker
