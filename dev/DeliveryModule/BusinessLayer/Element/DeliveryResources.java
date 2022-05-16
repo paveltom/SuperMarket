@@ -1,4 +1,4 @@
-package BusinessLayer.Element;
+package DeliveryModule.BusinessLayer.Element;
 
 public class DeliveryResources
 {

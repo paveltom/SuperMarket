@@ -1,6 +1,6 @@
-package BusinessLayer.Test;
+package DeliveryModule.BusinessLayer.Test;
 
 public interface Testable
 {
-    public void ExecTest();
+    void ExecTest();
 }

@@ -1,9 +1,9 @@
-package BusinessLayer.Controller;
+package DeliveryModule.BusinessLayer.Controller;
 
-import BusinessLayer.Element.*;
-import BusinessLayer.Type.ShippingZone;
-import BusinessLayer.Element.Truck;
-import BusinessLayer.Type.VehicleLicenseCategory;
+import DeliveryModule.BusinessLayer.Element.*;
+import DeliveryModule.BusinessLayer.Type.ShippingZone;
+import DeliveryModule.BusinessLayer.Element.Truck;
+import DeliveryModule.BusinessLayer.Type.VehicleLicenseCategory;
 
 /* Major controller
 * Implemented using Singelton pattern.

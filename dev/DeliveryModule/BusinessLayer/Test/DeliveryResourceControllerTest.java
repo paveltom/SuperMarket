@@ -1,11 +1,11 @@
-package BusinessLayer.Test;
+package DeliveryModule.BusinessLayer.Test;
 
-import BusinessLayer.Controller.DeliveryResourceController;
-import BusinessLayer.Element.Date;
-import BusinessLayer.Element.Driver;
-import BusinessLayer.Element.Truck;
-import BusinessLayer.Type.ShippingZone;
-import BusinessLayer.Type.VehicleLicenseCategory;
+import DeliveryModule.BusinessLayer.Controller.DeliveryResourceController;
+import DeliveryModule.BusinessLayer.Element.Date;
+import DeliveryModule.BusinessLayer.Element.Driver;
+import DeliveryModule.BusinessLayer.Element.Truck;
+import DeliveryModule.BusinessLayer.Type.ShippingZone;
+import DeliveryModule.BusinessLayer.Type.VehicleLicenseCategory;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

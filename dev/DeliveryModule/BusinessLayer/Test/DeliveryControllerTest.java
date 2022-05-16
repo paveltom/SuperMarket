@@ -1,8 +1,8 @@
-package BusinessLayer.Test;
+package DeliveryModule.BusinessLayer.Test;
 
-import BusinessLayer.Controller.DeliveryController;
-import BusinessLayer.Element.*;
-import BusinessLayer.Type.ShippingZone;
+import DeliveryModule.BusinessLayer.Controller.DeliveryController;
+import DeliveryModule.BusinessLayer.Element.*;
+import DeliveryModule.BusinessLayer.Type.ShippingZone;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

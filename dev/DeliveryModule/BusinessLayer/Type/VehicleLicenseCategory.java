@@ -1,4 +1,4 @@
-package BusinessLayer.Type;
+package DeliveryModule.BusinessLayer.Type;
 
 public enum VehicleLicenseCategory
 {
@@ -30,4 +30,4 @@ public enum VehicleLicenseCategory
                 weight <= MaxLoadWeights[C1.ordinal()] ? C1:
                         C;
     }
-};
+}

@@ -1,7 +1,7 @@
-package BusinessLayer.Controller;
+package DeliveryModule.BusinessLayer.Controller;
 
-import BusinessLayer.Element.*;
-import BusinessLayer.Type.VehicleLicenseCategory;
+import DeliveryModule.BusinessLayer.Element.*;
+import DeliveryModule.BusinessLayer.Type.VehicleLicenseCategory;
 
 import java.util.HashMap;
 import java.util.Map;

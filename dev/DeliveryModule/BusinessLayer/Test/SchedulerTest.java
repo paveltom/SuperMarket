@@ -1,8 +1,8 @@
-package BusinessLayer.Test;
+package DeliveryModule.BusinessLayer.Test;
 
-import BusinessLayer.Element.DeliveryDate;
-import BusinessLayer.Element.Scheduler;
-import BusinessLayer.Element.Shift;
+import DeliveryModule.BusinessLayer.Element.DeliveryDate;
+import DeliveryModule.BusinessLayer.Element.Scheduler;
+import DeliveryModule.BusinessLayer.Element.Shift;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -93,6 +93,8 @@ class SchedulerTest implements Testable{
         getAvailableShift_1();
         getAvailableShift_2();
         getAvailableShift_3();
+        test_decode();
+        test_encode();
     }
 
     @Override
