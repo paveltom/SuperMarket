@@ -1,15 +1,28 @@
 package DAL.DAObjects;
 
+import DAL.IdentityMap;
+
 import java.sql.*;
 
 public class DriversDAO implements IDAO{
 
-    // library java.sql
+    private IdentityMap driversIM;
 
-    // templates for quories
+    public DriversDAO(){
+        driversIM = new IdentityMap();
+    }
 
-    // prepare strings templates with empty spaces for objects
+    // addDriver
 
-    // "delete onCascade"
+    // getDriver
+
+    // updateDriver
+
+    // deleteDriver
+
+    // getAllShifts or ( getNextShifts & getCurrShifts)
+
+
+
 
 }
