@@ -3,8 +3,8 @@ package DAL.DTO;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class WorkerDTO {
-    public String id;
+public class WorkerDTO implements DTO {
+    public String wId;
     private String name,BankDetails,SocialConditions,Job;
     private boolean SMQual;
     private double Pay;
@@ -12,7 +12,7 @@ public class WorkerDTO {
 
     public WorkerDTO(String _id,String _name,String _Job,String _SMQual,String _BankDetails,String _Pay,String _startDate,String _SocialCondition)
     {
-        id = _id;
+        wId = _id;
         name = _name;
         Job = _Job;
         if(_SMQual.equals("yes"))
@@ -27,5 +27,15 @@ public class WorkerDTO {
         catch (Exception e)//The try will always succeed so we cant get an exception
         {}
         SocialConditions = _SocialCondition;
+    }
+
+    @Override
+    public String getKey() {
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        return null;
     }
 }
