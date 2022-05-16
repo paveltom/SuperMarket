@@ -1,6 +1,6 @@
-package BusinessLayer.Element;
-import BusinessLayer.Type.ShippingZone;
-import BusinessLayer.Type.VehicleLicenseCategory;
+package DeliveryModule.BusinessLayer.Element;
+import DeliveryModule.BusinessLayer.Type.ShippingZone;
+import DeliveryModule.BusinessLayer.Type.VehicleLicenseCategory;
 
 public class Driver
 {

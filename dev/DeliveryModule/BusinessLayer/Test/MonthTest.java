@@ -1,7 +1,7 @@
-package BusinessLayer.Test;
+package DeliveryModule.BusinessLayer.Test;
 
-import BusinessLayer.Element.Month;
-import BusinessLayer.Element.Shift;
+import DeliveryModule.BusinessLayer.Element.Month;
+import DeliveryModule.BusinessLayer.Element.Shift;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -161,6 +161,8 @@ class MonthTest implements Testable{
         getAvailableShift_3();
         getAvailableShift_4();
         getAvailableShift_5();
+        test_encode();
+        test_decode();
     }
 
     @Override

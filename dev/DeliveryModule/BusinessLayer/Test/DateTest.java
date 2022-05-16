@@ -1,6 +1,6 @@
-package BusinessLayer.Test;
+package DeliveryModule.BusinessLayer.Test;
 
-import BusinessLayer.Element.Date;
+import DeliveryModule.BusinessLayer.Element.Date;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

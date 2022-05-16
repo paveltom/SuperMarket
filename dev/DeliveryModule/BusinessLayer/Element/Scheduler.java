@@ -1,4 +1,4 @@
-package BusinessLayer.Element;
+package DeliveryModule.BusinessLayer.Element;
 
 import java.util.Arrays;
 
@@ -14,7 +14,7 @@ public class Scheduler
         Dairy = new Month[NumOfMonths + 1];
         final int January = 1, February = 2;
         Dairy[January] = new Month(31);
-        Dairy[February] = new Month(28);;
+        Dairy[February] = new Month(28);
         int numOfdays = 31;
         for(int month = 3; month <= NumOfMonths; month++)
         {

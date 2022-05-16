@@ -1,4 +1,4 @@
-package BusinessLayer.Type;
+package DeliveryModule.BusinessLayer.Type;
 
 public class Pair<T, E>
 {

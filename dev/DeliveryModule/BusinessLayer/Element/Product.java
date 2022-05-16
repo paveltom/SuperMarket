@@ -1,4 +1,4 @@
-package BusinessLayer.Element;
+package DeliveryModule.BusinessLayer.Element;
 
 /*
 * Internal (to Delivery-Business Layer) representation of a product
