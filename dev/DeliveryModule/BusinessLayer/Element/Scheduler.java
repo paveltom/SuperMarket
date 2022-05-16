@@ -6,6 +6,8 @@ public class Scheduler
 {
     private final int NumOfMonths = 12;
     private final int Year = 2022;
+    private final String MonthDelimiterDecoding = "//$";
+    private final char MonthDelimiterEncoding = '$';
 
     private Month[] Dairy;
 
@@ -24,13 +26,23 @@ public class Scheduler
         }
     }
 
+    /* Create Scheduler instance via parsing encoded string persisted in the DB */
+    public Scheduler(String encoded)
+    {
+        Month[] months = new Month[NumOfMonths+1];
+        String[] months_encoding = encoded.split(MonthDelimiterDecoding);
+        int i = 1;
+        for(String encode : months_encoding)
+            months[i++] = new Month(encode);
+        Dairy = months;
+    }
+
     /*
      * return null if all shift throughout the year are occupied.
      * else, return available delivery day.
      */
     public DeliveryDate GetAvailableDeliveryDate(int month, int day)
     {
-        final int DAY = 0, SHIFT = 1;
         int i = month, j = day;
         while(i <= NumOfMonths)
         {
@@ -61,31 +73,37 @@ public class Scheduler
         Dairy[constraint.Month].SetConstraints(constraint.WeeklyConstraints);
     }
 
+    /* Return true iff exists occupied shift from param month at param day */
+    public boolean IsOccupied(int month, int day)
+    {
+        int i = month, j = day;
+        while(i <= NumOfMonths)
+        {
+            var isOccupied = Dairy[i].IsOccupied(j);
+            if(isOccupied) /* Month i has pre-determined shift */
+                return false;
+            /* Proceed to check successive month from day 1 */
+            j = 1;
+            i++;
+        }
+        return false;
+    }
+
+    /* Encode Scheduler instance into string which will be persisted in the DB  */
     public String Encode()
     {
         StringBuilder stringBuilder = new StringBuilder();
-        char delimiter = '$';
         int ndelimiters = NumOfMonths - 1;
         int j = 1;
         while(j <= NumOfMonths)
         {
             stringBuilder.append(Dairy[j].Encode());
             if(ndelimiters > 0)
-                stringBuilder.append(delimiter);
+                stringBuilder.append(MonthDelimiterEncoding);
             ndelimiters--;
             j++;
         }
         return stringBuilder.toString();
-    }
-
-    public Scheduler(String encoded)
-    {
-        Month[] months = new Month[NumOfMonths+1];
-        String[] months_encoding = encoded.split("\\$");
-        int i = 1;
-        for(String encode : months_encoding)
-            months[i++] = new Month(encode);
-        Dairy = months;
     }
 
     @Override

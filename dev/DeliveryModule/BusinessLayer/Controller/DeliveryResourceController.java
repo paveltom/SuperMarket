@@ -215,6 +215,14 @@ public class DeliveryResourceController {
         return null;
     }
 
+    public boolean IsDriverOccupied(String driverId, int month, int day)
+    {
+        Driver driver = Drivers.get(driverId);
+        if(driver != null)
+            return driver.IsOccupied(month, day);
+        return false;
+    }
+
     public Driver GetDriver(String id)
     {
         return Drivers.getOrDefault(id, null);

@@ -28,7 +28,9 @@ public class DeliveryExecutorController
         int deliverId = DeliveryIds.addAndGet(INCREMENT);
         double CargoWeight = 0;
         final double MaxCargoWeight = VehicleLicenseCategory.GetMaxLoadWeight();
-        var unDelivered = new HashMap<Integer, Integer>(); // delivered[productId] = amount shall be supplied in another delivery
+
+        // delivered[productId] = amount of productId missing in current delivery
+        var unDelivered = new HashMap<Integer, Integer>();
         boolean isPartitioned = false;
         // Validate if the order need to be partitioned
         for(var product : deliveryOrder.RequestedProducts)
@@ -45,17 +47,23 @@ public class DeliveryExecutorController
                 unDelivered.put(product.Id, suppliedAmount);
             }
         }
+
         // Find available driver & truck
         DeliveryResources deliveryResources = DeliveryController.GetInstance().GetDeliveryResources(deliveryOrder.SubmissionDate, deliveryOrder.Supplier.Zone, CargoWeight);
-        // if either driver or truck are unavailable, return an error recipe
-        if(deliveryResources.DeliveryDriver == null)
-            return new ErrorRecipe(deliveryOrder.OrderId, NO_AVAILABLE_DRIVER);
-        else if(deliveryResources.DeliveryTruck == null)
-            return new ErrorRecipe(deliveryOrder.OrderId, NO_AVAILABLE_TRUCK);
-        // otherwise return a delivery recipe
-        var output = new DeliveryRecipe(deliveryOrder.OrderId, deliverId, isPartitioned, deliveryResources , unDelivered);
-        Deliveries.put(deliverId, deliveryOrder);
+
+        // if either driver or truck are unavailable, an error recipe will be returned
+        Recipe output = deliveryResources.DeliveryDriver == null ? new ErrorRecipe(deliveryOrder.OrderId, NO_AVAILABLE_DRIVER) :
+                 deliveryResources.DeliveryTruck == null ? new ErrorRecipe (deliveryOrder.OrderId, NO_AVAILABLE_TRUCK) :
+                 new DeliveryRecipe(deliveryOrder.OrderId, deliverId, isPartitioned, deliveryResources , unDelivered);
+        //
+        DocumentDelivery(deliverId, deliveryOrder);
         return output;
+    }
+
+    private void DocumentDelivery(int deliverId, DeliveryOrder deliveryOrder)
+    {
+        Deliveries.put(deliverId, deliveryOrder);
+        //insert to DB
     }
 
     public String GetDeliveriesHistory()

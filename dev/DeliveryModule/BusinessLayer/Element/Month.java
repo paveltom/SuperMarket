@@ -12,6 +12,9 @@ public class Month
 {
     public final int ShiftsPerDay = 4;
     public final int NumOfDays;
+    private final char NumOfDaysDelimiter = '@';
+    private final char DaysDelimiter = '#';
+
     /*
     * @INV: Shifts[i][j] = true iff shift j at day i is occupied.
     */
@@ -21,6 +24,39 @@ public class Month
     {
         NumOfDays = numOfDays;
         Shifts = new boolean[NumOfDays+1][ShiftsPerDay];
+    }
+
+    /* Create Month instance via parsing encoded string persisted in the DB */
+    public Month(String encoded)
+    {
+        int i = 0, numOfDays = 0, row = 1, col = 0;
+        char ch;
+        char[] chars = encoded.toCharArray();
+        while(chars[i] != NumOfDaysDelimiter)
+        {
+            numOfDays = numOfDays * 10 + chars[i] - '0';
+            i++;
+        }
+        i++;
+        boolean[][] res = new boolean[numOfDays + 1][ShiftsPerDay];
+        int length = encoded.length();
+        while(i<length)
+        {
+            ch = chars[i];
+            if(ch != DaysDelimiter)
+            {
+                res[row][col] = ch == '1';
+                col++;
+            }
+            else
+            {
+                row++;
+                col = 0;
+            }
+            i++;
+        }
+        Shifts = res;
+        NumOfDays = numOfDays;
     }
 
     /*
@@ -56,11 +92,26 @@ public class Month
         }
     }
 
+    /* Return true iff exists occupied shift in this month from param day */
+    public boolean IsOccupied(int day)
+    {
+        if(day >= 1 && day <= NumOfDays) { // validate legal input
+            for (int i = day; i <= NumOfDays; i++) {
+                for (int j = 0; j < ShiftsPerDay; j++) {
+                    if (Shifts[i][j]) // occupied shift
+                        return true;
+                }
+            }
+        }
+        return false; // All days after param day are not occupied.
+    }
+
+    /* Encode Month instance into string which will be persisted in the DB  */
     public String Encode()
     {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(NumOfDays);
-        stringBuilder.append('@');
+        stringBuilder.append(NumOfDaysDelimiter);
         int i = 1, delimiters = NumOfDays - 1;
         while(i <= NumOfDays)
         {
@@ -69,44 +120,14 @@ public class Month
                 stringBuilder.append(bool ? '1' : '0');
             }
             if(delimiters > 0)
-                stringBuilder.append('#');
+                stringBuilder.append(DaysDelimiter);
             i++;
             delimiters--;
         }
         return stringBuilder.toString();
     }
 
-    public Month(String encoded)
-    {
-        int i = 0, numOfDays = 0, row = 1, col = 0;
-        char ch;
-        char[] chars = encoded.toCharArray();
-        while(chars[i] != '@')
-        {
-            numOfDays = numOfDays * 10 + chars[i] - '0';
-            i++;
-        }
-        i++;
-        boolean[][] res = new boolean[numOfDays + 1][ShiftsPerDay];
-        int length = encoded.length();
-        while(i<length)
-        {
-            ch = chars[i];
-            if(ch != '#')
-            {
-                res[row][col] = ch == '1';
-                col++;
-            }
-            else
-            {
-                row++;
-                col = 0;
-            }
-            i++;
-        }
-        Shifts = res;
-        NumOfDays = numOfDays;
-    }
+
 
     @Override
     public boolean equals(Object obj)

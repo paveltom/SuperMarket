@@ -75,6 +75,8 @@ public class DeliveryController {
         return Resource.ShowShippingZone();
     }
 
+    public boolean IsDriverOccupied(String driverId, int month, int day){ return Resource.IsDriverOccupied(driverId, month, day);}
+
 	public static DeliveryController newInstanceForTests(String code){
 	if(code.equals("sudo"))
 		return new DeliveryController();

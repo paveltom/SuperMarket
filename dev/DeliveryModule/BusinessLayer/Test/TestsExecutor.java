@@ -6,7 +6,7 @@ public class TestsExecutor {
     {
         var sb = new StringBuilder();
         sb.append("------------------------------ Tests start ------------------------------\n");
-        Testable[] tests = {new DateTest(), new DeliveryControllerTest(), new DeliveryResourceControllerTest(), new MonthTest(), new SchedulerTest()};
+        Testable[] tests = {new DateTest(), new DeliveryControllerTest(), new DeliveryResourceControllerTest(), new MonthTest(), new SchedulerTest(), new SiteTest(), new ProductTest(), new DeliveryDateTest()};
         for(Testable test : tests)
         {
             sb.append(String.format("Check unit: %s\n", test));

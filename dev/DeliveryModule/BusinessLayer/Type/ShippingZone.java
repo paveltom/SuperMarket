@@ -1,5 +1,8 @@
 package DeliveryModule.BusinessLayer.Type;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public enum ShippingZone
 {
     Negev,
@@ -18,6 +21,18 @@ public enum ShippingZone
     public static String GetShippingZoneName(ShippingZone zone)
     {
         return ZONES_NAMES[zone.ordinal()];
+    }
+
+    private static Map<String, ShippingZone> Name2ShippingZone;
+    static {
+        Name2ShippingZone = new HashMap<>();
+        for(ShippingZone zone : ShippingZone.values())
+            Name2ShippingZone.put(GetShippingZoneName(zone), zone);
+    }
+
+    public static ShippingZone CreateShippingZoneByName(String zoneName)
+    {
+        return Name2ShippingZone.getOrDefault(zoneName, null);
     }
 }
 

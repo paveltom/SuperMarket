@@ -47,6 +47,12 @@ public class Driver
         Dairy.SetConstraint(constraint);
     }
 
+    /* Return true iff exists occupied shift from param month at param day */
+    public boolean IsOccupied(int month, int day)
+    {
+        return Dairy.IsOccupied(month, day);
+    }
+
     @Override
     public boolean equals(Object obj)
     {
