@@ -47,8 +47,12 @@ public class DeliveryController {
         return Resource.GetTrucks();
     }
 
-    public boolean AddDriver(String id, VehicleLicenseCategory license, String fname, String lname, String cellphone, ShippingZone zone) {
+    public boolean AddDriver(String id, VehicleLicenseCategory license, ShippingZone zone) {
         return Resource.AddDriver(id, license, zone);
+    }
+
+    public boolean AddDriver(String id, VehicleLicenseCategory license, ShippingZone zone, Constraint constraint) {
+        return Resource.AddDriver(id, license, zone, constraint);
     }
 
     public boolean AddTruck(double mlw, double nw, long vln, String m, ShippingZone zone) {

@@ -177,6 +177,18 @@ public class DeliveryResourceController {
         return false;
     }
 
+    public boolean AddDriver(String id, VehicleLicenseCategory license, ShippingZone zone, Constraint constraint)
+    {
+        if(!Drivers.containsKey(id))
+        {
+            var newDriver = new Driver(id, license, zone, constraint);
+            Drivers.put(id, newDriver);
+            DriversDistribution[zone.ordinal()][license.ordinal()].add(id);
+            return true;
+        }
+        return false;
+    }
+
     public boolean AddTruck(double mlw, double nw, long vln, String m, ShippingZone zone)
     {
         if(!Trucks.containsKey(vln))
@@ -221,6 +233,13 @@ public class DeliveryResourceController {
         if(driver != null)
             return driver.IsOccupied(month, day);
         return false;
+    }
+
+    public void SetConstraint(String driverId, Constraint constraint)
+    {
+        var driver = Drivers.remove(driverId);
+        if(driver != null)
+            driver.SetConstraint(constraint);
     }
 
     public Driver GetDriver(String id)
@@ -276,10 +295,4 @@ public class DeliveryResourceController {
         }
     }
 
-    public void SetConstraint(String id, Constraint constraint)
-    {
-        var driver = Drivers.get(id);
-        if(driver != null)
-            driver.SetConstraint(constraint);
-    }
 }
