@@ -66,7 +66,7 @@ public class SupplierController {
     public boolean hasDeliveryService(String sid) {
         return findSupplier(sid).hasDeliveryService();
     }
-    public List<SupProduct> getCatalog(String sid) {
+    public List<CatalogProduct> getCatalog(String sid) {
         return findSupplier(sid).getCatalog();
     }
     public QuantityAgreement getQa(String sid) {
@@ -140,8 +140,8 @@ public class SupplierController {
         return findSupplier(sid).getDiscountsForProductPerOrder(productID);
     }
 
-    public List<SupProduct> searchProduct(String name){
-        List<SupProduct> products = new LinkedList<>();
+    public List<CatalogProduct> searchProduct(String name){
+        List<CatalogProduct> products = new LinkedList<>();
         for(Supplier s:suppliers){
             products.addAll(s.searchProduct(name));
         }

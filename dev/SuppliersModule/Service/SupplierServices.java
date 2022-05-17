@@ -90,7 +90,7 @@ public class SupplierServices {
         }
     }
 
-    public ResponseT<List<SupProduct>> getCatalog(String sid){
+    public ResponseT<List<CatalogProduct>> getCatalog(String sid){
         try{
             return ResponseT.FromValue(sc.getCatalog(sid));
         }catch (Exception e){
@@ -249,7 +249,7 @@ public class SupplierServices {
         }
     }
 
-    public ResponseT<List<SupProduct>> searchProduct(String name){
+    public ResponseT<List<CatalogProduct>> searchProduct(String name){
         try{
             return ResponseT.FromValue(sc.searchProduct(name));
         }catch (Exception e){
