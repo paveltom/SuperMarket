@@ -1,10 +1,7 @@
 package DAL;
 
 import DAL.DAObjects.*;
-import DAL.DTO.DeliveryRecipeDTO;
-import DAL.DTO.DriverDTO;
-import DAL.DTO.TruckDTO;
-import DAL.DTO.WorkerDTO;
+import DAL.DTO.*;
 
 import java.util.List;
 
@@ -35,42 +32,42 @@ public class DALController {
     // delivery module methods:
 
     public List<DriverDTO> getAllDrivers(){
-
+        return null;
     }
 
     public List<TruckDTO> getAllTrucks(){
-
+        return null;
     }
 
     public List<DeliveryRecipeDTO> getAllDeliveries(){
-
+        return null;
     }
 
     public DriverDTO getDriver(String key){
-
+        return null;
     }
 
     public TruckDTO getTruck(String key){
-
+        return null;
     }
 
     public DeliveryRecipeDTO getDelivery(String key){
-
+        return null;
     }
 
     public void updateDriverDiary(String key, String shifts){
-
     }
 
     public void updateTruckDiary(String key, String shifts){
-
     }
 
-     public void addDelivery(String orderID, String supplier, String client, String milkProduct, String subDate){
-
+     public void addDelivery(DeliveryRecipeDTO recipeToAdd){
      }
 
     public void addTruck(TruckDTO truckToAdd){
+    }
+
+    public void addDriver(DriverDTO driverToAdd){
 
     }
 
@@ -89,10 +86,6 @@ public class DALController {
     // public void addDriverFutureShifts(String key, String toAdd)
     // rewriteDriverFutureShifts
     // public void getDriverFutureShifts(String key)
-
-
-
-
 
 
     // ====================================================================================
@@ -126,6 +119,30 @@ public class DALController {
         driversDAO.DeleteDriver(_id);
     }
 
+
+    public void UpdateShift(String date, String type, String data){
+        shiftsDAO.updateShift(date,type,data);
+    }
+
+    public List<ShiftDTO> getShiftHistory(){
+        return shiftsDAO.getShiftHistory();
+    }
+
+    public ShiftDTO getShift(String date, String type){
+        return shiftsDAO.getShift(date,type);
+    }
+
+    public void updateAvailability(String id, String availability){
+        shiftsDAO.updateAvailability(id,availability);
+    }
+
+    public List<String> getAllAvailability(){
+        return workersDAO.getAllAvailability();
+    }
+
+    public String getAvailability(String id){
+        return shiftsDAO.getAvailability(id);
+    }
 
     // =====================both modules methods:
 
