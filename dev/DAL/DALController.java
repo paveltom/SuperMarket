@@ -10,7 +10,7 @@ public class DALController {
 
     private DeliveriesDAO deliveriesDAO;
 
-    private WorkersDAO workersDAO;
+    private WorkersDAO workerDAO;
 
     private ShiftsDAO shiftsDAO;
 
@@ -22,7 +22,7 @@ public class DALController {
         driversDAO = new DriversDAO();
         trucksDAO = new TrucksDAO();
         deliveriesDAO = new DeliveriesDAO();
-        workersDAO = new WorkersDAO();
+        workerDAO = new WorkersDAO();
         shiftsDAO = new ShiftsDAO();
     }
 
@@ -67,7 +67,35 @@ public class DALController {
 
 
     // ==========================================================
-    // personnel module methods
+    // personnel module methods:
+
+    public WorkerDTO getWorker(String _id)
+    {
+        return workerDao.getWorker(_id);
+    }
+    public List<WorkerDTO> getAllWorkers()
+    {
+        return workerDao.getAllWorkers();
+    }
+
+    public List<WorkerDTO> getWorkerByJob(String _Job)
+    {
+        return WorkersDAO.getWorkerByJob(_Job);
+    }
+
+    public void UpdateWorker(String _id,String field,String _data)
+    {
+        WorkersDAO.UpdateWorker(_id,field,_data);
+    }
+
+    public void DeleteWorker(String _id)
+    {
+        workerDao.DeleteWorker(_id);
+    }
+    public void DeleteDriver(String _id)
+    {
+        driversDAO.DeleteDriver(_id);
+    }
 
 
 }
