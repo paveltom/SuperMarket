@@ -24,8 +24,8 @@ class SchedulerTest implements Testable{
         for(int i = 0; i < numOfDeliveries; i++)
             testObject.GetAvailableDeliveryDate(selectedMonth, selectedDay);
 
-        var returnedShift = testObject.GetAvailableDeliveryDate(selectedMonth, selectedDay);
-        var expectedShift = new DeliveryDate(selectedMonth, 2022, new Shift(28, 1));
+        DeliveryDate returnedShift = testObject.GetAvailableDeliveryDate(selectedMonth, selectedDay);
+        DeliveryDate expectedShift = new DeliveryDate(selectedMonth, 2022, new Shift(28, 1));
 
         assertEquals(expectedShift, returnedShift);
     }
@@ -42,8 +42,8 @@ class SchedulerTest implements Testable{
         for(int i = 0; i < numOfDeliveries; i++)
             testObject.GetAvailableDeliveryDate(selectedMonth, selectedDay);
 
-        var returnedShift = testObject.GetAvailableDeliveryDate(selectedMonth, selectedDay);
-        var expectedShift = new DeliveryDate(successiveMonth, 2022, new Shift(2, 1));
+        DeliveryDate returnedShift = testObject.GetAvailableDeliveryDate(selectedMonth, selectedDay);
+        DeliveryDate expectedShift = new DeliveryDate(successiveMonth, 2022, new Shift(2, 1));
 
         assertEquals(expectedShift, returnedShift);
     }
@@ -67,7 +67,7 @@ class SchedulerTest implements Testable{
         }
 
         /* Search for any available day since the beginning of the year */
-        var returnedShift = testObject.GetAvailableDeliveryDate(1, 1);
+        DeliveryDate returnedShift = testObject.GetAvailableDeliveryDate(1, 1);
         DeliveryDate expectedShift = null;
 
         assertEquals(expectedShift, returnedShift);

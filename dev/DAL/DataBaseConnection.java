@@ -36,7 +36,9 @@ public class DataBaseConnection {
         String statement = "INSERT INTO" + tableNAME + tablesWithParams.get(tableNAME) + "VALUES (" + params[0] + ",...";
     }
 
-    public void update(String tableNAME, String[] keys, String paramNAME, String paramTYPE, Object value)
+    public void update(String tableNAME, String[] key, String paramNAME, String paramVALUE)
+
+
 
 
 

@@ -1,7 +1,7 @@
 package DAL;
 
 import DAL.DAObjects.*;
-import DAL.DTO.DeliveryDTO;
+import DAL.DTO.DeliveryRecipeDTO;
 import DAL.DTO.DriverDTO;
 import DAL.DTO.TruckDTO;
 import DAL.DTO.WorkerDTO;
@@ -42,7 +42,7 @@ public class DALController {
 
     }
 
-    public List<DeliveryDTO> getAllDeliveries(){
+    public List<DeliveryRecipeDTO> getAllDeliveries(){
 
     }
 
@@ -54,7 +54,7 @@ public class DALController {
 
     }
 
-    public DeliveryDTO getDelivery(String key){
+    public DeliveryRecipeDTO getDelivery(String key){
 
     }
 
@@ -74,13 +74,21 @@ public class DALController {
 
     }
 
-    public void removeDelivery(DeliveryDTO deliveryDelete){
+    public void removeDelivery(DeliveryRecipeDTO deliveryDelete){
 
     }
 
-    public void removeTruck(TruckDTO truckDelete){
+    public void removeTruck(long key){
 
     }
+
+    public void removeDriver(String key){
+
+    }
+
+    // public void addDriverFutureShifts(String key, String toAdd)
+    // rewriteDriverFutureShifts
+    // public void getDriverFutureShifts(String key)
 
 
 

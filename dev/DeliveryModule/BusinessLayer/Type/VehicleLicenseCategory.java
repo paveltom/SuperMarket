@@ -41,7 +41,7 @@ public enum VehicleLicenseCategory
             Name2VehicleLicenseCategory.put(GetVehicleLicenseCategoryName(licenseCategory), licenseCategory);
     }
 
-    public VehicleLicenseCategory CreateShippingZoneByName(String zoneName)
+    public static VehicleLicenseCategory CreateShippingZoneByName(String zoneName)
     {
         return Name2VehicleLicenseCategory.getOrDefault(zoneName, null);
     }

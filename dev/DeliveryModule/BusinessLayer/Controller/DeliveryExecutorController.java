@@ -1,9 +1,12 @@
 package DeliveryModule.BusinessLayer.Controller;
 
+import DAL.DALController;
+import DAL.DTO.DeliveryRecipeDTO;
 import DeliveryModule.BusinessLayer.Element.*;
 import DeliveryModule.BusinessLayer.Type.VehicleLicenseCategory;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -11,16 +14,20 @@ public class DeliveryExecutorController
 {
     private AtomicInteger DeliveryIds;
     private final int INCREMENT = 1;
-    private Map<Integer, DeliveryOrder> Deliveries;
-
-    private final int NO_AVAILABLE_DRIVER = 0;
-    private final int NO_AVAILABLE_TRUCK = 1;
-
+    private Map<Integer, DeliveryRecipe> Deliveries;
 
     public DeliveryExecutorController()
     {
         DeliveryIds = new AtomicInteger(-1);
         Deliveries = new HashMap<>();
+        Init();
+    }
+
+    private void Init()
+    {
+        List<DeliveryRecipeDTO> deliveriesData = DALController.getInstance().getAllDeliveries();
+        for(DeliveryRecipeDTO src : deliveriesData)
+            Deliveries.put(src.DeliveryId, new DeliveryRecipe(src));
     }
 
     public Recipe Deliver(DeliveryOrder deliveryOrder)
@@ -29,49 +36,56 @@ public class DeliveryExecutorController
         double CargoWeight = 0;
         final double MaxCargoWeight = VehicleLicenseCategory.GetMaxLoadWeight();
 
-        // delivered[productId] = amount of productId missing in current delivery
-        var unDelivered = new HashMap<Integer, Integer>();
-        boolean isPartitioned = false;
-        // Validate if the order need to be partitioned
-        for(var product : deliveryOrder.RequestedProducts)
+        boolean exceedMaxLoadWeight = false;
+        // Calculate total cargo weight. Validate it doesnt exceed max load weight.
+        for(Product product : deliveryOrder.RequestedProducts)
         {
             double totalProductWeight = product.Amount * product.WeightPerUnit;
-            if(!isPartitioned && (CargoWeight + totalProductWeight < MaxCargoWeight))
+            if(CargoWeight + totalProductWeight < MaxCargoWeight)
                 CargoWeight += totalProductWeight;
-            else // cargo's weight exceeds the maximal load weights. Hence, partial this delivery order.
+            else // cargo's weight exceeds the maximal load weights.
             {
-                isPartitioned = true;
-                CargoWeight = MaxCargoWeight - CargoWeight;
-                int suppliedAmount = (int) (CargoWeight / product.WeightPerUnit);
-                CargoWeight += (suppliedAmount * product.WeightPerUnit);
-                unDelivered.put(product.Id, suppliedAmount);
+                exceedMaxLoadWeight = true;
+                break;
+
             }
         }
+        Recipe output;
+        if(exceedMaxLoadWeight)
+        {
+            output = new ExceedsMaxLoadWeight(deliveryOrder.OrderId);
+        }
+        else
+        {
+            // Find available driver & truck
+            DeliveryResources deliveryResources = DeliveryController.GetInstance().GetDeliveryResources(deliveryOrder.SubmissionDate, deliveryOrder.Supplier.Zone, CargoWeight);
 
-        // Find available driver & truck
-        DeliveryResources deliveryResources = DeliveryController.GetInstance().GetDeliveryResources(deliveryOrder.SubmissionDate, deliveryOrder.Supplier.Zone, CargoWeight);
-
-        // if either driver or truck are unavailable, an error recipe will be returned
-        Recipe output = deliveryResources.DeliveryDriver == null ? new ErrorRecipe(deliveryOrder.OrderId, NO_AVAILABLE_DRIVER) :
-                 deliveryResources.DeliveryTruck == null ? new ErrorRecipe (deliveryOrder.OrderId, NO_AVAILABLE_TRUCK) :
-                 new DeliveryRecipe(deliveryOrder.OrderId, deliverId, isPartitioned, deliveryResources , unDelivered);
-        //
-        DocumentDelivery(deliverId, deliveryOrder);
+            // if either driver or truck are unavailable, an error recipe will be returned
+           output = deliveryResources.DeliveryDriver == null ? new NoAvailableDriver(deliveryOrder.OrderId) :
+                    deliveryResources.DeliveryTruck == null ? new NoAvailableTruck(deliveryOrder.OrderId) :
+                    new DeliveryRecipe(deliveryOrder.OrderId, deliverId, deliveryOrder.Supplier, deliveryOrder.Client,
+                            deliveryOrder.RequestedProducts, deliveryResources.DueDate,
+                            deliveryResources.DeliveryDriver.Name, deliveryResources.DeliveryDriver.Cellphone,
+                            deliveryResources.DeliveryTruck.VehicleLicenseNumber, deliveryResources.DeliveryDriver.Id);
+        }
+        if(output instanceof DeliveryRecipe)
+            DocumentDelivery(deliverId, (DeliveryRecipe)output);
         return output;
     }
 
-    private void DocumentDelivery(int deliverId, DeliveryOrder deliveryOrder)
+    private void DocumentDelivery(int deliverId, DeliveryRecipe recipe)
     {
-        Deliveries.put(deliverId, deliveryOrder);
-        //insert to DB
+        Deliveries.put(deliverId, recipe);
+        recipe.Persist();
     }
+
 
     public String GetDeliveriesHistory()
     {
         StringBuilder sb = new StringBuilder();
         sb.append("------------------------------ Deliveries History ------------------------------\n");
-        for(var delivery: Deliveries.values())
-            sb.append(delivery);
+        for(DeliveryRecipe recipe: Deliveries.values())
+            sb.append(recipe);
         return sb.toString();
     }
 

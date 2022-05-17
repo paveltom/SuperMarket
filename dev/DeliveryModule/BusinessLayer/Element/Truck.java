@@ -1,23 +1,52 @@
 package DeliveryModule.BusinessLayer.Element;
 
+import DAL.DALController;
+import DAL.DTO.TruckDTO;
 import DeliveryModule.BusinessLayer.Type.ShippingZone;
+import DeliveryModule.BusinessLayer.Type.VehicleLicenseCategory;
 
 public class Truck
 {
     public final double MaxLoadWeight,NetWeight;
     public final long VehicleLicenseNumber;
+    public final VehicleLicenseCategory AuthorizedLicense;
     public final String Model;
     public final ShippingZone Zone;
-    private Scheduler Dairy;
+    private Scheduler Diary;
 
-    public Truck(double mlw, double nw, long vln, String m, ShippingZone z)
+    public Truck(double mlw, double nw, long vln, String m, ShippingZone z, VehicleLicenseCategory authorizedLicense)
     {
         MaxLoadWeight = mlw;
         NetWeight = nw;
         VehicleLicenseNumber = vln;
         Model = m;
         Zone = z;
-        Dairy = new Scheduler();
+        AuthorizedLicense = authorizedLicense;
+        Diary = new Scheduler();
+        Persist();
+    }
+
+    public Truck(TruckDTO src)
+    {
+        MaxLoadWeight = src.MaxLoadWeight;
+        NetWeight = src.NetWeight;
+        VehicleLicenseNumber = src.VehicleLicenseNumber;
+        Model = src.Model;
+        Zone = ShippingZone.CreateShippingZoneByName(src.Zone);
+        AuthorizedLicense = VehicleLicenseCategory.CreateShippingZoneByName(src.AuthorizedLicense);
+        Diary = new Scheduler(src.Diary);
+    }
+
+    private void Persist()
+    {
+        TruckDTO persist = new TruckDTO(MaxLoadWeight, NetWeight, VehicleLicenseNumber, Model, ShippingZone.GetShippingZoneName(Zone),
+                Diary.Encode(), VehicleLicenseCategory.GetVehicleLicenseCategoryName(AuthorizedLicense));
+        DALController.getInstance().addTruck(persist);
+    }
+
+    private void PersistDiary()
+    {
+        DALController.getInstance().updateTruckDiary(VehicleLicenseNumber, Diary.Encode());
     }
 
     @Override
@@ -28,12 +57,13 @@ public class Truck
 
     public DeliveryDate GetAvailableDeliveryDate(int month, int day)
     {
-        return Dairy.GetAvailableDeliveryDate(month, day);
+        return Diary.GetAvailableDeliveryDate(month, day);
     }
 
     public void SetOccupied(DeliveryDate occupiedDate)
     {
-        Dairy.SetOccupied(occupiedDate);
+        Diary.SetOccupied(occupiedDate);
+        PersistDiary();
     }
 
     @Override

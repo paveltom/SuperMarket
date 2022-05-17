@@ -1,7 +1,5 @@
 package DeliveryModule.BusinessLayer.Element;
 
-import DeliveryModule.BusinessLayer.Type.ShippingZone;
-
 /*
 * Internal (to Delivery-Business Layer) representation of a product
 */

@@ -31,8 +31,8 @@ class MonthTest implements Testable{
         testObject.SetOccupied(new Shift(shipmentDay, 1));
         testObject.SetOccupied(new Shift(shipmentDay, 2));
 
-        var returnedShift = testObject.GetAvailableShift(shipmentDay);
-        var expectedShift = new Shift (shipmentDay, 3);
+        Shift returnedShift = testObject.GetAvailableShift(shipmentDay);
+        Shift expectedShift = new Shift (shipmentDay, 3);
 
         assertEquals(returnedShift, expectedShift);
 
@@ -55,8 +55,8 @@ class MonthTest implements Testable{
         testObject.SetOccupied(new Shift(shipmentDay, 3));
 
 
-        var returnedShift = testObject.GetAvailableShift(shipmentDay);
-        var expectedShift = new Shift(shipmentDay + 1, 0);
+        Shift returnedShift = testObject.GetAvailableShift(shipmentDay);
+        Shift expectedShift = new Shift(shipmentDay + 1, 0);
 
         assertEquals(returnedShift, expectedShift);
 
@@ -77,7 +77,7 @@ class MonthTest implements Testable{
                 testObject.SetOccupied(new Shift(day, shift));
         }
 
-        var returnedShift = testObject.GetAvailableShift(1);
+        Shift returnedShift = testObject.GetAvailableShift(1);
         Shift expectedShift = null;
 
         assertEquals(returnedShift, expectedShift);
@@ -94,7 +94,7 @@ class MonthTest implements Testable{
     {
         testObject = new Month(JANUARY);
         final int someDay = 3;
-        var returnedShift = testObject.GetAvailableShift(someDay);
+        Shift returnedShift = testObject.GetAvailableShift(someDay);
         Shift expectedShift = new Shift(someDay, 0);
 
         assertEquals(returnedShift, expectedShift);
@@ -111,7 +111,7 @@ class MonthTest implements Testable{
     {
         testObject = new Month(FEBRUARY);
         final int invalidDay = 30;
-       var returnedShift = testObject.GetAvailableShift(invalidDay);
+        Shift returnedShift = testObject.GetAvailableShift(invalidDay);
        Shift expectedShift = null;
 
         assertEquals(returnedShift, expectedShift);

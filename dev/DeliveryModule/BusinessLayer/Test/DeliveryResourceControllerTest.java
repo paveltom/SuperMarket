@@ -2,6 +2,7 @@ package DeliveryModule.BusinessLayer.Test;
 
 import DeliveryModule.BusinessLayer.Controller.DeliveryResourceController;
 import DeliveryModule.BusinessLayer.Element.Date;
+import DeliveryModule.BusinessLayer.Element.DeliveryResources;
 import DeliveryModule.BusinessLayer.Element.Driver;
 import DeliveryModule.BusinessLayer.Element.Truck;
 import DeliveryModule.BusinessLayer.Type.ShippingZone;
@@ -23,15 +24,15 @@ class DeliveryResourceControllerTest implements Testable{
     @Test
     void getDeliveryDate()
     {
-        final var DATE = new Date(24, 4, 2022);
-        final var ZONE = ShippingZone.Shfela_JerusalemMountains;
+        final Date DATE = new Date(24, 4, 2022);
+        final ShippingZone ZONE = ShippingZone.Shfela_JerusalemMountains;
         int i = 0;
         final double[] deliveryWeights = {3496351.00, 10045670.00, 16190000.0354};
 
 
         for(VehicleLicenseCategory licenseCategory : VehicleLicenseCategory.values())
         {
-            var res = testObject.GetDeliveryResources(DATE, ZONE, deliveryWeights[i]);
+            DeliveryResources res = testObject.GetDeliveryResources(DATE, ZONE, deliveryWeights[i]);
             assertEquals(res.DeliveryDriver.License, licenseCategory);
             assertTrue(res.DeliveryTruck.MaxLoadWeight >= deliveryWeights[i]);
             i++;
@@ -46,14 +47,17 @@ class DeliveryResourceControllerTest implements Testable{
     @Test
     void addDriver()
     {
-        final long ID = 123456789;
-        String id = String.valueOf(ID);
+        final String ID = "123456789";
+        final String FNAME = "ADDED_DRIVER_FNAME";
+        final String LNAME = "ADDED_DRIVER_LNAME";
+        final String CELLPHONE = "ADDED_DRIVER_CELLPHONE";
 
-        testObject.AddDriver(id, VehicleLicenseCategory.E, ShippingZone.JezreelValley);
-        var actual = testObject.GetDriver(id);
-        var expected = new Driver(id, VehicleLicenseCategory.E, ShippingZone.JezreelValley);
+        testObject.AddDriver(ID,FNAME + LNAME,CELLPHONE, VehicleLicenseCategory.E, ShippingZone.JezreelValley);
+        Driver actual = testObject.GetDriver(ID);
+        Driver expected = new Driver(ID,FNAME + LNAME,CELLPHONE, VehicleLicenseCategory.E, ShippingZone.JezreelValley);
 
         assertEquals(expected, actual);
+
 
     }
 
@@ -72,9 +76,9 @@ class DeliveryResourceControllerTest implements Testable{
         final String TRUCK_MODEL = "ADDED_TRUCK_MODEL";
 
         testObject.AddTruck(NET_WEIGHT, MAXIMAL_LOAD_WEIGHT, VEHICLE_NUMBER, TRUCK_MODEL, ShippingZone.Galilee);
-        var actual = testObject.GetTruck(VEHICLE_NUMBER);
+        Truck actual = testObject.GetTruck(VEHICLE_NUMBER);
 
-        var expected = new Truck(NET_WEIGHT, MAXIMAL_LOAD_WEIGHT, VEHICLE_NUMBER, TRUCK_MODEL, ShippingZone.Galilee);
+        Truck expected = new Truck(NET_WEIGHT, MAXIMAL_LOAD_WEIGHT, VEHICLE_NUMBER, TRUCK_MODEL, ShippingZone.Galilee, VehicleLicenseCategory.C);
 
         assertEquals(expected, actual);
     }
@@ -87,22 +91,22 @@ class DeliveryResourceControllerTest implements Testable{
     @Test
     void removeDriver()
     {
-        final long ID = 123456798;
+        final String ID = "123456798";
         final String FNAME = "ADDED_DRIVER_FNAME";
         final String LNAME = "ADDED_DRIVER_LNAME";
         final String CELLPHONE = "ADDED_DRIVER_CELLPHONE";
-        String id = String.valueOf(ID);
 
-        testObject.AddDriver(id, VehicleLicenseCategory.E, ShippingZone.JezreelValley);
-        var actual = testObject.GetDriver(id);
+        testObject.AddDriver(ID, FNAME + LNAME,CELLPHONE, VehicleLicenseCategory.E, ShippingZone.JezreelValley);
+        Driver actual = testObject.GetDriver(ID);
 
         assertNotNull(actual);
 
-        testObject.RemoveDriver(id);
+        testObject.RemoveDriver(ID);
 
-        actual = testObject.GetDriver(id);
+        actual = testObject.GetDriver(ID);
 
         assertNull(actual);
+
     }
 
     /*
@@ -119,7 +123,7 @@ class DeliveryResourceControllerTest implements Testable{
         final String TRUCK_MODEL = "ADDED_TRUCK_MODEL";
 
         testObject.AddTruck(NET_WEIGHT, MAXIMAL_LOAD_WEIGHT, VEHICLE_NUMBER, TRUCK_MODEL, ShippingZone.Galilee);
-        var actual = testObject.GetTruck(VEHICLE_NUMBER);
+        Truck actual = testObject.GetTruck(VEHICLE_NUMBER);
 
         assertNotNull(actual);
 

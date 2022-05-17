@@ -6,7 +6,7 @@ import DeliveryModule.BusinessLayer.Element.Truck;
 import DeliveryModule.BusinessLayer.Type.VehicleLicenseCategory;
 
 /* Major controller
-* Implemented using Singelton pattern.
+* Implemented using Singleton pattern.
 * Provide communication between BusinessLayer controllers.
 * Facade layer communicate with BusinessLayer through DeliveryController API'S.
 */
@@ -47,12 +47,12 @@ public class DeliveryController {
         return Resource.GetTrucks();
     }
 
-    public boolean AddDriver(String id, VehicleLicenseCategory license, ShippingZone zone) {
-        return Resource.AddDriver(id, license, zone);
+    public boolean AddDriver(String id, String name, String cellphone, VehicleLicenseCategory license, ShippingZone zone) {
+        return Resource.AddDriver(id, name, cellphone, license, zone);
     }
 
-    public boolean AddDriver(String id, VehicleLicenseCategory license, ShippingZone zone, Constraint constraint) {
-        return Resource.AddDriver(id, license, zone, constraint);
+    public boolean AddDriver(String id, String name, String cellphone, VehicleLicenseCategory license, ShippingZone zone, Constraint constraint) {
+        return Resource.AddDriver(id, name, cellphone, license, zone, constraint);
     }
 
     public boolean AddTruck(double mlw, double nw, long vln, String m, ShippingZone zone) {
@@ -79,6 +79,11 @@ public class DeliveryController {
         return Resource.ShowShippingZone();
     }
 
+    public void SetConstraint(String id, Constraint constraint)
+    {
+        Resource.SetConstraint(id, constraint);
+    }
+
     public boolean IsDriverOccupied(String driverId, int month, int day){ return Resource.IsDriverOccupied(driverId, month, day);}
 
 	public static DeliveryController newInstanceForTests(String code){
@@ -94,9 +99,5 @@ public class DeliveryController {
         Executor.Clear();
     }
 
-    public void SetConstraint(String id, Constraint constraint)
-    {
-        Resource.SetConstraint(id, constraint);
-    }
 
 }

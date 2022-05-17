@@ -4,7 +4,7 @@ package DeliveryModule.BusinessLayer.Test;
 public class TestsExecutor {
     public static void main(String[] args)
     {
-        var sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
         sb.append("------------------------------ Tests start ------------------------------\n");
         Testable[] tests = {new DateTest(), new DeliveryControllerTest(), new DeliveryResourceControllerTest(), new MonthTest(), new SchedulerTest(), new SiteTest(), new ProductTest(), new DeliveryDateTest()};
         for(Testable test : tests)

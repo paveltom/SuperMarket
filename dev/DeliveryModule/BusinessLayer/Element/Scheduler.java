@@ -47,7 +47,7 @@ public class Scheduler
         while(i <= NumOfMonths)
         {
             /* Month i has available slot on day >= j */
-            var shift = Dairy[i].GetAvailableShift(j);
+            Shift shift = Dairy[i].GetAvailableShift(j);
             if(shift != null)
             {
                 return new DeliveryDate(i, Year, shift);
@@ -79,7 +79,7 @@ public class Scheduler
         int i = month, j = day;
         while(i <= NumOfMonths)
         {
-            var isOccupied = Dairy[i].IsOccupied(j);
+            boolean isOccupied = Dairy[i].IsOccupied(j);
             if(isOccupied) /* Month i has pre-determined shift */
                 return false;
             /* Proceed to check successive month from day 1 */

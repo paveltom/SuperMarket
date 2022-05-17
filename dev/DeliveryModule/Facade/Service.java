@@ -23,7 +23,7 @@ public class Service implements IService{
             output[0] = "An error occured: " + res.getErrorMessage();
             output[1] = "";
         }
-        pm.addAvailability(output); // sends new occupied driver's shift to Personel Module
+        pm.addDriverFuture(id,date,shiftType); // sends new occupied driver's shift to Personel Module, shiftType - 0 or 1
         return res;
     }
 
