@@ -53,7 +53,7 @@ public class Service implements IService{
 
     public ResponseT<String> showLicenseCategories(){ return deliveryResourcesService.showLicenseCategories(); }
 
-    public String[] addConstraints(){
+    public void addConstraints(String ID, FacadeDate date, int shift){
         // Doesn't has to be String[] - could be void
         // method that called by PersonelModule - sends constraints to Business Layer
         ResponseT<String[]> res = deliveryResourcesService.addConstraints();
