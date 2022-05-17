@@ -4,6 +4,7 @@ import java.util.Dictionary;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class SupplierController {
 
@@ -22,7 +23,7 @@ public class SupplierController {
     }
 
     public void addSupplier(String supId, String bankAccount, boolean cash, boolean credit, String contactName, String contactNum){
-        if(!suppliers.stream().filter(supplier -> supplier.getSid().equals(supId)).toList().isEmpty())
+        if(suppliers.stream().anyMatch(supplier -> supplier.getSid().equals(supId)))
             throw new IllegalArgumentException("trying to add supplier with already existing id");
 
         suppliers.add(new Supplier(supId + "", bankAccount, cash, credit, contactName, contactNum));
@@ -32,7 +33,7 @@ public class SupplierController {
         suppliers.remove(findSupplier(sid));
     }
 
-    private boolean supExsist(String sid){
+    private boolean supExist(String sid){
         for(Supplier s:suppliers){
             if(s.getSid().equals(sid))
                 return true;
@@ -45,7 +46,7 @@ public class SupplierController {
             if(s.getSid().equals(sid))
                 return s;
         }
-        throw new IllegalArgumentException("Supplier Doesnt Exists");
+        throw new IllegalArgumentException("Supplier doesn't Exists");
     }
 
     public void addContact(String sid, String contactName, String phoneNum){
@@ -65,7 +66,7 @@ public class SupplierController {
     public boolean hasDeliveryService(String sid) {
         return findSupplier(sid).hasDeliveryService();
     }
-    public List<SupProduct> getCatalog(String sid) {
+    public List<CatalogProduct> getCatalog(String sid) {
         return findSupplier(sid).getCatalog();
     }
     public QuantityAgreement getQa(String sid) {
@@ -139,8 +140,8 @@ public class SupplierController {
         return findSupplier(sid).getDiscountsForProductPerOrder(productID);
     }
 
-    public List<SupProduct> searchProduct(String name){
-        List<SupProduct> products = new LinkedList<>();
+    public List<CatalogProduct> searchProduct(String name){
+        List<CatalogProduct> products = new LinkedList<>();
         for(Supplier s:suppliers){
             products.addAll(s.searchProduct(name));
         }
@@ -148,7 +149,7 @@ public class SupplierController {
     }
 
     private Supplier getSupplier(String suppId){
-        List<Supplier> matchedSupp = suppliers.stream().filter(supplier -> supplier.getSid().equals(suppId)).toList();
+        List<Supplier> matchedSupp = suppliers.stream().filter(supplier -> supplier.getSid().equals(suppId)).collect(Collectors.toList());
         if(matchedSupp.isEmpty())
             throw new IllegalArgumentException("there is no supplier with that id");
 
@@ -158,29 +159,29 @@ public class SupplierController {
 
 
     public Map<String,String> getSupplierContacts(String sid){
-        if(!supExsist(sid))
-            throw new IllegalArgumentException("supplier doesntExsists");
+        if(!supExist(sid))
+            throw new IllegalArgumentException("supplier doesn't Exists");
 
         return getSupplier(sid).getContacts();
     }
 
     public void removeContact(String sid, String name){
-        if(!supExsist(sid))
-            throw new IllegalArgumentException("supplier doesntExsists");
+        if(!supExist(sid))
+            throw new IllegalArgumentException("supplier doesn't Exists");
 
         getSupplier(sid).removeContact(name);
     }
 
     public Dictionary<String, Dictionary<Integer, Float>> getPerItem(String sid) {
-        if(!supExsist(sid))
-            throw new IllegalArgumentException("supplier doesntExsists");
+        if(!supExist(sid))
+            throw new IllegalArgumentException("supplier doesn't Exists");
 
         return getSupplier(sid).getPerItem();
     }
 
     public Dictionary<String, Dictionary<Integer, Float>> getPerOrder(String sid) {
-        if(!supExsist(sid))
-            throw new IllegalArgumentException("supplier doesntExsists");
+        if(!supExist(sid))
+            throw new IllegalArgumentException("supplier doesn't Exists");
 
         return getSupplier(sid).getPerOrder();
     }

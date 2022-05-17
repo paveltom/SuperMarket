@@ -70,7 +70,7 @@ public class Supplier {
         hasContract();
         return contract.hasDeliveryService();
     }
-    public List<SupProduct> getCatalog() {
+    public List<CatalogProduct> getCatalog() {
         hasContract();
         return contract.getCatalog();
     }
@@ -161,7 +161,7 @@ public class Supplier {
         return contract.getDiscountsForProductPerOrder(productID);
     }
 
-    public List<SupProduct> searchProduct(String name){
+    public List<CatalogProduct> searchProduct(String name){
         if(contract == null)
             return new LinkedList<>();
         return contract.searchProduct(name);
