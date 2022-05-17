@@ -1,17 +1,19 @@
 package DAL;
 
 import DAL.DAObjects.*;
+import DAL.DTO.DeliveryDTO;
+import DAL.DTO.DriverDTO;
+import DAL.DTO.TruckDTO;
+import DAL.DTO.WorkerDTO;
+
+import java.util.List;
 
 public class DALController {
 
     private DriversDAO driversDAO;
-
     private TrucksDAO trucksDAO;
-
     private DeliveriesDAO deliveriesDAO;
-
-    private WorkersDAO workerDAO;
-
+    private WorkersDAO workersDAO;
     private ShiftsDAO shiftsDAO;
 
     private static class DALControllerHolder {
@@ -22,7 +24,7 @@ public class DALController {
         driversDAO = new DriversDAO();
         trucksDAO = new TrucksDAO();
         deliveriesDAO = new DeliveriesDAO();
-        workerDAO = new WorkersDAO();
+        workersDAO = new WorkersDAO();
         shiftsDAO = new ShiftsDAO();
     }
 
@@ -32,69 +34,115 @@ public class DALController {
 
     // delivery module methods:
 
-    // lookup the diagram - is that enough? other needed?
+    public List<DriverDTO> getAllDrivers(){
 
-    // getAllDrivers(): List<DriverDTO>
+    }
 
-    // getAllTrucks(): List<TruckDTO>
+    public List<TruckDTO> getAllTrucks(){
 
-    // getAllDeliveries(): List<DeliveriesDTO>
+    }
 
-    // getDriver(key): DriverDTO
+    public List<DeliveryDTO> getAllDeliveries(){
 
-    // getTruck(key): TruckDTO
+    }
 
-    // getDelivery(key): DeliveryDTO
+    public DriverDTO getDriver(String key){
 
-    // updateDriverDiary(key, shifts: string)
+    }
 
-    // updateTruckDiary(key, shifts; string)
+    public TruckDTO getTruck(String key){
 
-    // addDelivery(DeliveryDTO{supplier, client, orderID,  products, subDate})
+    }
 
-    // addTruck(TruckDTO)
+    public DeliveryDTO getDelivery(String key){
 
-    // removeDelivery(DeliveryDTO)
+    }
 
-    // removeTruck(TruckDTO)
+    public void updateDriverDiary(String key, String shifts){
 
-    // clearCache()
+    }
 
-    // deleteDB()
+    public void updateTruckDiary(String key, String shifts){
+
+    }
+
+     public void addDelivery(String orderID, String supplier, String client, String milkProduct, String subDate){
+
+     }
+
+    public void addTruck(TruckDTO truckToAdd){
+
+    }
+
+    public void removeDelivery(DeliveryDTO deliveryDelete){
+
+    }
+
+    public void removeTruck(TruckDTO truckDelete){
+
+    }
 
 
 
 
 
-    // ==========================================================
+
+    // ====================================================================================
     // personnel module methods:
 
     public WorkerDTO getWorker(String _id)
     {
-        return workerDao.getWorker(_id);
+        return workersDAO.getWorker(_id);
     }
     public List<WorkerDTO> getAllWorkers()
     {
-        return workerDao.getAllWorkers();
+        return workersDAO.getAllWorkers();
     }
 
     public List<WorkerDTO> getWorkerByJob(String _Job)
     {
-        return WorkersDAO.getWorkerByJob(_Job);
+        return workersDAO.getWorkerByJob(_Job);
     }
 
     public void UpdateWorker(String _id,String field,String _data)
     {
-        WorkersDAO.UpdateWorker(_id,field,_data);
+        workersDAO.UpdateWorker(_id,field,_data);
     }
 
     public void DeleteWorker(String _id)
     {
-        workerDao.DeleteWorker(_id);
+        workersDAO.DeleteWorker(_id);
     }
     public void DeleteDriver(String _id)
     {
         driversDAO.DeleteDriver(_id);
+    }
+
+
+    // =====================both modules methods:
+
+    public void clearCache(String typeToClear){
+        switch (typeToClear){
+            case "drivers":
+                driversDAO.freeCache();
+                break;
+            case "trucks":
+                trucksDAO.freeCache();
+                break;
+            case "deliveries":
+                deliveriesDAO.freeCache();
+                break;
+            case "shifts":
+                shiftsDAO.freeCache();
+                break;
+            case "workers":
+                workersDAO.freeCache();
+                break;
+        }
+    }
+
+    public void deleteDB(){
+
     }
 
 

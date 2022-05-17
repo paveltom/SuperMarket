@@ -1,6 +1,6 @@
 package DAL.DTO;
 
-public class DeliiveryDTO implements DTO {
+public class DeliveryDTO implements DTO {
 
     @Override
     public String getKey() {

@@ -1,4 +1,4 @@
 package DAL.DAObjects;
 
-public class ShiftsDAO {
+public class ShiftsDAO implements IDAO{
 }

@@ -1,22 +1,22 @@
 package DAL.DAObjects;
 
-import DAL.DTObjects.*;
+import DAL.DTO.*;
 import java.util.List;
 
 public interface IDAO {
 
 
-    public IDTO getObj(String[] keys);
+    public DTO getObj(String[] keys);
 
-    public IDTO loadObjectFromDB(String[] key);
+    public DTO loadObjectFromDB(String[] key);
 
-    public boolean storeObjToDB(IDTO obj);
+    public boolean storeObjToDB(DTO obj);
 
-    public boolean updateObj(IDTO obj, int[] valsToUpdate);
+    public boolean updateObj(DTO obj, int[] valsToUpdate);
 
     public boolean deleteObj(String[] keys);
 
-    public List<IDTO> getAllObjsFromDB();
+    public List<DTO> getAllObjsFromDB();
 
     public void loadAllObjsFromDB();
 
