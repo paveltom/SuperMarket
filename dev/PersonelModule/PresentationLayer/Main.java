@@ -140,9 +140,6 @@ public class Main {
                 case "DeleteWorker":
                     System.out.println(service.DeleteWorker(data[1]));
                     break;
-                case "ChangeId":
-                    System.out.println(service.ChangeId(data[1],data[2]));
-                    break;
                 case "ChangeName":
                     System.out.println(service.ChangeName(data[1],data[2]));
                     break;

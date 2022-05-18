@@ -274,16 +274,16 @@ public class PresentationController {
     }
 
     private void setMenus(){
-        String[] resourcesMenuStrings = {"Exit", "Back", "Add driver", "Add truck", "Remove driver", "Remove truck", "Show all drivers", "Show all trucks", "Get driver by ID", "Get truck by license plate"};
+        String[] resourcesMenuStrings = {"Exit", "Back", "Add truck", "Remove truck", "Show all drivers", "Show all trucks", "Get driver by ID", "Get truck by license plate"};
         Map<Integer, CallableMenu> resourceOpts = new HashMap<Integer, CallableMenu>(){{
-            put(2, new CallableMenu(() -> addDriver()));
-            put(3, new CallableMenu(() -> addTruck()));
-            put(4, new CallableMenu(() -> removeDriver()));
-            put(5, new CallableMenu(() -> removeTruck()));
-            put(6, new CallableMenu(() -> showDrivers()));
-            put(7, new CallableMenu(() -> showTrucks()));
-            put(8, new CallableMenu(() -> getDriverById()));
-            put(9, new CallableMenu(() -> getTruckByPlate()));
+            //put(2, new CallableMenu(() -> addDriver()));
+            put(2, new CallableMenu(() -> addTruck()));
+            //put(4, new CallableMenu(() -> removeDriver()));
+            put(3, new CallableMenu(() -> removeTruck()));
+            put(4, new CallableMenu(() -> showDrivers()));
+            put(5, new CallableMenu(() -> showTrucks()));
+            put(6, new CallableMenu(() -> getDriverById()));
+            put(7, new CallableMenu(() -> getTruckByPlate()));
         }};
         resourceMenu = new CallableMenu(resourceOpts, resourcesMenuStrings);
 
@@ -304,9 +304,11 @@ public class PresentationController {
         mainMenu = new CallableMenu(mainMenuOpts, mainMenuStrings);
 
 
-        String[] superUserMenuStrings = {"Exit", "Back", "dummyOption"};
+        String[] superUserMenuStrings = {"Exit", "Back", "Add Driver", "Remove Driver"};
         Map<Integer, CallableMenu> superUserMenuOpts = new HashMap<Integer, CallableMenu>(){{
-            put(2, mainMenu);
+            put(2, new CallableMenu(() -> addDriver()));
+            put(3, new CallableMenu(() -> removeDriver()));
+            put(4, mainMenu);
         }};
         superUserMenu = new CallableMenu(superUserMenuOpts, superUserMenuStrings);
     }

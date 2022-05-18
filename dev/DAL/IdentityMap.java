@@ -1,6 +1,8 @@
 package DAL;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import DAL.DTO.DTO;
 
@@ -22,4 +24,6 @@ public class IdentityMap {
     public void clearMap(){
         this.cachedObjects = new HashMap<>();
     }
+
+    public List<DTO> getObjsList(){return new ArrayList<DTO>(cachedObjects.values());}
 }
