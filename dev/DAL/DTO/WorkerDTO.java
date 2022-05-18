@@ -5,37 +5,56 @@ import java.util.Date;
 
 public class WorkerDTO implements DTO {
     public String wId;
-    private String name,BankDetails,SocialConditions,Job;
-    private boolean SMQual;
-    private double Pay;
-    private Date startDate;
+    private String Name,BankDetails,SocialConditions,Job,SMQual,Pay,StartDate;
 
     public WorkerDTO(String _id,String _name,String _Job,String _SMQual,String _BankDetails,String _Pay,String _startDate,String _SocialCondition)
     {
         wId = _id;
-        name = _name;
+        Name = _name;
         Job = _Job;
-        if(_SMQual.equals("yes"))
-            SMQual = true;
-        else  SMQual = false;
+        SMQual = _SMQual;
         BankDetails = _BankDetails;
-        Pay = Double.parseDouble(_Pay);
-        try {
-            SimpleDateFormat format1 = new SimpleDateFormat("dd/MM/yyyy");
-            startDate = format1.parse(_startDate);
-        }
-        catch (Exception e)//The try will always succeed so we cant get an exception
-        {}
+        Pay = _Pay;
+        StartDate = _startDate;
         SocialConditions = _SocialCondition;
     }
 
+    public String[] getParams()
+    {
+        return new String[]{wId, Name, Job, SMQual, BankDetails, Pay, StartDate, SocialConditions};
+    }
+
+    public String getParamVal(String paramName)
+    {
+        switch (paramName)
+        {
+            case "Id":
+                return wId;
+            case "Name":
+                return Name;
+            case "Job":
+                return Job;
+            case "SMQual":
+                return SMQual;
+            case "BankDetails":
+                return BankDetails;
+            case "Pay":
+                return Pay;
+            case "StartDate":
+                return StartDate;
+            case "SocialConditions":
+                return SocialConditions;
+            default:
+                return wId;
+        }
+    }
     @Override
     public String getKey() {
-        return null;
+        return wId;
     }
 
     @Override
     public String toString() {
-        return null;
+        return wId+":\nName:"+Name+":\nJob:"+Job+":\nSMQual:"+SMQual+":\nBankDetails:"+BankDetails+":\nPay:"+Pay+":\nStartDate:"+StartDate+":\nSocialCondiditons:"+SocialConditions;
     }
 }
