@@ -5,7 +5,6 @@ public class CatalogProduct {
     private final String id;
     private String catalogNum;
     private float price;
-
     private boolean inPeriodicOrder = false;
 
     // getters and setters

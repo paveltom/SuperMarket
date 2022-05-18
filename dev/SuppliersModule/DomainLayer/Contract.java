@@ -4,30 +4,24 @@ import java.util.*;
 
 public class Contract {
     private boolean[] supplyDays; //|7|
-    private int supplyMaxDays; // 0+ or -1
+    private int maxSupplyDays; // 0+ or -1
+    private int supplyCycle; //will be used to determine periodic order when no supply days available
     private boolean deliveryService;
-    private final List<SupProduct> catalog;
-    private final QuantityAgreement qa;
-
-    public Contract(boolean[] supplyDays, int supplyMaxDays, boolean deliveryService){
-        setSupplyDays(supplyDays);
-        setSupplyMaxDays(supplyMaxDays);
-        setDeliveryService(deliveryService);
-        this.catalog = new LinkedList<>();
-        this.qa = new QuantityAgreement();
-    }
+    private final List<CatalogProduct> catalog = new LinkedList<>();;
+    private QuantityAgreement qa;
 
     // getters
     public boolean[] getSupplyDays() {
         return supplyDays;
     }
-    public int getSupplyMaxDays() {
-        return supplyMaxDays;
+    public int getMaxSupplyDays() {
+        return maxSupplyDays;
     }
+    public int getSupplyCycle(){return supplyCycle;}
     public boolean hasDeliveryService() {
         return deliveryService;
     }
-    public List<SupProduct> getCatalog() {
+    public List<CatalogProduct> getCatalog() {
         return catalog;
     }
     public QuantityAgreement getQa() {
@@ -36,117 +30,106 @@ public class Contract {
 
     //setters
     public void setSupplyDays(boolean[] supplyDays) {
-        if (supplyDays == null || supplyDays.length > 7 )
+        if (supplyDays == null || supplyDays.length != 7 )
             throw new IllegalArgumentException("trying to set supply days with incorrect format");
-
         this.supplyDays = supplyDays;
     }
-
-    public void addSupplyDay(int day) {
-        if (day > 7 || day < 1)
-            throw new IllegalArgumentException("day out of range");
-
-        supplyDays[day-1] = true;
-    }
-
-    public void removeSupplyDay(int day) {
-        if (day > 7 || day < 1)
-            throw new IllegalArgumentException("day out of range");
-
-        supplyDays[day-1] = false;
-    }
-
-    public void setSupplyMaxDays(int supplyMaxDays) {
-        if(supplyMaxDays < -1)
+    public void setMaxSupplyDays(int maxSupplyDays) {
+        if(maxSupplyDays < -1)
             throw new IllegalArgumentException("trying to set max days for supply with negative number");
 
-        this.supplyMaxDays = supplyMaxDays;
+        this.maxSupplyDays = maxSupplyDays;
     }
-
+    public void setSupplyCycle(int supplyCycle){this.supplyCycle = supplyCycle;}
     public void setDeliveryService(boolean deliveryService) {
         this.deliveryService = deliveryService;
     }
 
+    public void addQuantityAgreement(QuantityAgreement qa){
+        if(getQa()==null)
+            throw new RuntimeException("Can not add Quantity agreement because the supplier already has one.");
+        this.qa = qa;
+    }
+
+    //  constructor
+    public Contract(boolean[] supplyDays, int maxSupplyDays, int supplyCycle, boolean deliveryService,
+                    String pId, String catalogNum, float price){
+        setSupplyDays(supplyDays);
+        setMaxSupplyDays(maxSupplyDays);
+        setSupplyCycle(supplyCycle);
+        setDeliveryService(deliveryService);
+        catalog.add(new CatalogProduct(pId, catalogNum, price));
+    }
+
+    public void addSupplyDay(int day) {
+        if (day > 7 || day < 1)
+            throw new IllegalArgumentException("day out of week range.");
+        supplyDays[day-1] = true;
+    }
+    public void removeSupplyDay(int day) {
+        if (day > 7 || day < 1)
+            throw new IllegalArgumentException("day out of week range");
+        supplyDays[day-1] = false;
+    }
+
     //products methods
-    public void addProduct(String catalogNum, String name, float price) {
-        if(hasProduct(catalogNum))
-            throw new IllegalArgumentException("trying to add product with an existing catalog number");
-
-        catalog.add(new SupProduct(catalogNum, name, price));
+    public void addProduct(String pId, String catalogNum, float price) {
+        if(hasProduct(pId))
+            throw new IllegalArgumentException("Product already exists.");
+        if(hasCatalogNum(catalogNum))
+            throw new IllegalArgumentException("trying to add product with a used catalog number.");
+        catalog.add(new CatalogProduct(pId, catalogNum, price));
     }
-
-    public void removeProduct(String catalogNum) {
-        catalog.removeIf(supProduct -> supProduct.getCatalogNum().equals(catalogNum));
-        qa.removeProduct(catalogNum);
+    public boolean removeProduct(String pId) {  //TODO change functionallity to delete supplier when when reached 0 catalog product
+        catalog.removeIf(catalogProduct -> catalogProduct.getId().equals(pId));
+        qa.removeProduct(pId);
+        return catalog.isEmpty();
     }
-
-    public void updateProductCatalogNum(String oldCatalogNum, String newCatalogNum) {
-        if(!hasProduct(oldCatalogNum))
-            throw new IllegalArgumentException("trying to update a product which doesn't exist");
-
-        catalog.stream().filter(supProduct -> supProduct.getCatalogNum().equals(oldCatalogNum)).findFirst().get().setCatalogNum(newCatalogNum);
-        qa.updateProductCatalogNum(oldCatalogNum, newCatalogNum);
+    public void updateCatalogNum(String pId, String newCatalogNum) {
+        if(!hasProduct(pId))
+            throw new IllegalArgumentException("Product doesn't exists.");
+        if(!hasCatalogNum(newCatalogNum))
+            throw new IllegalArgumentException("trying to update product's catalog number with a used onr.");
+        catalog.stream().filter(catalogProduct -> catalogProduct.getId().equals(pId)).findFirst().get().setCatalogNum(newCatalogNum);
     }
-
-    public void updateProductName(String catalogNum, String name) {
-        if(!hasProduct(catalogNum))
-            throw new IllegalArgumentException("trying to update a product which doesn't exist");
-
-        catalog.stream().filter(supProduct -> supProduct.getCatalogNum().equals(catalogNum)).findFirst().get().setName(name);
+    public void updateProductPrice(String pId, float price) {
+        if(!hasProduct(pId))
+            throw new IllegalArgumentException("Product doesn't exists.");
+        catalog.stream().filter(catalogProduct -> catalogProduct.getId().equals(pId)).findFirst().get().setPrice(price);
     }
-
-    public void updateProductPrice(String catalogNum, float price) {
-        if(!hasProduct(catalogNum))
-            throw new IllegalArgumentException("trying to update a product which doesn't exist");
-
-        catalog.stream().filter(supProduct -> supProduct.getCatalogNum().equals(catalogNum)).findFirst().get().setPrice(price);
+    public boolean hasProduct(String pId){
+        return catalog.stream().anyMatch(catalogProduct -> catalogProduct.getId().equals(pId));
     }
-
-    // Quantity Agreement methods
-    public void addDiscountPerItem(String productID, int quantity, float discount){
-        qa.addDiscountPerItem(productID, quantity, discount);
-    }
-
-    public void addDiscountPerOrder(String productID, int quantity, float discount){
-        qa.addDiscountPerOrder(productID, quantity, discount);
-    }
-
-    public void updateDiscountPerItem(String productID, int quantity, float discount){
-        qa.updateDiscountPerItem(productID, quantity, discount);
-    }
-
-    public void updateDiscountPerOrder(String productID, int quantity, float discount){
-        qa.updateDiscountPerOrder(productID, quantity, discount);
-    }
-
-    public void removeDiscountPerItem(String productID, int quantity){
-        qa.removeDiscountPerItem(productID, quantity);
-    }
-
-    public void removeDiscountPerOrder(String productID, int quantity) {
-        qa.removeDiscountPerOrder(productID, quantity);
-    }
-
-    public Dictionary<Integer,Float> getDiscountsForProductPerItem(String productID){
-        return qa.getDiscountsForProductPerItem(productID);
-    }
-
-    public Dictionary<Integer,Float> getDiscountsForProductPerOrder(String productID){
-        return qa.getDiscountsForProductPerOrder(productID);
-    }
-
-
-    private boolean hasProduct(String catalogNum){
+    private boolean hasCatalogNum(String catalogNum){
         return catalog.stream().anyMatch(supProduct -> supProduct.getCatalogNum().equals(catalogNum));
     }
 
-    public List<SupProduct> searchProduct(String name){
-        List<SupProduct> p = new LinkedList<>();
-        for(SupProduct  sp :catalog){
-            if(sp.getName().equals(name))
-                p.add(sp);
+    // Quantity Agreement methods
+    public void updateDiscountPerItem(String pId, int quantity, float discount){
+        if(!hasProduct(pId))
+            throw new IllegalArgumentException("product not exist.");
+        if(getQa()==null)
+            addQuantityAgreement(new QuantityAgreement()); //TODO make contract the only creator of qa according to grasp
+        qa.updateDiscount(pId, quantity, discount);
+    }
+    public Dictionary<Integer,Float> getDiscounts(String pId){
+        if(!hasProduct(pId) || getQa() == null)
+            return null;
+        return qa.getDiscounts(pId);
+    }
+    /*public List<CatalogProduct> searchProduct(String name){
+        List<CatalogProduct> p = new LinkedList<>();
+        for(CatalogProduct cp :catalog){
+            if(cp.getName().equals(name))
+                p.add(cp);
         }
         return p;
+    }*/
+
+    public Dictionary<String, Dictionary<Integer, Float>> getDiscounts() {
+        if(getQa() == null)
+            return null;
+        return qa.getDiscounts();
     }
 
     public String toString(){
@@ -156,14 +139,7 @@ public class Contract {
                 suppDays += suppDays + " " +  i;
         }
         return "delivery service: "  + hasDeliveryService() + "supply days:" + suppDays +
-               " | max days for delivery " + getSupplyMaxDays() + " | number of item in catalog: " + getCatalog().size();
-    }
-
-    public Dictionary<String, Dictionary<Integer, Float>> getPerItem() {
-        return qa.getPerItem();
-    }
-
-    public Dictionary<String, Dictionary<Integer, Float>> getPerOrder() {
-        return qa.getPerOrder();
+                " | max days for delivery " + getMaxSupplyDays() + " | number of item in catalog: " + getCatalog().size();
     }
 }
+
