@@ -103,7 +103,7 @@ public class CliController {
         if(input.equals("$") || input.equals("b"))
             displayMainMenu();
         else {
-            ResponseT<List<SupProduct>> r = ss.searchProduct(input);
+            ResponseT<List<CatalogProduct>> r = ss.searchProduct(input);
             if (!r.ErrorOccurred()) {
                 displayProductsWindow(r.getValue());
             } else if (r.ErrorOccurred()) {
@@ -140,16 +140,16 @@ public class CliController {
 
     }
 
-    private void showProducts(List<SupProduct> products) {
+    private void showProducts(List<CatalogProduct> products) {
         String productsString = "";
-        for (SupProduct sp : products) {
+        for (CatalogProduct sp : products) {
             productsString = productsString + sp.toString() + "\n";
         }
 
         System.out.println("\nproducts: \n" + productsString + "\n");
     }
 
-    private void displayProductsWindow(List<SupProduct> products) {
+    private void displayProductsWindow(List<CatalogProduct> products) {
         showProducts(products);
 
         System.out.println("\nproducts: \n" + "\n");
@@ -168,7 +168,7 @@ public class CliController {
     }
 
     private void displayProductsWindow(String sid) {
-        ResponseT<List<SupProduct>> p = ss.getCatalog(sid);
+        ResponseT<List<CatalogProduct>> p = ss.getCatalog(sid);
         if (!p.ErrorOccurred())
             showProducts(p.getValue());
 
