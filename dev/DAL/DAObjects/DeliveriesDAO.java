@@ -41,7 +41,7 @@ public class DeliveriesDAO implements IDAO{
             String[] params = {((DeliveryRecipeDTO) obj).OrderId, ((DeliveryRecipeDTO) obj).DeliveryId, ((DeliveryRecipeDTO) obj).SupplierZone,
                                ((DeliveryRecipeDTO) obj).SupplierAddress, ((DeliveryRecipeDTO) obj).SupplierName, ((DeliveryRecipeDTO) obj).SupplierCellphone,
                                 ((DeliveryRecipeDTO) obj).ClientZone, ((DeliveryRecipeDTO) obj).ClientAddress, ((DeliveryRecipeDTO) obj).ClientName,
-                                ((DeliveryRecipeDTO) obj).ClientName, ((DeliveryRecipeDTO) obj).ClientCellphone, ((DeliveryRecipeDTO) obj).DeliveredProducts,
+                                 ((DeliveryRecipeDTO) obj).ClientCellphone, ((DeliveryRecipeDTO) obj).DeliveredProducts,
                                 ((DeliveryRecipeDTO) obj).DueDate, ((DeliveryRecipeDTO) obj).DriverId, ((DeliveryRecipeDTO) obj).DriverName,
                                 ((DeliveryRecipeDTO) obj).DriverCellphone, String.valueOf(((DeliveryRecipeDTO) obj).TruckLicenseNumber)};
             try {
