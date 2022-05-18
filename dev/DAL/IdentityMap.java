@@ -25,5 +25,7 @@ public class IdentityMap {
         this.cachedObjects = new HashMap<>();
     }
 
+    public void unCacheObject(String key){this.cachedObjects.remove(key);}
+
     public List<DTO> getObjsList(){return new ArrayList<DTO>(cachedObjects.values());}
 }
