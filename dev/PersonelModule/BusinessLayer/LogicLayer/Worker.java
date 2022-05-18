@@ -1,5 +1,8 @@
 package PersonelModule.BusinessLayer.LogicLayer;
 
+import DAL.DALController;
+import DAL.DTO.WorkerDTO;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -41,21 +44,22 @@ public class Worker {
         return SocialConditions;
     }
 
-    public void setId(String id) {
-        if(id.length() != 9 )
-            throw new IllegalArgumentException("Id has to be 9 numbers");
-        else Id = id;
-    }
-
     public void setName(String name) {
         if(name == null)
             throw new IllegalArgumentException("Name cannot be null");
-        else Name = name;
+        else {
+            Name = name;
+            //Updating DB
+            UpdateDB();
+        }
+
     }
 
     public void setJob(String job) {
         try{
             this.Job = JobEnum.valueOf(job);
+            //Updating DB
+            UpdateDB();
         }
         catch (Exception e)
         {
@@ -66,25 +70,39 @@ public class Worker {
     public void setSMQualification(Boolean SMQualification) {
         if(SMQualification == null)
             throw new IllegalArgumentException("SMQualification cannot be null");
-        else this.SMQualification = SMQualification;
+        else {
+        this.SMQualification = SMQualification;
+        //Updating DB
+            UpdateDB();
+        }
     }
 
     public void setBankDetails(String bankDetails) {
         if(bankDetails == null)
             throw new IllegalArgumentException("Bank Details cannot be null");
-        else BankDetails = bankDetails;
+        else {
+            BankDetails = bankDetails;
+            //Updating DB
+            UpdateDB();
+        }
     }
 
     public void setPay(Double pay) {
         if(pay <= 29.12)
             throw new IllegalArgumentException("Pay cannot be below 29.12");
-        else Pay = pay;
+        else{
+            Pay = pay;
+            //Updating DB
+            UpdateDB();
+        }
     }
 
     public void setStartDate(String startDate) {
         try{
             SimpleDateFormat format1 = new SimpleDateFormat("dd/MM/yyyy");
             this.StartDate = format1.parse(startDate);
+            //Updating DB
+            UpdateDB();
         }
         catch (Exception e)
         {
@@ -95,7 +113,11 @@ public class Worker {
     public void setSocialConditions(String socialConditions) {
         if(socialConditions == null)
             throw new IllegalArgumentException("Social Conditions cannot be null");
-        else SocialConditions = socialConditions;
+        else {
+            SocialConditions = socialConditions;
+            //Updating DB
+            UpdateDB();
+        }
     }
 
     public String Id;
@@ -155,12 +177,43 @@ public class Worker {
         this.Pay = _Pay;
         this.SocialConditions = _Social;
 
-
+        //Save to DB
+        WorkerDTO wdto = new WorkerDTO(this.Id,this.Name,this.getJob(),this.getSMQualification(),this.getBankDetails(),this.getPay().toString(),this.getStartDate(),this.getSocialConditions());
+        DALController.getInstance().AddWorker(wdto);
     }
 
+    /**
+     * Loading Constractor
+     * @param wDto - Worker to load
+     */
+    public Worker(WorkerDTO wDto)
+    {
+        this.Id = wDto.getParamVal("Id");
+        this.Name = wDto.getParamVal("Name");
+        if(wDto.getParamVal("SMQual").equals("yes"))
+            this.SMQualification = true;
+        else this.SMQualification = false;
+        this.BankDetails = wDto.getParamVal("BankDetails");
+        this.Pay = Double.parseDouble(wDto.getParamVal("Pay"));
+        try{
+            SimpleDateFormat format1 = new SimpleDateFormat("dd/MM/yyyy");
+            this.StartDate = format1.parse(wDto.getParamVal("StartDate"));
+        }
+        catch (Exception e)
+        {
+            throw new IllegalArgumentException("Date isn't valid in db");
+        }
+        this.SocialConditions = wDto.getParamVal("SocialConditions");
+
+    }
     public String toString()
     {
         return "Id:"+this.Id+"\nName:"+this.Name+"\nJob:"+this.Job+"\nSMQualification:"+this.getSMQualification()+"\nBank Details:"+this.BankDetails+"\nPay:"+this.Pay+"\nStartDate"+this.getStartDate()+"\nSocial Conditions:"+this.SocialConditions;
+    }
+    private void UpdateDB()
+    {
+        WorkerDTO wdto = new WorkerDTO(this.Id,this.Name,this.getJob(),this.getSMQualification(),this.getBankDetails(),this.getPay().toString(),this.getStartDate(),this.getSocialConditions());
+        DALController.getInstance().UpdateWorker(wdto);
     }
 
 }

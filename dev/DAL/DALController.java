@@ -12,7 +12,7 @@ public class DALController {
     private DriversDAO driversDAO;
     private TrucksDAO trucksDAO;
     private DeliveriesDAO deliveriesDAO;
-    //private WorkersDAO workersDAO;
+    private WorkersDAO workersDAO;
     //private ShiftsDAO shiftsDAO;
 
     private static class DALControllerHolder {
@@ -23,7 +23,7 @@ public class DALController {
         driversDAO = new DriversDAO();
         trucksDAO = new TrucksDAO();
         deliveriesDAO = new DeliveriesDAO();
-        //workersDAO = new WorkersDAO();
+        workersDAO = new WorkersDAO();
         //shiftsDAO = new ShiftsDAO();
     }
 
@@ -124,35 +124,46 @@ public class DALController {
     // ====================================================================================
     // personnel module methods:
 
-//    public WorkerDTO getWorker(String _id)
-//    {
-//        return workersDAO.getWorker(_id);
-//    }
-//    public List<WorkerDTO> getAllWorkers()
-//    {
-//        return workersDAO.getAllWorkers();
-//    }
-//
-//    public List<WorkerDTO> getWorkerByJob(String _Job)
-//    {
-//        return workersDAO.getWorkerByJob(_Job);
-//    }
-//
-//    public void UpdateWorker(String _id,String field,String _data)
-//    {
-//        workersDAO.UpdateWorker(_id,field,_data);
-//    }
-//
-//    public void DeleteWorker(String _id)
-//    {
-//        workersDAO.DeleteWorker(_id);
-//    }
-//    public void DeleteDriver(String _id)
-//    {
-//        driversDAO.DeleteDriver(_id);
-//    }
-//
-//
+    public WorkerDTO getWorker(String _id)
+    {
+        return (WorkerDTO) workersDAO.getObj(new String[]{_id});
+    }
+    public List<WorkerDTO> getAllWorkers()
+    {
+        List<DTO> wList =  workersDAO.getAllObjsFromDB();
+        List<WorkerDTO> wDTOList = new ArrayList<WorkerDTO>();
+        for (DTO dto:
+             wList) {
+            wDTOList.add((WorkerDTO) dto);
+        }
+        return wDTOList;
+    }
+
+    public List<WorkerDTO> getWorkerByJob(String _Job)
+    {
+        List<DTO> wList =  workersDAO.getAllObjByJob(_Job);
+        List<WorkerDTO> wDTOList = new ArrayList<WorkerDTO>();
+        for (DTO dto:
+                wList) {
+            wDTOList.add((WorkerDTO) dto);
+        }
+        return wDTOList;
+    }
+
+    public void UpdateWorker(WorkerDTO workerToUpdate)
+    {
+        workersDAO.updateObj(workerToUpdate);
+    }
+
+    public void DeleteWorker(String _id)
+    {
+        workersDAO.deleteObj(new String[]{_id});
+    }
+    public void AddWorker(WorkerDTO WorkerToAdd)
+    {
+        workersDAO.storeObjToDB(WorkerToAdd);
+    }
+
 //    public void UpdateShift(String date, String type, String data){
 //        shiftsDAO.updateShift(date,type,data);
 //    }

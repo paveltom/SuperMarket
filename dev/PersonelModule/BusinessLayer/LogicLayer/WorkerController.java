@@ -1,6 +1,11 @@
 package PersonelModule.BusinessLayer.LogicLayer;
 
+import DAL.DALController;
+import DAL.DTO.WorkerDTO;
+
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 public class WorkerController {
@@ -27,6 +32,12 @@ public class WorkerController {
     {
         if(AllWorkers.containsKey(_Id))
             throw new IllegalArgumentException("A worker with this Id Already Exists");
+        WorkerDTO wDto = DALController.getInstance().getWorker(_Id);
+        if(wDto != null)
+        {
+            AllWorkers.put(_Id,new Worker(wDto));
+            throw new IllegalArgumentException("A worker with this Id Already Exists");
+        }
         Worker newWorker = new Worker(_Id,_Name,_Job,_Qual,_Bank,_Pay,_StartDate,_Social);
         AllWorkers.put(_Id,newWorker);
     }
@@ -39,7 +50,14 @@ public class WorkerController {
     {
         if(!AllWorkers.containsKey(_Id))
             throw new IllegalArgumentException("There is no worker with id "+_Id);
-        AllWorkers.remove(_Id);
+        WorkerDTO wDto = DALController.getInstance().getWorker(_Id);
+        if(wDto == null)
+        {
+            throw new IllegalArgumentException("There is no worker with id "+_Id);
+        }
+        if(AllWorkers.containsKey(_Id))
+            AllWorkers.remove(_Id);
+
     }
     /**
      * Function to change Id incase there was a mistake
@@ -48,14 +66,14 @@ public class WorkerController {
      */
     public void ChangeId(String _oldId,String _newId)
     {
-        if(!AllWorkers.containsKey(_oldId))
+       /* if(!AllWorkers.containsKey(_oldId))
             throw new IllegalArgumentException("There is no worker with id "+_oldId);
         if(AllWorkers.containsKey(_newId))
             throw new IllegalArgumentException("A worker with id :"+_newId+" Already Exist, Change failed");
         Worker changeWorker = AllWorkers.get(_oldId);
         changeWorker.setId(_newId);
         AllWorkers.remove(_oldId);
-        AllWorkers.put(_newId,changeWorker);
+        AllWorkers.put(_newId,changeWorker);*/
     }
 
     /**
@@ -229,6 +247,22 @@ public class WorkerController {
             }
         }
         return AllWorkersInJob;
+    }
+
+    /**
+     * Function to get a list of ids of worker by job
+     * @param _Job - the job
+     * @return List of id's
+     */
+    public List<String> getWorkerIdByJob(String _Job)
+    {
+        List<String> driverIds = new LinkedList<String>();
+        for (Worker w:
+                AllWorkers.values()) {
+            if(w.getJob() == "Driver")
+                driverIds.add(w.getId());
+        }
+        return driverIds;
     }
 
 }
