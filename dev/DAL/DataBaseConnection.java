@@ -8,9 +8,17 @@ import java.util.Map;
 
 public class DataBaseConnection {
     private String[] truckValues = {"VehicleLicenseNumber", "MaxLoadWeight", "NetWeight", "Zone", "Model", "Diary"};
+    private String[] driverValues = {"Id", "Name", "Cellphone", "VehicleLicenseCategory", "ShippingZone", "Diary"};
+    private String[] deliveryValues = {"OrderId", "DeliveryId", "SupplierZone", "SupplierAddress", "SupplierName", "SupplierCellphone",
+            "ClientZone", "ClientAddress", "ClientName", "ClientCellphone", "DeliverdProducts", "DueDate",
+            "DriverId", "DriverName", "DriverCellphone", "TruckLicenseNumber"};
+    private String[] shiftValues = {"date", "type", "shiftManager", "workers"};
     // add other strings
     private final Map<String, String[]> tablesWithParams = new HashMap<String, String[]>() {{
-        put("Tucks", truckValues);
+        put("Trucks", truckValues);
+        put("shifts", shiftValues);
+        put("Drivers", driverValues);
+        put("Deliveries", deliveryValues);
         // add other values
     }};
 
@@ -35,7 +43,7 @@ public class DataBaseConnection {
         }
     }
 
-    public void insert(String tableNAME, String[] params){ // exmpl: TRUCK, {"01113", "1000"...}
+    public boolean insert(String tableNAME, String[] params){ // exmpl: TRUCK, {"01113", "1000"...}
         Connection conn = null;
         Statement stmt = null;
         try {
@@ -45,18 +53,21 @@ public class DataBaseConnection {
             for (int i = 1; i < params.length; i++)
                 sql += "," + params[i];
             sql += ");";
-            stmt.executeUpdate(sql);
+            ResultSet rs = stmt.executeQuery(sql);
             conn.commit();
+            if(!rs.next()) return false;
+            rs.close();
             stmt.close();
             conn.close();
+            return true;
 
         } catch (Exception e){
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            return false;
         }
-
     }
 
-    public void update(String tableNAME, String[] key, String[]keysNAMES, String paramNAME, String paramVALUE){
+    public boolean update(String tableNAME, String[] key, String[]keysNAMES, String paramNAME, String paramVALUE){
         Connection conn = null;
         Statement stmt = null;
 
@@ -70,18 +81,21 @@ public class DataBaseConnection {
                 sql.append(" AND ").append(keysNAMES[i]).append("=").append(key[i]);
             sql.append(");");
 
-            stmt.executeUpdate(sql.toString());
+            ResultSet rs = stmt.executeQuery(sql.toString());
             conn.commit();
-
+            if(!rs.next()) return false;
+            rs.close();
             stmt.close();
             conn.close();
+            return true;
 
         } catch ( Exception e ) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            return false;
         }
     }
 
-    public void delete(String tableNAME, String[] key, String[]keysNAMES) {
+    public boolean delete(String tableNAME, String[] key, String[]keysNAMES) {
         Connection conn = null;
         Statement stmt = null;
 
@@ -95,14 +109,17 @@ public class DataBaseConnection {
                 sql.append(" AND ").append(keysNAMES[i]).append("=").append(key[i]);
             sql.append(");");
 
-            stmt.executeUpdate(sql.toString());
+            ResultSet rs = stmt.executeQuery(sql.toString());
             conn.commit();
-
+            if(!rs.next()) return false;
+            rs.close();
             stmt.close();
             conn.close();
+            return true;
 
         } catch ( Exception e ) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            return false;
         }
 
     }

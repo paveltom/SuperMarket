@@ -9,6 +9,7 @@ public class FacadeDate {
     private int month;
     private int day;
     private int year;
+    private int shift;
 
     public FacadeDate(){}
 
@@ -16,12 +17,14 @@ public class FacadeDate {
         this.day = date.Day;
         this.month = date.Month;
         this.year = date.Year;
+        this.shift = -1;
     }
 
     public FacadeDate(DeliveryDate date){
         this.day = date.Date.Day;
         this.month = date.Date.Month;
         this.year = date.Date.Year;
+        this.shift = date.Shift;
     }
 
 
@@ -43,4 +46,5 @@ public class FacadeDate {
         return year;
     }
 
+    public int getShift(){return shift;}
 }

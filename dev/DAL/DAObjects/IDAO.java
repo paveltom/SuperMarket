@@ -12,7 +12,7 @@ public interface IDAO {
 
     public boolean storeObjToDB(DTO obj);
 
-    public boolean updateObj(DTO obj, int[] valsToUpdate);
+    public boolean updateObj(DTO obj);
 
     public boolean deleteObj(String[] keys);
 

@@ -10,7 +10,7 @@ import java.util.List;
 public class DriversDAO implements IDAO{
 
     private IdentityMap driversIM;
-    DataBaseConnection dbconn;
+    private DataBaseConnection dbconn;
 
     public DriversDAO(){
         dbconn = new DataBaseConnection();
@@ -22,6 +22,7 @@ public class DriversDAO implements IDAO{
         String[] keys = {key};
         String[] keyNames = {"Id"};
         dbconn.update("Drivers", keys, keyNames, "Diary", shifts);
+        driversIM.cacheObject(loadObjectFromDB(keys));
     }
 
     public void addDriverFutureShifts(String key, String toAdd){
@@ -30,12 +31,14 @@ public class DriversDAO implements IDAO{
         String[] out = dbconn.select("Drivers", keyNames,keys).get(0);
         String updatedShifts = out[6] + toAdd;
         dbconn.update("Drivers", keys, keyNames, "FutureShifts", updatedShifts);
+        driversIM.cacheObject(loadObjectFromDB(keys));
     }
     public void rewriteDriverFutureShifts(String key, String[] shiftsToAdd){
         String[] keys = {key};
         String[] keyNames = {"Id"};
         String newShifts = String.join(",", shiftsToAdd);
         dbconn.update("Drivers", keys, keyNames, "FutureShifts", newShifts);
+        driversIM.cacheObject(loadObjectFromDB(keys));
     }
     public String getDriverFutureShifts(String key){
         String[] keys = {key};
@@ -43,8 +46,6 @@ public class DriversDAO implements IDAO{
         String[] driver = dbconn.select("Drivers", keyNames, keys).get(0);
         return driver[6];
     }
-
-    //String id, String license, String zone,String name, String cellphone, String diary
 
     @Override
     public DTO getObj(String[] keys) {
@@ -67,7 +68,10 @@ public class DriversDAO implements IDAO{
         if(obj instanceof DriverDTO){
             String[] params = {((DriverDTO) obj).Id, ((DriverDTO) obj).Name, ((DriverDTO) obj).Cellphone, ((DriverDTO) obj).License, ((DriverDTO) obj).Zone, ((DriverDTO) obj).Diary};
             try {
-                dbconn.insert("Drivers", params);
+                boolean res = dbconn.insert("Drivers", params);
+                if(!res) return res;
+                String[] keys = {((DriverDTO) obj).Id};
+                driversIM.cacheObject(loadObjectFromDB(keys));
                 return true;
             }catch(Exception e){
                 return false;
@@ -77,7 +81,7 @@ public class DriversDAO implements IDAO{
     }
 
     @Override
-    public boolean updateObj(DTO obj, int[] valsToUpdate) {
+    public boolean updateObj(DTO obj) {
         if(obj instanceof DriverDTO) {
             try {
                 String[] keys = {obj.getKey()};
@@ -88,6 +92,7 @@ public class DriversDAO implements IDAO{
                     if (params[i] != "")
                         dbconn.update("Drivers", keys, keyNames, paramNames[i], params[i]);
                 }
+                driversIM.cacheObject(loadObjectFromDB(keys));
                 return true;
             }catch (Exception e){
                 return false;

@@ -7,23 +7,35 @@ public class Service implements IService{
 
     private DeliveryService deliveryService;
     private DeliveryResourcesService deliveryResourcesService;
+    private PersonelModule.BusinessLayer.ServiceLayer.Service pmService;
 
     //private PersonelModule pm;
+
+    public Service(PersonelModule.BusinessLayer.ServiceLayer.Service otherService){ // needs to receive Personel Module instance
+        deliveryService = new DeliveryService();
+        deliveryResourcesService = new DeliveryResourcesService();
+        this.pmService = otherService;
+    }
 
     public Service(){ // needs to receive Personel Module instance
         deliveryService = new DeliveryService();
         deliveryResourcesService = new DeliveryResourcesService();
+        this.pmService = null;
     }
 
+
+
     public ResponseT<FacadeRecipe> deliver(FacadeSite origin, FacadeSite destination, int orderId, List<FacadeProduct> facProducts, FacadeDate facSubDate){
-        // i need that Nir will return driver's params - the one that was chosen to this delivery
         ResponseT<FacadeRecipe> res = deliveryService.deliver(origin, destination, orderId, facProducts, facSubDate);
-        String[] output = new String[2];
         if(res.getErrorOccurred()){
-            output[0] = "An error occured: " + res.getErrorMessage();
-            output[1] = "";
+            return res;
         }
-        //pm.addDriverFuture(id,date,shiftType); // sends new occupied driver's shift to Personel Module, shiftType - 0 or 1
+        String driverID = res.getValue().getDeliveryPerson().getId();
+        FacadeDate date = res.getValue().getDueDate();
+        int shiftType = res.getValue().getDueDate().getShift();
+        if(shiftType > 1) shiftType = 1;
+        else shiftType = 0;
+        pmService.addDriverFuture(driverID, date, shiftType); // sends new occupied driver's shift to Personel Module, shiftType - 0 or 1
         return res;
     }
 
@@ -54,7 +66,6 @@ public class Service implements IService{
     public ResponseT<String> showLicenseCategories(){ return deliveryResourcesService.showLicenseCategories(); }
 
     public void addConstraints(String ID, FacadeDate date, int shift){
-        // Doesn't has to be String[] - could be void
         // method that called by PersonelModule - sends constraints to Business Layer
         Response res = deliveryResourcesService.addConstraints(ID, date, shift);
         if(res.getErrorOccurred()){

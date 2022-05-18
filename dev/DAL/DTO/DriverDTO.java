@@ -21,7 +21,7 @@ public class DriverDTO implements DTO
 
     @Override
     public String getKey() {
-        return null;
+        return Id;
     }
 
     @Override

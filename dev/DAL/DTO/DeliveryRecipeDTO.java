@@ -2,7 +2,7 @@ package DAL.DTO;
 
 public class DeliveryRecipeDTO implements DTO
 {
-    public int OrderId, DeliveryId;
+    public String OrderId, DeliveryId;
     public String SupplierZone, SupplierAddress, SupplierName, SupplierCellphone;
     public String ClientZone, ClientAddress, ClientName, ClientCellphone;
     public String DeliveredProducts;
@@ -12,7 +12,7 @@ public class DeliveryRecipeDTO implements DTO
     public String DriverCellphone;
     public long TruckLicenseNumber;
 
-    public DeliveryRecipeDTO(int orderId, int deliveryId, String supplierZone, String supplierAddress, String supplierName,
+    public DeliveryRecipeDTO(String orderId, String deliveryId, String supplierZone, String supplierAddress, String supplierName,
                              String supplierCellphone, String clientZone,String clientAddress, String clientName,
                              String clientCellphone, String deliveredProducts, String dueDate,
                              String driverName, String driverCellphone, long truckLicenseNumber, String driverId)
@@ -37,7 +37,7 @@ public class DeliveryRecipeDTO implements DTO
 
     @Override
     public String getKey() {
-        return null;
+        return DeliveryId;
     }
 
     @Override

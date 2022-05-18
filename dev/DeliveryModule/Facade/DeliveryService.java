@@ -41,7 +41,6 @@ public class DeliveryService {
             DeliveryOrder delOrder = new DeliveryOrder(supplier, client, orderId, products, delSubmissionDate, zone);
             Recipe delRec = delController.Deliver(delOrder);
             if(delRec instanceof DeliveryRecipe) {
-
                 FacadeDriver facadeDriver = new FacadeDriver(((DeliveryRecipe) delRec).DriverId, ((DeliveryRecipe) delRec).DriverName, "", "", ((DeliveryRecipe) delRec).DriverCellphone);
                 FacadeTruck facadeTruck = new FacadeTruck(((DeliveryRecipe) delRec).TruckLicenseNumber, "", "", 0.0, 0.0);
                 FacadeDate facadeDate = new FacadeDate(((DeliveryRecipe) delRec).DueDate);
