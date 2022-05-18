@@ -8,11 +8,7 @@ import java.util.Map;
 
 public class SupplierServices {
 
-    private SupplierController sc;
-
-    public SupplierServices(){
-        sc = new SupplierController();
-    }
+    private final SupplierController sc = new SupplierController();
 
     public ResponseT<List<Supplier>> getSuppliers(){
         try{
@@ -22,156 +18,157 @@ public class SupplierServices {
         }
     }
 
-    public ResponseT<Contract> getSupplierContract(String suppId){
+    public ResponseT<Contract> getContract(String suppId){
         try{
-            return ResponseT.FromValue(sc.getSupplierContract(suppId));
+            return ResponseT.FromValue(sc.getContract(suppId));
         }catch (Exception e){
             return ResponseT.FromError(e.getMessage());
         }
     }
 
-    public Response addSupplier(String supId, String bankAccount, boolean cash, boolean credit, String contactName, String contactNum){
+    public Response addSupplier(String sId, String bankAccount, boolean cash, boolean credit, String contactName,String phoneNum,
+                                   boolean[] supplyDays, int maxSupplyDays, int supplCycle, boolean deliveryService,
+                                   String pId, String catNumber, float price){
         try{
-            sc.addSupplier(supId, bankAccount, cash, credit, contactName, contactNum);
+            sc.addSupplier(sId, bankAccount, cash, credit, contactName, phoneNum,
+                    supplyDays, maxSupplyDays, supplCycle, deliveryService,
+                    pId, catNumber, price);
             return new Response();
         }catch (Exception e){
             return new Response(e.getMessage());
         }
     }
 
-    public Response removeSupplier(String sid){
+    public Response removeSupplier(String sId){
         try{
-            sc.removeSupplier(sid);
+            sc.removeSupplier(sId);
             return new Response();
         }catch (Exception e){
             return new Response(e.getMessage());
         }
     }
 
-    public Response addContact(String sid, String contactName, String phoneNum){
+    public Response addContact(String sId, String contactName, String phoneNum){
         try{
-            sc.addContact(sid, contactName, phoneNum);
+            sc.addContact(sId, contactName, phoneNum);
             return new Response();
         }catch (Exception e){
             return new Response(e.getMessage());
         }
     }
 
-    public Response addContract(String sid, boolean[] supplyDays, int supplyMaxDays, boolean deliveryService){
+    public ResponseT<boolean[]> getSupplyDays(String sId){
         try{
-            sc.addContract(sid, supplyDays, supplyMaxDays, deliveryService);
-            return new Response();
-        }catch (Exception e){
-            return new Response(e.getMessage());
-        }
-    }
-
-    public ResponseT<boolean[]> getSupplyDays(String sid){
-        try{
-            return ResponseT.FromValue(sc.getSupplyDays(sid));
+            return ResponseT.FromValue(sc.getSupplyDays(sId));
         }catch (Exception e){
             return ResponseT.FromError(e.getMessage());
         }
     }
 
-    public ResponseT<Integer> getSupplyMaxDays(String sid){
+    public ResponseT<Integer> getSupplyMaxDays(String sId){
         try{
-            return ResponseT.FromValue(sc.getSupplyMaxDays(sid));
+            return ResponseT.FromValue(sc.getSupplyMaxDays(sId));
         }catch (Exception e){
             return ResponseT.FromError(e.getMessage());
         }
     }
 
-    public ResponseT<Boolean> hasDeliveryService(String sid){
+    public ResponseT<Boolean> hasDeliveryService(String sId){
         try{
-            return ResponseT.FromValue(sc.hasDeliveryService(sid));
+            return ResponseT.FromValue(sc.hasDeliveryService(sId));
         }catch (Exception e){
             return ResponseT.FromError(e.getMessage());
         }
     }
 
-    public ResponseT<List<CatalogProduct>> getCatalog(String sid){
+    public ResponseT<Map<String,String>> getContacts(String sId){
         try{
-            return ResponseT.FromValue(sc.getCatalog(sid));
+            return ResponseT.FromValue(sc.getContacts(sId));
         }catch (Exception e){
             return ResponseT.FromError(e.getMessage());
         }
     }
 
-    public ResponseT<QuantityAgreement> getQa(String sid){
+    public Response removeContact(String sId, String name){
         try{
-            return ResponseT.FromValue(sc.getQa(sid));
+            sc.removeContact(sId, name);
+            return new Response();
+        }catch (Exception e){
+            return new Response(e.getMessage());
+        }
+    }
+
+    public ResponseT<List<CatalogProduct>> getCatalog(String sId){
+        try{
+            return ResponseT.FromValue(sc.getCatalog(sId));
         }catch (Exception e){
             return ResponseT.FromError(e.getMessage());
         }
     }
 
-    public Response setSupplyDays(String sid, boolean[] supplyDays){
+    public ResponseT<QuantityAgreement> getQa(String sId){
         try{
-            sc.setSupplyDays(sid, supplyDays);
+            return ResponseT.FromValue(sc.getQa(sId));
+        }catch (Exception e){
+            return ResponseT.FromError(e.getMessage());
+        }
+    }
+
+    public Response setSupplyDays(String sId, boolean[] supplyDays){
+        try{
+            sc.setSupplyDays(sId, supplyDays);
             return new Response();
         }catch (Exception e){
             return new Response(e.getMessage());
         }
     }
 
-    public Response setSupplyMaxDays(String sid, int supplyMaxDays){
+    public Response setSupplyMaxDays(String sId, int supplyMaxDays){
         try{
-            sc.setSupplyMaxDays(sid, supplyMaxDays);
+            sc.setMaxSupplyDays(sId, supplyMaxDays);
             return new Response();
         }catch (Exception e){
             return new Response(e.getMessage());
         }
     }
 
-    public Response setDeliveryService(String sid, boolean deliveryService){
+    public Response setDeliveryService(String sId, boolean deliveryService){
         try{
-            sc.setDeliveryService(sid, deliveryService);
+            sc.setDeliveryService(sId, deliveryService);
+            return new Response();
+        }catch (Exception e){
+            return new Response(e.getMessage());
+        }
+    }
+    public Response addProduct(String sId, String pId, String catalogNum, float price) {
+        try{
+            sc.addProduct(sId, pId, catalogNum, price);
+            return new Response();
+        }catch (Exception e){
+            return new Response(e.getMessage());
+        }
+    }
+    public Response removeProduct(String sId, String catalogNum) {
+        try{
+            sc.removeProduct(sId, catalogNum);
             return new Response();
         }catch (Exception e){
             return new Response(e.getMessage());
         }
     }
 
-    public Response addProduct(String sid, String catalogNum, String name, float price) {
+    public Response updateProductCatalogNum(String sId, String oldCatalogNum, String newCatalogNum) {
         try{
-            sc.addProduct(sid, catalogNum, name, price);
+            sc.updateCatalogNum(sId, oldCatalogNum, newCatalogNum);
             return new Response();
         }catch (Exception e){
             return new Response(e.getMessage());
         }
     }
 
-    public Response removeProduct(String sid, String catalogNum) {
+    public Response updateProductPrice(String sId, String catalogNum, float price) {
         try{
-            sc.removeProduct(sid, catalogNum);
-            return new Response();
-        }catch (Exception e){
-            return new Response(e.getMessage());
-        }
-    }
-
-    public Response updateProductCatalogNum(String sid, String oldCatalogNum, String newCatalogNum) {
-        try{
-            sc.updateProductCatalogNum(sid, oldCatalogNum, newCatalogNum);
-            return new Response();
-        }catch (Exception e){
-            return new Response(e.getMessage());
-        }
-    }
-
-    public Response updateProductName(String sid, String catalogNum, String name) {
-        try {
-            sc.updateProductName(sid, catalogNum, name);
-            return new Response();
-        } catch (Exception e) {
-            return new Response(e.getMessage());
-        }
-    }
-
-    public Response updateProductPrice(String sid, String catalogNum, float price) {
-        try{
-            sc.updateProductPrice(sid, catalogNum, price);
+            sc.updateProductPrice(sId, catalogNum, price);
             return new Response();
         }catch (Exception e){
             return new Response(e.getMessage());
@@ -179,71 +176,26 @@ public class SupplierServices {
     }
 
     // Quantity Agreement methods
-    public Response addDiscountPerItem(String sid, String productID, int quantity, float discount){
+    public Response updateDiscount(String sId, String pId, int quantity, float discount){
         try{
-            sc.addDiscountPerItem(sid, productID, quantity, discount);
+            sc.updateDiscount(sId, pId, quantity, discount);
             return new Response();
         }catch (Exception e){
             return new Response(e.getMessage());
         }
     }
 
-    public Response addDiscountPerOrder(String sid, String productID, int quantity, float discount){
+    public ResponseT<Dictionary<Integer,Float>> getDiscounts(String sId, String pId){
         try{
-            sc.addDiscountPerOrder(sid, productID, quantity, discount);
-            return new Response();
-        }catch (Exception e){
-            return new Response(e.getMessage());
-        }
-    }
-
-    public Response updateDiscountPerItem(String sid, String productID, int quantity, float discount){
-        try{
-            sc.updateDiscountPerItem(sid, productID, quantity, discount);
-            return new Response();
-        }catch (Exception e){
-            return new Response(e.getMessage());
-        }
-    }
-
-    public Response updateDiscountPerOrder(String sid, String productID, int quantity, float discount){
-        try{
-            sc.updateDiscountPerOrder(sid, productID, quantity, discount);
-            return new Response();
-        }catch (Exception e){
-            return new Response(e.getMessage());
-        }
-    }
-
-    public Response removeDiscountPerItem(String sid, String productID, int quantity){
-        try{
-            sc.removeDiscountPerItem(sid, productID, quantity);
-            return new Response();
-        }catch (Exception e){
-            return new Response(e.getMessage());
-        }
-    }
-
-    public Response removeDiscountPerOrder(String sid, String productID, int quantity) {
-        try{
-            sc.removeDiscountPerOrder(sid, productID, quantity);
-            return new Response();
-        }catch (Exception e){
-            return new Response(e.getMessage());
-        }
-    }
-
-    public ResponseT<Dictionary<Integer,Float>> getDiscountsForProductPerItem(String sid, String productID){
-        try{
-            return ResponseT.FromValue(sc.getDiscountsForProductPerItem(sid, productID));
+            return ResponseT.FromValue(sc.getDiscounts(sId, pId));
         }catch (Exception e){
             return ResponseT.FromError(e.getMessage());
         }
     }
 
-    public ResponseT<Dictionary<Integer,Float>> getDiscountsForProductPerOrder(String sid, String productID){
+    public ResponseT<Dictionary<String, Dictionary<Integer, Float>>> getDiscounts(String sId) {
         try{
-            return ResponseT.FromValue(sc.getDiscountsForProductPerOrder(sid, productID));
+            return ResponseT.FromValue(sc.getDiscounts(sId));
         }catch (Exception e){
             return ResponseT.FromError(e.getMessage());
         }
@@ -252,48 +204,6 @@ public class SupplierServices {
     public ResponseT<List<CatalogProduct>> searchProduct(String name){
         try{
             return ResponseT.FromValue(sc.searchProduct(name));
-        }catch (Exception e){
-            return ResponseT.FromError(e.getMessage());
-        }
-    }
-
-
-
-
-
-
-
-
-
-
-    public ResponseT<Map<String,String>> getSupplierContacts(String sid){
-        try{
-            return ResponseT.FromValue(sc.getSupplierContacts(sid));
-        }catch (Exception e){
-            return ResponseT.FromError(e.getMessage());
-        }
-    }
-
-    public Response removeContact(String sid, String name){
-        try{
-            sc.removeContact(sid, name);
-            return new Response();
-        }catch (Exception e){
-            return new Response(e.getMessage());
-        }
-    }
-
-    public ResponseT<Dictionary<String, Dictionary<Integer, Float>>> getPerItem(String sid) {
-        try{
-            return ResponseT.FromValue(sc.getPerItem(sid));
-        }catch (Exception e){
-            return ResponseT.FromError(e.getMessage());
-        }
-    }
-
-    public ResponseT<Dictionary<String, Dictionary<Integer, Float>>> getPerOrder(String sid) {
-        try{
-            return ResponseT.FromValue(sc.getPerOrder(sid));
         }catch (Exception e){
             return ResponseT.FromError(e.getMessage());
         }

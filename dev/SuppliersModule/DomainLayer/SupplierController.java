@@ -7,139 +7,115 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class SupplierController {
+    private final List<Supplier> suppliers = new LinkedList<>();
 
-    List<Supplier> suppliers;
-
-    public SupplierController(){
-        suppliers = new LinkedList<>();
-    }
-
+    // getters
+    //TODO fixing visibility of catalog and qa only to create DTO for presentation
     public List<Supplier> getSuppliers() {
         return suppliers;
     }
-
-    public Contract getSupplierContract(String suppId){
-        return getSupplier(suppId).getContract();
+    public Contract getContract(String sId){
+        checkSupplier(sId);
+        return getSupplier(sId).getContract();
+    }
+    public List<CatalogProduct> getCatalog(String sId){
+        checkSupplier(sId);
+        return getSupplier(sId).getCatalog();
+    }
+    public QuantityAgreement getQa(String sId) {
+        checkSupplier(sId);
+        return getSupplier(sId).getQuantityAgreement();
+    }
+    public boolean[] getSupplyDays(String sId) {
+        checkSupplier(sId);
+        return getSupplier(sId).getSupplyDays();
+    }
+    public int getSupplyMaxDays(String sId) {
+        checkSupplier(sId);
+        return getSupplier(sId).getMaxSupplyDays();
+    }
+    public int getSupplyCycle(String sId){
+        checkSupplier(sId);
+        return getSupplier(sId).getSupplyCycle();}
+    public boolean hasDeliveryService(String sId) {
+        checkSupplier(sId);
+        return getSupplier(sId).hasDeliveryService();
     }
 
-    public void addSupplier(String supId, String bankAccount, boolean cash, boolean credit, String contactName, String contactNum){
-        if(suppliers.stream().anyMatch(supplier -> supplier.getSid().equals(supId)))
-            throw new IllegalArgumentException("trying to add supplier with already existing id");
-
-        suppliers.add(new Supplier(supId + "", bankAccount, cash, credit, contactName, contactNum));
+    //  setters
+    public void setSupplyDays(String sId, boolean[] supplyDays) {
+        checkSupplier(sId);
+        getSupplier(sId).setSupplyDays(supplyDays);
+    }
+    public void setMaxSupplyDays(String sId, int maxSupplyDays) {
+        checkSupplier(sId);
+        getSupplier(sId).setMaxSupplyDays(maxSupplyDays);
+    }
+    public void setSupplyCycle(String sId, int supplyCycle){
+        checkSupplier(sId);
+        getSupplier(sId).setSupplyCycle(supplyCycle);}
+    public void setDeliveryService(String sId, boolean deliveryService) {
+        checkSupplier(sId);
+        getSupplier(sId).setDeliveryService(deliveryService);
     }
 
-    public void removeSupplier(String sid){
-        suppliers.remove(findSupplier(sid));
+    //  other methods
+    public void addSupplier(String sId, String bankAccount, boolean cash, boolean credit, String contactName, String phoneNum,
+                            boolean[] supplyDays, int maxSupplyDays, int supplCycle, boolean deliveryService,
+                            String pId, String catNumber, float price){
+        if(hasSupp(sId))
+            throw new IllegalArgumentException("supplier with id " + sId + " already exist!");
+        suppliers.add(new Supplier(sId, bankAccount, cash, credit, contactName, phoneNum,  //TODO check if pId exist
+                                    supplyDays, maxSupplyDays, supplCycle, deliveryService,
+                                    pId, catNumber, price));
     }
-
-    private boolean supExist(String sid){
-        for(Supplier s:suppliers){
-            if(s.getSid().equals(sid))
-                return true;
-        }
-        return false;
+    public void removeSupplier(String sId){
+        suppliers.remove(getSupplier(sId));
     }
-
-    private Supplier findSupplier(String sid){
-        for(Supplier s:suppliers){
-            if(s.getSid().equals(sid))
-                return s;
-        }
-        throw new IllegalArgumentException("Supplier doesn't Exists");
+    public void addContact(String sId, String contactName, String phoneNum){
+        checkSupplier(sId);
+        getSupplier(sId).addContact(contactName, phoneNum);
     }
-
-    public void addContact(String sid, String contactName, String phoneNum){
-        findSupplier(sid).addContact(contactName, phoneNum);
-    }
-
-    public void addContract(String sid, boolean[] supplyDays, int supplyMaxDays, boolean deliveryService){
-        findSupplier(sid).addContract(supplyDays, supplyMaxDays, deliveryService);
-    }
-
-    public boolean[] getSupplyDays(String sid) {
-        return findSupplier(sid).getSupplyDays();
-    }
-    public int getSupplyMaxDays(String sid) {
-        return findSupplier(sid).getSupplyMaxDays();
-    }
-    public boolean hasDeliveryService(String sid) {
-        return findSupplier(sid).hasDeliveryService();
-    }
-    public List<CatalogProduct> getCatalog(String sid) {
-        return findSupplier(sid).getCatalog();
-    }
-    public QuantityAgreement getQa(String sid) {
-        return findSupplier(sid).getQa();
-    }
-
-
-    public void setSupplyDays(String sid, boolean[] supplyDays) {
-        findSupplier(sid).setSupplyDays(supplyDays);
-    }
-
-    public void setSupplyMaxDays(String sid, int supplyMaxDays) {
-        findSupplier(sid).setSupplyMaxDays(supplyMaxDays);
-    }
-
-    public void setDeliveryService(String sid, boolean deliveryService) {
-        findSupplier(sid).setDeliveryService(deliveryService);
+    public void removeContact(String sId, String name){
+        checkSupplier(sId);
+        getSupplier(sId).removeContact(name);
     }
 
     //products methods
-    public void addProduct(String sid, String catalogNum, String name, float price) {
-        findSupplier(sid).addProduct(catalogNum, name, price);
+    public void addProduct(String sId, String pId, String catalogNum, float price) {
+        checkSupplier(sId);
+        getSupplier(sId).addProduct(pId, catalogNum, price);
     }
-
-    public void removeProduct(String sid, String catalogNum) {
-        findSupplier(sid).removeProduct(catalogNum);
+    public void removeProduct(String sId, String pId) {
+        checkSupplier(sId);
+        getSupplier(sId).removeProduct(pId);
     }
-
-    public void updateProductCatalogNum(String sid, String oldCatalogNum, String newCatalogNum) {
-        findSupplier(sid).updateProductCatalogNum(oldCatalogNum, newCatalogNum);
+    public void updateCatalogNum(String sId, String pId, String newCatalogNum) {
+        checkSupplier(sId);
+        getSupplier(sId).updateCatalogNum(pId, newCatalogNum);
     }
-
-    public void updateProductName(String sid, String catalogNum, String name) {
-        findSupplier(sid).updateProductName(catalogNum, name);
+    public void updateProductPrice(String sId, String pId, float price) {
+        checkSupplier(sId);
+        getSupplier(sId).updateProductPrice(pId, price);
     }
-
-    public void updateProductPrice(String sid, String catalogNum, float price) {
-        findSupplier(sid).updateProductPrice(catalogNum, price);
-    }
-
+    
     // Quantity Agreement methods
-    public void addDiscountPerItem(String sid, String productID, int quantity, float discount){
-        findSupplier(sid).addDiscountPerItem(productID, quantity, discount);
+    public void updateDiscount(String sId, String pId, int quantity, float discount){
+        checkSupplier(sId);
+        getSupplier(sId).updateDiscount(pId, quantity, discount);
     }
-
-    public void addDiscountPerOrder(String sid, String productID, int quantity, float discount){
-        findSupplier(sid).addDiscountPerOrder(productID, quantity, discount);
+    public Dictionary<Integer,Float> getDiscounts(String sId, String pId){
+        checkSupplier(sId);
+        return getSupplier(sId).getDiscounts(pId);
     }
-
-    public void updateDiscountPerItem(String sid, String productID, int quantity, float discount){
-        findSupplier(sid).updateDiscountPerItem(productID, quantity, discount);
+    public Map<String,String> getContacts(String sId){
+        checkSupplier(sId);
+        return getSupplier(sId).getContacts();
     }
-
-    public void updateDiscountPerOrder(String sid, String productID, int quantity, float discount){
-        findSupplier(sid).updateDiscountPerOrder(productID, quantity, discount);
+    public Dictionary<String, Dictionary<Integer, Float>> getDiscounts(String sId) {
+        checkSupplier(sId);
+        return getSupplier(sId).getDiscounts();
     }
-
-    public void removeDiscountPerItem(String sid, String productID, int quantity){
-        findSupplier(sid).removeDiscountPerItem(productID, quantity);
-    }
-
-    public void removeDiscountPerOrder(String sid, String productID, int quantity) {
-        findSupplier(sid).removeDiscountPerOrder(productID, quantity);
-    }
-
-    public Dictionary<Integer,Float> getDiscountsForProductPerItem(String sid, String productID){
-        return findSupplier(sid).getDiscountsForProductPerItem(productID);
-    }
-
-    public Dictionary<Integer,Float> getDiscountsForProductPerOrder(String sid, String productID){
-        return findSupplier(sid).getDiscountsForProductPerOrder(productID);
-    }
-
     public List<CatalogProduct> searchProduct(String name){
         List<CatalogProduct> products = new LinkedList<>();
         for(Supplier s:suppliers){
@@ -148,41 +124,21 @@ public class SupplierController {
         return products;
     }
 
-    private Supplier getSupplier(String suppId){
-        List<Supplier> matchedSupp = suppliers.stream().filter(supplier -> supplier.getSid().equals(suppId)).collect(Collectors.toList());
+    private boolean hasSupp(String sId){
+        for(Supplier s:suppliers){
+            if(s.getsId().equals(sId))
+                return true;
+        }
+        return false;
+    }
+    private Supplier getSupplier(String sId){
+        List<Supplier> matchedSupp = suppliers.stream().filter(supplier -> supplier.getsId().equals(sId)).collect(Collectors.toList());
         if(matchedSupp.isEmpty())
             throw new IllegalArgumentException("there is no supplier with that id");
-
         return matchedSupp.get(0);
     }
-
-
-
-    public Map<String,String> getSupplierContacts(String sid){
-        if(!supExist(sid))
-            throw new IllegalArgumentException("supplier doesn't Exists");
-
-        return getSupplier(sid).getContacts();
-    }
-
-    public void removeContact(String sid, String name){
-        if(!supExist(sid))
-            throw new IllegalArgumentException("supplier doesn't Exists");
-
-        getSupplier(sid).removeContact(name);
-    }
-
-    public Dictionary<String, Dictionary<Integer, Float>> getPerItem(String sid) {
-        if(!supExist(sid))
-            throw new IllegalArgumentException("supplier doesn't Exists");
-
-        return getSupplier(sid).getPerItem();
-    }
-
-    public Dictionary<String, Dictionary<Integer, Float>> getPerOrder(String sid) {
-        if(!supExist(sid))
-            throw new IllegalArgumentException("supplier doesn't Exists");
-
-        return getSupplier(sid).getPerOrder();
+    private void checkSupplier(String sId){
+        if(!hasSupp(sId))
+            throw new IllegalArgumentException("Supplier doesn't exists.");
     }
 }

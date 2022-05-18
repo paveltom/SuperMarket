@@ -15,11 +15,11 @@ public class LoadDataForTesting {
         ss.addProduct("345tf", "4", "dragon fruit", 4f);
         ss.addProduct("345tf", "5", "pepper", 0.2f);
 
-        ss.addDiscountPerItem("345tf", "2", 50, 10);
-        ss.addDiscountPerItem("345tf", "2", 150, 20);
-        ss.addDiscountPerItem("345tf", "3", 10, 5);
-        ss.addDiscountPerItem("345tf", "3", 50, 10);
-        ss.addDiscountPerItem("345tf", "3", 150, 20);
+        ss.updateDiscount("345tf", "2", 50, 10);
+        ss.updateDiscount("345tf", "2", 150, 20);
+        ss.updateDiscount("345tf", "3", 10, 5);
+        ss.updateDiscount("345tf", "3", 50, 10);
+        ss.updateDiscount("345tf", "3", 150, 20);
 
         ss.addDiscountPerOrder("345tf", "4", 150, 20);
         ss.addDiscountPerOrder("345tf", "5", 50, 2.5f);

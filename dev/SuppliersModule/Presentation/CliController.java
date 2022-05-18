@@ -85,8 +85,8 @@ public class CliController {
             if(input.equals("$") || input.equals("b"))
                 displayMainMenu();
             else {
-                List<Supplier> matchedSupp = r.getValue().stream().filter(supplier -> supplier.getSid().equals(input)).collect(Collectors.toList());
-                if (r.getValue().stream().noneMatch(supplier -> supplier.getSid().equals(input))) {
+                List<Supplier> matchedSupp = r.getValue().stream().filter(supplier -> supplier.getsId().equals(input)).collect(Collectors.toList());
+                if (r.getValue().stream().noneMatch(supplier -> supplier.getsId().equals(input))) {
                     System.out.println("incorrect input\n");
                     showSuppliersWindow();
                 } else {
@@ -162,17 +162,17 @@ public class CliController {
             searchProductWindow();
     }
 
-    private void invalidproductAction(String sid){
+    private void invalidproductAction(String sId){
         System.out.println("invalid action");
-        displayProductsWindow(sid);
+        displayProductsWindow(sId);
     }
 
-    private void displayProductsWindow(String sid) {
-        ResponseT<List<CatalogProduct>> p = ss.getCatalog(sid);
+    private void displayProductsWindow(String sId) {
+        ResponseT<List<CatalogProduct>> p = ss.getCatalog(sId);
         if (!p.ErrorOccurred())
             showProducts(p.getValue());
 
-        System.out.print("Supplier id: " + sid + "\n");
+        System.out.print("Supplier id: " + sId + "\n");
         System.out.println("\nto add product insert 1 and <catalog number, name, price” => page refreshed with product added            \ninsert 2 and product catalog number to remove it\ninsert 3 and product catalog number and product price to update price\ninsert 4 and product catalog number and product name to update name\ninsert 5 and product catalog number and new catalog number to update catalog number");
 
 
@@ -188,69 +188,69 @@ public class CliController {
 
             if(splitted[0].equals("1")) {
                 if(splitted.length != 4 || !isStringFloat(splitted[3]))
-                    invalidproductAction(sid);
-                r = ss.addProduct(sid, splitted[1], splitted[2], Float.valueOf(splitted[3]));
+                    invalidproductAction(sId);
+                r = ss.addProduct(sId, splitted[1], splitted[2], Float.valueOf(splitted[3]));
                 if (!r.ErrorOccurred()) {
-                    displayProductsWindow(sid);
+                    displayProductsWindow(sId);
                 } else {
                     System.out.println("action failed, " + r.getErrorMessage() + "\n");
-                    displayProductsWindow(sid);
+                    displayProductsWindow(sId);
                 }
 
             }
             else if(splitted[0].equals("2")) {
                 if(splitted.length != 2)
-                    invalidproductAction(sid);
-                r = ss.removeProduct(sid, splitted[1]);
+                    invalidproductAction(sId);
+                r = ss.removeProduct(sId, splitted[1]);
                 if (!r.ErrorOccurred()) {
-                    displayProductsWindow(sid);
+                    displayProductsWindow(sId);
                 } else {
                     System.out.println("action failed, " + r.getErrorMessage() + "\n");
-                    displayProductsWindow(sid);
+                    displayProductsWindow(sId);
                 }
 
             }
             else if(splitted[0].equals("3")) {
                 if(splitted.length != 3)
-                    invalidproductAction(sid);
+                    invalidproductAction(sId);
                 if (!isStringFloat(splitted[2])) {
                     System.out.println("action failed, price must be float" + "\n");
-                    displayProductsWindow(sid);
+                    displayProductsWindow(sId);
                 }
-                r = ss.updateProductPrice(sid, splitted[1], Float.parseFloat(splitted[2]));
+                r = ss.updateProductPrice(sId, splitted[1], Float.parseFloat(splitted[2]));
                 if (!r.ErrorOccurred()) {
-                    displayProductsWindow(sid);
+                    displayProductsWindow(sId);
                 } else {
                     System.out.println("action failed, " + r.getErrorMessage() + "\n");
-                    displayProductsWindow(sid);
+                    displayProductsWindow(sId);
                 }
 
             }
             else if(splitted[0].equals("4")) {
                 if(splitted.length != 3)
-                    invalidproductAction(sid);
-                r = ss.updateProductName(sid, splitted[1], splitted[2]);
+                    invalidproductAction(sId);
+                r = ss.updateProductName(sId, splitted[1], splitted[2]);
                 if (!r.ErrorOccurred()) {
-                    displayProductsWindow(sid);
+                    displayProductsWindow(sId);
                 } else {
                     System.out.println("action failed, " + r.getErrorMessage() + "\n");
-                    displayProductsWindow(sid);
+                    displayProductsWindow(sId);
                 }
             }
             else if(splitted[0].equals("5")) {
                 if(splitted.length != 3)
-                    invalidproductAction(sid);
-                r = ss.updateProductCatalogNum(sid, splitted[1], splitted[2]);
+                    invalidproductAction(sId);
+                r = ss.updateProductCatalogNum(sId, splitted[1], splitted[2]);
                 if (!r.ErrorOccurred()) {
-                    displayProductsWindow(sid);
+                    displayProductsWindow(sId);
                 } else {
                     System.out.println("action failed, " + r.getErrorMessage() + "\n");
-                    displayProductsWindow(sid);
+                    displayProductsWindow(sId);
                 }
             }
             else {
                 System.out.println("action failed, invalid argumets" + "\n");
-                displayProductsWindow(sid);
+                displayProductsWindow(sId);
             }
         }
     }
@@ -280,7 +280,7 @@ public class CliController {
     }
 
     private void displayQuantityAgreementWindow(String suppId) {
-        ResponseT<Dictionary<String, Dictionary<Integer, Float>>> m1 = ss.getPerItem(suppId);
+        ResponseT<Dictionary<String, Dictionary<Integer, Float>>> m1 = ss.getDiscounts(suppId);
         ResponseT<Dictionary<String, Dictionary<Integer, Float>>> m2 = ss.getPerOrder(suppId);
 
         if (m1.ErrorOccurred()) {
@@ -309,7 +309,7 @@ public class CliController {
         else {
             if (splitted.length == 4) {
                 if (splitted[0].equals("1")) {
-                    Response action = ss.addDiscountPerItem(suppId, splitted[1], Integer.valueOf(splitted[2]), Float.valueOf(splitted[3]));
+                    Response action = ss.updateDiscount(suppId, splitted[1], Integer.valueOf(splitted[2]), Float.valueOf(splitted[3]));
                     if (action.ErrorOccurred()) {
                         System.out.println("action faild: " + action.getErrorMessage());
                     }
@@ -356,7 +356,7 @@ public class CliController {
     }
 
     private void displayContractWindow(String suppId) {
-        ResponseT<Contract> r = ss.getSupplierContract(suppId);
+        ResponseT<Contract> r = ss.getContract(suppId);
         if (r.ErrorOccurred()) {
             System.out.println("action failed, " + r.getErrorMessage() + "\n");
             supplierInfoWindow(suppId);
@@ -439,7 +439,7 @@ public class CliController {
     private void displayContactsWindow(String suppId) {
         System.out.println(" \nto add \"1\" and contact insert name and phone number\nto delete a contact enter \"2\" and contacts name");
 
-        ResponseT<Map<String, String>> p = ss.getSupplierContacts(suppId);
+        ResponseT<Map<String, String>> p = ss.getContacts(suppId);
         if (p.ErrorOccurred())
             supplierInfoWindow(suppId);
 

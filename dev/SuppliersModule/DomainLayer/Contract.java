@@ -21,6 +21,8 @@ public class Contract {
     public boolean hasDeliveryService() {
         return deliveryService;
     }
+
+    //TODO fixing visibility of catalog and qa only to create DTO for presentation
     public List<CatalogProduct> getCatalog() {
         return catalog;
     }
@@ -80,7 +82,7 @@ public class Contract {
             throw new IllegalArgumentException("trying to add product with a used catalog number.");
         catalog.add(new CatalogProduct(pId, catalogNum, price));
     }
-    public boolean removeProduct(String pId) {  //TODO change functionallity to delete supplier when when reached 0 catalog product
+    public boolean removeProduct(String pId) {  //TODO change functionality to delete supplier when when reached 0 catalog product
         catalog.removeIf(catalogProduct -> catalogProduct.getId().equals(pId));
         qa.removeProduct(pId);
         return catalog.isEmpty();
@@ -105,7 +107,7 @@ public class Contract {
     }
 
     // Quantity Agreement methods
-    public void updateDiscountPerItem(String pId, int quantity, float discount){
+    public void updateDiscount(String pId, int quantity, float discount){
         if(!hasProduct(pId))
             throw new IllegalArgumentException("product not exist.");
         if(getQa()==null)
@@ -117,19 +119,19 @@ public class Contract {
             return null;
         return qa.getDiscounts(pId);
     }
-    /*public List<CatalogProduct> searchProduct(String name){
-        List<CatalogProduct> p = new LinkedList<>();
-        for(CatalogProduct cp :catalog){
-            if(cp.getName().equals(name))
-                p.add(cp);
-        }
-        return p;
-    }*/
-
     public Dictionary<String, Dictionary<Integer, Float>> getDiscounts() {
         if(getQa() == null)
             return null;
         return qa.getDiscounts();
+    }
+
+    public List<CatalogProduct> searchProduct(String pId){
+        List<CatalogProduct> p = new LinkedList<>();
+        for(CatalogProduct cp :catalog){
+            if(cp.getId().equals(pId))
+                p.add(cp);
+        }
+        return p;
     }
 
     public String toString(){
