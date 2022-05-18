@@ -1,8 +1,6 @@
 package DeliveryModule.BusinessLayer.Controller;
 
 import DAL.DALController;
-import DAL.DTO.DriverDTO;
-import DAL.DTO.TruckDTO;
 import DeliveryModule.BusinessLayer.Element.*;
 import DeliveryModule.BusinessLayer.Type.Pair;
 import DeliveryModule.BusinessLayer.Type.ShippingZone;
@@ -51,58 +49,60 @@ public class DeliveryResourceController {
 
     private void InitDrivers()
     {
-        List<DriverDTO> driversData = DALController.getInstance().getAllDrivers();
-        for(DriverDTO src : driversData)
-        {
-            Driver driver = new Driver(src);
-            List<String> driversList = new ArrayList<String>();
-            driversList.add(driver.Id);
-            Drivers.put(driver.Id, driver);
-            DriversDistribution[driver.Zone.ordinal()][driver.License.ordinal()] = driversList;
-        }
-//       long DUMMY_ID = 0;
-//
-//        for (ShippingZone zone : ShippingZone.values()) {
-//            for (VehicleLicenseCategory licenseCategory : VehicleLicenseCategory.values())
-//            {
-//                String id = String.valueOf(DUMMY_ID);
-//                List<String> driversList = new ArrayList<String>();
-//                Driver driver = new Driver(id, licenseCategory, zone);
-//                driversList.add(id);
-//                Drivers.put(id, driver);
-//                DriversDistribution[zone.ordinal()][licenseCategory.ordinal()] = driversList;
-//                DUMMY_ID++;
-//            }
+//        List<DriverDTO> driversData = DALController.getInstance().getAllDrivers();
+//        for(DriverDTO src : driversData)
+//        {
+//            Driver driver = new Driver(src);
+//            List<String> driversList = new ArrayList<String>();
+//            driversList.add(driver.Id);
+//            Drivers.put(driver.Id, driver);
+//            DriversDistribution[driver.Zone.ordinal()][driver.License.ordinal()] = driversList;
 //        }
+       long Init_Driver_Id = 0;
+       String Init_Driver_Name = "Augustin Louis Cauchy";
+       String Init_Driver_Cellphone = "496351";
+
+        for (ShippingZone zone : ShippingZone.values()) {
+            for (VehicleLicenseCategory licenseCategory : VehicleLicenseCategory.values())
+            {
+                String id = String.valueOf(Init_Driver_Id);
+                List<String> driversList = new ArrayList<>();
+                Driver driver = new Driver(id, Init_Driver_Name,Init_Driver_Cellphone, licenseCategory, zone);
+                driversList.add(id);
+                Drivers.put(id, driver);
+                DriversDistribution[zone.ordinal()][licenseCategory.ordinal()] = driversList;
+                Init_Driver_Id++;
+            }
+        }
     }
 
     private void InitTrucks()
     {
-        List<TruckDTO> trucksData = DALController.getInstance().getAllTrucks();
-        for(TruckDTO src : trucksData)
-        {
-            Truck truck = new Truck(src);
-            List<Long> trucksList = new ArrayList<>();
-            trucksList.add(truck.VehicleLicenseNumber);
-            Trucks.put(truck.VehicleLicenseNumber, truck);
-            TrucksDistribution[truck.Zone.ordinal()][truck.AuthorizedLicense.ordinal()] = trucksList;
-        }
-
-//        final double DUMMY_NW = 10000000.00;
-//        long DUMMY_VEHICLE_NUMBER = 5555555;
-//        final String DUMMY_TRUCK_MODEL = "DUMMY_TRUCK_MODEL";
-//
-//        for (ShippingZone zone : ShippingZone.values()) {
-//            for (VehicleLicenseCategory licenseCategory : VehicleLicenseCategory.values())
-//            {
-//                List<Long> trucksList = new ArrayList<Long>();
-//                Truck truck = new Truck(VehicleLicenseCategory.MaxLoadWeightByLicense(licenseCategory), DUMMY_NW, DUMMY_VEHICLE_NUMBER, DUMMY_TRUCK_MODEL, zone);
-//                trucksList.add(DUMMY_VEHICLE_NUMBER);
-//                Trucks.put(DUMMY_VEHICLE_NUMBER, truck);
-//                TrucksDistribution[zone.ordinal()][licenseCategory.ordinal()] = trucksList;
-//                DUMMY_VEHICLE_NUMBER++;
-//            }
+//        List<TruckDTO> trucksData = DALController.getInstance().getAllTrucks();
+//        for(TruckDTO src : trucksData)
+//        {
+//            Truck truck = new Truck(src);
+//            List<Long> trucksList = new ArrayList<>();
+//            trucksList.add(truck.VehicleLicenseNumber);
+//            Trucks.put(truck.VehicleLicenseNumber, truck);
+//            TrucksDistribution[truck.Zone.ordinal()][truck.AuthorizedLicense.ordinal()] = trucksList;
 //        }
+
+        final double DUMMY_NW = 10000000.00;
+        long DUMMY_VEHICLE_NUMBER = 5555555;
+        final String DUMMY_TRUCK_MODEL = "DUMMY_TRUCK_MODEL";
+
+        for (ShippingZone zone : ShippingZone.values()) {
+            for (VehicleLicenseCategory licenseCategory : VehicleLicenseCategory.values())
+            {
+                List<Long> trucksList = new ArrayList<Long>();
+                Truck truck = new Truck(VehicleLicenseCategory.MaxLoadWeightByLicense(licenseCategory), DUMMY_NW, DUMMY_VEHICLE_NUMBER, DUMMY_TRUCK_MODEL, zone, licenseCategory);
+                trucksList.add(DUMMY_VEHICLE_NUMBER);
+                Trucks.put(DUMMY_VEHICLE_NUMBER, truck);
+                TrucksDistribution[zone.ordinal()][licenseCategory.ordinal()] = trucksList;
+                DUMMY_VEHICLE_NUMBER++;
+            }
+        }
     }
 
     // return closest delivery day.

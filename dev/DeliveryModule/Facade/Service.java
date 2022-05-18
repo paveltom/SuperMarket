@@ -35,7 +35,7 @@ public class Service implements IService{
         int shiftType = res.getValue().getDueDate().getShift();
         if(shiftType > 1) shiftType = 1;
         else shiftType = 0;
-        pmService.addDriverFuture(driverID, date, shiftType); // sends new occupied driver's shift to Personel Module, shiftType - 0 or 1
+//        pmService.addDriverFuture(driverID, date, shiftType); // sends new occupied driver's shift to Personel Module, shiftType - 0 or 1
         return res;
     }
 

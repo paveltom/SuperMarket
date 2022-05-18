@@ -25,9 +25,9 @@ public class DeliveryExecutorController
 
     private void Init()
     {
-        List<DeliveryRecipeDTO> deliveriesData = DALController.getInstance().getAllDeliveries();
-        for(DeliveryRecipeDTO src : deliveriesData)
-            Deliveries.put(src.DeliveryId, new DeliveryRecipe(src));
+//        List<DeliveryRecipeDTO> deliveriesData = DALController.getInstance().getAllDeliveries();
+//        for(DeliveryRecipeDTO src : deliveriesData)
+//            Deliveries.put(Integer.parseInt(src.DeliveryId), new DeliveryRecipe(src));
     }
 
     public Recipe Deliver(DeliveryOrder deliveryOrder)

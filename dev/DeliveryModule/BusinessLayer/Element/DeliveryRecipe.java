@@ -38,8 +38,8 @@ public class DeliveryRecipe implements Recipe
 
     public DeliveryRecipe(DeliveryRecipeDTO src)
     {
-        OrderId = src.OrderId;
-        DeliveryId = src.DeliveryId;
+        OrderId = Integer.parseInt(src.OrderId);
+        DeliveryId = Integer.parseInt(src.DeliveryId);
         Supplier = new Site(ShippingZone.CreateShippingZoneByName(src.SupplierZone), src.SupplierAddress, src.SupplierName, src.SupplierCellphone);
         Client = new Site(ShippingZone.CreateShippingZoneByName(src.ClientZone), src.ClientAddress, src.ClientName, src.ClientCellphone);
         DeliveredProducts = DecodeProducts(src.DeliveredProducts);
@@ -61,7 +61,7 @@ public class DeliveryRecipe implements Recipe
         // encode products delivered as a string
         String deliveredProducts = EncodeProducts();
         String dueDate = DueDate.Encode();
-        DeliveryRecipeDTO addMe = new DeliveryRecipeDTO(OrderId, DeliveryId, supplierZone, supplierAddress, supplierName, supplierCellphone,
+        DeliveryRecipeDTO addMe = new DeliveryRecipeDTO(String.valueOf(OrderId), String.valueOf(DeliveryId), supplierZone, supplierAddress, supplierName, supplierCellphone,
                 clientZone, clientAddress, clientName, clientCellphone, deliveredProducts, dueDate, DriverName, DriverCellphone, TruckLicenseNumber, DriverId);
         DALController.getInstance().addDelivery(addMe);
     }
