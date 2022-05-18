@@ -29,7 +29,7 @@ public interface IService {
 
     public ResponseT<String> showLicenseCategories();
 
-    public String[] addConstraints();
+    public void addConstraints(String ID, FacadeDate date, int shift);
 
 
 }

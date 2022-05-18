@@ -39,12 +39,21 @@ public class DeliveryService {
             Site supplier = new Site(zone, origin.getAddress(), origin.getContactName(), origin.getCellphone());
             Site client = new Site(ShippingZone.valueOf(destination.getZone()), destination.getAddress(), destination.getContactName(), destination.getCellphone());
             DeliveryOrder delOrder = new DeliveryOrder(supplier, client, orderId, products, delSubmissionDate, zone);
-            DeliveryRecipe delRec = delController.Deliver(delOrder);
-            FacadeDriver facadeDriver = new FacadeDriver(delRec.DeliveryPerson);
-            FacadeTruck facadeTruck = new FacadeTruck(delRec.DeliveryTruck);
-            FacadeDate facadeDate = new FacadeDate(delRec.DueDate);
-            FacadeRecipe facadeRecipe = new FacadeRecipe(delRec.OrderId, delRec.DeliveryId, delRec.IsPartitioned, facadeDate, facadeDriver, facadeTruck, delRec.UnDeliveredProducts);
-            return new ResponseT<>(facadeRecipe, true);
+            Recipe delRec = delController.Deliver(delOrder);
+            if(delRec instanceof DeliveryRecipe) {
+
+                FacadeDriver facadeDriver = new FacadeDriver(((DeliveryRecipe) delRec).DriverId, ((DeliveryRecipe) delRec).DriverName, "", "", ((DeliveryRecipe) delRec).DriverCellphone);
+                FacadeTruck facadeTruck = new FacadeTruck(((DeliveryRecipe) delRec).TruckLicenseNumber, "", "", 0.0, 0.0);
+                FacadeDate facadeDate = new FacadeDate(((DeliveryRecipe) delRec).DueDate);
+                List<FacadeProduct> delProducts = new ArrayList<>();
+                for(Product prod : ((DeliveryRecipe) delRec).DeliveredProducts)
+                    delProducts.add(new FacadeProduct(prod.Id, prod.Amount, prod.WeightPerUnit));
+                FacadeRecipe facadeRecipe = new FacadeRecipe(((DeliveryRecipe) delRec).OrderId, ((DeliveryRecipe) delRec).DeliveryId, false, facadeDate, facadeDriver, facadeTruck, delProducts);
+                return new ResponseT<>(facadeRecipe, true);
+            }
+            if(delRec instanceof ExceedsMaxLoadWeight) return new ResponseT<>(new FacadeRecipe(((ExceedsMaxLoadWeight) delRec).OrderId + "exceeds max load weight."), false);
+            if(delRec instanceof NoAvailableDriver) return new ResponseT<>(new FacadeRecipe(((NoAvailableDriver) delRec).OrderId + "- no available driver."), false);
+            else return new ResponseT<>(new FacadeRecipe(((NoAvailableTruck) delRec).OrderId + "- no available truck."), false);
         }
         catch(Exception e) {
            return new ResponseT<>(e.getMessage());

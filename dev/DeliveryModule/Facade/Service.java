@@ -19,11 +19,11 @@ public class Service implements IService{
         // i need that Nir will return driver's params - the one that was chosen to this delivery
         ResponseT<FacadeRecipe> res = deliveryService.deliver(origin, destination, orderId, facProducts, facSubDate);
         String[] output = new String[2];
-        if(res.errorOccurred){
+        if(res.getErrorOccurred()){
             output[0] = "An error occured: " + res.getErrorMessage();
             output[1] = "";
         }
-        pm.addDriverFuture(id,date,shiftType); // sends new occupied driver's shift to Personel Module, shiftType - 0 or 1
+        //pm.addDriverFuture(id,date,shiftType); // sends new occupied driver's shift to Personel Module, shiftType - 0 or 1
         return res;
     }
 
@@ -56,8 +56,10 @@ public class Service implements IService{
     public void addConstraints(String ID, FacadeDate date, int shift){
         // Doesn't has to be String[] - could be void
         // method that called by PersonelModule - sends constraints to Business Layer
-        ResponseT<String[]> res = deliveryResourcesService.addConstraints();
-        return res.getValue();
+        Response res = deliveryResourcesService.addConstraints(ID, date, shift);
+        if(res.getErrorOccurred()){
+            System.out.println(res.getErrorMessage());
+        }
     }
 
     /*

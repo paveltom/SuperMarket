@@ -1,25 +1,38 @@
 package DeliveryModule.Facade.FacadeObjects;
 
-import java.util.Map;
+import java.util.List;
 
 public class FacadeRecipe {
 
     private final int OrderId;
     private final int DeliveryId;
-    private final boolean IsPartitioned;
-    private final Map<Integer, Integer> UnDeliveredProducts;
+    private final boolean IsUndelivered;
+    private final List<FacadeProduct> deliveredProducts;
     private final FacadeDate DueDate;
     private final FacadeDriver DeliveryPerson;
     private final FacadeTruck DeliveryTruck;
 
-    public FacadeRecipe(int supplierOrderId, int deliveryId, boolean isPartitioned, FacadeDate dueDate, FacadeDriver deliveryPerson, FacadeTruck deliveryTruck, Map<Integer, Integer> unDeliveredProduct) {
+    private String errorMsg;
+
+    public FacadeRecipe(String errMsg){
+        this.errorMsg = errMsg;
+        this.deliveredProducts = null;
+        this.DeliveryId = 0;
+        this.DeliveryTruck = null;
+        this.DeliveryPerson = null;
+        this.DueDate = null;
+        this.IsUndelivered = true;
+        this.OrderId = 0;
+    }
+
+    public FacadeRecipe(int supplierOrderId, int deliveryId, boolean isUndelivered, FacadeDate dueDate, FacadeDriver deliveryPerson, FacadeTruck deliveryTruck, List<FacadeProduct> deliveredProduct) {
         OrderId = supplierOrderId;
         DeliveryId = deliveryId;
-        IsPartitioned = isPartitioned;
+        IsUndelivered = isUndelivered;
         DueDate = dueDate;
         DeliveryPerson = deliveryPerson;
         DeliveryTruck = deliveryTruck;
-        UnDeliveredProducts = unDeliveredProduct;
+        deliveredProducts = deliveredProduct;
     }
 
     public int getOrderId() {
@@ -30,12 +43,12 @@ public class FacadeRecipe {
         return DeliveryId;
     }
 
-    public boolean isPartitioned() {
-        return IsPartitioned;
+    public boolean IsUndelivered() {
+        return IsUndelivered;
     }
 
-    public Map<Integer, Integer> getUnDeliveredProducts() {
-        return UnDeliveredProducts;
+    public List<FacadeProduct> getDeliveredProducts() {
+        return deliveredProducts;
     }
 
     public FacadeDate getDueDate() {
@@ -55,10 +68,10 @@ public class FacadeRecipe {
         StringBuilder sb = new StringBuilder();
         sb.append("---------- Delivery Recipe ----------\n");
         sb.append(String.format("Delivery: %d\nOrder: %d\nDue Date: %s\n\n%s\n%s\n", DeliveryId, OrderId, DueDate, DeliveryPerson, DeliveryTruck));
-        if (IsPartitioned) {
+        if (IsUndelivered) {
             sb.append("\nMissing products: show missing per product id\n");
-            for (var entry : UnDeliveredProducts.entrySet())
-                sb.append(String.format("\nProduct: %d\nMissing amount: %d\n", entry.getKey(), entry.getValue()));
+            for (FacadeProduct entry : deliveredProducts)
+                sb.append(String.format("\nProduct: %d\nAmount: %d\n", entry.getId(), entry.getAmount()));
         }
         return sb.toString();
     }

@@ -1,10 +1,16 @@
 package DeliveryModule.Facade;
 
 import DeliveryModule.BusinessLayer.Controller.DeliveryController;
+import DeliveryModule.BusinessLayer.Element.Constraint;
+import DeliveryModule.BusinessLayer.Element.Shift;
 import DeliveryModule.BusinessLayer.Type.VehicleLicenseCategory;
 import DeliveryModule.BusinessLayer.Type.ShippingZone;
+import DeliveryModule.Facade.FacadeObjects.FacadeDate;
 import DeliveryModule.Facade.FacadeObjects.FacadeDriver;
 import DeliveryModule.Facade.FacadeObjects.FacadeTruck;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DeliveryResourcesService {
 
@@ -21,23 +27,33 @@ public class DeliveryResourcesService {
             delController = DeliveryController.GetInstance();
     }
 
-    public Response addConstraints() {
+    public Response addConstraints(String ID, FacadeDate date, int shift) {
+        int a = 0;
+        if(shift != 0)
+            a += 2;
+        List<Shift> shftList = new ArrayList<>();
+        shftList.add(new Shift(date.getDay(), a));
+        shftList.add(new Shift(date.getDay(), ++a));
+        Constraint cons = new Constraint(date.getMonth(), shftList);
+
         try {
-            return new ResponseT<>(delController.addConstraints(), true);
+            delController.SetConstraint(ID, cons);
         }
         catch (Exception e){
-            return new ResponseT<>(e.getMessage());
+            return new Response(e.getMessage());
         }
+        return new Response();
     }
 
     public Response addDriver(FacadeDriver facDriver){
         try {
             String id = facDriver.getId();
             String name = facDriver.getName();
+            String cellphone = facDriver.getCellphone();
             VehicleLicenseCategory licCategory = VehicleLicenseCategory.valueOf(facDriver.getVehicleCategory());
             ShippingZone shipZone = ShippingZone.valueOf(facDriver.getLivingArea());
             // Has to be changed after update of the BusinessLayer Driver -> remove Long.parse, remove lastName, remove cellphone
-            boolean added = delController.AddDriver(Long.parseLong(id), licCategory, name, "", "", shipZone);
+            boolean added = delController.AddDriver(id, name, cellphone, licCategory, shipZone);
             if(added) {
                 String strId = id + "";
                 return new ResponseT<>(strId, true);
@@ -81,7 +97,7 @@ public class DeliveryResourcesService {
 
     public Response removeDriver(long id){
         try {
-            delController.RemoveDriver(id);
+            delController.RemoveDriver(String.valueOf(id));
             return new Response();
         }catch (Exception e){
             return new Response(e.getMessage());
@@ -89,7 +105,7 @@ public class DeliveryResourcesService {
     }
 
     public ResponseT<FacadeDriver> getDriverById(long id){
-        FacadeDriver facadeDriver = new FacadeDriver(delController.GetDriver(id));
+        FacadeDriver facadeDriver = new FacadeDriver(delController.GetDriver(String.valueOf(id)));
         return new ResponseT<>(facadeDriver, true);
     }
 

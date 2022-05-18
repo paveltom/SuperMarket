@@ -207,7 +207,7 @@ public class PresentationController {
             if(input.equals("0")) return 0;
             details[i] = input;
         }
-        FacadeDriver facDriver = new FacadeDriver(details[0], details[1], details[2], details[3]);
+        FacadeDriver facDriver = new FacadeDriver(details[0], details[1], details[2], details[3], "");
         Response res = service.addDriver(facDriver);
         if(res.getErrorOccurred()) {
             operateOutput("Couldn't add a new driver. " + res.getErrorMessage());
@@ -275,7 +275,7 @@ public class PresentationController {
 
     private void setMenus(){
         String[] resourcesMenuStrings = {"Exit", "Back", "Add driver", "Add truck", "Remove driver", "Remove truck", "Show all drivers", "Show all trucks", "Get driver by ID", "Get truck by license plate"};
-        Map<Integer, CallableMenu> resourceOpts = new HashMap<>(){{
+        Map<Integer, CallableMenu> resourceOpts = new HashMap<Integer, CallableMenu>(){{
             put(2, new CallableMenu(() -> addDriver()));
             put(3, new CallableMenu(() -> addTruck()));
             put(4, new CallableMenu(() -> removeDriver()));
@@ -289,7 +289,7 @@ public class PresentationController {
 
 
         String[] deliveryMenuStrings = {"Exit", "Back", "New delivery", "Show deliveries history"};
-        Map<Integer, CallableMenu> deliveryOpts = new HashMap<>(){{
+        Map<Integer, CallableMenu> deliveryOpts = new HashMap<Integer, CallableMenu>(){{
             put(2, new CallableMenu(() -> addDelivery()));
             put(3, new CallableMenu(() -> getDeliveriesHistory()));
         }};
@@ -297,7 +297,7 @@ public class PresentationController {
 
 
         String[] mainMenuStrings = {"Exit", "Back", "Delivery", "Resources"};
-        Map<Integer, CallableMenu> mainMenuOpts = new HashMap<>(){{
+        Map<Integer, CallableMenu> mainMenuOpts = new HashMap<Integer, CallableMenu>(){{
             put(2, deliveryMenu);
             put(3, resourceMenu);
         }};
@@ -305,7 +305,7 @@ public class PresentationController {
 
 
         String[] superUserMenuStrings = {"Exit", "Back", "dummyOption"};
-        Map<Integer, CallableMenu> superUserMenuOpts = new HashMap<>(){{
+        Map<Integer, CallableMenu> superUserMenuOpts = new HashMap<Integer, CallableMenu>(){{
             put(2, mainMenu);
         }};
         superUserMenu = new CallableMenu(superUserMenuOpts, superUserMenuStrings);

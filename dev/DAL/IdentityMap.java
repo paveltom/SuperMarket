@@ -2,20 +2,20 @@ package DAL;
 
 import java.util.HashMap;
 import java.util.Map;
-import DAL.DTObjects.IDTO;
+import DAL.DTO.DTO;
 
 public class IdentityMap {
-    private Map<String, IDTO> cachedObjects;
+    private Map<String, DTO> cachedObjects;
 
     public IdentityMap(){
         this.cachedObjects = new HashMap<>();
     }
 
-    public void cacheObject(IDTO obj){
+    public void cacheObject(DTO obj){
         cachedObjects.put(obj.getKey(), obj);
     }
 
-    public IDTO getCachedObj(String key){
+    public DTO getCachedObj(String key){
         return cachedObjects.get(key);
     }
 

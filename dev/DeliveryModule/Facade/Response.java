@@ -3,7 +3,7 @@ package DeliveryModule.Facade;
 public class Response {
 
     private String errorMessage;
-    public boolean errorOccurred = false;
+    private boolean errorOccurred = false;
 
     Response() {
     }

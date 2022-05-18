@@ -58,7 +58,7 @@ public class DALController {
     public void updateDriverDiary(String key, String shifts){
     }
 
-    public void updateTruckDiary(String key, String shifts){
+    public void updateTruckDiary(long key, String shifts){
     }
 
      public void addDelivery(DeliveryRecipeDTO recipeToAdd){
