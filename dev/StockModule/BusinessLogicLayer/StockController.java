@@ -1,4 +1,4 @@
-package com.company.BusinessLogicLayer;
+package StockModule.BusinessLogicLayer;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,6 +24,10 @@ public class StockController {
         categoriesCounter = 0;
         discounts = new ArrayList<>();
         discountsCounter = 0;
+    }
+
+    public int getQuantityForOrder(String ID,int Days){
+        return 0;
     }
 
     public List<Product> getProductsInStock(){
