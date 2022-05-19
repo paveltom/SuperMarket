@@ -1,4 +1,4 @@
-package com.company.BusinessLogicLayer;
+package StockModule.BusinessLogicLayer;
 
 import java.util.Date;
 import java.util.HashMap;
