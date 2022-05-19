@@ -4,7 +4,6 @@ import java.util.*;
 
 public class StockController {
     private HashMap<String,Product> products;
-    private int productsCounter;
     private List<Purchase> purchases;
     private int purchasesCounter;
     private List<Category> categories;
@@ -14,7 +13,6 @@ public class StockController {
 
     StockController(){
         products = new HashMap<>();
-        productsCounter = 0;
         purchases = new ArrayList<>();
         purchasesCounter = 0;
         categories = new ArrayList<>();
@@ -100,7 +98,6 @@ public class StockController {
     public void insertNewProduct(String productName, String productManufacturer, int categoryID, Date supplyTime, int demand){
         Product p = new Product(productName, productManufacturer, categoryID, supplyTime, demand);
         products.put(p.getID(),p);
-        productsCounter++;
     }
     public void setSubCategory(int subCategoryID,int parentID){
         Category subCategory = categories.get(subCategoryID);
