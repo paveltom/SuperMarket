@@ -1,6 +1,6 @@
-package com.company.ServiceLayer;
+package StockModule.ServiceLayer;
 
-import com.company.BusinessLogicLayer.*;
+import StockModule.BusinessLogicLayer.*;
 
 import java.util.Date;
 import java.util.List;
