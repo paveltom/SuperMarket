@@ -1,4 +1,4 @@
-package com.company.ServiceLayer;
+package StockModule.ServiceLayer;
 
 public class Response
 {
