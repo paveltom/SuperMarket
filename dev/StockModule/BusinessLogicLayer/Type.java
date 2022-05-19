@@ -1,4 +1,4 @@
-package com.company.BusinessLogicLayer;
+package StockModule.BusinessLogicLayer;
 
 public enum Type {
     PERCENT, FIXED
