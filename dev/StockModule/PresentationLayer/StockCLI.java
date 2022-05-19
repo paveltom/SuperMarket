@@ -1,12 +1,14 @@
-package com.company.PresentationLayer;
+package StockModule.PresentationLayer;
 
-import com.company.BusinessLogicLayer.Type;
-import com.company.ServiceLayer.Service;
+//import com.company.BusinessLogicLayer.Type;
+//import com.company.ServiceLayer.Service;
+import StockModule.BusinessLogicLayer.Type;
+import StockModule.ServiceLayer.Service;
+
 
 import java.util.*;
 
 public class StockCLI {
-
 
     static int SelectedBranchID = -1;
     static boolean branchSelected = false;
