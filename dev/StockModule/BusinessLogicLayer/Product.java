@@ -13,9 +13,9 @@ public class Product {
     private int demand; // Demand means amount of units sold per week.
     private List<Item> items;
 
-    public Product(String ID, String name, String manufacturer, int categoryID, Date supplyTime, int demand)
+    public Product(String name, String manufacturer, int categoryID, Date supplyTime, int demand)
     {
-        this.ID = ID;
+        this.ID = name+manufacturer;
         this.name = name;
         this.manufacturer = manufacturer;
         this.amount = 0;
