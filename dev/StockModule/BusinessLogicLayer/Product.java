@@ -3,17 +3,17 @@ package StockModule.BusinessLogicLayer;
 import java.util.*;
 
 public class Product {
-    private int ID;
+    private String ID;
     private String name;
     private String manufacturer;
     private int amount;
     private int amountToNotify;
     private int categoryID;
     private Date supplyTime;
-    private int demand;
+    private int demand; // Demand means amount of units sold per week.
     private List<Item> items;
 
-    public Product(int ID, String name, String manufacturer, int categoryID, Date supplyTime, int demand)
+    public Product(String ID, String name, String manufacturer, int categoryID, Date supplyTime, int demand)
     {
         this.ID = ID;
         this.name = name;
@@ -48,8 +48,15 @@ public class Product {
         return items;
     }
 
+    public int getDemand(){
+        return demand;
+    }
     public int getCategoryID(){
         return categoryID;
+    }
+
+    public String getID(){
+        return ID;
     }
 
     public List<Item> getDefectedItems(){
