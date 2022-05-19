@@ -1,12 +1,9 @@
 package StockModule.BusinessLogicLayer;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class StockController {
-    private List<Product> products;
+    private HashMap<String,Product> products;
     private int productsCounter;
     private List<Purchase> purchases;
     private int purchasesCounter;
@@ -16,7 +13,7 @@ public class StockController {
     private int discountsCounter;
 
     StockController(){
-        products = new ArrayList<>();
+        products = new HashMap<>();
         productsCounter = 0;
         purchases = new ArrayList<>();
         purchasesCounter = 0;
@@ -27,12 +24,15 @@ public class StockController {
     }
 
     public int getQuantityForOrder(String ID,int Days){
-        return 0;
+        Product p = products.get(ID);
+        int demand = p.getDemand();
+        return (demand/7)*Days;
+
     }
 
-    public List<Product> getProductsInStock(){
+    public HashMap<String,Product> getProductsInStock(){
         //Requirement 2
-        return new ArrayList<>(products);
+        return new HashMap<String,Product>(products);
     }
 
     public List<Purchase> getPurchasesHistoryReport(){
@@ -73,7 +73,7 @@ public class StockController {
         }
         return output;
     }
-
+    
     public List<Item> getDefectedItemsReport(){
         //Requirement 8+9
         List<Item> output = new ArrayList<>();
@@ -94,7 +94,8 @@ public class StockController {
     }
 
     public void insertNewProduct(String productName, String productManufacturer, int categoryID, Date supplyTime, int demand){
-        products.add(new Product(productsCounter, productName, productManufacturer, categoryID, supplyTime, demand));
+        Product p = new Product(productsCounter, productName, productManufacturer, categoryID, supplyTime, demand)
+        products.put(p.getID(),p);
         productsCounter++;
     }
     public void setSubCategory(int subCategoryID,int parentID){
