@@ -3,14 +3,14 @@ package StockModule.BusinessLogicLayer;
 import java.util.Date;
 
 public class Item {
-    private int productID;
+    private String productID;
     private String location;
     private Date expireDate;
     private boolean isDefect;
     private boolean isExpired;
     private int amount;
 
-    public Item(String _location, int _productID, Date _expireDate, boolean _isDefect, int _amount)
+    public Item(String _location, String _productID, Date _expireDate, boolean _isDefect, int _amount)
     {
         location = _location;
         productID = _productID;
