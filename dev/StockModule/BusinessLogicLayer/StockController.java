@@ -23,11 +23,10 @@ public class StockController {
         discountsCounter = 0;
     }
 
-    public int getQuantityForOrder(String ID,int Days){
+    public int getQuantityForOrder(String ID,int days){
         Product p = products.get(ID);
         int demand = p.getDemand();
-        return (demand/7)*Days;
-
+        return (demand/7)*days;
     }
 
     public HashMap<String,Product> getProductsInStock(){
@@ -54,8 +53,9 @@ public class StockController {
     public List<Item> getStockReport(){
         //Requirement 6
         List<Item> output = new ArrayList<>();
-        for(Product p : products)
+        for (String s : products.keySet())
         {
+            Product p = products.get(s);
             output.addAll(p.getItems());
         }
         return output;
@@ -64,8 +64,9 @@ public class StockController {
     public List<Item> getStockReportByCategory(int CategoryID){
         //Requirement 7
         List<Item> output = new ArrayList<>();
-        for(Product p : products)
+        for (String s : products.keySet())
         {
+            Product p = products.get(s);
             if(isAncestorOf(p.getCategoryID(),CategoryID))
             {
                 output.addAll(p.getItems());
@@ -73,12 +74,13 @@ public class StockController {
         }
         return output;
     }
-    
+
     public List<Item> getDefectedItemsReport(){
         //Requirement 8+9
         List<Item> output = new ArrayList<>();
-        for (Product p : products)
+        for (String s : products.keySet())
         {
+            Product p = products.get(s);
             output.addAll(p.getDefectedItems());
         }
         return output;
@@ -86,15 +88,17 @@ public class StockController {
 
     public List<Item> getExpiredItemsReport() {
         List<Item> output = new ArrayList<>();
-        for (Product p : products)
+
+        for (String s : products.keySet())
         {
+            Product p = products.get(s);
             output.addAll(p.getExpiredItems());
         }
         return output;
     }
 
     public void insertNewProduct(String productName, String productManufacturer, int categoryID, Date supplyTime, int demand){
-        Product p = new Product(productsCounter, productName, productManufacturer, categoryID, supplyTime, demand)
+        Product p = new Product(productName, productManufacturer, categoryID, supplyTime, demand);
         products.put(p.getID(),p);
         productsCounter++;
     }
