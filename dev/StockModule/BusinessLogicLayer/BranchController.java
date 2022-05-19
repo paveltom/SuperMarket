@@ -1,6 +1,4 @@
-package com.company.BusinessLogicLayer;
-
-import com.company.ServiceLayer.Response;
+package StockModule.BusinessLogicLayer;
 
 import java.util.ArrayList;
 import java.util.Date;
