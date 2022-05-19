@@ -3,15 +3,15 @@ package com.company.PresentationLayer;
 import com.company.BusinessLogicLayer.Type;
 import com.company.ServiceLayer.Service;
 
-import java.net.SocketOption;
 import java.util.*;
 
-public class Main {
+public class StockCLI {
 
 
     static int SelectedBranchID = -1;
     static boolean branchSelected = false;
-    public static void main(String[] args) {
+
+    public void run() {
 
         Service s = new Service();
 

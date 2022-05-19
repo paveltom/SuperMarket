@@ -6,13 +6,12 @@ import SuppliersModule.Service.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class CliController {
+public class SupplierCLI {
 
     private final Scanner in;
     private final SupplierServices ss;
 
-
-    public CliController() {
+    public SupplierCLI() {
         in = new Scanner(System.in);
         ss = new SupplierServices();
         loadData();
@@ -20,16 +19,24 @@ public class CliController {
 
     private void loadData() {
         LoadDataForTesting ld;
-        System.out.println("load testind data? y/n");
+        System.out.println("load testing data? y/n");
         String input = in.nextLine();
         if (input.equals("y")) {
             ld = new LoadDataForTesting(ss);
         }
+    }
 
+    public void run(){
+        displayMainMenu();
     }
 
     public void displayMainMenu() {
-        System.out.println("\n at any stage insert “$” to roll back to the main menu \n at any stage insert “b” to go back to the previous window \n insert one of the following numbers to select action\n\n1. add supplier \n2. show suppliers\n3. search product");
+        System.out.println("\n at any stage insert “$” to roll back to the main menu " +
+                "\n at any stage insert “b” to go back to the previous window " +
+                "\n insert one of the following numbers to select action" +
+                "\n\n1. add supplier " +
+                "\n2. show suppliers" +
+                "\n3. search product");
 
         String input = in.nextLine();
         if (input.equals("1"))
@@ -47,19 +54,24 @@ public class CliController {
     }
 
     private void addingSupplierWindow() {
-        System.out.println("\ninsert supplier id, bank account, using cash?, using credit?, contact name, contact phone-number\ne.g 235 6456684 n y yossi 0524679565");
+        System.out.println("\ninsert supplier id, bank account, using cash?, using credit?, contact name, contact phone-number," +
+                           "\nsupply days, max supply days, supply cycle, delivery Service?, product id, catalog number, price" +
+                           "\ne.g 235 6456684 n y yossi 0524679565 ");
 
         String input = in.nextLine();
-
         if(input.equals("$") || input.equals("b"))
             displayMainMenu();
         else{
             String[] splitted = input.split(" ");
-            if (splitted.length != 6 || (!splitted[2].equals("y") && !splitted[2].equals("n")) || (!splitted[3].equals("y") && !splitted[3].equals("n"))) {
+            if (splitted.length != 13 || (!splitted[2].equals("y") && !splitted[2].equals("n")) || (!splitted[3].equals("y") && !splitted[3].equals("n"))) {
                 System.out.println("incorrect input\n");
                 addingSupplierWindow();
             } else {
-                Response r = ss.addSupplier(splitted[0], splitted[1], splitted[2].equals("y"), splitted[3].equals("y"), splitted[4], splitted[5]);
+                boolean[] days = new boolean[7];
+                days[Integer.parseInt(splitted[1]) - 1] = splitted[2].equals("y");
+                Response r = ss.addSupplier(splitted[0], splitted[1], splitted[2].equals("y"), splitted[3].equals("y"), splitted[4], splitted[5],
+                                            days, Integer.parseInt(splitted[7]), Integer.parseInt(splitted[8]), splitted[9].equals("y"),    //TODO days
+                                            splitted[10], splitted[11], Float.parseFloat(splitted[12]));
                 if (r.ErrorOccurred()) {
                     System.out.println("action failed, " + r.getErrorMessage() + "\n");
                     addingSupplierWindow();
@@ -97,7 +109,7 @@ public class CliController {
     }
 
     private void searchProductWindow() {
-        System.out.println("\ninsert product name");
+        System.out.println("\ninsert product id");
 
         String input = in.nextLine();
         if(input.equals("$") || input.equals("b"))
@@ -114,7 +126,11 @@ public class CliController {
     }
 
     private void supplierInfoWindow(String suppId) {
-        System.out.println("\n1. display products\n2. display quantity agreement\n3. display contract\n4. display contacts\n5. delete supplier");
+        System.out.println("\n1. display products" +
+                "\n2. display quantity agreement\n" +
+                "3. display contract\n" +
+                "4. display contacts\n" +
+                "5. delete supplier");
 
         String input = in.nextLine();
         if(input.equals("1"))
@@ -173,7 +189,10 @@ public class CliController {
             showProducts(p.getValue());
 
         System.out.print("Supplier id: " + sId + "\n");
-        System.out.println("\nto add product insert 1 and <catalog number, name, price” => page refreshed with product added            \ninsert 2 and product catalog number to remove it\ninsert 3 and product catalog number and product price to update price\ninsert 4 and product catalog number and product name to update name\ninsert 5 and product catalog number and new catalog number to update catalog number");
+        System.out.println("\nto add product insert 1 and <product id, catalog number, price> => page refreshed with product added" +
+                "\ninsert 2 and product id to remove it from the supplier" +
+                "\ninsert 3, product id and price to update price" +
+                "\ninsert 4, product id and new catalog number to update catalog number");
 
 
         String input = in.nextLine();
@@ -189,7 +208,7 @@ public class CliController {
             if(splitted[0].equals("1")) {
                 if(splitted.length != 4 || !isStringFloat(splitted[3]))
                     invalidproductAction(sId);
-                r = ss.addProduct(sId, splitted[1], splitted[2], Float.valueOf(splitted[3]));
+                r = ss.addProduct(sId, splitted[1], splitted[2], Float.parseFloat(splitted[3]));
                 if (!r.ErrorOccurred()) {
                     displayProductsWindow(sId);
                 } else {
@@ -227,17 +246,6 @@ public class CliController {
 
             }
             else if(splitted[0].equals("4")) {
-                if(splitted.length != 3)
-                    invalidproductAction(sId);
-                r = ss.updateProductName(sId, splitted[1], splitted[2]);
-                if (!r.ErrorOccurred()) {
-                    displayProductsWindow(sId);
-                } else {
-                    System.out.println("action failed, " + r.getErrorMessage() + "\n");
-                    displayProductsWindow(sId);
-                }
-            }
-            else if(splitted[0].equals("5")) {
                 if(splitted.length != 3)
                     invalidproductAction(sId);
                 r = ss.updateProductCatalogNum(sId, splitted[1], splitted[2]);
@@ -281,25 +289,18 @@ public class CliController {
 
     private void displayQuantityAgreementWindow(String suppId) {
         ResponseT<Dictionary<String, Dictionary<Integer, Float>>> m1 = ss.getDiscounts(suppId);
-        ResponseT<Dictionary<String, Dictionary<Integer, Float>>> m2 = ss.getPerOrder(suppId);
 
         if (m1.ErrorOccurred()) {
             System.out.println("action failed: " + m1.getErrorMessage());
             supplierInfoWindow(suppId);
         }
-        if (m2.ErrorOccurred()) {
-            System.out.println("action failed: " + m2.getErrorMessage());
-            supplierInfoWindow(suppId);
-        }
 
-        System.out.println(" 1. discount by order size list : ");
+        System.out.println(" 1. discounts list:");
         //print map 1
         printQuantityAgreementMap(m1.getValue());
-        System.out.println(" 2. discount by item quantity list : ");
-        //print map 2
-        printQuantityAgreementMap(m2.getValue());
 
-        System.out.println("\nto add a discount press 1 or 2 and enter item id and quantity and discount\nto delete a discount press -1 or -2 and enter item id and quantity\nto add a discount press *1 or *2 and enter item id and quantity and discount\ne.g “2 5 100 20””\n\n");
+        System.out.println("\nto update a discount enter product id, quantity and discount" +
+                            "\ne.g 5234 100 20\n");
 
         String input = in.nextLine();
         String[] splitted = input.split(" ");
@@ -307,42 +308,9 @@ public class CliController {
         if(input.equals("$") || input.equals("b"))
             displayMainMenu();
         else {
-            if (splitted.length == 4) {
+            if (splitted.length == 3) {
                 if (splitted[0].equals("1")) {
-                    Response action = ss.updateDiscount(suppId, splitted[1], Integer.valueOf(splitted[2]), Float.valueOf(splitted[3]));
-                    if (action.ErrorOccurred()) {
-                        System.out.println("action faild: " + action.getErrorMessage());
-                    }
-                    displayQuantityAgreementWindow(suppId);
-                } else if (splitted[0].equals("2")) {
-                    Response action = ss.addDiscountPerOrder(suppId, splitted[1], Integer.valueOf(splitted[2]), Float.valueOf(splitted[3]));
-                    if (action.ErrorOccurred()) {
-                        System.out.println("action faild: " + action.getErrorMessage());
-                    }
-                    displayQuantityAgreementWindow(suppId);
-                } else if (splitted[0].equals("*1")) {
-                    Response action = ss.updateDiscountPerItem(suppId, splitted[1], Integer.valueOf(splitted[2]), Float.valueOf(splitted[3]));
-                    if (action.ErrorOccurred()) {
-                        System.out.println("action faild: " + action.getErrorMessage());
-                    }
-                    displayQuantityAgreementWindow(suppId);
-                } else if (splitted[0].equals("*2")) {
-                    Response action = ss.updateDiscountPerOrder(suppId, splitted[1], Integer.valueOf(splitted[2]), Float.valueOf(splitted[3]));
-                    if (action.ErrorOccurred()) {
-                        System.out.println("action faild: " + action.getErrorMessage());
-                    }
-                    displayQuantityAgreementWindow(suppId);
-                }
-            } else if (splitted.length == 3) {
-                if (splitted[0].equals("-1")) {
-                    Response action = ss.removeDiscountPerItem(suppId, splitted[1], Integer.valueOf(splitted[2]));
-                    if (action.ErrorOccurred()) {
-                        System.out.println("action faild: " + action.getErrorMessage());
-                    }
-                    displayQuantityAgreementWindow(suppId);
-                }
-                if (splitted[0].equals("-2")) {
-                    Response action = ss.removeDiscountPerOrder(suppId, splitted[1], Integer.valueOf(splitted[2]));
+                    Response action = ss.updateDiscount(suppId, splitted[0], Integer.parseInt(splitted[1]), Float.parseFloat(splitted[2]));
                     if (action.ErrorOccurred()) {
                         System.out.println("action faild: " + action.getErrorMessage());
                     }
@@ -362,7 +330,12 @@ public class CliController {
             supplierInfoWindow(suppId);
         } else {
             System.out.println(r.getValue().toString());
-            System.out.println("\ninsert a number and a following info to update\ne.g 2 5 will change the max delivery days to 5\n\n1. change delivery day (expecting a day in the week as a number between 1-7 and y/n)\n2. change max delivery days (any not negative number or -1 for no max delivery days)\n3. change delivery service status (y/n)");
+            System.out.println("\ninsert a number and a following info to update" +
+                    "\ne.g 2 5 will change the max delivery days to 5" +
+                    "\n\n1. change delivery day (expecting a day in the week as a number between 1-7 and y/n)" +
+                    "\n2. change max delivery days (any not negative number or -1 for no max delivery days)" +
+                    "\n3. change delivery service status (y/n)");
+
             String input = in.nextLine();
             String[] splitted = input.split(" ");
 
