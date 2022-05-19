@@ -7,18 +7,20 @@ import java.util.List;
 import java.util.Map;
 
 public class DataBaseConnection {
-    private String[] truckValues = {"VehicleLicenseNumber", "MaxLoadWeight", "NetWeight", "Zone", "Model", "Diary"};
+    private String[] truckValues = {"VehicleLicenseNumber", "MaxLoadWeight", "NetWeight", "Zone", "Model", "Diary","DriverFutureShifts"};
     private String[] driverValues = {"Id", "Name", "Cellphone", "VehicleLicenseCategory", "ShippingZone", "Diary"};
     private String[] deliveryValues = {"OrderId", "DeliveryId", "SupplierZone", "SupplierAddress", "SupplierName", "SupplierCellphone",
             "ClientZone", "ClientAddress", "ClientName", "ClientCellphone", "DeliverdProducts", "DueDate",
             "DriverId", "DriverName", "DriverCellphone", "TruckLicenseNumber"};
     private String[] shiftValues = {"date", "type", "shiftManager", "workers"};
+    private String[] workerValues = {"Id","Name","Job","SMQual","BankDetails","Pay","StartDate","SocialConditions","Availability"};
     // add other strings
     private final Map<String, String[]> tablesWithParams = new HashMap<String, String[]>() {{
         put("Trucks", truckValues);
         put("shifts", shiftValues);
         put("Drivers", driverValues);
         put("Deliveries", deliveryValues);
+        put("Workers",workerValues);
         // add other values
     }};
 
