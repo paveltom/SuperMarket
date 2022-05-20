@@ -6,18 +6,18 @@ public class StockController {
     private HashMap<String,Product> products;
     private HashMap<Integer,Purchase> purchases;
     private int purchasesCounter;
-    private List<Category> categories;
+    private HashMap<Integer,Category> categories;
     private int categoriesCounter;
-    private List<Discount> discounts;
+    private HashMap<Integer,Discount> discounts;
     private int discountsCounter;
 
     StockController(){
         products = new HashMap<>();
         purchases = new HashMap<>();
         purchasesCounter = 0;
-        categories = new ArrayList<>();
+        categories = new HashMap<>();
         categoriesCounter = 0;
-        discounts = new ArrayList<>();
+        discounts = new HashMap<>();
         discountsCounter = 0;
     }
 
@@ -37,15 +37,15 @@ public class StockController {
         return new HashMap<Integer,Purchase>(purchases);
     }
 
-    public List<Discount> getCurrentDiscounts(){
+    public HashMap<Integer,Discount> getCurrentDiscounts(){
         //Requirement 4
         //return new ArrayList<>(discounts);
         return discounts;
     }
 
-    public List<Category> getCategories(){
+    public HashMap<Integer,Category> getCategories(){
         //Requirement 5
-        return new ArrayList<>(categories);
+        return new HashMap<>(categories);
     }
 
     public List<Item> getStockReport(){
@@ -99,6 +99,7 @@ public class StockController {
         Product p = new Product(productName, productManufacturer, categoryID, supplyTime, demand);
         products.put(p.getID(),p);
     }
+
     public void setSubCategory(int subCategoryID,int parentID){
         Category subCategory = categories.get(subCategoryID);
         Category parent = categories.get(parentID);
@@ -108,17 +109,21 @@ public class StockController {
     public void insertNewItem(int productID, String location, Date expireDate, boolean isDefect, int amount){
         products.get(productID).addItem(location, expireDate, isDefect, amount);
     }
+
     public void reduceItemAmount(int productID, int itemID, int amountToReduce) throws Exception
     {
         products.get(productID).reduceItemAmount(itemID, amountToReduce);
     }
+
     public void insertNewCategory(String categoryName){
-        categories.add(new Category(categoriesCounter,categoryName));
+        Category c = new Category(categoriesCounter,categoryName);
+        categories.put(c.getID(),c);
         categoriesCounter++;
     }
 
     public void insertNewDiscount(int productID, Date startDate, Date endDate, int amount, Type t){
-        discounts.add(new Discount(discountsCounter, productID, startDate, endDate, amount, t));
+        Discount d = new Discount(discountsCounter, productID, startDate, endDate, amount, t);
+        discounts.put(d.getID(),d);
         discountsCounter++;
     }
 
