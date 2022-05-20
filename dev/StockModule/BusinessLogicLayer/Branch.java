@@ -31,12 +31,12 @@ public class Branch {
         return stockController.getPurchasesHistoryReport();
     }
 
-    public List<Discount> getCurrentDiscounts(){
+    public HashMap<Integer,Discount> getCurrentDiscounts(){
         //Requirement 4
         return stockController.getCurrentDiscounts();
     }
 
-    public List<Category> getCategories(){
+    public HashMap<Integer,Category> getCategories(){
         //Requirement 5
         return stockController.getCategories();
     }
