@@ -22,7 +22,7 @@ public class Branch {
         return "Branch ID : " + branchID + " , Branch name : " + name + "\n";
     }
 
-    public List<Product> getProductsInStock(){
+    public HashMap<String,Product> getProductsInStock(){
         return stockController.getProductsInStock();
     }
 
