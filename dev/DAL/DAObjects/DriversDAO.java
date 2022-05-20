@@ -36,7 +36,7 @@ public class DriversDAO implements IDAO{
     public void rewriteDriverFutureShifts(String key, String[] shiftsToAdd){
         String[] keys = {key};
         String[] keyNames = {"Id"};
-        String newShifts = String.join(",", shiftsToAdd);
+        String newShifts = String.join("#", shiftsToAdd);
         dbconn.update("Drivers", keys, keyNames, "FutureShifts", newShifts);
         driversIM.cacheObject(loadObjectFromDB(keys));
     }

@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class WorkerDTO implements DTO {
     public String wId;
-    private String Name,BankDetails,SocialConditions,Job,SMQual,Pay,StartDate;
+    private String Name,BankDetails,SocialConditions,Job,SMQual,Pay,StartDate,Availability;
 
     public WorkerDTO(String _id,String _name,String _Job,String _SMQual,String _BankDetails,String _Pay,String _startDate,String _SocialCondition)
     {
@@ -17,11 +17,24 @@ public class WorkerDTO implements DTO {
         Pay = _Pay;
         StartDate = _startDate;
         SocialConditions = _SocialCondition;
+        Availability = "";
     }
 
+    public WorkerDTO(String _id,String _name,String _Job,String _SMQual,String _BankDetails,String _Pay,String _startDate,String _SocialCondition,String _Avail)
+    {
+        wId = _id;
+        Name = _name;
+        Job = _Job;
+        SMQual = _SMQual;
+        BankDetails = _BankDetails;
+        Pay = _Pay;
+        StartDate = _startDate;
+        SocialConditions = _SocialCondition;
+        Availability = _Avail;
+    }
     public String[] getParams()
     {
-        return new String[]{wId, Name, Job, SMQual, BankDetails, Pay, StartDate, SocialConditions};
+        return new String[]{wId, Name, Job, SMQual, BankDetails, Pay, StartDate, SocialConditions,Availability};
     }
 
     public String getParamVal(String paramName)
@@ -44,6 +57,8 @@ public class WorkerDTO implements DTO {
                 return StartDate;
             case "SocialConditions":
                 return SocialConditions;
+            case "Availability":
+                return Availability;
             default:
                 return wId;
         }

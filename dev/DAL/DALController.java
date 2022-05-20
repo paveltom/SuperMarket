@@ -3,6 +3,7 @@ package DAL;
 import DAL.DAObjects.*;
 import DAL.DTO.*;
 import DeliveryModule.BusinessLayer.Element.DeliveryRecipe;
+import com.sun.corba.se.spi.orbutil.threadpool.Work;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -164,6 +165,16 @@ public class DALController {
         workersDAO.storeObjToDB(WorkerToAdd);
     }
 
+    public List<WorkerDTO> LoadAllWorkers()
+    {
+        List<DTO> wList =  workersDAO.getAllObjsFromDB();
+        List<WorkerDTO> wDTOList = new ArrayList<WorkerDTO>();
+        for (DTO dto:
+                wList) {
+            wDTOList.add((WorkerDTO) dto);
+        }
+        return wDTOList;
+    }
 //    public void UpdateShift(String date, String type, String data){
 //        shiftsDAO.updateShift(date,type,data);
 //    }

@@ -48,7 +48,7 @@ public class WorkersDAO implements IDAO{
             return null;
         else
         {
-            WorkerDTO wDTO = new WorkerDTO(WorkerFromDb.get(0)[0],WorkerFromDb.get(0)[1],WorkerFromDb.get(0)[2],WorkerFromDb.get(0)[3],WorkerFromDb.get(0)[4],WorkerFromDb.get(0)[5],WorkerFromDb.get(0)[6],WorkerFromDb.get(0)[7]);
+            WorkerDTO wDTO = new WorkerDTO(WorkerFromDb.get(0)[0],WorkerFromDb.get(0)[1],WorkerFromDb.get(0)[2],WorkerFromDb.get(0)[3],WorkerFromDb.get(0)[4],WorkerFromDb.get(0)[5],WorkerFromDb.get(0)[6],WorkerFromDb.get(0)[7],WorkerFromDb.get(0)[8]);
             workerIM.cacheObject(wDTO);
             return wDTO;
         }
@@ -94,7 +94,7 @@ public class WorkersDAO implements IDAO{
                 allDTO) {
             if(workerIM.getCachedObj(s[0]) == null)
             {
-                WorkerDTO wDTO = new WorkerDTO(s[0],s[1],s[2],s[3],s[4],s[5],s[6],s[7]);
+                WorkerDTO wDTO = new WorkerDTO(s[0],s[1],s[2],s[3],s[4],s[5],s[6],s[7],s[8]);
                 workerIM.cacheObject(wDTO);
             }
         }
