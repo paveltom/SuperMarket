@@ -1,9 +1,6 @@
 package StockModule.BusinessLogicLayer;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class BranchController{
     private List<Branch> branches;
@@ -37,7 +34,7 @@ public class BranchController{
         return branches.get(branchID).getProductsInStock();
     }
 
-    public List<Purchase> getPurchasesHistoryReport(int branchID){
+    public HashMap<Integer,Purchase> getPurchasesHistoryReport(int branchID){
         //Requirement 3
         return branches.get(branchID).getPurchasesHistoryReport();
     }
