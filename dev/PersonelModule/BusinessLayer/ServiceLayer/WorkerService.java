@@ -3,6 +3,8 @@ package PersonelModule.BusinessLayer.ServiceLayer;
 import PersonelModule.BusinessLayer.LogicLayer.Worker;
 import PersonelModule.BusinessLayer.LogicLayer.WorkerController;
 
+import java.util.List;
+
 public class WorkerService {
 
     public WorkerController wController;
@@ -84,14 +86,8 @@ public class WorkerService {
      */
     public String  ChangeJob(String _Id,String _newJob)
     {
-        try{
-            wController.ChangeJob(_Id,_newJob);
-            return  "Changed job successfully";
-        }
-        catch(Exception e)
-        {
-            return e.getMessage();
-        }
+        wController.ChangeJob(_Id,_newJob);
+        return  "Changed job successfully";
     }
 
     /**
@@ -228,5 +224,35 @@ public class WorkerService {
     public String GetWorkerByJob(String _Job)
     {
         return wController.getWorkerByJov(_Job);
+    }
+
+    /**
+     * Function to get the name of a worker by his id
+     * @param _Id - the id of the worker
+     * @return the worker's name
+     */
+    public String GetWorkerNameById(String _Id)
+    {
+        return wController.getNameById(_Id);
+    }
+
+    /**
+     * Function to get the Job of a worker by his id
+     * @param _Id - the id of the worker
+     * @return the worker's Job
+     */
+    public String getWorkerJobById(String _Id)
+    {
+        return wController.getJobById(_Id);
+    }
+
+    public List<String> getWorkersIdByJob(String _Job)
+    {
+        return wController.getWorkerIdByJob(_Job);
+    }
+
+    public void loadAllWorkers()
+    {
+        wController.LoadAllWorkers();
     }
 }

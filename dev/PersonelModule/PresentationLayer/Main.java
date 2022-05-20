@@ -124,9 +124,9 @@ public class Main {
                             String c62 = scan.nextLine();
                             String[] d62 = c62.split("#");
                             while(!d62[0].equals("x")){
-                                String ans = service.AddDriver(d62[0],d62[1],"Driver",d62[2],d62[3],Double.parseDouble(d62[4]),d62[5],d62[6],d62[7],d62[8]);
+                                String ans = service.AddDriver(d62[0],d62[1],"Driver",d62[2],d62[3],Double.parseDouble(d62[4]),d62[5],d62[6],d62[7],d62[8],d62[9]);
                                 System.out.println(ans);
-                                if(ans.equals("Added worker successfully")) break;
+                                if(ans.equals("Added Driver successfully")) break;
                                 else{
                                     System.out.println("Try again");
                                     c62 = scan.nextLine();
@@ -144,6 +144,21 @@ public class Main {
                     System.out.println(service.ChangeName(data[1],data[2]));
                     break;
                 case "ChangeJob":
+                    System.out.println("Enter the Job you want to change into :\n PersonnelManager\n Cashier\n StoreKeeper\n Usher\n LogisticsManager\n Driver");
+                    String c2 = scan.nextLine();
+                    switch (c2)
+                    {
+                        case "Driver":
+                            System.out.println("Type the additional driver details in this format:\n<Id>#<VehicleCategory>#<LivingArea>#<Cellphone>");
+                            String driverInfo = scan.nextLine();
+                            String[] driverInfoSplit = driverInfo.split("#");
+                            System.out.println(service.ChangeToDriver(driverInfoSplit[0],driverInfoSplit[1],driverInfoSplit[2],driverInfoSplit[3]));
+                            break;
+                        default:
+                            System.out.println("Type the worker Id");
+                            String wId = scan.nextLine();
+                            System.out.println(service.ChangeJob(wId,c2));
+                    }
                     System.out.println(service.ChangeJob(data[1],data[2]));
                     break;
                 case "ChangeQual":

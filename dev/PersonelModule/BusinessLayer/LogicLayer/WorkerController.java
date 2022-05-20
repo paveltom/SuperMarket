@@ -11,6 +11,7 @@ import java.util.Map;
 public class WorkerController {
 
     public Map<String,Worker> AllWorkers;
+    private Boolean loaded = false;
 
     public WorkerController()
     {
@@ -49,14 +50,16 @@ public class WorkerController {
     public void DeleteWorker(String _Id)
     {
         if(!AllWorkers.containsKey(_Id))
-            throw new IllegalArgumentException("There is no worker with id "+_Id);
-        WorkerDTO wDto = DALController.getInstance().getWorker(_Id);
-        if(wDto == null)
         {
-            throw new IllegalArgumentException("There is no worker with id "+_Id);
+            WorkerDTO wDto = DALController.getInstance().getWorker(_Id);
+            if(wDto == null)
+            {
+                throw new IllegalArgumentException("There is no worker with id "+_Id);
+            }
         }
         if(AllWorkers.containsKey(_Id))
             AllWorkers.remove(_Id);
+        DALController.getInstance().DeleteWorker(_Id);
 
     }
     /**
@@ -83,8 +86,7 @@ public class WorkerController {
      */
     public void ChangeName(String _Id,String _newName)
     {
-        if (!AllWorkers.containsKey(_Id))
-            throw new IllegalArgumentException("There is no worker with id "+_Id);
+        CheckIfExists(_Id);
         Worker changeWorker = AllWorkers.get(_Id);
         changeWorker.setName(_newName);
         AllWorkers.replace(_Id,changeWorker);
@@ -97,8 +99,7 @@ public class WorkerController {
      */
     public void ChangeJob(String _Id,String _newJob)
     {
-        if (!AllWorkers.containsKey(_Id))
-            throw new IllegalArgumentException("There is no worker with id "+_Id);
+        CheckIfExists(_Id);
         Worker changeWorker = AllWorkers.get(_Id);
         changeWorker.setJob(_newJob);
         AllWorkers.replace(_Id,changeWorker);
@@ -111,8 +112,7 @@ public class WorkerController {
      */
     public void ChangeQual(String _Id,boolean _newQual)
     {
-        if (!AllWorkers.containsKey(_Id))
-            throw new IllegalArgumentException("There is no worker with id "+_Id);
+        CheckIfExists(_Id);
         Worker changeWorker = AllWorkers.get(_Id);
         changeWorker.setSMQualification(_newQual);
         AllWorkers.replace(_Id,changeWorker);
@@ -125,8 +125,7 @@ public class WorkerController {
      */
     public void ChangeBank(String _Id,String _newBank)
     {
-        if (!AllWorkers.containsKey(_Id))
-            throw new IllegalArgumentException("There is no worker with id "+_Id);
+        CheckIfExists(_Id);
         Worker changeWorker = AllWorkers.get(_Id);
         changeWorker.setBankDetails(_newBank);
         AllWorkers.replace(_Id,changeWorker);
@@ -139,8 +138,7 @@ public class WorkerController {
      */
     public void ChangePay(String _Id,double _newPay)
     {
-        if (!AllWorkers.containsKey(_Id))
-            throw new IllegalArgumentException("There is no worker with id "+_Id);
+        CheckIfExists(_Id);
         Worker changeWorker = AllWorkers.get(_Id);
         changeWorker.setPay(_newPay);
         AllWorkers.replace(_Id,changeWorker);
@@ -153,8 +151,7 @@ public class WorkerController {
      */
     public void ChangeStart(String _Id,String _newStart)
     {
-        if (!AllWorkers.containsKey(_Id))
-            throw new IllegalArgumentException("There is no worker with id "+_Id);
+        CheckIfExists(_Id);
         Worker changeWorker = AllWorkers.get(_Id);
         changeWorker.setStartDate(_newStart);
         AllWorkers.replace(_Id,changeWorker);
@@ -167,8 +164,7 @@ public class WorkerController {
      */
     public void ChangeSocial(String _Id,String _newSocial)
     {
-        if (!AllWorkers.containsKey(_Id))
-            throw new IllegalArgumentException("There is no worker with id "+_Id);
+        CheckIfExists(_Id);
         Worker changeWorker = AllWorkers.get(_Id);
         changeWorker.setSocialConditions(_newSocial);
         AllWorkers.replace(_Id,changeWorker);
@@ -181,8 +177,7 @@ public class WorkerController {
      */
     public String GetWorkerToString(String _Id)
     {
-        if (!AllWorkers.containsKey(_Id))
-            throw new IllegalArgumentException("There is no worker with id "+_Id);
+        CheckIfExists(_Id);
         return AllWorkers.get(_Id).toString();
     }
 
@@ -192,6 +187,7 @@ public class WorkerController {
      */
     public String GetAllWorkersToString()
     {
+        LoadAllWorkers();
         Boolean first = true;
         String allWorkersString = "";
         for (String key:
@@ -216,8 +212,7 @@ public class WorkerController {
      */
     public Worker getWorker(String _Id)
     {
-        if(!AllWorkers.containsKey(_Id))
-            throw new IllegalArgumentException("There is no worker with id "+_Id );
+        CheckIfExists(_Id);
         return AllWorkers.get(_Id);
     }
 
@@ -228,6 +223,14 @@ public class WorkerController {
      */
     public String getWorkerByJov(String _Job)
     {
+        List<WorkerDTO> WorkersAtJob = DALController.getInstance().getWorkerByJob(_Job);
+        for (WorkerDTO wDto:
+                WorkersAtJob) {
+            if(!AllWorkers.containsKey(wDto.getKey()))
+            {
+                AllWorkers.put(wDto.getKey(),new Worker(wDto));
+            }
+        }
         Boolean first = true;
         String AllWorkersInJob = "";
         for (String key:
@@ -256,13 +259,78 @@ public class WorkerController {
      */
     public List<String> getWorkerIdByJob(String _Job)
     {
-        List<String> driverIds = new LinkedList<String>();
+        List<WorkerDTO> WorkersAtJob = DALController.getInstance().getWorkerByJob(_Job);
+        for (WorkerDTO wDto:
+                WorkersAtJob) {
+            if(!AllWorkers.containsKey(wDto.getKey()))
+            {
+                AllWorkers.put(wDto.getKey(),new Worker(wDto));
+            }
+        }
+        List<String> workerIds = new LinkedList<String>();
         for (Worker w:
                 AllWorkers.values()) {
-            if(w.getJob() == "Driver")
-                driverIds.add(w.getId());
+            if(w.getJob() == _Job)
+                workerIds.add(w.getId());
         }
-        return driverIds;
+        return workerIds;
+    }
+
+    /**
+     * Function to check if a worker exists
+     * @param _Id the id of the worker
+     */
+    public void CheckIfExists(String _Id)
+    {
+        if(!AllWorkers.containsKey(_Id))
+        {
+            WorkerDTO wDto = DALController.getInstance().getWorker(_Id);
+            if(wDto == null)
+            {
+                throw new IllegalArgumentException("There is no worker with id "+_Id);
+            }
+            AllWorkers.put(wDto.getKey(),new Worker(wDto));
+        }
+    }
+
+    /**
+     * Function to load all workers (this function only works ones because we only need to load all workers ones after that they are saved in the ram)
+     */
+    public void LoadAllWorkers()
+    {
+        if(!loaded)
+        {
+            loaded = true;
+            List <WorkerDTO> workerList = DALController.getInstance().getAllWorkers();
+            for (WorkerDTO wDto:
+                 workerList) {
+                if(!AllWorkers.containsKey(wDto.getKey()))
+                {
+                    AllWorkers.put(wDto.getKey(),new Worker(wDto));
+                }
+            }
+        }
+    }
+
+    /**
+     * Function to get the name of a worker by his id
+     * @param _Id - the id of the worker
+     * @return the worker's name
+     */
+    public String getNameById(String _Id)
+    {
+        CheckIfExists(_Id);
+        return AllWorkers.get(_Id).getName();
+    }
+    /**
+     * Function to get the Job of a worker by his id
+     * @param _Id - the id of the worker
+     * @return the worker's Job
+     */
+    public String getJobById(String _Id)
+    {
+        CheckIfExists(_Id);
+        return AllWorkers.get(_Id).getJob();
     }
 
 }
