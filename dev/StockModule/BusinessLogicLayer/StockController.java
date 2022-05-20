@@ -29,7 +29,7 @@ public class StockController {
 
     public HashMap<String,Product> getProductsInStock(){
         //Requirement 2
-        return new HashMap<String,Product>(products);
+        return new HashMap<>(products);
     }
 
     public HashMap<Integer,Purchase> getPurchasesHistoryReport(){
