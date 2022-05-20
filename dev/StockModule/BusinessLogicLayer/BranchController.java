@@ -39,12 +39,12 @@ public class BranchController{
         return branches.get(branchID).getPurchasesHistoryReport();
     }
 
-    public List<Discount> getCurrentDiscounts(int branchID){
+    public HashMap<Integer,Discount> getCurrentDiscounts(int branchID){
         //Requirement 4
         return branches.get(branchID).getCurrentDiscounts();
     }
 
-    public List<Category> getCategories(int branchID){
+    public HashMap<Integer,Category> getCategories(int branchID){
         //Requirement 5
         return branches.get(branchID).getCategories();
     }
