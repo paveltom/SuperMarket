@@ -4,7 +4,7 @@ import java.util.*;
 
 public class StockController {
     private HashMap<String,Product> products;
-    private List<Purchase> purchases;
+    private HashMap<Integer,Purchase> purchases;
     private int purchasesCounter;
     private List<Category> categories;
     private int categoriesCounter;
@@ -13,7 +13,7 @@ public class StockController {
 
     StockController(){
         products = new HashMap<>();
-        purchases = new ArrayList<>();
+        purchases = new HashMap<>();
         purchasesCounter = 0;
         categories = new ArrayList<>();
         categoriesCounter = 0;
@@ -32,9 +32,9 @@ public class StockController {
         return new HashMap<String,Product>(products);
     }
 
-    public List<Purchase> getPurchasesHistoryReport(){
+    public HashMap<Integer,Purchase> getPurchasesHistoryReport(){
         //Requirement 3
-        return new ArrayList<>(purchases);
+        return new HashMap<Integer,Purchase>(purchases);
     }
 
     public List<Discount> getCurrentDiscounts(){
@@ -123,7 +123,8 @@ public class StockController {
     }
 
     public void insertNewPurchase(Date purchaseDate, Map<Integer, Map<Integer, Integer>> products){
-        purchases.add(new Purchase(purchasesCounter, purchaseDate, products));
+        Purchase p = new Purchase(purchasesCounter, purchaseDate, products);
+        purchases.put(p.getID(),p);
         purchasesCounter++;
     }
 
