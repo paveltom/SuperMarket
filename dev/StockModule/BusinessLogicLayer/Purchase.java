@@ -19,6 +19,10 @@ public class Purchase {
         products.putAll(_products);
     }
 
+    public int getID(){
+        return purchaseID;
+    }
+
     public String toString(){
         return "Purchase ID : " + purchaseID + " , Purchase Date : " + purchaseDate + "\n";
     }
