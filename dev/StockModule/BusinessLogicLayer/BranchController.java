@@ -29,7 +29,7 @@ public class BranchController{
         branches.get(branchID).setSubCategory(subCategoryID,parentID);
     }
 
-    public List<Product> getProductsInStock(int branchID){
+    public HashMap<String,Product> getProductsInStock(int branchID){
         //Requirement 2
         return branches.get(branchID).getProductsInStock();
     }
