@@ -39,4 +39,9 @@ public class ShiftService {
     public String showAvailability(){
         return sController.showAvailability();
     }
+
+    public boolean isOccupied(String _Id)
+    {
+        return false;
+    }
 }

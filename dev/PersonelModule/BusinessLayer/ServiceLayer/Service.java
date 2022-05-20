@@ -208,9 +208,9 @@ public class Service {
         try{
             Calendar cal = Calendar.getInstance();
             int dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
-            if (DMService.IsOccupided(_Id,cal.get(dayOfMonth),cal.get(Calendar.MONTH)+1))
+            if (DMService.isOccupied(_Id,Integer.valueOf(cal.get(Calendar.MONTH) + 1),Integer.valueOf(cal.get(dayOfMonth))))
                 return "Cannot delete worker because he has Jobs in the future";
-            if(sService.IsOccupided(_Id,new Date()))
+            if (sService.isOccupied(_Id))
                 return "Cannot delete worker because he has Jobs in the future";
             wService.DeleteWorker(_Id);
             sService.removeWorker(_Id);
@@ -262,9 +262,9 @@ public class Service {
         try{
         Calendar cal = Calendar.getInstance();
         int dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
-        if (DMService.IsOccupided(_Id,cal.get(dayOfMonth),cal.get(Calendar.MONTH)+1))
+        if (DMService.isOccupied(_Id,Integer.valueOf(cal.get(Calendar.MONTH) + 1),Integer.valueOf(cal.get(dayOfMonth))))
             return "Cannot delete worker because he has Jobs in the future";
-        if(sService.IsOccupided(_Id,new Date()))
+            if (sService.isOccupied(_Id))
             return "Cannot delete worker because he has Jobs in the future";
         if(wService.getWorkerJobById(_Id).equals("Driver"))
         {
@@ -291,9 +291,9 @@ public class Service {
         try {
             Calendar cal = Calendar.getInstance();
             int dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
-            if (DMService.IsOccupided(_Id, cal.get(dayOfMonth), cal.get(Calendar.MONTH) + 1))
+            if (DMService.isOccupied(_Id,Integer.valueOf(cal.get(Calendar.MONTH) + 1),Integer.valueOf(cal.get(dayOfMonth))))
                 return "Cannot delete worker because he has Jobs in the future";
-            if (sService.IsOccupided(_Id, new Date()))
+            if (sService.isOccupied(_Id))
                 return "Cannot delete worker because he has Jobs in the future";
             wService.ChangeJob(_Id, "Driver");
             FacadeDriver fDriver = new FacadeDriver(_Id,wService.GetWorkerNameById(_Id),vehicleCategory,livingArea,cellphone);
@@ -314,9 +314,9 @@ public class Service {
     {
         Calendar cal = Calendar.getInstance();
         int dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
-        if (DMService.IsOccupided(_Id,cal.get(dayOfMonth),cal.get(Calendar.MONTH)+1))
+        if (DMService.isOccupied(_Id,Integer.valueOf(cal.get(Calendar.MONTH) + 1),Integer.valueOf(cal.get(dayOfMonth))))
             return "Cannot delete worker because he has Jobs in the future";
-        if(sService.IsOccupided(_Id,new Date()))
+        if (sService.isOccupied(_Id))
             return "Cannot delete worker because he has Jobs in the future";
         if(_newQual.equals("yes"))
             return wService.ChangeQual(_Id,true);
