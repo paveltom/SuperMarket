@@ -15,9 +15,9 @@ public interface IService {
 
     public Response removeTruck(int licensePlate);
 
-    public Response removeDriver(int id);
+    public Response removeDriver(String id);
 
-    public ResponseT<FacadeDriver> getDriverById(int id);
+    public ResponseT<FacadeDriver> getDriverById(String id);
 
     public ResponseT<FacadeTruck> getTruckByPlate(int licPlate);
 
@@ -31,6 +31,7 @@ public interface IService {
 
     public void addConstraints(String ID, FacadeDate date, int shift);
 
+    public boolean isOccupied(String driverID, int month, int day);
 
 }
 

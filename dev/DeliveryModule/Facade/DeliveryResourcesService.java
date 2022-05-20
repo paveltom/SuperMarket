@@ -95,17 +95,17 @@ public class DeliveryResourcesService {
         }
     }
 
-    public Response removeDriver(long id){
+    public Response removeDriver(String id){
         try {
-            delController.RemoveDriver(String.valueOf(id));
+            delController.RemoveDriver(id);
             return new Response();
         }catch (Exception e){
             return new Response(e.getMessage());
         }
     }
 
-    public ResponseT<FacadeDriver> getDriverById(long id){
-        FacadeDriver facadeDriver = new FacadeDriver(delController.GetDriver(String.valueOf(id)));
+    public ResponseT<FacadeDriver> getDriverById(String id){
+        FacadeDriver facadeDriver = new FacadeDriver(delController.GetDriver(id));
         return new ResponseT<>(facadeDriver, true);
     }
 
@@ -132,4 +132,9 @@ public class DeliveryResourcesService {
         for (int i = 1; i < cats.length; i++) { names += ", " +  VehicleLicenseCategory.GetVehicleLicenseCategoryName(cats[i]); }
         return new ResponseT<>(names, true);
     }
+
+    public boolean isDriverOccupied(String driverId, int month, int day){
+        return delController.IsDriverOccupied(driverId, month, day);
+    }
+
 }

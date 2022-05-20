@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public class DataBaseConnection {
-    private String[] truckValues = {"VehicleLicenseNumber", "MaxLoadWeight", "NetWeight", "Zone", "Model", "Diary","DriverFutureShifts"};
+    private String[] truckValues = {"VehicleLicenseNumber", "MaxLoadWeight", "NetWeight", "Zone", "Model", "Diary"};
     private String[] driverValues = {"Id", "Name", "Cellphone", "VehicleLicenseCategory", "ShippingZone", "Diary"};
     private String[] deliveryValues = {"OrderId", "DeliveryId", "SupplierZone", "SupplierAddress", "SupplierName", "SupplierCellphone",
             "ClientZone", "ClientAddress", "ClientName", "ClientCellphone", "DeliverdProducts", "DueDate",
@@ -30,8 +30,9 @@ public class DataBaseConnection {
         try {
             // db parameters
             String dir = System.getProperty("user.dir");
-            String url = "jdbc:sqlite:" + dir + "/example.db";
-
+            String url = "jdbc:sqlite:" + dir + "\\dev\\DataBase\\example.db";
+            System.out.println("url: " + url);
+            Class.forName("org.sqlite.JDBC");
             // create a connection to the database
             conn = DriverManager.getConnection(url);
 
@@ -41,27 +42,39 @@ public class DataBaseConnection {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             return null;
-
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
+//        } catch (ClassNotFoundException e) {
+//            throw new RuntimeException(e);
+//        }
     }
 
     public boolean insert(String tableNAME, String[] params){ // exmpl: TRUCK, {"01113", "1000"...}
+        System.out.println("\ninsert");
         Connection conn = null;
         Statement stmt = null;
+        System.out.println("table: " + tableNAME);
+        System.out.println("params: ");
+        for(String curr: params) System.out.print(curr + " ");
+        System.out.println();
+        System.out.println("paramNames: ");
+        for(String curr: tablesWithParams.get(tableNAME)) System.out.print(curr + " ");
+        System.out.println();
         try {
             conn = connect();
             stmt = conn.createStatement();
-            String sql = "INSERT INTO " + tableNAME + " " + String.join(",", tablesWithParams.get(tableNAME)) + " VALUES (" + params[0] + ",";
+            //String sql = "INSERT INTO " + tableNAME + " " + String.join(",", tablesWithParams.get(tableNAME)) + " VALUES (" + params[0];
+            String sql = "INSERT INTO " + tableNAME + " VALUES ('" + params[0] + "'";
             for (int i = 1; i < params.length; i++)
-                sql += "," + params[i];
+                sql += ",'" + params[i] + "'";
             sql += ");";
-            ResultSet rs = stmt.executeQuery(sql);
-            conn.commit();
-            if(!rs.next()) return false;
-            rs.close();
+            System.out.println("sql: " + sql);
+            boolean res = stmt.execute(sql);
+            //conn.commit();
             stmt.close();
             conn.close();
-            return true;
+            return res;
 
         } catch (Exception e){
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
@@ -70,6 +83,7 @@ public class DataBaseConnection {
     }
 
     public boolean update(String tableNAME, String[] key, String[]keysNAMES, String paramNAME, String paramVALUE){
+        System.out.println("\nupdate");
         Connection conn = null;
         Statement stmt = null;
 
@@ -78,18 +92,18 @@ public class DataBaseConnection {
             conn.setAutoCommit(false);
             stmt = conn.createStatement();
 
-            StringBuilder sql = new StringBuilder("UPDATE " + tableNAME + " set " + paramNAME + " = " + paramVALUE + " where " + keysNAMES[0] + "=" + key[0]);
+            StringBuilder sql = new StringBuilder("UPDATE " + tableNAME + " set " + paramNAME + " = '" + paramVALUE + "' where " + keysNAMES[0] + "=" + key[0]);
             for (int i = 1; i < keysNAMES.length; i++)
                 sql.append(" AND ").append(keysNAMES[i]).append("=").append(key[i]);
-            sql.append(");");
+            sql.append(";");
 
-            ResultSet rs = stmt.executeQuery(sql.toString());
+            System.out.println("sql: " + sql);
+
+            boolean res = stmt.execute(sql.toString());
             conn.commit();
-            if(!rs.next()) return false;
-            rs.close();
             stmt.close();
             conn.close();
-            return true;
+            return res;
 
         } catch ( Exception e ) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
@@ -97,7 +111,8 @@ public class DataBaseConnection {
         }
     }
 
-    public boolean delete(String tableNAME, String[] key, String[]keysNAMES) {
+    public boolean delete(String tableNAME, String[] key, String[] keysNAMES) {
+        System.out.println("\ndelete");
         Connection conn = null;
         Statement stmt = null;
 
@@ -106,18 +121,18 @@ public class DataBaseConnection {
             conn.setAutoCommit(false);
             stmt = conn.createStatement();
 
-            StringBuilder sql = new StringBuilder("Delete from  " + tableNAME + " where " + keysNAMES[0] + "=" + key[0]);
+            StringBuilder sql = new StringBuilder("Delete from " + tableNAME + " where " + keysNAMES[0] + "=" + key[0]);
             for (int i = 1; i < keysNAMES.length; i++)
                 sql.append(" AND ").append(keysNAMES[i]).append("=").append(key[i]);
-            sql.append(");");
+            sql.append(";");
 
-            ResultSet rs = stmt.executeQuery(sql.toString());
+            System.out.println("delete sql: " + sql);
+
+            boolean res = stmt.execute(sql.toString());
             conn.commit();
-            if(!rs.next()) return false;
-            rs.close();
             stmt.close();
             conn.close();
-            return true;
+            return res;
 
         } catch ( Exception e ) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
@@ -133,6 +148,7 @@ public class DataBaseConnection {
      * @param paramsWHEREValues put 'null' here if you want to select all values from the table.
      */
     public List<String[]> select(String tableNAME, String[] paramsWHERE, String[] paramsWHEREValues) {
+        System.out.println("\nselect");
         Connection conn = null;
         Statement stmt = null;
 
@@ -147,7 +163,7 @@ public class DataBaseConnection {
                 for (int i = 1; i < paramsWHERE.length; i++)
                     sql.append(" AND ").append(paramsWHERE[i]).append("=").append(paramsWHEREValues[i]);
             }
-            sql.append(");");
+            sql.append(";");
 
             ResultSet resultSet = stmt.executeQuery(sql.toString());
             String[] resRow = tablesWithParams.get(tableNAME);

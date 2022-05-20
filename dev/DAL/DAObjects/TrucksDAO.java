@@ -21,11 +21,12 @@ public class TrucksDAO implements IDAO{
     }
 
 
-    public void updateTruckDiary(String key, String shifts){
+    public boolean updateTruckDiary(String key, String shifts){
         String[] keys = {key};
         String[] keyNames = {"VehicleLicenseNumber"};
-        dbconn.update("Trucks", keys, keyNames, "Diary", shifts);
+        boolean res = dbconn.update("Trucks", keys, keyNames, "Diary", shifts);
         trucksIM.cacheObject(loadObjectFromDB(keys));
+        return res;
     }
 
     @Override
@@ -61,6 +62,7 @@ public class TrucksDAO implements IDAO{
 
     @Override
     public boolean updateObj(DTO obj) {
+        boolean res = false;
         if(obj instanceof TruckDTO) {
             try {
                 String[] keys = {obj.getKey()};
@@ -69,15 +71,15 @@ public class TrucksDAO implements IDAO{
                 String[] paramNames = {"VehicleLicenseNumber", "MaxLoadWeight", "NetWeight", "Model", "ShippingZone", "Diary"};
                 for (int i = 0; i < params.length; i++) {
                     if (params[i] != "")
-                        dbconn.update("Trucks", keys, keyNames, paramNames[i], params[i]);
+                        res = dbconn.update("Trucks", keys, keyNames, paramNames[i], params[i]);
                 }
                 trucksIM.cacheObject(loadObjectFromDB(keys));
-                return true;
+                return res;
             }catch (Exception e){
                 return false;
             }
         }
-        return false;
+        return res;
     }
 
     @Override

@@ -18,27 +18,30 @@ public class DriversDAO implements IDAO{
     }
 
 
-    public void updateDriverDiary(String key, String shifts){
+    public boolean updateDriverDiary(String key, String shifts){
         String[] keys = {key};
         String[] keyNames = {"Id"};
-        dbconn.update("Drivers", keys, keyNames, "Diary", shifts);
+        boolean res = dbconn.update("Drivers", keys, keyNames, "Diary", shifts);
         driversIM.cacheObject(loadObjectFromDB(keys));
+        return res;
     }
 
-    public void addDriverFutureShifts(String key, String toAdd){
+    public boolean addDriverFutureShifts(String key, String toAdd){
         String[] keys = {key};
         String[] keyNames = {"Id"};
         String[] out = dbconn.select("Drivers", keyNames,keys).get(0);
         String updatedShifts = out[6] + toAdd;
-        dbconn.update("Drivers", keys, keyNames, "FutureShifts", updatedShifts);
+        boolean res = dbconn.update("Drivers", keys, keyNames, "FutureShifts", updatedShifts);
         driversIM.cacheObject(loadObjectFromDB(keys));
+        return res;
     }
-    public void rewriteDriverFutureShifts(String key, String[] shiftsToAdd){
+    public boolean rewriteDriverFutureShifts(String key, String[] shiftsToAdd){
         String[] keys = {key};
         String[] keyNames = {"Id"};
         String newShifts = String.join("#", shiftsToAdd);
-        dbconn.update("Drivers", keys, keyNames, "FutureShifts", newShifts);
+        boolean res = dbconn.update("Drivers", keys, keyNames, "FutureShifts", newShifts);
         driversIM.cacheObject(loadObjectFromDB(keys));
+        return res;
     }
     public String getDriverFutureShifts(String key){
         String[] keys = {key};
@@ -82,6 +85,7 @@ public class DriversDAO implements IDAO{
 
     @Override
     public boolean updateObj(DTO obj) {
+        boolean res = false;
         if(obj instanceof DriverDTO) {
             try {
                 String[] keys = {obj.getKey()};
@@ -90,15 +94,15 @@ public class DriversDAO implements IDAO{
                 String[] paramNames = {"Id", "Name", "Cellphone", "VehicleLicenseCategory", "ShippingZone", "Diary"};
                 for (int i = 0; i < params.length; i++) {
                     if (params[i] != "")
-                        dbconn.update("Drivers", keys, keyNames, paramNames[i], params[i]);
+                        res = dbconn.update("Drivers", keys, keyNames, paramNames[i], params[i]);
                 }
                 driversIM.cacheObject(loadObjectFromDB(keys));
-                return true;
+                return res;
             }catch (Exception e){
                 return false;
             }
         }
-        return false;
+        return res;
     }
 
     @Override

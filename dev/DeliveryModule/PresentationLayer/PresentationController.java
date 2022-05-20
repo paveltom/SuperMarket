@@ -234,7 +234,7 @@ public class PresentationController {
     private int removeDriver(){
         int input = Integer.parseInt(operateInput("Driver's ID (enter '0' to cancel): "));
         if(input == 0) return 0;
-        Response res = service.removeDriver(input);
+        Response res = service.removeDriver(String.valueOf(input));
         if(res.getErrorOccurred()) {
             operateOutput("Couldn't remove a driver " + input + ". " + res.getErrorMessage());
             return 1;
@@ -246,7 +246,7 @@ public class PresentationController {
     private int getDriverById(){
         int input = Integer.parseInt(operateInput("Driver's ID (enter '0' to cancel): "));
         if(input == 0) return 0;
-        operateOutput(service.getDriverById(input).getValue().toString());
+        operateOutput(service.getDriverById(String.valueOf(input)).getValue().toString());
         return 0;
     }
 

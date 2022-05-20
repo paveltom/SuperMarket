@@ -57,6 +57,7 @@ public class DeliveriesDAO implements IDAO{
 
     @Override
     public boolean updateObj(DTO obj) {
+        boolean res = false;
         if(obj instanceof DeliveryRecipeDTO) {
             try {
                 String[] keys = {obj.getKey()};
@@ -72,15 +73,15 @@ public class DeliveriesDAO implements IDAO{
                         "DriverId", "DriverName", "DriverCellphone", "TruckLicenseNumber"};
                 for (int i = 0; i < params.length; i++) {
                     if (params[i] != "")
-                        dbconn.update("Deliveries", keys, keyNames, paramNames[i], params[i]);
+                        res = dbconn.update("Deliveries", keys, keyNames, paramNames[i], params[i]);
                 }
                 deliveriesIM.cacheObject(loadObjectFromDB(keys));
-                return true;
+                return res;
             }catch (Exception e){
                 return false;
             }
         }
-        return false;
+        return res;
     }
 
     @Override

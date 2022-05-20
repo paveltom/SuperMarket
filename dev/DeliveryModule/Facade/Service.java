@@ -51,9 +51,9 @@ public class Service implements IService{
 
     public Response removeTruck(int licensePlate){ return deliveryResourcesService.removeTruck(licensePlate); }
 
-    public Response removeDriver(int id){ return deliveryResourcesService.removeDriver(id); }
+    public Response removeDriver(String id){ return deliveryResourcesService.removeDriver(id); }
 
-    public ResponseT<FacadeDriver> getDriverById(int id){ return deliveryResourcesService.getDriverById(id); }
+    public ResponseT<FacadeDriver> getDriverById(String id){ return deliveryResourcesService.getDriverById(id); }
 
     public ResponseT<FacadeTruck> getTruckByPlate(int licPlate){ return deliveryResourcesService.getTruckByPlate(licPlate); }
 
@@ -71,6 +71,10 @@ public class Service implements IService{
         if(res.getErrorOccurred()){
             System.out.println(res.getErrorMessage());
         }
+    }
+
+    public boolean isOccupied(String driverID, int month, int day){
+        return deliveryResourcesService.isDriverOccupied(driverID, month, day);
     }
 
     /*

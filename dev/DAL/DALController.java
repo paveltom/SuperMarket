@@ -76,46 +76,58 @@ public class DALController {
         return (DeliveryRecipeDTO) deliveriesDAO.getObj(keys);
     }
 
-    public void updateDriverDiary(String key, String shifts){
-        driversDAO.updateDriverDiary(key, shifts);
+    public boolean updateDriver(DriverDTO driver){
+        return driversDAO.updateObj(driver);
     }
 
-    public void updateTruckDiary(long key, String shifts){
-        trucksDAO.updateTruckDiary(String.valueOf(key), shifts);
+    public boolean updateTruck(TruckDTO truck){
+        return trucksDAO.updateObj(truck);
     }
 
-     public void addDelivery(DeliveryRecipeDTO recipeToAdd){
-        deliveriesDAO.storeObjToDB(recipeToAdd);
+    public boolean updateDelivery(DeliveryRecipeDTO deliveryRecipe){
+        return deliveriesDAO.updateObj(deliveryRecipe);
+    }
+
+    public boolean updateDriverDiary(String key, String shifts){
+        return driversDAO.updateDriverDiary(key, shifts);
+    }
+
+    public boolean updateTruckDiary(long key, String shifts){
+        return trucksDAO.updateTruckDiary(String.valueOf(key), shifts);
+    }
+
+     public boolean addDelivery(DeliveryRecipeDTO recipeToAdd){
+        return deliveriesDAO.storeObjToDB(recipeToAdd);
      }
 
-    public void addTruck(TruckDTO truckToAdd){
-        trucksDAO.storeObjToDB(truckToAdd);
+    public boolean addTruck(TruckDTO truckToAdd){
+        return trucksDAO.storeObjToDB(truckToAdd);
     }
 
-    public void addDriver(DriverDTO driverToAdd){
-        driversDAO.storeObjToDB(driverToAdd);
+    public boolean addDriver(DriverDTO driverToAdd){
+        return driversDAO.storeObjToDB(driverToAdd);
     }
 
-    public void removeDelivery(String key){
+    public boolean removeDelivery(String key){
         String[] keys = {key};
-        deliveriesDAO.deleteObj(keys);
+        return deliveriesDAO.deleteObj(keys);
     }
 
-    public void removeTruck(long key){
+    public boolean removeTruck(long key){
         String[] keys = {String.valueOf(key)};
-        deliveriesDAO.deleteObj(keys);
+        return deliveriesDAO.deleteObj(keys);
     }
 
-    public void removeDriver(String key){
+    public boolean removeDriver(String key){
         String[] keys = {String.valueOf(key)};
-        deliveriesDAO.deleteObj(keys);
+        return deliveriesDAO.deleteObj(keys);
     }
 
-    public void addDriverFutureShifts(String key, String toAdd){
-        driversDAO.addDriverFutureShifts(key, toAdd);
+    public boolean addDriverFutureShifts(String key, String toAdd){
+        return driversDAO.addDriverFutureShifts(key, toAdd);
     }
-    public void rewriteDriverFutureShifts(String key, String[] shiftsToAdd){
-        driversDAO.rewriteDriverFutureShifts(key, shiftsToAdd);
+    public boolean rewriteDriverFutureShifts(String key, String[] shiftsToAdd){
+        return driversDAO.rewriteDriverFutureShifts(key, shiftsToAdd);
     }
     public String getDriverFutureShifts(String key){
         return driversDAO.getDriverFutureShifts(key);
