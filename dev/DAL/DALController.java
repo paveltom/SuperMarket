@@ -3,9 +3,9 @@ package DAL;
 import DAL.DAObjects.*;
 import DAL.DTO.*;
 import DeliveryModule.BusinessLayer.Element.DeliveryRecipe;
-import com.sun.corba.se.spi.orbutil.threadpool.Work;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +15,7 @@ public class DALController {
     private TrucksDAO trucksDAO;
     private DeliveriesDAO deliveriesDAO;
     private WorkersDAO workersDAO;
-    //private ShiftsDAO shiftsDAO;
+    private ShiftsDAO shiftsDAO;
 
     private static class DALControllerHolder {
         private static DALController instance = new DALController();
@@ -26,7 +26,7 @@ public class DALController {
         trucksDAO = new TrucksDAO();
         deliveriesDAO = new DeliveriesDAO();
         workersDAO = new WorkersDAO();
-        //shiftsDAO = new ShiftsDAO();
+        shiftsDAO = new ShiftsDAO();
     }
 
     public static DALController getInstance(){
@@ -192,6 +192,23 @@ public class DALController {
     public Map<String,String> getAllAvail()
     {
         return workersDAO.getAllAvail();
+    }
+
+    public void addShift(ShiftDTO shiftToAdd){
+        shiftsDAO.storeObjToDB(shiftToAdd);
+    }
+
+    public List<ShiftDTO> getShiftHistory(){
+        List<ShiftDTO> l = new LinkedList<>();
+        for (DTO d:
+                shiftsDAO.getAllObjsFromDB()) {
+            l.add((ShiftDTO) d);
+        }
+        return l;
+    }
+
+    public ShiftDTO getShift(String date, String type){
+        return (ShiftDTO) shiftsDAO.getObj(new String[]{date,type});
     }
 //    public void UpdateShift(String date, String type, String data){
 //        shiftsDAO.updateShift(date,type,data);

@@ -26,7 +26,7 @@ public class ShiftsDAO implements IDAO{
 
     @Override
     public DTO loadObjectFromDB(String[] key) {
-        List<String[]> shifts = con.select("shifts", new String[]{"date", "type"},new String[]{key[0],key[1]});
+        List<String[]> shifts = con.select("Shifts", new String[]{"Date", "Type"},new String[]{key[0],key[1]});
         if(shifts==null || shifts.size()==0) return null;
         String[] sDetails = shifts.get(0);
         Date d;
@@ -76,7 +76,7 @@ public class ShiftsDAO implements IDAO{
         }
         ws=ws.substring(0,ws.length()-1);
         params[3]=ws;
-        return con.insert("shifts", params);
+        return con.insert("Shifts", params);
     }
 
     @Override
@@ -88,7 +88,7 @@ public class ShiftsDAO implements IDAO{
     @Override
     public boolean deleteObj(String[] keys) {
         im.unCacheObject(keys[0]+"#"+keys[1]);
-        return con.delete("shifts",keys,new String[]{"date","type"});
+        return con.delete("Shifts",keys,new String[]{"Date","Type"});
     }
 
     @Override
@@ -99,7 +99,7 @@ public class ShiftsDAO implements IDAO{
 
     @Override
     public void loadAllObjsFromDB() {
-        List<String[]> ls = con.select("shifts",null,null);
+        List<String[]> ls = con.select("Shifts",null,null);
         for (String[] key:
                 ls) {
             loadObjectFromDB(new String[]{key[0],key[1]});
