@@ -2,9 +2,6 @@ package DAL;
 
 import DAL.DAObjects.*;
 import DAL.DTO.*;
-import DeliveryModule.BusinessLayer.Element.DeliveryRecipe;
-import com.sun.corba.se.spi.orbutil.threadpool.Work;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +12,7 @@ public class DALController {
     private TrucksDAO trucksDAO;
     private DeliveriesDAO deliveriesDAO;
     private WorkersDAO workersDAO;
-    //private ShiftsDAO shiftsDAO;
+    private ShiftsDAO shiftsDAO;
 
     private static class DALControllerHolder {
         private static DALController instance = new DALController();
@@ -193,7 +190,7 @@ public class DALController {
     {
         return workersDAO.getAllAvail();
     }
-//    public void UpdateShift(String date, String type, String data){
+    //    public void UpdateShift(String date, String type, String data){
 //        shiftsDAO.updateShift(date,type,data);
 //    }
 //
