@@ -6,17 +6,22 @@ import DAL.DataBaseConnection;
 import DAL.IdentityMap;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class WorkersDAO implements IDAO{
     public IdentityMap workerIM = new IdentityMap();
     private String TableName = "Workers";
     private String[] params = {"Id","Name","Job","SMQual","BankDetails","Pay","StartDate","SocialConditions"};
 
-    public List<DTO> getAllObjByJob(String Job)
+    public List<DTO> getAllObjByJob(String _Job)
     {
         DataBaseConnection dbc = new DataBaseConnection();
-        List<String[]> allDTO = dbc.select(TableName, new String[]{"Job"}, new String[]{Job});
+        String[] key = {"Job"};
+        String job = "'"+_Job+"'";
+        String[] key1 = {job};
+        List<String[]> allDTO = dbc.select(TableName, key, key1);
         List<DTO> dtos = new ArrayList<DTO>();
         for (String[] s:
                 allDTO) {
@@ -28,6 +33,16 @@ public class WorkersDAO implements IDAO{
             }
         }
         return dtos;
+    }
+    public Map<String,String> getAllAvail()
+    {
+        Map<String,String> avails = new HashMap<String ,String >();
+     loadAllObjsFromDB();
+        for (DTO dto:
+             workerIM.getObjsList()) {
+            avails.put(((WorkerDTO)dto).getKey(),((WorkerDTO)dto).getParamVal("Availability"));
+        }
+        return avails;
     }
     @Override
     public DTO getObj(String[] keys) {

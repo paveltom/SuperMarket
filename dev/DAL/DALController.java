@@ -7,6 +7,7 @@ import com.sun.corba.se.spi.orbutil.threadpool.Work;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class DALController {
 
@@ -186,6 +187,11 @@ public class DALController {
             wDTOList.add((WorkerDTO) dto);
         }
         return wDTOList;
+    }
+
+    public Map<String,String> getAllAvail()
+    {
+        return workersDAO.getAllAvail();
     }
 //    public void UpdateShift(String date, String type, String data){
 //        shiftsDAO.updateShift(date,type,data);

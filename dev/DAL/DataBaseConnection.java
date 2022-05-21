@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class DataBaseConnection {
     private String[] truckValues = {"VehicleLicenseNumber", "MaxLoadWeight", "NetWeight", "Zone", "Model", "Diary"};
-    private String[] driverValues = {"Id", "Name", "Cellphone", "VehicleLicenseCategory", "ShippingZone", "Diary"};
+    private String[] driverValues = {"Id", "Name", "Cellphone", "VehicleLicenseCategory", "ShippingZone", "Diary","FutureShifts"};
     private String[] deliveryValues = {"OrderId", "DeliveryId", "SupplierZone", "SupplierAddress", "SupplierName", "SupplierCellphone",
             "ClientZone", "ClientAddress", "ClientName", "ClientCellphone", "DeliverdProducts", "DueDate",
             "DriverId", "DriverName", "DriverCellphone", "TruckLicenseNumber"};
@@ -164,7 +164,6 @@ public class DataBaseConnection {
                     sql.append(" AND ").append(paramsWHERE[i]).append("=").append(paramsWHEREValues[i]);
             }
             sql.append(";");
-
             ResultSet resultSet = stmt.executeQuery(sql.toString());
             String[] resRow = tablesWithParams.get(tableNAME);
             String[] resValues = new String[resRow.length];
