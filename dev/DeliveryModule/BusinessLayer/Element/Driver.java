@@ -47,7 +47,7 @@ public class Driver
     private void Persist()
     {
         DriverDTO persist = new DriverDTO(Id, VehicleLicenseCategory.GetVehicleLicenseCategoryName(License),
-                ShippingZone.GetShippingZoneName(Zone),Name, Cellphone, Diary.Encode());
+                ShippingZone.GetShippingZoneName(Zone),Name, Cellphone, Diary.Encode(),"");
         DALController.getInstance().addDriver(persist);
     }
 
