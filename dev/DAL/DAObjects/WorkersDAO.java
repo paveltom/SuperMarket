@@ -15,6 +15,11 @@ public class WorkersDAO implements IDAO{
     private String TableName = "Workers";
     private String[] params = {"Id","Name","Job","SMQual","BankDetails","Pay","StartDate","SocialConditions"};
 
+    public void changeAvailability(String w, String a){
+        WorkerDTO wor = (WorkerDTO) getObj(new String[]{w});
+        wor.changeAvailability(a);
+    }
+
     public List<DTO> getAllObjByJob(String _Job)
     {
         DataBaseConnection dbc = new DataBaseConnection();
@@ -34,9 +39,9 @@ public class WorkersDAO implements IDAO{
         }
         return dtos;
     }
-    public Map<String,String> getAllAvail()
+    public HashMap<String,String> getAllAvail()
     {
-        Map<String,String> avails = new HashMap<String ,String >();
+        HashMap<String,String> avails = new HashMap<String ,String >();
      loadAllObjsFromDB();
         for (DTO dto:
              workerIM.getObjsList()) {

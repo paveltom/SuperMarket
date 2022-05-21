@@ -4,10 +4,7 @@ import DAL.DAObjects.*;
 import DAL.DTO.*;
 import DeliveryModule.BusinessLayer.Element.DeliveryRecipe;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DALController {
 
@@ -189,7 +186,7 @@ public class DALController {
         return wDTOList;
     }
 
-    public Map<String,String> getAllAvail()
+    public HashMap<String,String> getAllAvail()
     {
         return workersDAO.getAllAvail();
     }

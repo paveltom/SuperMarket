@@ -2,6 +2,7 @@ package PersonelModule.BusinessLayer.LogicLayer;
 
 import DAL.DALController;
 import DAL.DTO.ShiftDTO;
+import DAL.DTO.WorkerDTO;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -16,9 +17,9 @@ public class ShiftController {
 
     public ShiftController() {
         this.shifts = new LinkedList<Shift>();
-        this.availability = new HashMap<String,String>();
+        //this.availability = new HashMap<String,String>();
         this.dal=DALController.getInstance();
-
+        this.availability = this.dal.getAllAvail();
     }
 
     public void addShift(String date, Integer shiftType, Worker manager, HashMap<String, LinkedList<Worker>> workersList){
@@ -96,8 +97,12 @@ public class ShiftController {
     }
 
     public void changeAvailability(String w, String a){
-        if(availability.containsKey(w))
-            availability.replace(w,a);
+        if(availability.containsKey(w)) {
+            WorkerDTO dto = dal.getWorker(w);
+            dto.changeAvailability(a);
+            dal.UpdateWorker(dto);
+            availability.replace(w, a);
+        }
         else
             throw new IllegalArgumentException("Worker doesn't exists");
     }

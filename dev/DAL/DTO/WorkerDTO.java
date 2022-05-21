@@ -72,4 +72,8 @@ public class WorkerDTO implements DTO {
     public String toString() {
         return wId+":\nName:"+Name+":\nJob:"+Job+":\nSMQual:"+SMQual+":\nBankDetails:"+BankDetails+":\nPay:"+Pay+":\nStartDate:"+StartDate+":\nSocialCondiditons:"+SocialConditions;
     }
+
+    public void changeAvailability(String a) {
+        this.Availability=a;
+    }
 }
