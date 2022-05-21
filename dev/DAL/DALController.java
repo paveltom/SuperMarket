@@ -3,6 +3,7 @@ package DAL;
 import DAL.DAObjects.*;
 import DAL.DTO.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +24,7 @@ public class DALController {
         trucksDAO = new TrucksDAO();
         deliveriesDAO = new DeliveriesDAO();
         workersDAO = new WorkersDAO();
-        //shiftsDAO = new ShiftsDAO();
+        shiftsDAO = new ShiftsDAO();
     }
 
     public static DALController getInstance(){
@@ -190,7 +191,26 @@ public class DALController {
     {
         return workersDAO.getAllAvail();
     }
+
     //    public void UpdateShift(String date, String type, String data){
+
+    public void addShift(ShiftDTO shiftToAdd){
+        shiftsDAO.storeObjToDB(shiftToAdd);
+    }
+
+    public List<ShiftDTO> getShiftHistory(){
+        List<ShiftDTO> l = new LinkedList<>();
+        for (DTO d:
+                shiftsDAO.getAllObjsFromDB()) {
+            l.add((ShiftDTO) d);
+        }
+        return l;
+    }
+
+    public ShiftDTO getShift(String date, String type){
+        return (ShiftDTO) shiftsDAO.getObj(new String[]{date,type});
+    }
+//    public void UpdateShift(String date, String type, String data){
 //        shiftsDAO.updateShift(date,type,data);
 //    }
 //

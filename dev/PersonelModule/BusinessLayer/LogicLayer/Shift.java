@@ -12,30 +12,17 @@ public class Shift {
     public String manager;
     public HashMap<JobEnum, LinkedList<String>> workers;
 
-    public Shift(Date date, Integer shiftType, Worker manager, HashMap<JobEnum, LinkedList<Worker>> workersList) {
+    public Shift(Date date, Integer shiftType, String manager, HashMap<JobEnum, LinkedList<String>> workersList) {
         this.date = date;
         this.shiftType = shiftType;
-        if(!manager.SMQualification) throw new IllegalArgumentException("The selected worker for the shift manager is not qualified");
-        this.manager = manager.getId();
+        this.manager = manager;
         if(!workersList.containsKey(JobEnum.Cashier) || !workersList.containsKey(JobEnum.Usher) || !workersList.containsKey(JobEnum.StoreKeeper) || !workersList.containsKey(JobEnum.Driver))
             throw new IllegalArgumentException("Shift must contain cashier, usher, store keeper and driver");
         if(shiftType == 1) {
             if (workersList.containsKey(JobEnum.LogisticsManager) || workersList.containsKey(JobEnum.PersonnelManager))
                 throw new IllegalArgumentException("Evening shift cant have Personnel Manager or Logistics Manager");
         }
-        HashMap<JobEnum, LinkedList<String>> hm = new HashMap<>();
-        for (JobEnum j:
-             workersList.keySet()) {
-            LinkedList<String> lnk = new LinkedList<>();
-            for (Worker w:
-                    workersList.get(j)) {
-                if(!w.getJob().equals(j.toString()))
-                    throw new IllegalArgumentException("Some workers can't work in their assigned role");
-                lnk.add(w.getId());
-            }
-            hm.put(j,lnk);
-        }
-        this.workers = hm;
+        this.workers = workersList;
     }
 
     public Date getDate() {
@@ -56,15 +43,15 @@ public class Shift {
 
     public String toString() {
         String s="[\n" +
-                "Date: "+new SimpleDateFormat("dd/MM/yyyy").format(date)+
-                "\nShift type: ";
+                "\tDate: "+new SimpleDateFormat("dd/MM/yyyy").format(date)+
+                "\n\tShift type: ";
         if(this.shiftType == 0) s=s+"Morning";
         else s=s+"Evening";
-        s+="\nManager: "+this.manager+
-                "\nWorkers:\n";
+        s+="\n\tManager: "+this.manager+
+                "\n\tWorkers:\n";
         for (JobEnum j:
                 workers.keySet()) {
-            s+="\t"+j+": ";
+            s+="\t\t"+j+": ";
             for (String w:
                     workers.get(j)) {
                 s+=w+", ";

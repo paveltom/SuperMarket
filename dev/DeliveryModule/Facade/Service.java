@@ -73,7 +73,7 @@ public class Service implements IService{
         }
     }
 
-    public boolean IsOccupied(String driverID, int month, int day){
+    public boolean isOccupied(String driverID, int month, int day){
         return deliveryResourcesService.isDriverOccupied(driverID, month, day);
     }
 

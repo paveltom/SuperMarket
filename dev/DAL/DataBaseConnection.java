@@ -12,12 +12,12 @@ public class DataBaseConnection {
     private String[] deliveryValues = {"OrderId", "DeliveryId", "SupplierZone", "SupplierAddress", "SupplierName", "SupplierCellphone",
             "ClientZone", "ClientAddress", "ClientName", "ClientCellphone", "DeliverdProducts", "DueDate",
             "DriverId", "DriverName", "DriverCellphone", "TruckLicenseNumber"};
-    private String[] shiftValues = {"date", "type", "shiftManager", "workers"};
+    private String[] shiftValues = {"Date", "Type", "Manager", "Workers"};
     private String[] workerValues = {"Id","Name","Job","SMQual","BankDetails","Pay","StartDate","SocialConditions","Availability"};
     // add other strings
     private final Map<String, String[]> tablesWithParams = new HashMap<String, String[]>() {{
         put("Trucks", truckValues);
-        put("shifts", shiftValues);
+        put("Shifts", shiftValues);
         put("Drivers", driverValues);
         put("Deliveries", deliveryValues);
         put("Workers",workerValues);
