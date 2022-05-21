@@ -2,6 +2,7 @@ package DAL;
 
 import DAL.DAObjects.*;
 import DAL.DTO.*;
+import java.util.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -187,7 +188,7 @@ public class DALController {
         return wDTOList;
     }
 
-    public Map<String,String> getAllAvail()
+    public HashMap<String,String> getAllAvail()
     {
         return workersDAO.getAllAvail();
     }
