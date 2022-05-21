@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public class DataBaseConnection {
-    private String[] truckValues = {"VehicleLicenseNumber", "MaxLoadWeight", "NetWeight", "Zone", "Model", "Diary"};
+    private String[] truckValues = {"VehicleLicenseNumber", "MaxLoadWeight", "NetWeight", "ShippingZone", "Model", "Diary"};
     private String[] driverValues = {"Id", "Name", "Cellphone", "VehicleLicenseCategory", "ShippingZone", "Diary", "FutureShifts"};
     private String[] deliveryValues = {"OrderId", "DeliveryId", "SupplierZone", "SupplierAddress", "SupplierName", "SupplierCellphone",
             "ClientZone", "ClientAddress", "ClientName", "ClientCellphone", "DeliverdProducts", "DueDate",
@@ -76,7 +76,7 @@ public class DataBaseConnection {
             return res;
 
         } catch (Exception e){
-            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            System.err.println(e.getClass().getName() + ": " + e.getMessage() + ". Insert method. On table: " + tableNAME);
             return false;
         }
     }
@@ -105,7 +105,7 @@ public class DataBaseConnection {
             return res;
 
         } catch ( Exception e ) {
-            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            System.err.println(e.getClass().getName() + ": " + e.getMessage() + ". Update method. On table: " + tableNAME);
             return false;
         }
     }
@@ -134,7 +134,7 @@ public class DataBaseConnection {
             return res;
 
         } catch ( Exception e ) {
-            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            System.err.println(e.getClass().getName() + ": " + e.getMessage() + ". Delete method. On table: " + tableNAME);
             return false;
         }
 
@@ -179,14 +179,13 @@ public class DataBaseConnection {
             conn.close();
             return output;
         } catch ( Exception e ) {
-            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            System.err.println(e.getClass().getName() + ": " + e.getMessage() + ". Select method. On table: " + tableNAME);
             return null;
         }
     }
 
     private boolean createCrucialTables(Connection conn) {
         Statement statement;
-        boolean res = false;
         String existence = "SELECT count(*) "
                 + "FROM information_schema.tables "
                 + "WHERE table_name = ?"
@@ -253,13 +252,13 @@ public class DataBaseConnection {
             if(resultSet.next()) return true;
 
             Statement stmt = conn.createStatement();
-            res = stmt.execute(driversTableCreation);
-            res = stmt.execute(trucksTableCreation);
-            res = stmt.execute(deliveriesTableCreation);
-            res = stmt.execute(shiftsTableCreation);
-            res = stmt.execute(workersTableCreataion);
+            stmt.execute(driversTableCreation);
+            stmt.execute(trucksTableCreation);
+            stmt.execute(deliveriesTableCreation);
+            stmt.execute(shiftsTableCreation);
+            stmt.execute(workersTableCreataion);
             System.out.println("DB and Tables created successfully...");
-            return res;
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;

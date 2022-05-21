@@ -45,7 +45,7 @@ public class DeliveriesDAO implements IDAO{
                                 ((DeliveryRecipeDTO) obj).DueDate, ((DeliveryRecipeDTO) obj).DriverId, ((DeliveryRecipeDTO) obj).DriverName,
                                 ((DeliveryRecipeDTO) obj).DriverCellphone, String.valueOf(((DeliveryRecipeDTO) obj).TruckLicenseNumber)};
             try {
-                boolean res = dbconn.insert("Trucks", params);
+                boolean res = dbconn.insert("Deliveries", params);
                 if(!res) return res;
                 return true;
             }catch(Exception e){

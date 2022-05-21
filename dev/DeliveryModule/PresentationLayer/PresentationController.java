@@ -46,7 +46,7 @@ public class PresentationController {
                     if(!menuStorage.isEmpty())
                         currMenu = menuStorage.pop();
                     else
-                        exit();
+                        return;
                     break;
 
                 default:

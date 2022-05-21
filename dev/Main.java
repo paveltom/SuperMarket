@@ -4,9 +4,6 @@ import PersonelModule.BusinessLayer.ServiceLayer.Service;
 import java.util.Scanner;
 
 public class Main {
-    // PersonelModule instance pm
-    // main-menu that holds both and navigates between those two menus
-    // !!!!important - instances of pc and pm have to know each other through some ModulesController
     public static void main(String[] args){
         PersonelModule.PresentationLayer.Main pmMain = new PersonelModule.PresentationLayer.Main();
         Service pmService = new Service();
@@ -15,7 +12,7 @@ public class Main {
         String input = "-1";
 
         while(input != "0") {
-            System.out.println("0. Exit + \n1. Delivery module + \n2. Personnel module");
+            System.out.println("0. Exit \n1. Delivery module \n2. Personnel module");
             System.out.println("Choose option:");
             input = scanner.nextLine();
             switch (input){
