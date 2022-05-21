@@ -31,7 +31,7 @@ public class DataBaseConnection {
             // db parameters
             String dir = System.getProperty("user.dir");
             String url = "jdbc:sqlite:" + dir + "\\dev\\DataBase\\PerDel.db";
-            System.out.println("url: " + url);
+            //System.out.println("url: " + url);
             Class.forName("org.sqlite.JDBC");
 
             // create a connection to the database
@@ -39,7 +39,7 @@ public class DataBaseConnection {
 
             boolean exists = createCrucialTables(conn); // create db with tables if not exists
 
-            System.out.println("Connection to SQLite has been established.");
+            //System.out.println("Connection to SQLite has been established.");
             return conn;
 
         } catch (SQLException e) {
@@ -51,25 +51,24 @@ public class DataBaseConnection {
     }
 
     public boolean insert(String tableNAME, String[] params){ // exmpl: TRUCK, {"01113", "1000"...}
-        System.out.println("\ninsert");
         Connection conn = null;
         Statement stmt = null;
-        System.out.println("table: " + tableNAME);
-        System.out.println("params: ");
-        for(String curr: params) System.out.print(curr + " ");
-        System.out.println();
-        System.out.println("paramNames: ");
-        for(String curr: tablesWithParams.get(tableNAME)) System.out.print(curr + " ");
-        System.out.println();
+        //System.out.println("\ninsert");
+        //System.out.println("table: " + tableNAME);
+        //System.out.println("params: ");
+        //for(String curr: params) System.out.print(curr + " ");
+        //System.out.println();
+        //System.out.println("paramNames: ");
+        //for(String curr: tablesWithParams.get(tableNAME)) System.out.print(curr + " ");
+        //System.out.println();
         try {
             conn = connect();
             stmt = conn.createStatement();
-            //String sql = "INSERT INTO " + tableNAME + " " + String.join(",", tablesWithParams.get(tableNAME)) + " VALUES (" + params[0];
             String sql = "INSERT INTO " + tableNAME + " VALUES ('" + params[0] + "'";
             for (int i = 1; i < params.length; i++)
                 sql += ",'" + params[i] + "'";
             sql += ");";
-            System.out.println("sql: " + sql);
+            //System.out.println("sql: " + sql);
             boolean res = stmt.execute(sql);
             //conn.commit();
             stmt.close();
@@ -83,7 +82,7 @@ public class DataBaseConnection {
     }
 
     public boolean update(String tableNAME, String[] key, String[]keysNAMES, String paramNAME, String paramVALUE){
-        System.out.println("\nupdate");
+        //System.out.println("\nupdate");
         Connection conn = null;
         Statement stmt = null;
 
@@ -97,7 +96,7 @@ public class DataBaseConnection {
                 sql.append(" AND ").append(keysNAMES[i]).append("=").append(key[i]);
             sql.append(";");
 
-            System.out.println("sql: " + sql);
+            //System.out.println("sql: " + sql);
 
             boolean res = stmt.execute(sql.toString());
             conn.commit();
@@ -112,7 +111,7 @@ public class DataBaseConnection {
     }
 
     public boolean delete(String tableNAME, String[] key, String[] keysNAMES) {
-        System.out.println("\ndelete");
+        //System.out.println("\ndelete");
         Connection conn = null;
         Statement stmt = null;
 
@@ -126,7 +125,7 @@ public class DataBaseConnection {
                 sql.append(" AND ").append(keysNAMES[i]).append("=").append(key[i]);
             sql.append(";");
 
-            System.out.println("delete sql: " + sql);
+            //System.out.println("delete sql: " + sql);
 
             boolean res = stmt.execute(sql.toString());
             conn.commit();
@@ -148,7 +147,7 @@ public class DataBaseConnection {
      * @param paramsWHEREValues put 'null' here if you want to select all values from the table.
      */
     public List<String[]> select(String tableNAME, String[] paramsWHERE, String[] paramsWHEREValues) {
-        System.out.println("\nselect");
+        //System.out.println("\nselect");
         Connection conn = null;
         Statement stmt = null;
 
@@ -259,7 +258,7 @@ public class DataBaseConnection {
             res = stmt.execute(deliveriesTableCreation);
             res = stmt.execute(shiftsTableCreation);
             res = stmt.execute(workersTableCreataion);
-            System.out.println("Drivers table created successfully...");
+            System.out.println("DB and Tables created successfully...");
             return res;
         } catch (SQLException e) {
             e.printStackTrace();
