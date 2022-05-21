@@ -13,7 +13,7 @@ import java.util.Map;
 public class WorkersDAO implements IDAO{
     public IdentityMap workerIM = new IdentityMap();
     private String TableName = "Workers";
-    private String[] params = {"Id","Name","Job","SMQual","BankDetails","Pay","StartDate","SocialConditions"};
+    private String[] params = {"Id","Name","Job","SMQual","BankDetails","Pay","StartDate","SocialConditions", "Availability"};
 
     public List<DTO> getAllObjByJob(String _Job)
     {
