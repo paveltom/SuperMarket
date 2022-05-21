@@ -193,6 +193,7 @@ public class Worker {
         if(wDto.getParamVal("SMQual").equals("yes"))
             this.SMQualification = true;
         else this.SMQualification = false;
+        this.Job = JobEnum.valueOf(wDto.getParamVal("Job"));
         this.BankDetails = wDto.getParamVal("BankDetails");
         this.Pay = Double.parseDouble(wDto.getParamVal("Pay"));
         try{

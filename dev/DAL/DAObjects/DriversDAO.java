@@ -69,7 +69,7 @@ public class DriversDAO implements IDAO{
     @Override
     public boolean storeObjToDB(DTO obj) {
         if(obj instanceof DriverDTO){
-            String[] params = {((DriverDTO) obj).Id, ((DriverDTO) obj).Name, ((DriverDTO) obj).Cellphone, ((DriverDTO) obj).License, ((DriverDTO) obj).Zone, ((DriverDTO) obj).Diary, ""};
+            String[] params = {((DriverDTO) obj).Id, ((DriverDTO) obj).Name, ((DriverDTO) obj).Cellphone, ((DriverDTO) obj).License, ((DriverDTO) obj).Zone, ((DriverDTO) obj).Diary, ((DriverDTO) obj).FutureShifts};
             try {
                 boolean res = dbconn.insert("Drivers", params);
                 if(!res) return res;
@@ -90,7 +90,7 @@ public class DriversDAO implements IDAO{
             try {
                 String[] keys = {obj.getKey()};
                 String[] keyNames = {"Id"};
-                String[] params = {((DriverDTO) obj).Id, ((DriverDTO) obj).Name, ((DriverDTO) obj).Cellphone, ((DriverDTO) obj).License, ((DriverDTO) obj).Zone, ((DriverDTO) obj).Diary, ""};
+                String[] params = {((DriverDTO) obj).Id, ((DriverDTO) obj).Name, ((DriverDTO) obj).Cellphone, ((DriverDTO) obj).License, ((DriverDTO) obj).Zone, ((DriverDTO) obj).Diary, ((DriverDTO) obj).FutureShifts};
                 String[] paramNames = {"Id", "Name", "Cellphone", "VehicleLicenseCategory", "ShippingZone", "Diary", "FutureShifts"};
                 for (int i = 0; i < params.length; i++) {
                     if (params[i] != "")

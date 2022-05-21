@@ -120,7 +120,7 @@ public class Main {
                             }
                             break;
                         case "6":
-                            System.out.println("Type the worker details in the following order:\n<Id>#<Name>#<SMQualification>#<BankDetails>#<Pay>#<StartDate>#<SocialDetails>#<DeliveryZone>#<license>");
+                            System.out.println("Type the worker details in the following order:\n<Id>#<Name>#<SMQualification>#<BankDetails>#<Pay>#<StartDate>#<SocialDetails>#<VehicleCategory>#<LivingArea>#<Cellphone>");
                             String c62 = scan.nextLine();
                             String[] d62 = c62.split("#");
                             while(!d62[0].equals("x")){
