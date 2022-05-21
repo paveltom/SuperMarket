@@ -31,7 +31,7 @@ public interface IService {
 
     public void addConstraints(String ID, FacadeDate date, int shift);
 
-    public boolean IsOccupied(String driverID, int month, int day);
+    public boolean isOccupied(String driverID, int month, int day);
 
 }
 
