@@ -17,8 +17,8 @@ public class PresentationController {
     private CallableMenu superUserMenu;
     private final Stack<CallableMenu> menuStorage;
 
-    public PresentationController(){
-        service = new Service();
+    public PresentationController(PersonelModule.BusinessLayer.ServiceLayer.Service pmService){
+        service = new Service(pmService);
         menuPrinter = new MenuPrinter();
         menuStorage = new Stack<>();
         setMenus();

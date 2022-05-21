@@ -8,8 +8,8 @@ public class Main {
 
         //System.out.println("Hello World - Modified by 316534072!");
 
-        PresentationController pc = new PresentationController();
-        pc.run();
+//        PresentationController pc = new PresentationController();
+//        pc.run();
 
     }
 }

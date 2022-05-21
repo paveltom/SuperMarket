@@ -25,9 +25,9 @@ public class Main {
         service.changeAvailability("666666666","tue - Morning, wed - Evening");
         service.addShift("12/04/2022",0,"111111111","PersonnelManager 111111111|Cashier 222222222|StoreKeeper 333333333|Usher 444444444|LogisticsManager 555555555|Driver 666666666");
     }
-    public static void main(String[] args) {
+    public void main(Service serv) {
         //Init();
-        service = new Service();
+        service = serv;
         Scanner scan = new Scanner(System.in);
         System.out.println("Program Initiated");
         System.out.println("Please Enter Next Command");
