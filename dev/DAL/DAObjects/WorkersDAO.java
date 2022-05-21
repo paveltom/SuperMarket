@@ -105,7 +105,7 @@ public class WorkersDAO implements IDAO{
     @Override
     public void loadAllObjsFromDB() {
         DataBaseConnection dbc = new DataBaseConnection();
-        List<String[]> allDTO = dbc.select(TableName, new String[]{"null"}, new String[]{"null"});
+        List<String[]> allDTO = dbc.select(TableName, null, null);
         for (String[] s:
                 allDTO) {
             if(workerIM.getCachedObj(s[0]) == null)
