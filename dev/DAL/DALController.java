@@ -190,7 +190,7 @@ public class DALController {
 
     public HashMap<String,String> getAllAvail()
     {
-        return workersDAO.getAllAvail();
+        return (HashMap<String, String>) workersDAO.getAllAvail();
     }
 
     //    public void UpdateShift(String date, String type, String data){

@@ -16,9 +16,9 @@ public class Month
     private final char DaysDelimiter = '#';
 
     /*
-    * @INV: Shifts[i][j] = true iff shift j at day i is occupied.
-    */
-    private boolean[][] Shifts;
+     * @INV: Shifts[i][j] = true iff shift j at day i is occupied.
+     */
+    private final boolean[][] Shifts;
 
     public Month(int numOfDays)
     {
@@ -60,8 +60,8 @@ public class Month
     }
 
     /*
-    * return null if all shifts of this month are occupied.
-    * else, return available Shift
+     * return null if all shifts of this month are occupied.
+     * else, return available Shift
      */
     public Shift GetAvailableShift(int day)
     {

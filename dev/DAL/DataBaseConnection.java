@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public class DataBaseConnection {
-    private String[] truckValues = {"VehicleLicenseNumber", "MaxLoadWeight", "NetWeight", "ShippingZone", "Model", "Diary"};
+    private String[] truckValues = {"VehicleLicenseNumber", "MaxLoadWeight", "NetWeight", "Model", "ShippingZone", "Diary", "AuthorizedLicense"};
     private String[] driverValues = {"Id", "Name", "Cellphone", "VehicleLicenseCategory", "ShippingZone", "Diary", "FutureShifts"};
     private String[] deliveryValues = {"OrderId", "DeliveryId", "SupplierZone", "SupplierAddress", "SupplierName", "SupplierCellphone",
             "ClientZone", "ClientAddress", "ClientName", "ClientCellphone", "DeliverdProducts", "DueDate",
@@ -206,7 +206,8 @@ public class DataBaseConnection {
                 " NetWeight TEXT NOT NULL," +
                 " Model TEXT NOT NULL," +
                 " ShippingZone TEXT NOT NULL," +
-                " Diary TEXT NOT NULL)";
+                " Diary TEXT NOT NULL," +
+                " AuthorizedLicense TEXT NOT NULL)";
 
         String deliveriesTableCreation = "CREATE TABLE Deliveries (" +
                 "OrderId TEXT," +

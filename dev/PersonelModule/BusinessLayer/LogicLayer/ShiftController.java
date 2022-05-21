@@ -169,6 +169,7 @@ public class ShiftController {
         return availability;
     }
     public String showAvailability(){
+        this.availability = this.dal.getAllAvail();
         String s = "Availability:\n";
         for (String id:
                 availability.keySet()) {

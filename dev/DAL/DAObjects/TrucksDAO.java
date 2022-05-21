@@ -41,14 +41,14 @@ public class TrucksDAO implements IDAO{
     public DTO loadObjectFromDB(String[] keys) {
         String[] keyNames = {"VehicleLicenseNumber"};
         String[] truck = dbconn.select("Trucks", keyNames, keys).get(0);
-        DTO output = new TruckDTO(Double.parseDouble(truck[1]), Double.parseDouble(truck[2]), Long.parseLong(truck[0]), truck[3], truck[4], truck[5], "");
+        DTO output = new TruckDTO(Double.parseDouble(truck[1]), Double.parseDouble(truck[2]), Long.parseLong(truck[0]), truck[3], truck[4], truck[5], truck[6]);
         return output;
     }
 
     @Override
     public boolean storeObjToDB(DTO obj) {
         if(obj instanceof TruckDTO){
-            String[] params = {String.valueOf(((TruckDTO) obj).VehicleLicenseNumber), String.valueOf(((TruckDTO) obj).MaxLoadWeight), String.valueOf(((TruckDTO) obj).NetWeight), ((TruckDTO) obj).Model, ((TruckDTO) obj).Zone, ((TruckDTO) obj).Diary};
+            String[] params = {String.valueOf(((TruckDTO) obj).VehicleLicenseNumber), String.valueOf(((TruckDTO) obj).MaxLoadWeight), String.valueOf(((TruckDTO) obj).NetWeight), ((TruckDTO) obj).Model, ((TruckDTO) obj).Zone, ((TruckDTO) obj).Diary, ((TruckDTO) obj).AuthorizedLicense};
             try {
                 boolean res = dbconn.insert("Trucks", params);
                 if(!res) return res;
@@ -67,8 +67,8 @@ public class TrucksDAO implements IDAO{
             try {
                 String[] keys = {obj.getKey()};
                 String[] keyNames = {"Id"};
-                String[] params = {String.valueOf(((TruckDTO) obj).VehicleLicenseNumber), String.valueOf(((TruckDTO) obj).MaxLoadWeight), String.valueOf(((TruckDTO) obj).NetWeight), ((TruckDTO) obj).Model, ((TruckDTO) obj).Zone, ((TruckDTO) obj).Diary};
-                String[] paramNames = {"VehicleLicenseNumber", "MaxLoadWeight", "NetWeight", "Model", "ShippingZone", "Diary"};
+                String[] params = {String.valueOf(((TruckDTO) obj).VehicleLicenseNumber), String.valueOf(((TruckDTO) obj).MaxLoadWeight), String.valueOf(((TruckDTO) obj).NetWeight), ((TruckDTO) obj).Model, ((TruckDTO) obj).Zone, ((TruckDTO) obj).Diary, ((TruckDTO) obj).AuthorizedLicense};
+                String[] paramNames = {"VehicleLicenseNumber", "MaxLoadWeight", "NetWeight", "Model", "ShippingZone", "Diary", "AuthorizedLicense"};
                 for (int i = 0; i < params.length; i++) {
                     if (params[i] != "")
                         res = dbconn.update("Trucks", keys, keyNames, paramNames[i], params[i]);
@@ -102,7 +102,7 @@ public class TrucksDAO implements IDAO{
     public void loadAllObjsFromDB() {
         List<String[]> res = dbconn.select("Trucks", null, null);
         for(String[] truck : res){
-            TruckDTO toCache = new TruckDTO(Double.parseDouble(truck[1]), Double.parseDouble(truck[2]), Long.parseLong(truck[0]), truck[3], truck[4], truck[5], "");
+            TruckDTO toCache = new TruckDTO(Double.parseDouble(truck[1]), Double.parseDouble(truck[2]), Long.parseLong(truck[0]), truck[3], truck[4], truck[5], truck[6]);
             trucksIM.cacheObject(toCache);
         }
     }

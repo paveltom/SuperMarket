@@ -6,8 +6,7 @@ public class Scheduler
 {
     private final int NumOfMonths = 12;
     private final int Year = 2022;
-    private final String MonthDelimiterDecoding = "//$";
-    private final char MonthDelimiterEncoding = '$';
+    private final String Delimiter = "~";
 
     private Month[] Dairy;
 
@@ -30,7 +29,7 @@ public class Scheduler
     public Scheduler(String encoded)
     {
         Month[] months = new Month[NumOfMonths+1];
-        String[] months_encoding = encoded.split(MonthDelimiterDecoding);
+        String[] months_encoding = encoded.split(Delimiter);
         int i = 1;
         for(String encode : months_encoding)
             months[i++] = new Month(encode);
@@ -53,7 +52,7 @@ public class Scheduler
                 return new DeliveryDate(i, Year, shift);
             }
             /* Month i has no available slot
-            * Proceed to successive month from day 1 */
+             * Proceed to successive month from day 1 */
             else
             {
                 j = 1;
@@ -99,7 +98,7 @@ public class Scheduler
         {
             stringBuilder.append(Dairy[j].Encode());
             if(ndelimiters > 0)
-                stringBuilder.append(MonthDelimiterEncoding);
+                stringBuilder.append(Delimiter);
             ndelimiters--;
             j++;
         }

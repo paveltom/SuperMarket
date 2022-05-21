@@ -6,6 +6,7 @@ import DeliveryModule.Facade.FacadeObjects.FacadeDriver;
 import PersonelModule.BusinessLayer.LogicLayer.Worker;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
 
 public class Service {
@@ -34,14 +35,14 @@ public class Service {
         String DriverShifts = "";
         List<String> wIds = wService.getWorkersIdByJob("Driver");
         for (String wid:
-             wIds) {
+                wIds) {
             boolean first = true;
             DriverShifts +="Driver "+wService.GetWorkerNameById(wid) +" id:"+wid+" future delivers are:";
             String futureShifts = DALController.getInstance().getDriverFutureShifts(wid);
             String[] SingleShift = futureShifts.split("#");
             List<String> UpdatedFutureShifts = new LinkedList<String>();
             for (String oneShift:
-                 SingleShift) {
+                    SingleShift) {
                 String[] dateAndType = oneShift.split(",");
                 try {
                     SimpleDateFormat format1 = new SimpleDateFormat("dd/MM/yyyy");
@@ -123,7 +124,7 @@ public class Service {
         }
         //Adding Constraints to drivers
         for (String DriverId:
-             DriverIds) {
+                DriverIds) {
             try {
                 int day = Integer.valueOf(date.split("/")[0]);
                 int month = Integer.valueOf(date.split("/")[1]);
@@ -194,6 +195,15 @@ public class Service {
         }
         catch (Exception e)
         {
+            try {
+                wService.DeleteWorker(_Id);
+                sService.removeWorker(_Id);
+                DMService.removeDriver(_Id);
+            }
+            catch (Exception e1)
+            {
+
+            }
             return e.getMessage();
         }
     }
@@ -205,10 +215,11 @@ public class Service {
      */
     public String DeleteWorker(String _Id)
     {
+        Calendar cal = Calendar.getInstance();
         try{
-            Calendar cal = Calendar.getInstance();
-            int dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
-            if (DMService.isOccupied(_Id,Integer.valueOf(cal.get(Calendar.MONTH) + 1),Integer.valueOf(cal.get(dayOfMonth))))
+
+
+            if (DMService.isOccupied(_Id, cal.get(Calendar.MONTH) + 1,LocalDate.now().getDayOfMonth()))
                 return "Cannot delete worker because he has Jobs in the future";
             if (sService.isOccupied(_Id))
                 return "Cannot delete worker because he has Jobs in the future";
@@ -219,7 +230,7 @@ public class Service {
         }
         catch (Exception e)
         {
-            return e.getMessage();
+            return "Wasnt able to delete worker check input";
         }
     }
 
@@ -260,19 +271,19 @@ public class Service {
     public String ChangeJob(String _Id,String _newJob)
     {
         try{
-        Calendar cal = Calendar.getInstance();
-        int dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
-        if (DMService.isOccupied(_Id,Integer.valueOf(cal.get(Calendar.MONTH) + 1),Integer.valueOf(cal.get(dayOfMonth))))
-            return "Cannot delete worker because he has Jobs in the future";
+            Calendar cal = Calendar.getInstance();
+            int dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
+            if (DMService.isOccupied(_Id, cal.get(Calendar.MONTH) + 1,LocalDate.now().getDayOfMonth()))
+                return "Cannot change worker because he has Jobs in the future";
             if (sService.isOccupied(_Id))
-            return "Cannot delete worker because he has Jobs in the future";
-        if(wService.getWorkerJobById(_Id).equals("Driver"))
-        {
-            wService.ChangeJob(_Id,_newJob);
-            DMService.removeDriver(_Id);
-        }
-        else wService.ChangeJob(_Id,_newJob);
-        return "Changed job successfully";}
+                return "Cannot change worker because he has Jobs in the future";
+            if(wService.getWorkerJobById(_Id).equals("Driver"))
+            {
+                wService.ChangeJob(_Id,_newJob);
+                DMService.removeDriver(_Id);
+            }
+            else wService.ChangeJob(_Id,_newJob);
+            return "Changed job successfully";}
         catch (Exception e ){
             return e.getMessage();
         }
@@ -291,10 +302,10 @@ public class Service {
         try {
             Calendar cal = Calendar.getInstance();
             int dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
-            if (DMService.isOccupied(_Id,Integer.valueOf(cal.get(Calendar.MONTH) + 1),Integer.valueOf(cal.get(dayOfMonth))))
-                return "Cannot delete worker because he has Jobs in the future";
+            if (DMService.isOccupied(_Id, cal.get(Calendar.MONTH) + 1,LocalDate.now().getDayOfMonth()))
+                return "Cannot change worker because he has Jobs in the future";
             if (sService.isOccupied(_Id))
-                return "Cannot delete worker because he has Jobs in the future";
+                return "Cannot change worker because he has Jobs in the future";
             wService.ChangeJob(_Id, "Driver");
             FacadeDriver fDriver = new FacadeDriver(_Id,wService.GetWorkerNameById(_Id),vehicleCategory,livingArea,cellphone);
             DMService.addDriver(fDriver);
@@ -314,10 +325,10 @@ public class Service {
     {
         Calendar cal = Calendar.getInstance();
         int dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
-        if (DMService.isOccupied(_Id,Integer.valueOf(cal.get(Calendar.MONTH) + 1),Integer.valueOf(cal.get(dayOfMonth))))
-            return "Cannot delete worker because he has Jobs in the future";
+        if (DMService.isOccupied(_Id, cal.get(Calendar.MONTH) + 1,LocalDate.now().getDayOfMonth()))
+            return "Cannot change worker because he has Jobs in the future";
         if (sService.isOccupied(_Id))
-            return "Cannot delete worker because he has Jobs in the future";
+            return "Cannot change worker because he has Jobs in the future";
         if(_newQual.equals("yes"))
             return wService.ChangeQual(_Id,true);
         else if(_newQual.equals("no"))

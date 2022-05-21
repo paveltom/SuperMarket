@@ -15,6 +15,7 @@ public class Service implements IService{
         deliveryService = new DeliveryService();
         deliveryResourcesService = new DeliveryResourcesService();
         this.pmService = otherService;
+        pmService.AddDmService(this);
     }
 
     public Service(){ // needs to receive Personel Module instance

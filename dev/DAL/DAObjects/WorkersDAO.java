@@ -15,11 +15,6 @@ public class WorkersDAO implements IDAO{
     private String TableName = "Workers";
     private String[] params = {"Id","Name","Job","SMQual","BankDetails","Pay","StartDate","SocialConditions"};
 
-    public void changeAvailability(String w, String a){
-        WorkerDTO wor = (WorkerDTO) getObj(new String[]{w});
-        wor.changeAvailability(a);
-    }
-
     public List<DTO> getAllObjByJob(String _Job)
     {
         DataBaseConnection dbc = new DataBaseConnection();
@@ -39,12 +34,12 @@ public class WorkersDAO implements IDAO{
         }
         return dtos;
     }
-    public HashMap<String,String> getAllAvail()
+    public Map<String,String> getAllAvail()
     {
-        HashMap<String,String> avails = new HashMap<String ,String >();
-     loadAllObjsFromDB();
+        Map<String,String> avails = new HashMap<String ,String >();
+        loadAllObjsFromDB();
         for (DTO dto:
-             workerIM.getObjsList()) {
+                workerIM.getObjsList()) {
             avails.put(((WorkerDTO)dto).getKey(),((WorkerDTO)dto).getParamVal("Availability"));
         }
         return avails;
@@ -55,7 +50,7 @@ public class WorkersDAO implements IDAO{
         if(workerIM.getCachedObj(keys[0]) != null)
             return wDTO;
         else {
-           return loadObjectFromDB(keys);
+            return loadObjectFromDB(keys);
         }
 
     }
@@ -96,6 +91,7 @@ public class WorkersDAO implements IDAO{
     public boolean deleteObj(String[] keys) {
         DataBaseConnection dbc = new DataBaseConnection();
         dbc.delete(TableName,keys, new String[]{params[0]});
+        workerIM.unCacheObject(keys[0]);
         return true;
     }
 

@@ -5,7 +5,7 @@ public class Site
 {
     public final ShippingZone Zone;
     public final String Address, Name, Cellphone;
-    private final String Delimiter = "\\$";
+    private final String Delimiter = "~";
 
     public Site(ShippingZone Zone, String Address, String Name, String Cellphone)
     {
@@ -27,12 +27,26 @@ public class Site
 
     public String Encode()
     {
-        return String.format("%s$%s$%s$%s", ShippingZone.GetShippingZoneName(Zone), Address, Name, Cellphone);
+        return String.format("%s~%s~%s~%s", ShippingZone.GetShippingZoneName(Zone), Address, Name, Cellphone);
     }
 
     @Override
     public String toString()
     {
         return String.format("Site: %s\nZone: %s\nAddress: %s\nCellphone: %s\n", Name, Zone, Address, Cellphone);
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if(this == obj)
+            return true;
+        if(!(obj instanceof Site))
+            return false;
+        else
+        {
+            Site other = (Site) obj;
+            return Zone.equals(other.Zone) && Address.equals(other.Address) && Name.equals(other.Name) && Cellphone.equals(other.Cellphone);
+        }
     }
 }
