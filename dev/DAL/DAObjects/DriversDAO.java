@@ -110,6 +110,7 @@ public class DriversDAO implements IDAO{
         try {
             String[] keyNames = {"Id"};
             dbconn.delete("Drivers", keys, keyNames);
+            driversIM.unCacheObject(keys[0]);
             return true;
         }catch (Exception e){return false;}
     }

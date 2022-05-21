@@ -25,7 +25,7 @@ public class Service implements IService{
 
 
 
-    public ResponseT<FacadeRecipe> deliver(FacadeSite origin, FacadeSite destination, int orderId, List<FacadeProduct> facProducts, FacadeDate facSubDate){
+    public ResponseT<FacadeRecipe> deliver(FacadeSite origin, FacadeSite destination, String orderId, List<FacadeProduct> facProducts, FacadeDate facSubDate){
         ResponseT<FacadeRecipe> res = deliveryService.deliver(origin, destination, orderId, facProducts, facSubDate);
         if(res.getErrorOccurred()){
             return res;

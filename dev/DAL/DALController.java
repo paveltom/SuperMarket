@@ -115,12 +115,12 @@ public class DALController {
 
     public boolean removeTruck(long key){
         String[] keys = {String.valueOf(key)};
-        return deliveriesDAO.deleteObj(keys);
+        return trucksDAO.deleteObj(keys);
     }
 
     public boolean removeDriver(String key){
         String[] keys = {String.valueOf(key)};
-        return deliveriesDAO.deleteObj(keys);
+        return driversDAO.deleteObj(keys);
     }
 
     public boolean addDriverFutureShifts(String key, String toAdd){

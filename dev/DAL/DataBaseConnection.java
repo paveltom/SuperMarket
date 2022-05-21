@@ -249,7 +249,10 @@ public class DataBaseConnection {
         try{
             DatabaseMetaData meta = conn.getMetaData();
             ResultSet resultSet = meta.getTables(null, null, "Drivers", new String[] {"TABLE"});
-            if(resultSet.next()) return true;
+            if(resultSet.next()){
+                resultSet.close();
+                return true;
+            }
 
             Statement stmt = conn.createStatement();
             stmt.execute(driversTableCreation);
@@ -258,6 +261,8 @@ public class DataBaseConnection {
             stmt.execute(shiftsTableCreation);
             stmt.execute(workersTableCreataion);
             System.out.println("DB and Tables created successfully...");
+            stmt.close();
+            resultSet.close();
             return true;
         } catch (SQLException e) {
             e.printStackTrace();

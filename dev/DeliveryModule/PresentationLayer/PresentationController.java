@@ -151,7 +151,7 @@ public class PresentationController {
         LocalDate currTime = LocalDate.now();
         FacadeDate facDate = new FacadeDate(currTime.getDayOfMonth(), currTime.getMonthValue(), currTime.getYear());
 
-        int id = (int) System.currentTimeMillis(); //unique order Id
+        String id = Integer.toUnsignedString((int)System.currentTimeMillis()); //unique order Id
         ResponseT<FacadeRecipe> res = service.deliver(origin, destination, id, productList, facDate);
         if(res.getErrorOccurred())
             operateOutput("Couldn't create a delivery for this order.\n" + res.getErrorMessage());

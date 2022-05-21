@@ -89,6 +89,7 @@ public class DeliveriesDAO implements IDAO{
         try {
             String[] keyNames = {"DeliveryId"};
             dbconn.delete("Deliveries", keys, keyNames);
+            deliveriesIM.unCacheObject(keys[0]);
             return true;
         }catch (Exception e){return false;}    }
 

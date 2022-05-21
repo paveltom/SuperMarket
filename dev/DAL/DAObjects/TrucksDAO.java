@@ -87,6 +87,7 @@ public class TrucksDAO implements IDAO{
         try {
             String[] keyNames = {"VehicleLicenseNumber"};
             dbconn.delete("Trucks", keys, keyNames);
+            trucksIM.unCacheObject(keys[0]);
             return true;
         }catch (Exception e){return false;}
     }
