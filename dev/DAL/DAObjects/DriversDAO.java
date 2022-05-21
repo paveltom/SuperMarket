@@ -62,14 +62,14 @@ public class DriversDAO implements IDAO{
     public DTO loadObjectFromDB(String[] keys) {
         String[] keyNames = {"Id"};
         String[] driver = dbconn.select("Drivers", keyNames, keys).get(0);
-        DTO output = new DriverDTO(driver[0], driver[3], driver[4], driver[1], driver[2], driver[6]);
+        DTO output = new DriverDTO(driver[0], driver[3], driver[4], driver[1], driver[2], driver[5], driver[6]);
         return output;
     }
 
     @Override
     public boolean storeObjToDB(DTO obj) {
         if(obj instanceof DriverDTO){
-            String[] params = {((DriverDTO) obj).Id, ((DriverDTO) obj).Name, ((DriverDTO) obj).Cellphone, ((DriverDTO) obj).License, ((DriverDTO) obj).Zone, ((DriverDTO) obj).Diary};
+            String[] params = {((DriverDTO) obj).Id, ((DriverDTO) obj).Name, ((DriverDTO) obj).Cellphone, ((DriverDTO) obj).License, ((DriverDTO) obj).Zone, ((DriverDTO) obj).Diary, ""};
             try {
                 boolean res = dbconn.insert("Drivers", params);
                 if(!res) return res;
@@ -90,8 +90,8 @@ public class DriversDAO implements IDAO{
             try {
                 String[] keys = {obj.getKey()};
                 String[] keyNames = {"Id"};
-                String[] params = {((DriverDTO) obj).Id, ((DriverDTO) obj).Name, ((DriverDTO) obj).Cellphone, ((DriverDTO) obj).License, ((DriverDTO) obj).Zone, ((DriverDTO) obj).Diary};
-                String[] paramNames = {"Id", "Name", "Cellphone", "VehicleLicenseCategory", "ShippingZone", "Diary"};
+                String[] params = {((DriverDTO) obj).Id, ((DriverDTO) obj).Name, ((DriverDTO) obj).Cellphone, ((DriverDTO) obj).License, ((DriverDTO) obj).Zone, ((DriverDTO) obj).Diary, ""};
+                String[] paramNames = {"Id", "Name", "Cellphone", "VehicleLicenseCategory", "ShippingZone", "Diary", "FutureShifts"};
                 for (int i = 0; i < params.length; i++) {
                     if (params[i] != "")
                         res = dbconn.update("Drivers", keys, keyNames, paramNames[i], params[i]);
@@ -124,7 +124,7 @@ public class DriversDAO implements IDAO{
     public void loadAllObjsFromDB() {
         List<String[]> res = dbconn.select("Drivers", null, null);
         for(String[] driver : res){
-            DriverDTO toCache = new DriverDTO(driver[0], driver[3], driver[4], driver[1], driver[2], driver[6]);
+            DriverDTO toCache = new DriverDTO(driver[0], driver[3], driver[4], driver[1], driver[2], driver[5], driver[6]);
             driversIM.cacheObject(toCache);
         }
     }

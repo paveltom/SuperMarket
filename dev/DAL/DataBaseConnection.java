@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class DataBaseConnection {
     private String[] truckValues = {"VehicleLicenseNumber", "MaxLoadWeight", "NetWeight", "Zone", "Model", "Diary"};
-    private String[] driverValues = {"Id", "Name", "Cellphone", "VehicleLicenseCategory", "ShippingZone", "Diary"};
+    private String[] driverValues = {"Id", "Name", "Cellphone", "VehicleLicenseCategory", "ShippingZone", "Diary", "FutureShifts"};
     private String[] deliveryValues = {"OrderId", "DeliveryId", "SupplierZone", "SupplierAddress", "SupplierName", "SupplierCellphone",
             "ClientZone", "ClientAddress", "ClientName", "ClientCellphone", "DeliverdProducts", "DueDate",
             "DriverId", "DriverName", "DriverCellphone", "TruckLicenseNumber"};
@@ -30,11 +30,14 @@ public class DataBaseConnection {
         try {
             // db parameters
             String dir = System.getProperty("user.dir");
-            String url = "jdbc:sqlite:" + dir + "\\dev\\DataBase\\example.db";
+            String url = "jdbc:sqlite:" + dir + "\\dev\\DataBase\\PerDel.db";
             System.out.println("url: " + url);
             Class.forName("org.sqlite.JDBC");
+
             // create a connection to the database
             conn = DriverManager.getConnection(url);
+
+            boolean exists = createCrucialTables(conn); // create db with tables if not exists
 
             System.out.println("Connection to SQLite has been established.");
             return conn;
@@ -45,9 +48,6 @@ public class DataBaseConnection {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-//        } catch (ClassNotFoundException e) {
-//            throw new RuntimeException(e);
-//        }
     }
 
     public boolean insert(String tableNAME, String[] params){ // exmpl: TRUCK, {"01113", "1000"...}
@@ -185,21 +185,87 @@ public class DataBaseConnection {
         }
     }
 
+    private boolean createCrucialTables(Connection conn) {
+        Statement statement;
+        boolean res = false;
+        String existence = "SELECT count(*) "
+                + "FROM information_schema.tables "
+                + "WHERE table_name = ?"
+                + "LIMIT 1;";
 
-//    private boolean isTableExists(SQLiteDatabase db, String tableName){
-//        String sql = "SELECT name FROM sqlite_master WHERE type='table' AND name='"+tableName+"'";
-//        Cursor mCursor = db.rawQuery(sql, null);
-//        if (mCursor.getCount() > 0) {
-//            return true;
-//        }
-//        mCursor.close();
-//        return false;
-//    }
-//
-//    // if database has no tables
-//    private void createCrucialTables() {
-//
-//    }
+        String driversTableCreation = "CREATE TABLE Drivers " +
+                "(Id TEXT PRIMARY KEY NOT NULL," +
+                " Name TEXT NOT NULL," +
+                " Cellphone TEXT NOT NULL," +
+                " VehicleLicenseCategory TEXT NOT NULL," +
+                " ShippingZone TEXT NOT NULL," +
+                " Diary TEXT NOT NULL," +
+                " FutureShifts TEXT NOT NULL)";
+
+        String trucksTableCreation = "CREATE TABLE Trucks " +
+                "(VehicleLicenseNumber TEXT PRIMARY KEY NOT NULL," +
+                " MaxLoadWeight TEXT NOT NULL," +
+                " NetWeight TEXT NOT NULL," +
+                " Model TEXT NOT NULL," +
+                " ShippingZone TEXT NOT NULL," +
+                " Diary TEXT NOT NULL)";
+
+        String deliveriesTableCreation = "CREATE TABLE Deliveries (" +
+                "OrderId TEXT," +
+                " DeliveryId TEXT," +
+                " SupplierZone TEXT," +
+                " SupplierAddress TEXT," +
+                " SupplierName TEXT," +
+                " SupplierCellphone TEXT," +
+                " ClientZone TEXT," +
+                " ClientAddress TEXT," +
+                " ClientName TEXT," +
+                " ClientCellphone TEXT," +
+                " DeliverdProducts TEXT," +
+                " DueDate TEXT," +
+                " DriverID TEXT," +
+                " DriverName TEXT," +
+                " DriverCellphone TEXT," +
+                " TruckLicenseNumber REAL," +
+                " PRIMARY KEY(DeliveryId)" + ")";
+
+        String shiftsTableCreation = "CREATE TABLE Shifts (" +
+                "Date TEXT NOT NULL," +
+                " Type TEXT NOT NULL," +
+                " Manager TEXT NOT NULL," +
+                " Workers TEXT NOT NULL," +
+                " PRIMARY KEY(Date,Type)" + ");";
+
+        String workersTableCreataion = "CREATE TABLE Workers (" +
+                "Id TEXT NOT NULL," +
+                " Name TEXT NOT NULL," +
+                "Job TEXT NOT NULL," +
+                " SMQual TEXT NOT NULL," +
+                " BankDetails TEXT," +
+                " Pay TEXT NOT NULL," +
+                " StartDate TEXT NOT NULL," +
+                " SocialConditions TEXT," +
+                " Availability TEXT," +
+                " PRIMARY KEY(Id)" + ");";
+
+        try{
+            DatabaseMetaData meta = conn.getMetaData();
+            ResultSet resultSet = meta.getTables(null, null, "Drivers", new String[] {"TABLE"});
+            if(resultSet.next()) return true;
+
+            Statement stmt = conn.createStatement();
+            res = stmt.execute(driversTableCreation);
+            res = stmt.execute(trucksTableCreation);
+            res = stmt.execute(deliveriesTableCreation);
+            res = stmt.execute(shiftsTableCreation);
+            res = stmt.execute(workersTableCreataion);
+            System.out.println("Drivers table created successfully...");
+            return res;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
 
 

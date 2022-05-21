@@ -7,8 +7,9 @@ public class DriverDTO implements DTO
     public String Zone;
     public String Name, Cellphone;
     public String Diary;
+    public String FutureShifts;
 
-    public DriverDTO(String id, String license, String zone,String name, String cellphone, String diary)
+    public DriverDTO(String id, String license, String zone,String name, String cellphone, String diary, String futureShifts)
     {
         Id = id;
         License = license;
@@ -16,6 +17,7 @@ public class DriverDTO implements DTO
         Name = name;
         Cellphone = cellphone;
         Diary = diary;
+        FutureShifts = "";
     }
 
 
