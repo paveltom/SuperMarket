@@ -16,20 +16,25 @@ public class SupplyTime {
         return maxDeliveryDuration;
     }
     public int getOrderCycle(){return orderCycle;}
-    public int getDaysAcc() {return daysAcc;}
+    private int getDaysAcc() {return daysAcc;}
     public boolean hasWeeklyDeliver(){
-        for(boolean day: daysOfDelivery) {
-            if (day)
-                return true;
-        }
+        for(boolean day: daysOfDelivery) {if (day) return true;}
         return false;
     }
+    private boolean hasCallDelivery(){return maxDeliveryDuration >= 0;}
 
     //  setters
     private void setDaysOfDelivery(boolean[] daysOfDelivery) {
         if (daysOfDelivery == null || daysOfDelivery.length != 7 )
             throw new IllegalArgumentException("incorrect format at days of delivery");
         this.daysOfDelivery = daysOfDelivery;
+    }
+    public void changeDaysOfDelivery(int day, boolean state) {
+        if (day > 7 || day < 1)
+            throw new IllegalArgumentException("day out of week range.");
+        boolean[] week = daysOfDelivery.clone();
+        week[day-1] = state;
+        setDaysOfDelivery(week);
     }
     public void setMaxDeliveryDuration(int maxDeliveryDuration) {
         if(maxDeliveryDuration < -1)
@@ -55,6 +60,7 @@ public class SupplyTime {
         daysAcc = orderCycle - 1; //if cycle delivery then an order would be placed at the end of the day
     }
 
+    //methods
 
     //return true if tomorrow is a weekly delivery / it's the cyclic time to order from the supplier
     public boolean endDay(){
@@ -67,19 +73,46 @@ public class SupplyTime {
             return daysAcc == 0;
         }
     }
-    //TODO
-    public int getDaysToOrder(){ //returns the difference between the closest available order arrival and the next period order
-        /*if(!hasWeeklyDeliver()){
-            return maxDeliveryDuration
-        }*/
-        return -1;
+
+    public int getPeriodicOrderInterval(){ //returns the difference between the closest periodic order to the next
+        if(!hasWeeklyDeliver()){
+            return orderCycle;
+        }
+        else{
+            int day = LocalDate.now().getDayOfWeek().getValue() % 7; //sunday:= 0
+            int nextPeriodicDel = -1;
+            int nextNextPeriodicDel = -1;
+            for(int i=1; i<8; i++){
+                if (daysOfDelivery[(day+i)%7])
+                    nextPeriodicDel = i;
+            }
+            for(int i=nextPeriodicDel+1; i<nextPeriodicDel+8; i++){
+                if (daysOfDelivery[(day+i)%7])
+                    nextNextPeriodicDel = i;
+            }
+            return nextNextPeriodicDel - nextPeriodicDel;
+        }
     }
 
-    public void changeDaysOfDelivery(int day, boolean state) {
-        if (day > 7 || day < 1)
-            throw new IllegalArgumentException("day out of week range.");
-        boolean[] week = daysOfDelivery.clone();
-        week[day-1] = state;
-        setDaysOfDelivery(week);
+    public int getDaysForShortageOrder() { //returns the difference between the closest available order arrival and the next periodic order arrival
+        if(!hasWeeklyDeliver()){
+            return orderCycle - daysAcc;
+        }
+        else if(!hasCallDelivery()) {
+            return getPeriodicOrderInterval();
+        }
+        else{ //has both delivery options,check what comes first and choose by that
+            int day = LocalDate.now().getDayOfWeek().getValue() % 7; //sunday:= 0
+            int nextPeriodicDel = -1;
+            for(int i=1; i<8; i++){
+                if (daysOfDelivery[(day+i)%7])
+                    nextPeriodicDel = i;
+            }
+            if(maxDeliveryDuration < nextPeriodicDel){
+                return nextPeriodicDel - maxDeliveryDuration;
+            }
+            else
+                return getPeriodicOrderInterval();
+        }
     }
 }
