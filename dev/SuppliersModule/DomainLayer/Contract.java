@@ -1,26 +1,27 @@
 package SuppliersModule.DomainLayer;
 
+import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Contract {
-    private boolean[] supplyDays; //|7|
-    private int maxSupplyDays; // 0+ or -1
-    private int supplyCycle; //will be used to determine periodic order when no supply days available
+    private SupplyTime supplyTime;
     private boolean deliveryService;
     private final List<CatalogProduct> catalog = new LinkedList<>();;
     private QuantityAgreement qa;
 
     // getters
-    public boolean[] getSupplyDays() {
-        return supplyDays;
+    public boolean[] getDaysOfDelivery() {
+        return supplyTime.getDaysOfDelivery();
     }
-    public int getMaxSupplyDays() {
-        return maxSupplyDays;
+    public int getMaxDeliveryDuration() {
+        return supplyTime.getMaxDeliveryDuration();
     }
-    public int getSupplyCycle(){return supplyCycle;}
+    public int getOrderCycle(){return supplyTime.getOrderCycle();}
     public boolean hasDeliveryService() {
         return deliveryService;
     }
+
 
     //TODO fixing visibility of catalog and qa only to create DTO for presentation
     public List<CatalogProduct> getCatalog() {
@@ -29,49 +30,38 @@ public class Contract {
     public QuantityAgreement getQa() {
         return qa;
     }
+    public List<String> getOrderProduct(){
+        return catalog.stream().filter(CatalogProduct::isInPeriodicOrder).map(CatalogProduct::getId).collect(Collectors.toList());
+    }
 
     //setters
-    public void setSupplyDays(boolean[] supplyDays) {
-        if (supplyDays == null || supplyDays.length != 7 )
-            throw new IllegalArgumentException("trying to set supply days with incorrect format");
-        this.supplyDays = supplyDays;
-    }
-    public void setMaxSupplyDays(int maxSupplyDays) {
-        if(maxSupplyDays < -1)
-            throw new IllegalArgumentException("trying to set max days for supply with negative number");
-
-        this.maxSupplyDays = maxSupplyDays;
-    }
-    public void setSupplyCycle(int supplyCycle){this.supplyCycle = supplyCycle;}
     public void setDeliveryService(boolean deliveryService) {
         this.deliveryService = deliveryService;
     }
 
-    public void addQuantityAgreement(QuantityAgreement qa){
-        if(getQa()==null)
-            throw new RuntimeException("Can not add Quantity agreement because the supplier already has one.");
-        this.qa = qa;
-    }
-
     //  constructor
-    public Contract(boolean[] supplyDays, int maxSupplyDays, int supplyCycle, boolean deliveryService,
+    public Contract(boolean[] daysOfDelivery, int maxDeliveryDuration, int orderCycle, boolean deliveryService,
                     String pId, String catalogNum, float price){
-        setSupplyDays(supplyDays);
-        setMaxSupplyDays(maxSupplyDays);
-        setSupplyCycle(supplyCycle);
+        supplyTime = new SupplyTime(daysOfDelivery, maxDeliveryDuration, orderCycle);
         setDeliveryService(deliveryService);
         catalog.add(new CatalogProduct(pId, catalogNum, price));
     }
 
+    //return true if tomorrow there is a supply coming / time to order from the supplier
+    public List<String> endDay(){
+        supplyTime.endDay();
+        return null; //TODO
+    }
+
+    public int getDaysToOrder(){ //returns the difference between the closest available order arrival and the next period order 
+        return supplyTime.getDaysToOrder();
+    }
+
     public void addSupplyDay(int day) {
-        if (day > 7 || day < 1)
-            throw new IllegalArgumentException("day out of week range.");
-        supplyDays[day-1] = true;
+        supplyTime.addSupplyDay(day);
     }
     public void removeSupplyDay(int day) {
-        if (day > 7 || day < 1)
-            throw new IllegalArgumentException("day out of week range");
-        supplyDays[day-1] = false;
+        supplyTime.removeSupplyDay(day);
     }
 
     //products methods
@@ -102,11 +92,19 @@ public class Contract {
     public boolean hasProduct(String pId){
         return catalog.stream().anyMatch(catalogProduct -> catalogProduct.getId().equals(pId));
     }
+    /*public boolean hasInPeriodicOrder(String pId){
+        return catalog.stream().anyMatch(catalogProduct -> catalogProduct.getId().equals(pId) & catalogProduct.isInPeriodicOrder());
+    }*/
     private boolean hasCatalogNum(String catalogNum){
         return catalog.stream().anyMatch(supProduct -> supProduct.getCatalogNum().equals(catalogNum));
     }
 
     // Quantity Agreement methods
+    public void addQuantityAgreement(QuantityAgreement qa){
+        if(getQa()==null)
+            throw new RuntimeException("Can not add Quantity agreement because the supplier already has one.");
+        this.qa = qa;
+    }
     public void updateDiscount(String pId, int quantity, float discount){
         if(!hasProduct(pId))
             throw new IllegalArgumentException("product not exist.");
@@ -136,12 +134,19 @@ public class Contract {
 
     public String toString(){
         String suppDays = "";
-        for (int i=0; i<getSupplyDays().length; i++) {
-            if (getSupplyDays()[i])
+        for (int i = 0; i< getDaysOfDelivery().length; i++) {
+            if (getDaysOfDelivery()[i])
                 suppDays += suppDays + " " +  i;
         }
         return "delivery service: "  + hasDeliveryService() + "supply days:" + suppDays +
-                " | max days for delivery " + getMaxSupplyDays() + " | number of item in catalog: " + getCatalog().size();
+                " | max days for delivery " + getMaxDeliveryDuration() + " | number of item in catalog: " + getCatalog().size();
+    }
+
+
+    public void setDeliveryDuration(int maxSupplyDays) {
+    }
+
+    public void setSupplyCycle(int supplyCycle) {
     }
 }
 

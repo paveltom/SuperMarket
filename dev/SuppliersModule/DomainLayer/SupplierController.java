@@ -1,9 +1,6 @@
 package SuppliersModule.DomainLayer;
 
-import java.util.Dictionary;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class SupplierController {
@@ -59,7 +56,28 @@ public class SupplierController {
         getSupplier(sId).setDeliveryService(deliveryService);
     }
 
+    //  order methods
+    public void endDay(){
+        for (Supplier s: suppliers ){
+            s.endDay();
+        }
+    }
+    public Map<Supplier, Integer> getSuppliersDays(String pId){
+        List<Supplier> delivers = suppliers.stream().filter(supplier -> supplier.hasProduct(pId)).collect(Collectors.toList());
+        Map<Supplier, Integer> deliversQuantities = new HashMap<>();
+        for (Supplier supp: delivers){
+            int q = supp.getDaysToOrder();
+            deliversQuantities.put(supp, q);
+        }
+        return deliversQuantities;
+    }
+
+    public void orderShortage(Map<Supplier, Integer> suppQuantities, String pId){
+        //TODO decide the best deliver and order from him
+    }
+
     //  other methods
+
     public void addSupplier(String sId, String bankAccount, boolean cash, boolean credit, String contactName, String phoneNum,
                             boolean[] supplyDays, int maxSupplyDays, int supplCycle, boolean deliveryService,
                             String pId, String catNumber, float price){

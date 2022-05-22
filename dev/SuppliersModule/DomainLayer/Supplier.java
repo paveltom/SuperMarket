@@ -8,6 +8,7 @@ public class Supplier {
     private final boolean[] paymentMethods = new boolean[2];
     private final Map<String,String> contacts = new HashMap<>();
     private final Contract contract;
+    private final OrderController oc;
 
     //  getters
     public String getsId(){
@@ -23,12 +24,12 @@ public class Supplier {
         return paymentMethods[1];
     }
     public boolean[] getSupplyDays() {
-        return contract.getSupplyDays();
+        return contract.getDaysOfDelivery();
     }
     public int getMaxSupplyDays() {
-        return contract.getMaxSupplyDays();
+        return contract.getMaxDeliveryDuration();
     }
-    public int getSupplyCycle(){return contract.getSupplyCycle();}
+    public int getSupplyCycle(){return contract.getOrderCycle();}
     public boolean hasDeliveryService() {
         return contract.hasDeliveryService();
     }
@@ -47,11 +48,8 @@ public class Supplier {
     }
 
     // setter
-    public void setSupplyDays(boolean[] supplyDays) {
-        contract.setSupplyDays(supplyDays);
-    }
     public void setMaxSupplyDays(int maxSupplyDays) {
-        contract.setMaxSupplyDays(maxSupplyDays);
+        contract.setDeliveryDuration(maxSupplyDays);
     }
     public void setSupplyCycle(int supplyCycle){contract.setSupplyCycle(supplyCycle);}
     public void setDeliveryService(boolean deliveryService) {
@@ -68,7 +66,16 @@ public class Supplier {
         this.paymentMethods[1] = credit;
         addContact(contactName, phoneNum);
         contract = new Contract(supplyDays, MaxSupplyDays, supplCycle, deliveryService, pId, catNumber, price);
+        oc = OrderController.getInstance();
     }
+
+    // order methods
+    public void endDay(){
+        List<String> cp = contract.endDay();
+        if(cp != null)
+            oc.orderPeriodic(cp, contract.getDaysToOrder());
+    }
+    public int getDaysToOrder(){return contract.getDaysToOrder();}
 
     public void addContact(String contactName, String phoneNum){
         contacts.put(contactName, phoneNum);
@@ -90,6 +97,7 @@ public class Supplier {
     public void updateProductPrice(String pId, float price) {
         contract.updateProductPrice(pId, price);
     }
+    public boolean hasProduct(String pId){ return contract.hasProduct(pId);}
 
     // Quantity Agreement methods
     public void updateDiscount(String pId, int quantity, float discount){
