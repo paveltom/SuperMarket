@@ -1,6 +1,7 @@
 package SuppliersModule.DomainLayer;
 
 import java.time.LocalDate;
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class Supplier {
@@ -81,6 +82,7 @@ public class Supplier {
         contract = new Contract(supplyDays, MaxSupplyDays, supplCycle, deliveryService, pId, catNumber, price);
         oc = OrderController.getInstance();
     }
+
 
     // order methods
     public void endDay(){

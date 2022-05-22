@@ -5,11 +5,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DataBaseConnection {
-    private String[] suppliers = {"supplier_id", "name", "address", "payment", "supplyDays", "supplyDays",
-                                    "supplyMaxDays", "supplyCycle", "deliveryService"};
+    private String[] suppliers = {"supplier_id", "bankAccount", "cash", "credit", "supplyDays",
+                                    "MaxSupplyDays", "supplCycle", "deliveryService"};
+    private String[] supplier_contacts = {"supplier_id", "contactName", "phoneNum"};
+
+    private String[] products = {"product_id", "name", "manufacturer", "amountToNotify", "categoryID", "supplyTime", "demand"};
+
     private String[] quantityAgreement = {"supplier_id", "product_id", "quantity", "discount"};
     private String[] items = {"product_id", "location", "expireDate", "isDefect", "isExpired", "amount"};
-    private String[] products = {"product_id", "name", "demand", "category_id", "amountToNotify", "manufacturer"};
+
     private String[] product_contract = {"supplier_id", "product_id", "price", "is_periodic_order", "catalogNum"};
     private String[] discount = {"discount_id", "product_id", "discountStartDate", "discountEndDate", "discountAmount", "discountType"};
     private String[] discount_product = {"discount_id", "quantity", "discount"};
@@ -73,6 +77,65 @@ public class DataBaseConnection {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             return false;
         }
+    }
+
+    public boolean update(String tableNAME, String[] key, String[]keysNAMES, String paramNAME, String paramVALUE){
+        //System.out.println("\nupdate");
+        Connection conn = null;
+        Statement stmt = null;
+
+        try {
+            conn = connect();
+            conn.setAutoCommit(false);
+            stmt = conn.createStatement();
+
+            StringBuilder sql = new StringBuilder("UPDATE " + tableNAME + " set " + paramNAME + " = '" + paramVALUE + "' where " + keysNAMES[0] + "=" + key[0]);
+            for (int i = 1; i < keysNAMES.length; i++)
+                sql.append(" AND ").append(keysNAMES[i]).append("=").append(key[i]);
+            sql.append(";");
+
+            //System.out.println("sql: " + sql);
+
+            boolean res = stmt.execute(sql.toString());
+            conn.commit();
+            stmt.close();
+            conn.close();
+            return res;
+
+        } catch ( Exception e ) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage() + ". Update method. On table: " + tableNAME);
+            return false;
+        }
+    }
+
+    public boolean delete(String tableNAME, String[] key, String[] keysNAMES) {
+        //System.out.println("\ndelete");
+        Connection conn = null;
+        Statement stmt = null;
+
+        try {
+            conn = connect();
+            conn.setAutoCommit(false);
+            stmt = conn.createStatement();
+
+            StringBuilder sql = new StringBuilder("Delete from " + tableNAME + " where " + keysNAMES[0] + "=" + key[0]);
+            for (int i = 1; i < keysNAMES.length; i++)
+                sql.append(" AND ").append(keysNAMES[i]).append("=").append(key[i]);
+            sql.append(";");
+
+            //System.out.println("delete sql: " + sql);
+
+            boolean res = stmt.execute(sql.toString());
+            conn.commit();
+            stmt.close();
+            conn.close();
+            return res;
+
+        } catch ( Exception e ) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage() + ". Delete method. On table: " + tableNAME);
+            return false;
+        }
+
     }
 
 }

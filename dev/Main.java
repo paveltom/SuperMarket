@@ -1,5 +1,9 @@
+package com.company;
+
 import SuppliersModule.Presentation.SupplierCLI;
-import com.company.PresentationLayer.StockCLI;
+//import com.company.PresentationLayer.StockCLI;
+import StockModule.PresentationLayer.StockCLI;
+
 
 import java.util.Scanner;
 
@@ -7,7 +11,7 @@ public class Main {
 
     public static void main(String[] args) {
         SupplierCLI suppCLI = new SupplierCLI();
-        com.company.PresentationLayer.StockCLI stockCLI = new StockCLI();
+        StockCLI stockCLI = new StockCLI();
         Scanner scanner = new Scanner(System.in);
 
         String input = "";
