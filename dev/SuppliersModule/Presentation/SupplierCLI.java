@@ -345,9 +345,7 @@ public class SupplierCLI {
                         System.out.println("incorrect input\n");
                         displayContractWindow(suppId);
                     } else {
-                        boolean[] days = new boolean[7];
-                        days[Integer.parseInt(splitted[1]) - 1] = splitted[2].equals("y");
-                        Response r2 = ss.setSupplyDays(suppId, days);
+                        Response r2 = ss.changeDaysOfDelivery(suppId, Integer.parseInt(splitted[1]), splitted[2].equals("y"));
                         if (r2.ErrorOccurred()) {
                             System.out.println("incorrect input\n");
                             displayContractWindow(suppId);

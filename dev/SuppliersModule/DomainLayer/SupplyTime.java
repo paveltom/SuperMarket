@@ -74,16 +74,12 @@ public class SupplyTime {
         }*/
         return -1;
     }
-    //TODO
-    public void addSupplyDay(int day) {
+
+    public void changeDaysOfDelivery(int day, boolean state) {
         if (day > 7 || day < 1)
             throw new IllegalArgumentException("day out of week range.");
-        daysOfDelivery[day-1] = true;
+        boolean[] week = daysOfDelivery.clone();
+        week[day-1] = state;
+        setDaysOfDelivery(week);
     }
-    public void removeSupplyDay(int day) {
-        if (day > 7 || day < 1)
-            throw new IllegalArgumentException("day out of week range");
-        daysOfDelivery[day-1] = false;
-    }
-
 }

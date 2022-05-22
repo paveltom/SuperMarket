@@ -56,12 +56,8 @@ public class Contract {
     public int getDaysToOrder(){ //returns the difference between the closest available order arrival and the next period order 
         return supplyTime.getDaysToOrder();
     }
-
-    public void addSupplyDay(int day) {
-        supplyTime.addSupplyDay(day);
-    }
-    public void removeSupplyDay(int day) {
-        supplyTime.removeSupplyDay(day);
+    public void changeDaysOfDelivery(int day, boolean state) {
+        supplyTime.changeDaysOfDelivery(day, state);
     }
 
     //products methods
@@ -148,5 +144,7 @@ public class Contract {
 
     public void setSupplyCycle(int supplyCycle) {
     }
+
+
 }
 

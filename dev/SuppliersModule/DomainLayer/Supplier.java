@@ -125,4 +125,8 @@ public class Supplier {
         return "supplier id: " + getsId() + " | Bank Account: " + getBankAccount() +
                 " | payments: cash-" + cash + " credit-" + credit + " | contacts:\n" + contacts;
     }
+
+    public void changeDaysOfDelivery(int day, boolean state) {
+        contract.changeDaysOfDelivery(day, state);
+    }
 }

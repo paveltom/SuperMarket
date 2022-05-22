@@ -114,15 +114,6 @@ public class SupplierServices {
         }
     }
 
-    public Response setSupplyDays(String sId, boolean[] supplyDays){
-        try{
-            sc.setSupplyDays(sId, supplyDays);
-            return new Response();
-        }catch (Exception e){
-            return new Response(e.getMessage());
-        }
-    }
-
     public Response setSupplyMaxDays(String sId, int supplyMaxDays){
         try{
             sc.setMaxSupplyDays(sId, supplyMaxDays);
@@ -206,6 +197,15 @@ public class SupplierServices {
             return ResponseT.FromValue(sc.searchProduct(name));
         }catch (Exception e){
             return ResponseT.FromError(e.getMessage());
+        }
+    }
+
+    public Response changeDaysOfDelivery(String sId, int day , boolean state) {
+        try{
+            sc.changeDaysOfDelivery(sId, day, state);
+            return new Response();
+        }catch (Exception e){
+            return new Response(e.getMessage());
         }
     }
 }

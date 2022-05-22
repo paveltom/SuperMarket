@@ -40,10 +40,6 @@ public class SupplierController {
     }
 
     //  setters
-    public void setSupplyDays(String sId, boolean[] supplyDays) {
-        checkSupplier(sId);
-        getSupplier(sId).setSupplyDays(supplyDays);
-    }
     public void setMaxSupplyDays(String sId, int maxSupplyDays) {
         checkSupplier(sId);
         getSupplier(sId).setMaxSupplyDays(maxSupplyDays);
@@ -158,5 +154,10 @@ public class SupplierController {
     private void checkSupplier(String sId){
         if(!hasSupp(sId))
             throw new IllegalArgumentException("Supplier doesn't exists.");
+    }
+
+    public void changeDaysOfDelivery(String sId, int day, boolean state) {
+        checkSupplier(sId);
+        getSupplier(sId).changeDaysOfDelivery(day, state);
     }
 }
