@@ -27,15 +27,15 @@ public class OrderController {
     }
 
     public Map<String, Integer> orderPeriodic(List<String> products, int daysToOrder){
-        Map<String, Integer> quantities = new HashMap<>();
-        for (String s: products) {
-            quantities.put(s, stc.getQuantityForOrder(s, daysToOrder));
+        Map<String, Integer> suppQuantities = new HashMap<>();
+        for (String pId: products) {
+            suppQuantities.put(pId, stc.getQuantityForOrder(pId, daysToOrder));
         }
-        return quantities;
+        return suppQuantities;
     }
 
     public void orderShortage(String pId){
-        Map<Supplier, Integer> suppDays = supc.getSuppliersDays(pId); //return amount of days until next supply
+        Map<Supplier, Integer> suppDays = supc.getSuppliersDays(pId); //return amount of days until next supply for each supplier
         Map<Supplier, Integer> suppQuantities = new HashMap<>();
         for (Map.Entry<Supplier, Integer> entry : suppDays.entrySet()) {
             int quantity = stc.getQuantityForOrder(pId, entry.getValue());

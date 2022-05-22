@@ -7,7 +7,6 @@ public class SupplierController {
     private final List<Supplier> suppliers = new LinkedList<>();
 
     // getters
-    //TODO fixing visibility of catalog and qa only to create DTO for presentation
     public List<Supplier> getSuppliers() {
         return suppliers;
     }
@@ -55,17 +54,16 @@ public class SupplierController {
     //  order methods
     public void endDay(){
         for (Supplier s: suppliers ){
-            s.endDay();
-        }
+            s.endDay();}
     }
     public Map<Supplier, Integer> getSuppliersDays(String pId){
-        List<Supplier> delivers = suppliers.stream().filter(supplier -> supplier.hasProduct(pId)).collect(Collectors.toList());
-        Map<Supplier, Integer> deliversQuantities = new HashMap<>();
-        for (Supplier supp: delivers){
-            int q = supp.getDaysToOrder();
-            deliversQuantities.put(supp, q);
+        List<Supplier> supplierList = suppliers.stream().filter(supplier -> supplier.hasProduct(pId)).collect(Collectors.toList());
+        Map<Supplier, Integer> suppDays = new HashMap<>();
+        for (Supplier supp: supplierList){
+            int d = supp.getDaysForShortageOrder();
+            suppDays.put(supp, d);
         }
-        return deliversQuantities;
+        return suppDays;
     }
 
     public void orderShortage(Map<Supplier, Integer> suppQuantities, String pId){
@@ -74,14 +72,14 @@ public class SupplierController {
 
     //  other methods
 
-    public void addSupplier(String sId, String bankAccount, boolean cash, boolean credit, String contactName, String phoneNum,
+    public void addSupplier(String sId, String name, String address, String bankAccount, boolean cash, boolean credit, String contactName, String phoneNum,
                             boolean[] supplyDays, int maxSupplyDays, int supplCycle, boolean deliveryService,
                             String pId, String catNumber, float price){
         if(hasSupp(sId))
             throw new IllegalArgumentException("supplier with id " + sId + " already exist!");
-        suppliers.add(new Supplier(sId, bankAccount, cash, credit, contactName, phoneNum,  //TODO check if pId exist
-                                    supplyDays, maxSupplyDays, supplCycle, deliveryService,
-                                    pId, catNumber, price));
+        suppliers.add(new Supplier(sId, name, address, bankAccount, cash, credit,    //TODO check if pId exist
+                contactName, phoneNum, supplyDays, maxSupplyDays,
+                supplCycle, deliveryService, pId, catNumber, price));
     }
     public void removeSupplier(String sId){
         suppliers.remove(getSupplier(sId));
@@ -118,7 +116,7 @@ public class SupplierController {
         checkSupplier(sId);
         getSupplier(sId).updateDiscount(pId, quantity, discount);
     }
-    public Dictionary<Integer,Float> getDiscounts(String sId, String pId){
+    public Map<Integer, Float> getDiscounts(String sId, String pId){
         checkSupplier(sId);
         return getSupplier(sId).getDiscounts(pId);
     }
@@ -126,7 +124,7 @@ public class SupplierController {
         checkSupplier(sId);
         return getSupplier(sId).getContacts();
     }
-    public Dictionary<String, Dictionary<Integer, Float>> getDiscounts(String sId) {
+    public Map<String, Map<Integer, Float>> getDiscounts(String sId) {
         checkSupplier(sId);
         return getSupplier(sId).getDiscounts();
     }

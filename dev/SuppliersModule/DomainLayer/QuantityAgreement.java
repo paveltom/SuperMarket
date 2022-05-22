@@ -1,11 +1,11 @@
 package SuppliersModule.DomainLayer;
 
-import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.Map;
 
 public class QuantityAgreement {
-    private final Dictionary<String, Dictionary<Integer, Float>> Discounts = new Hashtable<>();
-    public Dictionary<String, Dictionary<Integer, Float>> getDiscounts() {
+    private final Map<String, Map<Integer, Float>> Discounts = new Hashtable<>();
+    public Map<String, Map<Integer, Float>> getDiscounts() {
         return Discounts;
     }
     public void updateDiscount(String pId, int quantity, float discount){
@@ -22,7 +22,7 @@ public class QuantityAgreement {
             Discounts.get(pId).put(quantity, discount);
         }
     }
-    public Dictionary<Integer,Float> getDiscounts(String pId){
+    public Map<Integer, Float> getDiscounts(String pId){
         return Discounts.get(pId);
     }
     public void removeProduct(String pId){
@@ -40,7 +40,24 @@ public class QuantityAgreement {
             throw new IllegalArgumentException("quantity must be greater than 0");
     }
     private void validDiscount(float d) {
-        if (d < 0)
-            throw new IllegalArgumentException("discount can not be negative");
+        if (d < 0 | d >= 100)
+            throw new IllegalArgumentException("discount must be in % format between 0 to 100-");
     }
+
+    public float getDiscount(String pId, int amount) {
+        Map<Integer, Float> disc = Discounts.get(pId);
+        if(disc == null) {
+            return 0;
+        }
+        else{
+            int maxDiscKey = -1;
+            for (Integer lvl : disc.keySet()){
+                if(maxDiscKey < lvl & lvl <= amount){
+                    maxDiscKey = lvl;
+                }
+            }
+            return disc.get(maxDiscKey);
+        }
+    }
+
 }

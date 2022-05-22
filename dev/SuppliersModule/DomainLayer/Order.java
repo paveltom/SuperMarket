@@ -1,6 +1,6 @@
 package SuppliersModule.DomainLayer;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -11,7 +11,7 @@ public class Order {
     private final String supId;
     private final String supName;
     private final String supAddress;
-    private final Date date;
+    private final LocalDate date;
     private final String contactPhone;
     private final List<OrderProduct> products = new LinkedList<>();
 
@@ -28,7 +28,7 @@ public class Order {
     public String getSupAddress() {
         return supAddress;
     }
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
     public String getContactPhone() {
@@ -38,7 +38,7 @@ public class Order {
         return products;
     }
 
-    public Order(String id, String supId, String supName, String supAddress, Date date, String contactPhone) {
+    public Order(String id, String supId, String supName, String supAddress, LocalDate date, String contactPhone) {
         this.id = id;
         this.supId = supId;
         this.supName = supName;

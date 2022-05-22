@@ -2,7 +2,6 @@ package SuppliersModule.Service;
 
 import SuppliersModule.DomainLayer.*;
 
-import java.util.Dictionary;
 import java.util.List;
 import java.util.Map;
 
@@ -26,11 +25,11 @@ public class SupplierServices {
         }
     }
 
-    public Response addSupplier(String sId, String bankAccount, boolean cash, boolean credit, String contactName,String phoneNum,
+    public Response addSupplier(String sId, String name, String address, String bankAccount, boolean cash, boolean credit, String contactName,String phoneNum,
                                    boolean[] supplyDays, int maxSupplyDays, int supplCycle, boolean deliveryService,
                                    String pId, String catNumber, float price){
         try{
-            sc.addSupplier(sId, bankAccount, cash, credit, contactName, phoneNum,
+            sc.addSupplier(sId, name, address, bankAccount, cash, credit, contactName, phoneNum,
                     supplyDays, maxSupplyDays, supplCycle, deliveryService,
                     pId, catNumber, price);
             return new Response();
@@ -176,7 +175,7 @@ public class SupplierServices {
         }
     }
 
-    public ResponseT<Dictionary<Integer,Float>> getDiscounts(String sId, String pId){
+    public ResponseT<Map<Integer, Float>> getDiscounts(String sId, String pId){
         try{
             return ResponseT.FromValue(sc.getDiscounts(sId, pId));
         }catch (Exception e){
@@ -184,7 +183,7 @@ public class SupplierServices {
         }
     }
 
-    public ResponseT<Dictionary<String, Dictionary<Integer, Float>>> getDiscounts(String sId) {
+    public ResponseT<Map<String, Map<Integer, Float>>> getDiscounts(String sId) {
         try{
             return ResponseT.FromValue(sc.getDiscounts(sId));
         }catch (Exception e){

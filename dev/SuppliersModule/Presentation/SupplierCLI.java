@@ -69,8 +69,8 @@ public class SupplierCLI {
             } else {
                 boolean[] days = new boolean[7];
                 days[Integer.parseInt(splitted[1]) - 1] = splitted[2].equals("y");
-                Response r = ss.addSupplier(splitted[0], splitted[1], splitted[2].equals("y"), splitted[3].equals("y"), splitted[4], splitted[5],
-                                            days, Integer.parseInt(splitted[7]), Integer.parseInt(splitted[8]), splitted[9].equals("y"),    //TODO days
+                Response r = ss.addSupplier(splitted[0], splitted[1], splitted[2], splitted[3], splitted[4].equals("y"), splitted[5].equals("y"), splitted[6], splitted[7],
+                                            days, Integer.parseInt(splitted[9]), Integer.parseInt(splitted[10]), splitted[11].equals("y"),    //TODO days
                                             splitted[10], splitted[11], Float.parseFloat(splitted[12]));
                 if (r.ErrorOccurred()) {
                     System.out.println("action failed, " + r.getErrorMessage() + "\n");
@@ -263,22 +263,20 @@ public class SupplierCLI {
         }
     }
 
-    private void printQuantityAgreementMap(Dictionary<String, Dictionary<Integer, Float>> m) {
+    private void printQuantityAgreementMap(Map<String, Map<Integer, Float>> m) {
         if (m == null) {
             System.out.print("no discounts");
         } else {
-            Enumeration<String> e1 = m.keys();
-            while (e1.hasMoreElements()) {
-                String k = e1.nextElement();
-                System.out.print(k + "\n\t");
-                Dictionary<Integer, Float> d = m.get(k);
+            Set<String> e1 = m.keySet();
+           for(String s: e1) {
+                System.out.print(s + "\n\t");
+                Map<Integer, Float> d = m.get(s);
 
                 if (d == null) {
                     System.out.print("no discounts for this product\n");
                 } else {
-                    Enumeration<Integer> e2 = d.keys();
-                    while (e2.hasMoreElements()) {
-                        int i = e2.nextElement();
+                    Set<Integer> e2 = d.keySet();
+                    for(Integer i: e2) {
                         System.out.print("quantity: " + i + " discount: " + d.get(i) + "\n\t");
                     }
                 }
@@ -288,7 +286,7 @@ public class SupplierCLI {
     }
 
     private void displayQuantityAgreementWindow(String suppId) {
-        ResponseT<Dictionary<String, Dictionary<Integer, Float>>> m1 = ss.getDiscounts(suppId);
+        ResponseT<Map<String, Map<Integer, Float>>> m1 = ss.getDiscounts(suppId);
 
         if (m1.ErrorOccurred()) {
             System.out.println("action failed: " + m1.getErrorMessage());

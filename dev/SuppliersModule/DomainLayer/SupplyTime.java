@@ -53,6 +53,7 @@ public class SupplyTime {
         this.orderCycle = orderCycle;
     }
 
+    //  constructor
     public SupplyTime(boolean[] daysOfDelivery, int maxDeliveryDuration, int orderCycle){
         setDaysOfDelivery(daysOfDelivery);
         setMaxDeliveryDuration(maxDeliveryDuration);

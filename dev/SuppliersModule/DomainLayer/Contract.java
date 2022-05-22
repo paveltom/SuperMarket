@@ -1,13 +1,12 @@
 package SuppliersModule.DomainLayer;
 
-import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class Contract {
-    private SupplyTime supplyTime;
+    private final SupplyTime supplyTime;
     private boolean deliveryService;
-    private final List<CatalogProduct> catalog = new LinkedList<>();;
+    private final List<CatalogProduct> catalog = new LinkedList<>();
     private QuantityAgreement qa;
 
     // getters
@@ -21,9 +20,6 @@ public class Contract {
     public boolean hasDeliveryService() {
         return deliveryService;
     }
-
-
-    //TODO fixing visibility of catalog and qa only to create DTO for presentation
     public List<CatalogProduct> getCatalog() {
         return catalog;
     }
@@ -35,9 +31,10 @@ public class Contract {
     }
 
     //setters
-    public void setDeliveryService(boolean deliveryService) {
-        this.deliveryService = deliveryService;
-    }
+    public void changeDaysOfDelivery(int day, boolean state) {supplyTime.changeDaysOfDelivery(day, state);}
+    public void setDeliveryService(boolean deliveryService) {this.deliveryService = deliveryService;}
+    public void setMaxDeliveryDuration(int maxDeliveryDuration) { supplyTime.setMaxDeliveryDuration(maxDeliveryDuration);}
+    public void setOrderCycle(int orderCycle) { supplyTime.setOrderCycle(orderCycle);}
 
     //  constructor
     public Contract(boolean[] daysOfDelivery, int maxDeliveryDuration, int orderCycle, boolean deliveryService,
@@ -47,20 +44,22 @@ public class Contract {
         catalog.add(new CatalogProduct(pId, catalogNum, price));
     }
 
-    //return true if tomorrow there is a supply coming / time to order from the supplier
+    //  order methods
+
+    //return list of products to order
     public List<String> endDay(){
-        supplyTime.endDay();
-        return null; //TODO
+        if(supplyTime.endDay())
+            return getOrderProduct();
+        return null;
+    }
+    public int getPeriodicOrderInterval(){
+        return supplyTime.getPeriodicOrderInterval();
+    }
+    public int getDaysForShortageOrder(){
+        return supplyTime.getDaysForShortageOrder();
     }
 
-    public int getDaysToOrder(){ //returns the difference between the closest available order arrival and the next period order 
-        return supplyTime.getDaysToOrder();
-    }
-    public void changeDaysOfDelivery(int day, boolean state) {
-        supplyTime.changeDaysOfDelivery(day, state);
-    }
-
-    //products methods
+    //  products methods
     public void addProduct(String pId, String catalogNum, float price) {
         if(hasProduct(pId))
             throw new IllegalArgumentException("Product already exists.");
@@ -88,9 +87,6 @@ public class Contract {
     public boolean hasProduct(String pId){
         return catalog.stream().anyMatch(catalogProduct -> catalogProduct.getId().equals(pId));
     }
-    /*public boolean hasInPeriodicOrder(String pId){
-        return catalog.stream().anyMatch(catalogProduct -> catalogProduct.getId().equals(pId) & catalogProduct.isInPeriodicOrder());
-    }*/
     private boolean hasCatalogNum(String catalogNum){
         return catalog.stream().anyMatch(supProduct -> supProduct.getCatalogNum().equals(catalogNum));
     }
@@ -108,12 +104,15 @@ public class Contract {
             addQuantityAgreement(new QuantityAgreement()); //TODO make contract the only creator of qa according to grasp
         qa.updateDiscount(pId, quantity, discount);
     }
-    public Dictionary<Integer,Float> getDiscounts(String pId){
+    public Map<Integer, Float> getDiscount(String pId){
         if(!hasProduct(pId) || getQa() == null)
             return null;
         return qa.getDiscounts(pId);
     }
-    public Dictionary<String, Dictionary<Integer, Float>> getDiscounts() {
+    public float getDiscount(String pId, int amount) {
+        return qa.getDiscount(pId, amount);
+    }
+    public Map<String, Map<Integer, Float>> getDiscount() {
         if(getQa() == null)
             return null;
         return qa.getDiscounts();
@@ -127,22 +126,23 @@ public class Contract {
         }
         return p;
     }
+    public float getCatalogPrice(String pId) {
+        return catalog.stream().filter(catalogProduct -> catalogProduct.getId().equals(pId)).findFirst().get().getPrice();
+    }
+
+    public float getFinalPrice(String pId, int amount) {
+        float price = getCatalogPrice(pId);
+        return price - price* getDiscount(pId, amount)/100;
+    }
 
     public String toString(){
-        String suppDays = "";
+        StringBuilder suppDays = new StringBuilder();
         for (int i = 0; i< getDaysOfDelivery().length; i++) {
             if (getDaysOfDelivery()[i])
-                suppDays += suppDays + " " +  i;
+                suppDays.append(suppDays).append(" ").append(i);
         }
         return "delivery service: "  + hasDeliveryService() + "supply days:" + suppDays +
                 " | max days for delivery " + getMaxDeliveryDuration() + " | number of item in catalog: " + getCatalog().size();
-    }
-
-
-    public void setDeliveryDuration(int maxSupplyDays) {
-    }
-
-    public void setSupplyCycle(int supplyCycle) {
     }
 
 

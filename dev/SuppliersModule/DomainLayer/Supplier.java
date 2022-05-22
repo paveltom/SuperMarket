@@ -1,19 +1,25 @@
 package SuppliersModule.DomainLayer;
 
+import java.time.LocalDate;
 import java.util.*;
 
 public class Supplier {
-    private String sId;
-    private String bankAccount;
+    private final String sId;
+    private final String name;
+    private final String address;
+    private final String bankAccount;
     private final boolean[] paymentMethods = new boolean[2];
     private final Map<String,String> contacts = new HashMap<>();
     private final Contract contract;
     private final OrderController oc;
+    private final List<Order> orders = new LinkedList<>();
 
     //  getters
     public String getsId(){
         return sId;
     }
+    public String getName(){return name;}
+    public String getAddress(){return address;}
     public String getBankAccount() {
         return bankAccount;
     }
@@ -33,7 +39,6 @@ public class Supplier {
     public boolean hasDeliveryService() {
         return contract.hasDeliveryService();
     }
-    //TODO 1. fixing visibility of catalog and qa only to create DTO for presentation 2. encapsulating getters with copies
     public Contract getContract(){
         return contract;
     }
@@ -46,21 +51,29 @@ public class Supplier {
     public Map<String, String> getContacts() {
         return contacts;
     }
+    public List<Order> getOrders() {return orders;}
 
-    // setter
+    // setters
     public void setMaxSupplyDays(int maxSupplyDays) {
-        contract.setDeliveryDuration(maxSupplyDays);
+        contract.setMaxDeliveryDuration(maxSupplyDays);
     }
-    public void setSupplyCycle(int supplyCycle){contract.setSupplyCycle(supplyCycle);}
+    public void setSupplyCycle(int supplyCycle){contract.setOrderCycle(supplyCycle);}
     public void setDeliveryService(boolean deliveryService) {
         contract.setDeliveryService(deliveryService);
     }
+    public void addContact(String contactName, String phoneNum){
+        contacts.put(contactName, phoneNum);
+    }
+    public void removeContact(String name){contacts.remove(name);}
+    public void changeDaysOfDelivery(int day, boolean state) {contract.changeDaysOfDelivery(day, state);}
 
-
-    public Supplier(String sId, String bankAccount, boolean cash, boolean credit, String contactName, String phoneNum,
+    // constructor
+    public Supplier(String sId, String name, String address, String bankAccount, boolean cash, boolean credit, String contactName, String phoneNum,
                     boolean[] supplyDays, int MaxSupplyDays, int supplCycle, boolean deliveryService,
                     String pId, String catNumber, float price){
         this.sId = sId;
+        this.name = name;
+        this.address = address;
         this.bankAccount = bankAccount;
         this.paymentMethods[0] = cash;
         this.paymentMethods[1] = credit;
@@ -72,17 +85,19 @@ public class Supplier {
     // order methods
     public void endDay(){
         List<String> cp = contract.endDay();
-        if(cp != null)
-            oc.orderPeriodic(cp, contract.getDaysToOrder());
+        if(cp != null) {
+            Map<String, Integer> prodQuantities = oc.orderPeriodic(cp, contract.getPeriodicOrderInterval());
+            String phone = contacts.entrySet().stream().findFirst().get().getValue();
+            Order order = new Order("todo", sId, name, address, LocalDate.now(), phone); //TODO
+            for (Map.Entry<String, Integer> entry : prodQuantities.entrySet()) {
+                String pId = entry.getKey();
+                int amount = entry.getValue();
+                order.addProduct(pId, contract.getCatalogPrice(pId), amount, contract.getDiscount(pId, amount), contract.getFinalPrice(pId, amount));
+            }
+        }
     }
-    public int getDaysToOrder(){return contract.getDaysToOrder();}
-
-    public void addContact(String contactName, String phoneNum){
-        contacts.put(contactName, phoneNum);
-    }
-    public void removeContact(String name){
-        contacts.remove(name);
-    }
+    public int getPeriodicOrderInterval(){return contract.getPeriodicOrderInterval();}
+    public int getDaysForShortageOrder(){return contract.getDaysForShortageOrder();}
 
     //products methods
     public void addProduct(String pId, String catalogNum, float price) { //TODO 1.calculating and setting product in periodic order 2. checking that pid exist
@@ -100,14 +115,12 @@ public class Supplier {
     public boolean hasProduct(String pId){ return contract.hasProduct(pId);}
 
     // Quantity Agreement methods
-    public void updateDiscount(String pId, int quantity, float discount){
-        contract.updateDiscount(pId, quantity, discount);
+    public void updateDiscount(String pId, int quantity, float discount){contract.updateDiscount(pId, quantity, discount);}
+    public Map<Integer, Float> getDiscounts(String pId){
+        return contract.getDiscount(pId);
     }
-    public Dictionary<Integer,Float> getDiscounts(String pId){
-        return contract.getDiscounts(pId);
-    }
-    public Dictionary<String, Dictionary<Integer, Float>> getDiscounts() {
-        return contract.getDiscounts();
+    public Map<String, Map<Integer, Float>> getDiscounts() {
+        return contract.getDiscount();
     }
     public List<CatalogProduct> searchProduct(String pId){
         return contract.searchProduct(pId);
@@ -124,9 +137,5 @@ public class Supplier {
 
         return "supplier id: " + getsId() + " | Bank Account: " + getBankAccount() +
                 " | payments: cash-" + cash + " credit-" + credit + " | contacts:\n" + contacts;
-    }
-
-    public void changeDaysOfDelivery(int day, boolean state) {
-        contract.changeDaysOfDelivery(day, state);
     }
 }
