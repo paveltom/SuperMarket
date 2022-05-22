@@ -24,8 +24,8 @@ public class Product {
         this.supplyTime = supplyTime;
         this.demand = demand;
         this.items = new LinkedList<>();
-
     }
+
 
     public String toString(){
         return "Product Name : " + name + " , Manufacturer : " + manufacturer + " , Amount : " + amount + " , Category ID : " + categoryID + " , Supply Time : " + supplyTime + " , Demand : " + demand+ "\n";

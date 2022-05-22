@@ -10,6 +10,7 @@ public class Contract {
     private final List<CatalogProduct> catalog = new LinkedList<>();;
     private QuantityAgreement qa;
 
+    DAL.DataBaseConnection conn;
     // getters
     public boolean[] getDaysOfDelivery() {
         return supplyTime.getDaysOfDelivery();
@@ -37,14 +38,16 @@ public class Contract {
     //setters
     public void setDeliveryService(boolean deliveryService) {
         this.deliveryService = deliveryService;
+
     }
 
     //  constructor
     public Contract(boolean[] daysOfDelivery, int maxDeliveryDuration, int orderCycle, boolean deliveryService,
-                    String pId, String catalogNum, float price){
+                    String pId, String catalogNum, float price, DAL.DataBaseConnection conn){
         supplyTime = new SupplyTime(daysOfDelivery, maxDeliveryDuration, orderCycle);
         setDeliveryService(deliveryService);
         catalog.add(new CatalogProduct(pId, catalogNum, price));
+        this.conn = conn;
     }
 
     //return true if tomorrow there is a supply coming / time to order from the supplier
@@ -67,6 +70,8 @@ public class Contract {
         if(hasCatalogNum(catalogNum))
             throw new IllegalArgumentException("trying to add product with a used catalog number.");
         catalog.add(new CatalogProduct(pId, catalogNum, price));
+
+
     }
     public boolean removeProduct(String pId) {  //TODO change functionality to delete supplier when when reached 0 catalog product
         catalog.removeIf(catalogProduct -> catalogProduct.getId().equals(pId));
