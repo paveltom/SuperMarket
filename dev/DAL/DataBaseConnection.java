@@ -10,7 +10,7 @@ public class DataBaseConnection {
     private String[] suppliers = {"supplier_id", "name", "address", "bank", "cash", "credit", "deliveryService"};
     private String[] supplyTimes = {"supplier_id", "daysOfDelivery", "maxDeliveryDuration", "orderCycle", "daysAcc"};
     private String[] contacts = {"supplier_id", "contactName", "phoneNum"};
-    private String[] product_order = {"supplier_id", "product_id", "order_id", "quantity", "discount", "finalPrice", "catalogPrice"}
+    private String[] product_order = {"supplier_id", "product_id", "order_id", "quantity", "discount", "finalPrice", "catalogPrice"};
     private String[] products = {"product_id", "name", "manufacturer", "amountToNotify", "categoryID", "supplyTime", "demand"};
     private String[] product_contract = {"supplier_id", "product_id", "price", "is_periodic_order", "catalogNum"};
     private String[] quantityAgreements = {"supplier_id", "product_id", "quantity", "discount"};

@@ -1,5 +1,7 @@
 package StockModule.BusinessLogicLayer;
 
+import DAL.DAO.ProductDAO;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
@@ -15,6 +17,7 @@ public class Product {
     private Date supplyTime;
     private int demand; // Demand means amount of units sold per week.
     private List<Item> items;
+    private ProductDAO dao;
 
     public Product(String name, String manufacturer, int categoryID, Date supplyTime, int demand)
     {
@@ -23,6 +26,23 @@ public class Product {
         this.manufacturer = manufacturer;
         this.amount = 0;
         this.amountToNotify = 0;
+        this.categoryID = categoryID;
+        this.supplyTime = supplyTime;
+        this.demand = demand;
+        this.items = new LinkedList<>();
+
+        dao = new ProductDAO();
+        dao.insert(this);
+
+    }
+
+    public Product(String name, String manufacturer,int amountToNotify,  int categoryID, Date supplyTime, int demand, boolean isFromDB)
+    {
+        this.ID = name+manufacturer;
+        this.name = name;
+        this.manufacturer = manufacturer;
+        this.amount = 0;
+        this.amountToNotify = amountToNotify;
         this.categoryID = categoryID;
         this.supplyTime = supplyTime;
         this.demand = demand;
@@ -40,6 +60,7 @@ public class Product {
         for(Item i : items){
             amount += i.getAmount();
         }
+        dao.updateAmount(this);
         if(amount < demand)
         {
             throw new Exception("PLEASE NOTICE : Current amount is lower than product's demand. Please refill stock.");
@@ -47,6 +68,11 @@ public class Product {
 
     }
 
+    public Date getSupplyTime(){return supplyTime;}
+    public int getAmount(){return amount;}
+    public int getAmountToNotify(){return amountToNotify;}
+    public String getManufacturer(){return manufacturer;}
+    public String getName(){return name;}
     public List<Item> getItems(){
         return items;
     }

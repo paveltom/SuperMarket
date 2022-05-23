@@ -65,7 +65,7 @@ public class Supplier {
     public void setDeliveryService(boolean deliveryService) {
         contract.setDeliveryService(deliveryService);
 
-        dao.
+        dao.setDeliveryService(this);
     }
     public void addContact(String contactName, String phoneNum){
         contacts.put(contactName, phoneNum);
