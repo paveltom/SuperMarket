@@ -98,6 +98,12 @@ public class Supplier {
             addOrder(order);
         }
     }
+    public void makeShortageOrder(String pId, int quantity, float discount) {
+        String phone = contacts.entrySet().stream().findFirst().get().getValue();
+        Order order = new Order(sId+LocalDate.now(), sId, name, address, LocalDate.now(), phone);
+        order.addProduct(pId, contract.getCatalogPrice(pId), quantity, discount, contract.getFinalPrice(pId, quantity));
+        addOrder(order);
+    }
     private void addOrder(Order order){
         orders.add(order);
         //TODO save in db
