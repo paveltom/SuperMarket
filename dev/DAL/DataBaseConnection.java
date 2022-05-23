@@ -29,6 +29,7 @@ public class DataBaseConnection {
         put("Discounts", discount);
         put("Discount_Product", discount_product);
         put("Category", category);
+        put("Supplier_Contacts", category);
         // add other values
     }};
 

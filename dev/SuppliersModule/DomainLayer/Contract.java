@@ -39,7 +39,7 @@ public class Contract {
 
     //  constructor
     public Contract(boolean[] daysOfDelivery, int maxDeliveryDuration, int orderCycle, boolean deliveryService,
-                    String pId, String catalogNum, float price, DAL.DataBaseConnection conn){
+                    String pId, String catalogNum, float price){
         supplyTime = new SupplyTime(daysOfDelivery, maxDeliveryDuration, orderCycle);
         setDeliveryService(deliveryService);
         catalog.add(new CatalogProduct(pId, catalogNum, price));
