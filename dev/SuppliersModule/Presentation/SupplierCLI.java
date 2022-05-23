@@ -17,7 +17,7 @@ public class SupplierCLI {
     public SupplierCLI() {
         in = new Scanner(System.in);
         ss = new SupplierServices();
-        loadData();
+        //loadData();
     }
 
     private void loadData() {
