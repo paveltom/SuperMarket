@@ -123,7 +123,7 @@ public class StockController {
 
     public void insertNewDiscount(int productID, Date startDate, Date endDate, int amount, Type t){
         Discount d = new Discount(discountsCounter, productID, startDate, endDate, amount, t);
-        discounts.put(d.getID(),d);
+        //discounts.put(d.getID(),d);
         discountsCounter++;
     }
 

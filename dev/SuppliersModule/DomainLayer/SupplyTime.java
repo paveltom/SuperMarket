@@ -1,5 +1,7 @@
 package SuppliersModule.DomainLayer;
 
+import DAL.DAO.SupplyTimeDAO;
+
 import java.time.LocalDate;
 
 public class SupplyTime {
@@ -7,8 +9,11 @@ public class SupplyTime {
     private int maxDeliveryDuration; // 0:= deliver the same day of order, -1:= only weekly deliver
     private int orderCycle; //when no weekly deliver, determines the amount of days between orders
     private int daysAcc; //when no weekly deliver, determines the amount of days past from last order
+    private String sId;
+    private SupplyTimeDAO dao;
 
     //  getters
+    public String getsId(){ return sId; }
     public boolean[] getDaysOfDelivery() {
         return daysOfDelivery;
     }
@@ -16,7 +21,7 @@ public class SupplyTime {
         return maxDeliveryDuration;
     }
     public int getOrderCycle(){return orderCycle;}
-    private int getDaysAcc() {return daysAcc;}
+    public int getDaysAcc() {return daysAcc;}
     public boolean hasWeeklyDeliver(){
         for(boolean day: daysOfDelivery) {if (day) return true;}
         return false;
@@ -28,6 +33,8 @@ public class SupplyTime {
         if (daysOfDelivery == null || daysOfDelivery.length != 7 )
             throw new IllegalArgumentException("incorrect format at days of delivery");
         this.daysOfDelivery = daysOfDelivery;
+
+        dao.changeDaysOfDelivery(this);
     }
     public void changeDaysOfDelivery(int day, boolean state) {
         if (day > 7 || day < 1)
@@ -35,6 +42,8 @@ public class SupplyTime {
         boolean[] week = daysOfDelivery.clone();
         week[day-1] = state;
         setDaysOfDelivery(week);
+
+        dao.changeDaysOfDelivery(this);
     }
     public void setMaxDeliveryDuration(int maxDeliveryDuration) {
         if(maxDeliveryDuration < -1)
@@ -42,6 +51,8 @@ public class SupplyTime {
         if(maxDeliveryDuration == -1 & !hasWeeklyDeliver())
             throw new IllegalArgumentException("missing delivery time options");
         this.maxDeliveryDuration = maxDeliveryDuration;
+
+        dao.setMaxDeliveryDuration(this);
     }
     public void setOrderCycle(int orderCycle){
         if(orderCycle == 0 | orderCycle < -1)
@@ -51,14 +62,20 @@ public class SupplyTime {
         if(orderCycle == -1 & !hasWeeklyDeliver())
             throw new IllegalArgumentException("order cycle is a must when there isn't a weekly delivery");
         this.orderCycle = orderCycle;
+
+        dao.setOrderCycle(this);
     }
 
     //  constructor
-    public SupplyTime(boolean[] daysOfDelivery, int maxDeliveryDuration, int orderCycle){
+    public SupplyTime(String sId, boolean[] daysOfDelivery, int maxDeliveryDuration, int orderCycle){
         setDaysOfDelivery(daysOfDelivery);
         setMaxDeliveryDuration(maxDeliveryDuration);
         setOrderCycle(orderCycle);
         daysAcc = orderCycle - 1; //if cycle delivery then an order would be placed at the end of the day
+        this.sId = sId;
+        dao = new SupplyTimeDAO();
+
+        dao.insert(this);
     }
 
     //methods

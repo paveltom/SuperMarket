@@ -1,5 +1,6 @@
 package SuppliersModule.DomainLayer;
 
+import DAL.DAO.SupplierDAO;
 import SuppliersModule.DomainLayer.Contract;
 
 import java.time.LocalDate;
@@ -15,6 +16,7 @@ public class Supplier {
     private final SuppliersModule.DomainLayer.Contract contract;
     private final SuppliersModule.DomainLayer.OrderController oc;
     private final List<SuppliersModule.DomainLayer.Order> orders = new LinkedList<>();
+    private SupplierDAO dao;
 
     //  getters
     public String getsId(){
@@ -62,6 +64,8 @@ public class Supplier {
     public void setSupplyCycle(int supplyCycle){contract.setOrderCycle(supplyCycle);}
     public void setDeliveryService(boolean deliveryService) {
         contract.setDeliveryService(deliveryService);
+
+        dao.
     }
     public void addContact(String contactName, String phoneNum){
         contacts.put(contactName, phoneNum);
@@ -80,8 +84,11 @@ public class Supplier {
         this.paymentMethods[0] = cash;
         this.paymentMethods[1] = credit;
         addContact(contactName, phoneNum);
-        contract = new Contract(supplyDays, MaxSupplyDays, supplCycle, deliveryService, pId, catNumber, price);
+        contract = new Contract(sId, supplyDays, MaxSupplyDays, supplCycle, deliveryService, pId, catNumber, price);
         oc = OrderController.getInstance();
+        dao = new SupplierDAO();
+
+        dao.insert(this);
     }
 
 

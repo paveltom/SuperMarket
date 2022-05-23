@@ -1,4 +1,4 @@
-package com.company.DAL;
+package DAL;
 
 import DAL.DataBaseConnection;
 

@@ -8,9 +8,11 @@ public class Contract {
     private boolean deliveryService;
     private final List<CatalogProduct> catalog = new LinkedList<>();
     private QuantityAgreement qa;
+    private final String sId;
 
     DAL.DataBaseConnection conn;
     // getters
+    public String getsId(){return sId;}
     public boolean[] getDaysOfDelivery() {
         return supplyTime.getDaysOfDelivery();
     }
@@ -38,9 +40,10 @@ public class Contract {
     public void setOrderCycle(int orderCycle) { supplyTime.setOrderCycle(orderCycle);}
 
     //  constructor
-    public Contract(boolean[] daysOfDelivery, int maxDeliveryDuration, int orderCycle, boolean deliveryService,
+    public Contract( String sId, boolean[] daysOfDelivery, int maxDeliveryDuration, int orderCycle, boolean deliveryService,
                     String pId, String catalogNum, float price){
-        supplyTime = new SupplyTime(daysOfDelivery, maxDeliveryDuration, orderCycle);
+        this.sId = sId;
+        supplyTime = new SupplyTime(sId, daysOfDelivery, maxDeliveryDuration, orderCycle);
         setDeliveryService(deliveryService);
         catalog.add(new CatalogProduct(pId, catalogNum, price));
         this.conn = conn;
