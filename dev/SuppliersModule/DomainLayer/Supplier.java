@@ -1,7 +1,5 @@
 package com.company.SuppliersModule.DomainLayer;
 
-import SuppliersModule.DomainLayer.Contract;
-
 import java.time.LocalDate;
 import java.util.*;
 
@@ -12,9 +10,9 @@ public class Supplier {
     private final String bankAccount;
     private final boolean[] paymentMethods = new boolean[2];
     private final Map<String,String> contacts = new HashMap<>();
-    private final SuppliersModule.DomainLayer.Contract contract;
-    private final SuppliersModule.DomainLayer.OrderController oc;
-    private final List<SuppliersModule.DomainLayer.Order> orders = new LinkedList<>();
+    private final Contract contract;
+    private final OrderController oc;
+    private final List<Order> orders = new LinkedList<>();
 
     //  getters
     public String getsId(){

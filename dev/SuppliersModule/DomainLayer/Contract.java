@@ -1,5 +1,7 @@
 package com.company.SuppliersModule.DomainLayer;
 
+import com.company.DAL.DataBaseConnection;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -9,7 +11,7 @@ public class Contract {
     private final List<CatalogProduct> catalog = new LinkedList<>();
     private QuantityAgreement qa;
 
-    DAL.DataBaseConnection conn;
+    DataBaseConnection conn;
     // getters
     public boolean[] getDaysOfDelivery() {
         return supplyTime.getDaysOfDelivery();

@@ -1,9 +1,7 @@
 package com.company;
 
-import SuppliersModule.Presentation.SupplierCLI;
-//import com.company.PresentationLayer.StockCLI;
-import StockModule.PresentationLayer.StockCLI;
-
+import com.company.StockModule.PresentationLayer.StockCLI;
+import com.company.SuppliersModule.Presentation.SupplierCLI;
 
 import java.util.Scanner;
 
