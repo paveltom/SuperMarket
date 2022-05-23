@@ -26,9 +26,6 @@ public class StockCLI {
             Protocol(message,s,toRead);
         }
         System.out.println("Ok, bye.");
-
-
-
     }
 
     public static void Protocol(String msg,Service s,Scanner toRead){
@@ -77,6 +74,7 @@ public class StockCLI {
                 System.out.println("New branch created successfully.");
             }
         }
+
         else if(msg.equals("RemoveBranch")){
             System.out.println("Enter Branch ID to delete : ");
             int toDeleteBranch = toRead.nextInt();
@@ -109,30 +107,34 @@ public class StockCLI {
         }
         else if(branchSelected){
             switch (msg) {
-                case "QuitBranch" -> {
+                case "QuitBranch":
                     branchSelected = false;
                     SelectedBranchID = -1;
                     System.out.println("Left branch successfully.");
-                }
-                case "AddCategory" -> {
+                    break;
+
+                case "AddCategory":
                     System.out.println("Enter new category name : ");
                     if (!s.insertNewCategory(SelectedBranchID, toRead.next()).ErrorOccured())
                         System.out.println("Added category successfully.");
-                }
-                case "SetSubCategory" -> {
+                    break;
+
+                case "SetSubCategory":
                     System.out.println("Enter categoryID you want to set as subcategory : ");
                     int subCategoryID = toRead.nextInt();
                     System.out.println("Enter categoryID you want to set as parent : ");
                     int parentID = toRead.nextInt();
                     if (!s.setSubCategory(SelectedBranchID, subCategoryID, parentID).ErrorOccured())
                         System.out.println("Subcategory set successfully.");
-                }
-                case "RemoveCategory" -> {
+                    break;
+
+                case "RemoveCategory":
                     System.out.println("Enter category ID to delete :");
                     if (!s.deleteCategory(SelectedBranchID, toRead.nextInt()).ErrorOccured())
                         System.out.println("Removed category successfully.");
-                }
-                case "AddProduct" -> {
+                    break;
+
+                case "AddProduct":
                     System.out.println("Enter new product name :");
                     String productName = toRead.next();
                     System.out.println("Enter new product manufacturer :");
@@ -149,20 +151,22 @@ public class StockCLI {
                     System.out.println("Enter the minimum demand for this product.");
                     int demand = toRead.nextInt();
                     System.out.println(s.insertNewProduct(SelectedBranchID, productName, productManufacturer, categoryID, new Date(year, month - 1, day), demand).ErrorMessage);
-                }
-                case "RemoveProduct" -> {
+                    break;
+
+                case "RemoveProduct":
                     System.out.print("Enter product ID to remove : ");
                     if (!s.deleteProduct(SelectedBranchID, toRead.nextInt()).ErrorOccured())
                         System.out.print("Product removed successfully.");
-                }
-                case "AddPurchase" -> {
+                    break;
+
+                case "AddPurchase":
                     System.out.println("Enter date of purchase : ");
                     System.out.println("Year :");
-                    int year = toRead.nextInt();
+                    int yearAddPurchase = toRead.nextInt();
                     System.out.println("Month :");
-                    int month = toRead.nextInt();
+                    int monthAddPurchase = toRead.nextInt();
                     System.out.println("Day :");
-                    int day = toRead.nextInt();
+                    int dayAddPurchase = toRead.nextInt();
                     System.out.println("Enter product ID : ");
                     int productID = toRead.nextInt();
                     System.out.println("Enter fixed price of product : ");
@@ -170,25 +174,27 @@ public class StockCLI {
                     System.out.println("Enter actual price of product : ");
                     int actualPrice = toRead.nextInt();
                     Map<Integer, Map<Integer, Integer>> products = (Map<Integer, Map<Integer, Integer>>) new HashMap<>().put(productID, new HashMap<>().put(fixedPrice, actualPrice));
-                    if (!s.insertNewPurchase(SelectedBranchID, new Date(year, month - 1, day), products).ErrorOccured())
+                    if (!s.insertNewPurchase(SelectedBranchID, new Date(yearAddPurchase, monthAddPurchase - 1, dayAddPurchase), products).ErrorOccured())
                         System.out.print("Added purchase successfully.");
-                }
-                case "RemovePurchase" -> {
+                    break;
+
+                case "RemovePurchase":
                     System.out.println("Enter purchase ID to remove : ");
                     if (!s.deletePurchase(SelectedBranchID, toRead.nextInt()).ErrorOccured())
                         System.out.print("Removed purchase successfully.");
-                }
-                case "AddDiscount" -> {
+                    break;
+
+                case "AddDiscount":
                     System.out.println("Enter ID of product to add discount to : ");
                     int ProductID = toRead.nextInt();
                     System.out.println("Enter start date of discount : ");
                     System.out.println("Year :");
-                    int year = toRead.nextInt();
+                    int yearAddDiscount = toRead.nextInt();
                     System.out.println("Month :");
-                    int month = toRead.nextInt();
+                    int monthAddDiscount = toRead.nextInt();
                     System.out.println("Day :");
-                    int day = toRead.nextInt();
-                    Date startDate = new Date(year, month - 1, day);
+                    int dayAddDiscount = toRead.nextInt();
+                    Date startDate = new Date(yearAddDiscount, monthAddDiscount - 1, dayAddDiscount);
 
                     System.out.println("Enter end date of discount : ");
                     System.out.println("Year :");
@@ -215,65 +221,92 @@ public class StockCLI {
 
                     }
                     System.out.println(s.insertNewDiscount(SelectedBranchID, ProductID, startDate, endDate, amount, t).ErrorMessage);
-                }
-                case "RemoveDiscount" -> {
+                    break;
+
+                case "RemoveDiscount":
                     System.out.println("Enter ID of discount to remove : ");
                     if (!s.deleteDiscount(SelectedBranchID, toRead.nextInt()).ErrorOccured())
                         System.out.print("Removed discount successfully.");
-                }
-                case "AddItem" -> {
+                    break;
+
+                case "AddItem":
                     System.out.println("Enter ID of product of item to add : ");
-                    int ProductID = toRead.nextInt();
+                    int ProductIDAddItem = toRead.nextInt();
                     System.out.println("Enter location of item : ");
                     String Location = toRead.next();
                     System.out.println("Enter expire date : ");
                     System.out.println("Year :");
-                    int year = toRead.nextInt();
+                    int yearAddItem = toRead.nextInt();
                     System.out.println("Month :");
-                    int month = toRead.nextInt();
+                    int monthAddItem = toRead.nextInt();
                     System.out.println("Day :");
-                    int day = toRead.nextInt();
-                    Date expireDate = new Date(year, month - 1, day);
+                    int dayAddItem = toRead.nextInt();
+                    Date expireDate = new Date(yearAddItem, monthAddItem - 1, dayAddItem);
                     System.out.println("Is the item usable ? enter 'Yes' or 'No' ");
                     String isUsable = toRead.next();
                     while (!isUsable.equals("Yes") && !isUsable.equals("No")) {
                         System.out.println("Please enter 'Yes' or 'No'.");
                         isUsable = toRead.next();
-
                     }
                     System.out.println("Enter amount of items : ");
-                    int amount = toRead.nextInt();
-                    if (!s.insertNewItem(SelectedBranchID, ProductID, Location, expireDate, isUsable.equals("Yes"), amount).ErrorOccured())
+                    int amountAddItem = toRead.nextInt();
+                    if (!s.insertNewItem(SelectedBranchID, ProductIDAddItem, Location, expireDate, isUsable.equals("Yes"), amountAddItem).ErrorOccured())
                         System.out.print("Added item successfully.");
-                }
-                case "ReduceItemAmount" -> {
+                    break;
+
+                case "ReduceItemAmount":
                     System.out.println("Enter ProductID of the item : ");
-                    int ProductID = toRead.nextInt();
+                    int ProductIDReduceItemAmount = toRead.nextInt();
                     System.out.println("Enter ID of the item : ");
                     int itemID = toRead.nextInt();
                     System.out.println("Enter how much do you want to reduce : ");
                     int amountToReduce = toRead.nextInt();
-                    System.out.println(s.reduceItemAmount(SelectedBranchID, ProductID, itemID, amountToReduce).ErrorMessage);
-                }
-                case "RemoveItem" -> {
+                    System.out.println(s.reduceItemAmount(SelectedBranchID, ProductIDReduceItemAmount, itemID, amountToReduce).ErrorMessage);
+                    break;
+
+                case "RemoveItem":
                     System.out.println("Enter product ID : ");
-                    int ProductID = toRead.nextInt();
+                    int ProductIDRemoveItem = toRead.nextInt();
                     System.out.println("Enter item ID : ");
                     int ItemID = toRead.nextInt();
-                    System.out.println(s.deleteItem(SelectedBranchID, ProductID, ItemID).ErrorMessage);
-                }
-                case "ShowProducts" -> System.out.println(s.getProductsInStock(SelectedBranchID).Value);
-                case "ShowPurchases" -> System.out.println(s.getPurchasesHistoryReport(SelectedBranchID).Value);
-                case "ShowDiscount" -> System.out.println(s.getCurrentDiscounts(SelectedBranchID).Value);
-                case "ShowCategories" -> System.out.println(s.getCategories(SelectedBranchID).Value);
-                case "ShowItems" -> System.out.println(s.getStockReport(SelectedBranchID).Value);
-                case "ShowItemsByCategory" -> {
+                    System.out.println(s.deleteItem(SelectedBranchID, ProductIDRemoveItem, ItemID).ErrorMessage);
+                    break;
+                case "ShowProducts":
+                    System.out.println(s.getProductsInStock(SelectedBranchID).Value);
+                    break;
+
+                case "ShowPurchases":
+                    System.out.println(s.getPurchasesHistoryReport(SelectedBranchID).Value);
+                    break;
+
+                case "ShowDiscount":
+                    System.out.println(s.getCurrentDiscounts(SelectedBranchID).Value);
+                    break;
+
+                case "ShowCategories":
+                    System.out.println(s.getCategories(SelectedBranchID).Value);
+                    break;
+
+                case "ShowItems":
+                    System.out.println(s.getStockReport(SelectedBranchID).Value);
+                    break;
+
+                case "ShowItemsByCategory":
                     System.out.println("Enter product ID to filter : ");
                     System.out.println(s.getStockReportByCategory(SelectedBranchID, toRead.nextInt()).Value);
-                }
-                case "ShowDefectiveItems" -> System.out.println(s.getDefectedProductsReport(SelectedBranchID).Value);
-                case "ShowExpiredItems" -> System.out.println(s.getExpiredProductsReport(SelectedBranchID).Value);
-                default -> System.out.println("Enter a valid command.");
+                    break;
+
+                case "ShowDefectiveItems":
+                    System.out.println(s.getDefectedProductsReport(SelectedBranchID).Value);
+                    break;
+
+                case "ShowExpiredItems":
+                    System.out.println(s.getExpiredProductsReport(SelectedBranchID).Value);
+                    break;
+
+                default:
+                    System.out.println("Enter a valid command.");
+                    break;
             }
         }
         else
