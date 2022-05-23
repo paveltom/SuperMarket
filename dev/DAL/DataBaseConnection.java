@@ -15,7 +15,7 @@ public class DataBaseConnection {
     private String[] product_contract = {"supplier_id", "product_id", "price", "is_periodic_order", "catalogNum"};
     private String[] quantityAgreements = {"supplier_id", "product_id", "quantity", "discount"};
     private String[] discounts = {"discount_id", "product_id", "discountStartDate", "discountEndDate", "discountAmount", "discountType"};
-    private String[] orders = {"supplier_id", "id", "date", "contr=actPhone", "supName", "supAddress"};
+    private String[] orders = {"supplier_id", "id", "date", "contactPhone", "supName", "supAddress"};
     private String[] items = {"product_id", "location", "expireDate", "isDefect", "isExpired", "amount"};
     private String[] discount_product = {"discount_id", "quantity", "discount"};
     private String[] category = {"category_id", "name", "parentCategory", "subCategories"};
