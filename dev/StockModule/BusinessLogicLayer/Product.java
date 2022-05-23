@@ -1,6 +1,9 @@
-package StockModule.BusinessLogicLayer;
+package com.company.StockModule.BusinessLogicLayer;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Product {
     private String ID;
@@ -37,7 +40,7 @@ public class Product {
         for(Item i : items){
             amount += i.getAmount();
         }
-        if(amount<demand)
+        if(amount < demand)
         {
             throw new Exception("PLEASE NOTICE : Current amount is lower than product's demand. Please refill stock.");
         }

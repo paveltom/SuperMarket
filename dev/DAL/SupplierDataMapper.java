@@ -1,11 +1,9 @@
 package com.company.DAL;
 
-import DAL.DataBaseConnection;
-
 import java.util.Arrays;
 
 public class SupplierDataMapper {
-    DAL.DataBaseConnection conn;
+    DataBaseConnection conn;
     public SupplierDataMapper(){
         conn = new DataBaseConnection();
     }

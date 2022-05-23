@@ -1,6 +1,6 @@
-package SuppliersModule.Presentation;
+package com.company.SuppliersModule.Presentation;
 
-import SuppliersModule.Service.SupplierServices;
+import com.company.SuppliersModule.Service.SupplierServices;
 
 public class LoadDataForTesting {
     public LoadDataForTesting(SupplierServices ss){

@@ -1,4 +1,4 @@
-package SuppliersModule.DomainLayer;
+package com.company.SuppliersModule.DomainLayer;
 
 import SuppliersModule.DomainLayer.Contract;
 

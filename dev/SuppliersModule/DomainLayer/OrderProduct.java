@@ -1,4 +1,4 @@
-package SuppliersModule.DomainLayer;
+package com.company.SuppliersModule.DomainLayer;
 
 public class OrderProduct {
     private final String id;

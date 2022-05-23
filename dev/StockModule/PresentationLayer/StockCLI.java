@@ -1,10 +1,7 @@
-package StockModule.PresentationLayer;
+package com.company.StockModule.PresentationLayer;
 
-//import com.company.BusinessLogicLayer.Type;
-//import com.company.ServiceLayer.Service;
-import StockModule.BusinessLogicLayer.Type;
-import StockModule.ServiceLayer.Service;
-
+import com.company.StockModule.BusinessLogicLayer.Type;
+import com.company.StockModule.ServiceLayer.Service;
 
 import java.util.*;
 
@@ -66,12 +63,7 @@ public class StockCLI {
                 System.out.println("'ShowItemsByCategory' - Prints stock report only on a specific category.");
                 System.out.println("'ShowDefectedItems' - Prints stock report of Defective products.");
                 System.out.println("'ShowExpiredItems' - Prints stock report of Expired products.");
-
-
-
-
             }
-
         }
 
         else if(msg.equals("LoadData")){

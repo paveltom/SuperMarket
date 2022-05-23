@@ -1,4 +1,4 @@
-package StockModule.BusinessLogicLayer;
+package com.company.StockModule.BusinessLogicLayer;
 
 import java.util.Date;
 
@@ -27,7 +27,7 @@ public class Item {
     public void reduce(int amountToReduce) throws Exception
     {
         int newAmount = amount - amountToReduce;
-        if(newAmount<0)
+        if(newAmount < 0)
         {
             throw new Exception("Can't reduce more than amount in stock. Reduce declined.");
         }

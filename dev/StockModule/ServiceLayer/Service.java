@@ -1,8 +1,7 @@
-package StockModule.ServiceLayer;
+package com.company.StockModule.ServiceLayer;
 
-import StockModule.BusinessLogicLayer.*;
+import com.company.StockModule.BusinessLogicLayer.*;
 
-import java.time.format.ResolverStyle;
 import java.util.*;
 
 public class Service

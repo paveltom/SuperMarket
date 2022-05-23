@@ -1,4 +1,4 @@
-package DAL;
+package com.company.DAL;
 
 import java.sql.*;
 import java.util.HashMap;
@@ -18,6 +18,7 @@ public class DataBaseConnection {
     private String[] discount = {"discount_id", "product_id", "discountStartDate", "discountEndDate", "discountAmount", "discountType"};
     private String[] discount_product = {"discount_id", "quantity", "discount"};
     private String[] category = {"category_id", "name", "parentCategory", "subCategories"};
+    private String[] purchase = {"purchase_id", "purchaseDate"};
 
     // add other strings
     private final Map<String, String[]> tablesWithParams = new HashMap<String, String[]>() {{
@@ -30,6 +31,7 @@ public class DataBaseConnection {
         put("Discount_Product", discount_product);
         put("Category", category);
         put("Supplier_Contacts", category);
+        put("Purchases", purchase);
         // add other values
     }};
 
@@ -50,7 +52,6 @@ public class DataBaseConnection {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             return null;
-
         }
     }
 
@@ -136,7 +137,5 @@ public class DataBaseConnection {
             System.err.println(e.getClass().getName() + ": " + e.getMessage() + ". Delete method. On table: " + tableNAME);
             return false;
         }
-
     }
-
 }

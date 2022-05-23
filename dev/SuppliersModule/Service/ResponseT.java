@@ -1,4 +1,4 @@
-package SuppliersModule.Service;
+package com.company.SuppliersModule.Service;
 
 public class ResponseT <T> extends Response{
 

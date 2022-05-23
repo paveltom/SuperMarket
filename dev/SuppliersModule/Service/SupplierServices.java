@@ -1,6 +1,7 @@
-package SuppliersModule.Service;
+package com.company.SuppliersModule.Service;
 
-import SuppliersModule.DomainLayer.*;
+
+import com.company.SuppliersModule.DomainLayer.*;
 
 import java.util.List;
 import java.util.Map;
