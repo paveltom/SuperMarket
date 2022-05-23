@@ -10,6 +10,7 @@ public class Supplier {
     private final String bankAccount;
     private final boolean[] paymentMethods = new boolean[2];
     private final Map<String,String> contacts = new HashMap<>();
+    private boolean deliveryService;
     private final Contract contract;
     private final OrderController oc;
     private final List<Order> orders = new LinkedList<>();
@@ -37,7 +38,7 @@ public class Supplier {
     }
     public int getSupplyCycle(){return contract.getOrderCycle();}
     public boolean hasDeliveryService() {
-        return contract.hasDeliveryService();
+        return deliveryService;
     }
     public Contract getContract(){
         return contract;
@@ -58,9 +59,7 @@ public class Supplier {
         contract.setMaxDeliveryDuration(maxSupplyDays);
     }
     public void setSupplyCycle(int supplyCycle){contract.setOrderCycle(supplyCycle);}
-    public void setDeliveryService(boolean deliveryService) {
-        contract.setDeliveryService(deliveryService);
-    }
+    public void setDeliveryService(boolean deliveryService) {this.deliveryService = deliveryService;}
     public void addContact(String contactName, String phoneNum){
         contacts.put(contactName, phoneNum);
     }
@@ -77,8 +76,9 @@ public class Supplier {
         this.bankAccount = bankAccount;
         this.paymentMethods[0] = cash;
         this.paymentMethods[1] = credit;
+        this.deliveryService = deliveryService;
         addContact(contactName, phoneNum);
-        contract = new Contract(supplyDays, MaxSupplyDays, supplCycle, deliveryService, pId, catNumber, price);
+        contract = new Contract(supplyDays, MaxSupplyDays, supplCycle, pId, catNumber, price);
         oc = OrderController.getInstance();
     }
 
