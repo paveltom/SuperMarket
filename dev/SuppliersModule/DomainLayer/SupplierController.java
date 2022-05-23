@@ -1,4 +1,4 @@
-package com.company.SuppliersModule.DomainLayer;
+package SuppliersModule.DomainLayer;
 
 import java.util.*;
 import java.util.stream.Collectors;

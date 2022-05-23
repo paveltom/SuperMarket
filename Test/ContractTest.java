@@ -1,4 +1,4 @@
-import com.company.SuppliersModule.DomainLayer.Contract;
+import SuppliersModule.DomainLayer.Contract;
 import org.junit.jupiter.api.Test;
 
 import java.util.Objects;

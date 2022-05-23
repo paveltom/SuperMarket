@@ -1,4 +1,4 @@
-package com.company.SuppliersModule.DomainLayer;
+package SuppliersModule.DomainLayer;
 
 import java.util.Hashtable;
 import java.util.Map;

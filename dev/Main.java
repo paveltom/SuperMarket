@@ -1,7 +1,5 @@
-package com.company;
-
-import com.company.StockModule.PresentationLayer.StockCLI;
-import com.company.SuppliersModule.Presentation.SupplierCLI;
+import StockModule.PresentationLayer.StockCLI;
+import SuppliersModule.Presentation.SupplierCLI;
 
 import java.util.Scanner;
 

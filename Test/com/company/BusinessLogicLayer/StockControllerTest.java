@@ -1,7 +1,7 @@
-package com.company.BusinessLogicLayer;
+package BusinessLogicLayer;
 
-import com.company.StockModule.BusinessLogicLayer.StockController;
-import com.company.StockModule.BusinessLogicLayer.Type;
+import StockModule.BusinessLogicLayer.StockController;
+import StockModule.BusinessLogicLayer.Type;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

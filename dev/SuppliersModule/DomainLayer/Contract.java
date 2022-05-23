@@ -1,6 +1,6 @@
-package com.company.SuppliersModule.DomainLayer;
+package SuppliersModule.DomainLayer;
 
-import com.company.DAL.DataBaseConnection;
+import DAL.DataBaseConnection;
 
 import java.util.*;
 import java.util.stream.Collectors;

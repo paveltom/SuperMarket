@@ -1,4 +1,4 @@
-package com.company.SuppliersModule.Service;
+package SuppliersModule.Service;
 
 public class Response {
     private String ErrorMessage = null;

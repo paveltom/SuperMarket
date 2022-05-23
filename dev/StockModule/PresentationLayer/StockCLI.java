@@ -1,7 +1,7 @@
-package com.company.StockModule.PresentationLayer;
+package StockModule.PresentationLayer;
 
-import com.company.StockModule.BusinessLogicLayer.Type;
-import com.company.StockModule.ServiceLayer.Service;
+import StockModule.BusinessLogicLayer.Type;
+import StockModule.ServiceLayer.Service;
 
 import java.util.*;
 

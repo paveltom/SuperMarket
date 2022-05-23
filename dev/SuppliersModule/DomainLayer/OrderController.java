@@ -1,6 +1,6 @@
-package com.company.SuppliersModule.DomainLayer;
+package SuppliersModule.DomainLayer;
 
-import com.company.StockModule.BusinessLogicLayer.StockController;
+import StockModule.BusinessLogicLayer.StockController;
 
 import java.util.HashMap;
 import java.util.List;

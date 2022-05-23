@@ -1,4 +1,4 @@
-package com.company.StockModule.ServiceLayer;
+package StockModule.ServiceLayer;
 
 public class ResponseT<T> extends Response
 {

@@ -1,12 +1,11 @@
-package com.company.SuppliersModule.Presentation;
+package SuppliersModule.Presentation;
 
-import com.company.SuppliersModule.DomainLayer.CatalogProduct;
-import com.company.SuppliersModule.DomainLayer.Contract;
-import com.company.SuppliersModule.DomainLayer.Supplier;
-import com.company.SuppliersModule.Service.Response;
-import com.company.SuppliersModule.Service.ResponseT;
-import com.company.SuppliersModule.Service.SupplierServices;
-import com.company.SuppliersModule.Presentation.*;
+import SuppliersModule.DomainLayer.CatalogProduct;
+import SuppliersModule.DomainLayer.Contract;
+import SuppliersModule.DomainLayer.Supplier;
+import SuppliersModule.Service.Response;
+import SuppliersModule.Service.ResponseT;
+import SuppliersModule.Service.SupplierServices;
 import java.util.*;
 import java.util.stream.Collectors;
 

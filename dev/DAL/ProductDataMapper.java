@@ -1,6 +1,6 @@
-package com.company.DAL;
+package DAL;
 
-import com.company.StockModule.BusinessLogicLayer.Type;
+import StockModule.BusinessLogicLayer.Type;
 
 import java.util.Date;
 import java.util.List;

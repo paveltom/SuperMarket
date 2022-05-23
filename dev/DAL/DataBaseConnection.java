@@ -1,4 +1,4 @@
-package com.company.DAL;
+package DAL;
 
 import java.sql.*;
 import java.util.HashMap;

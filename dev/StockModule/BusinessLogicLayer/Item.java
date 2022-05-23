@@ -1,4 +1,4 @@
-package com.company.StockModule.BusinessLogicLayer;
+package StockModule.BusinessLogicLayer;
 
 import java.util.Date;
 
