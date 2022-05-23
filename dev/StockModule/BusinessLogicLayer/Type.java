@@ -1,5 +1,5 @@
 package StockModule.BusinessLogicLayer;
 
 public enum Type {
-    PERCENT, FIXED
+    PERCENT, FIXED;
 }

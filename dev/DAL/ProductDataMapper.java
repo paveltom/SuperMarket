@@ -1,13 +1,13 @@
 package DAL;
 
-import DAL.DataBaseConnection;
+import StockModule.BusinessLogicLayer.Type;
 
 import java.util.Date;
 import java.util.List;
 
 public class ProductDataMapper {
 
-    DAL.DataBaseConnection conn;
+    DataBaseConnection conn;
     public ProductDataMapper(){
         conn = new DataBaseConnection();
     }
@@ -53,9 +53,24 @@ public class ProductDataMapper {
         conn.update("Category", keys, keysVals, "subCategories", String.valueOf(subCategories));
     }
 
-    public void addDiscount(){
-
+    public void addDiscount(int discountID, int productID, Date discountStartDate, Date discountEndDate, int discountAmount, Type discountType){
+        String[] params = {String.valueOf(discountID), String.valueOf(productID), discountStartDate.toString(), discountEndDate.toString(), String.valueOf(discountAmount), discountType.toString()};
+        conn.insert("Discounts", params);
     }
-    public void removeDiscount(){}
+    public void removeDiscount(int discountId){
+        String[] keys = {"discount_id"};
+        String[] keysVals = {String.valueOf(discountId)};
+        conn.delete("Discounts", keys, keysVals);
+    }
 
+    public void addPurchase(int purchaseID, Date purchaseDate){
+        String[] params = {String.valueOf(purchaseID), purchaseDate.toString()};
+        conn.insert("Purchases", params);
+    }
+
+    public void removePurchase(int purchaseId){
+        String[] keys = {"purchase_id"};
+        String[] keysVals = {String.valueOf(purchaseId)};
+        conn.delete("Purchases", keys, keysVals);
+    }
 }

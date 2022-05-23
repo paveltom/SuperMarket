@@ -1,8 +1,11 @@
 package SuppliersModule.Presentation;
 
-import SuppliersModule.DomainLayer.*;
-import SuppliersModule.Service.*;
-
+import SuppliersModule.DomainLayer.CatalogProduct;
+import SuppliersModule.DomainLayer.Contract;
+import SuppliersModule.DomainLayer.Supplier;
+import SuppliersModule.Service.Response;
+import SuppliersModule.Service.ResponseT;
+import SuppliersModule.Service.SupplierServices;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -14,7 +17,7 @@ public class SupplierCLI {
     public SupplierCLI() {
         in = new Scanner(System.in);
         ss = new SupplierServices();
-        loadData();
+        //loadData();
     }
 
     private void loadData() {

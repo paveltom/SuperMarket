@@ -27,7 +27,7 @@ public class Item {
     public void reduce(int amountToReduce) throws Exception
     {
         int newAmount = amount - amountToReduce;
-        if(newAmount<0)
+        if(newAmount < 0)
         {
             throw new Exception("Can't reduce more than amount in stock. Reduce declined.");
         }

@@ -20,7 +20,6 @@ public class Discount
         discountEndDate = _discountEndDate;
         discount = new HashMap<>();
         discount.put(_amount, _t);
-
     }
 
 
@@ -29,6 +28,14 @@ public class Discount
         Integer amount = (Integer) discount.keySet().toArray()[0];
         Type t = discount.get(amount);
         return "Discount ID : " + discountID + " , Product ID : " + productID + " , Start Date : " + discountStartDate + " , End Date : " + discountEndDate + " , Amount : " + amount + " " + t+ "\n";
+    }
+
+    public int getDiscountID() {
+        return discountID;
+    }
+
+    public int getProductID() {
+        return productID;
     }
 
     public Map<Integer, Type> getType() {

@@ -1,7 +1,6 @@
 package SuppliersModule.DomainLayer;
 
 import StockModule.BusinessLogicLayer.StockController;
-import SuppliersModule.DomainLayer.*;
 
 import java.util.HashMap;
 import java.util.List;

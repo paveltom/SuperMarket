@@ -68,6 +68,19 @@ public class SupplierController {
 
     public void orderShortage(Map<Supplier, Integer> suppQuantities, String pId){
         //TODO decide the best deliver and order from him
+        Supplier bestSupp = null;
+        int bestQuantity = -1;
+        float bestDiscount = -1;
+        for (Map.Entry<Supplier, Integer> entry : suppQuantities.entrySet()){
+            float currentDiscount = entry.getKey().getContract().getDiscount(pId, entry.getValue());
+            if(currentDiscount > bestDiscount){
+                bestSupp = entry.getKey();
+                bestQuantity = entry.getValue();
+                bestDiscount = currentDiscount;
+            }
+        }
+        if(bestSupp != null)
+            bestSupp.makeShortageOrder(pId, bestQuantity, bestDiscount);
     }
 
     //  other methods

@@ -1,10 +1,7 @@
-import DomainLayer.Contract;
-import org.junit.Before;
-import org.junit.Test;
+import SuppliersModule.DomainLayer.Contract;
+import org.junit.jupiter.api.Test;
 
 import java.util.Objects;
-
-import static org.junit.Assert.*;
 
 public class ContractTest {
 
