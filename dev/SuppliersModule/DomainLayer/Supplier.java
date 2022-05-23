@@ -89,13 +89,18 @@ public class Supplier {
         if(cp != null) {
             Map<String, Integer> prodQuantities = oc.orderPeriodic(cp, contract.getPeriodicOrderInterval());
             String phone = contacts.entrySet().stream().findFirst().get().getValue();
-            Order order = new Order("todo", sId, name, address, LocalDate.now(), phone); //TODO
+            Order order = new Order(sId+LocalDate.now(), sId, name, address, LocalDate.now(), phone);
             for (Map.Entry<String, Integer> entry : prodQuantities.entrySet()) {
                 String pId = entry.getKey();
                 int amount = entry.getValue();
                 order.addProduct(pId, contract.getCatalogPrice(pId), amount, contract.getDiscount(pId, amount), contract.getFinalPrice(pId, amount));
             }
+            addOrder(order);
         }
+    }
+    private void addOrder(Order order){
+        orders.add(order);
+        //TODO save in db
     }
     public int getPeriodicOrderInterval(){return contract.getPeriodicOrderInterval();}
     public int getDaysForShortageOrder(){return contract.getDaysForShortageOrder();}
