@@ -82,7 +82,7 @@ public class DeliveryResourcesService {
                 return new Response("System cannot allow to perform this action.");
         }
         catch (Exception e){
-            return new Response(e.getMessage());
+            return new Response("Exception: " + e.getClass() + ". " + e.getMessage());
         }
     }
 

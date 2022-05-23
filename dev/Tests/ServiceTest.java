@@ -1,17 +1,24 @@
 package Tests;
 
+import DAL.DALController;
+import DAL.DTO.DriverDTO;
+import DeliveryModule.PresentationLayer.PresentationController;
 import PersonelModule.BusinessLayer.ServiceLayer.Service;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.List;
 
 import static org.junit.Assert.*;
 
 public class ServiceTest {
 
     Service service;
+    DeliveryModule.Facade.Service DMService;
     @Before
     public void setUp() throws Exception {
         service = new Service();
+        DMService = new DeliveryModule.Facade.Service(service);
     }
 
     @Test
@@ -139,39 +146,106 @@ public class ServiceTest {
     //--------------------------------------------------------------------------------
     //-----------------------------Shared Tests---------------------------------------
     @Test
+    public void deleteWorkerDriver() {
+      //  assertEquals("Added Driver successfully",service.AddDriver("212589691","Nikita Kovalchuk","Driver","yes","Bank 003 111111",30.00,"22/9/2020","...","E","Negev","0525670092"));
+        assertEquals("Deleted worker successfully",service.DeleteWorker("212589691"));//To remove from DB
+    }
+    @Test
     public void AddDriver() {
         assertEquals("Added Driver successfully",service.AddDriver("212589691","Nikita Kovalchuk","Driver","yes","Bank 003 111111",30.00,"22/9/2020","...","E","Negev","0525670092"));
         assertEquals("Deleted worker successfully",service.DeleteWorker("212589691"));//To remove from DB
     }
-
     @Test
-    public void AddDriverWithIdThatExists() {
+    public void AddDrivers() {
         assertEquals("Added Driver successfully",service.AddDriver("212589691","Nikita Kovalchuk","Driver","yes","Bank 003 111111",30.00,"22/9/2020","...","E","Negev","0525670092"));
-        assertEquals("A worker with this Id Already Exists",service.AddDriver("212589691","Nikita Kovalchuk1","Driver","yes","Bank 003 111111",30.00,"22/9/2020","...","E","Negev","0525670092"));
-        assertEquals("Deleted worker successfully",service.DeleteWorker("212589691"));//To remove from DB
-    }
+        assertEquals("Added Driver successfully",service.AddDriver("212589692","Nikita Kovalchuk","Driver","yes","Bank 003 111111",30.00,"22/9/2020","...","E","Negev","0525670092"));
+        assertEquals("Added Driver successfully",service.AddDriver("212589693","Nikita Kovalchuk","Driver","yes","Bank 003 111111",30.00,"22/9/2020","...","E","Negev","0525670092"));
 
-    @Test
-    public void AddDriverWithIlligalDriverData() {
-        assertEquals("Added Driver successfully",service.AddDriver("212589691","Nikita Kovalchuk","Driver","yes","Bank 003 111111",30.00,"22/9/2020","...","AC","Negev","0525670092"));
         assertEquals("Deleted worker successfully",service.DeleteWorker("212589691"));//To remove from DB
-    }
+        assertEquals("Deleted worker successfully",service.DeleteWorker("212589692"));//To remove from DB
+        assertEquals("Deleted worker successfully",service.DeleteWorker("212589693"));//To remove from DB
 
+    }
     @Test
     public void AddDriverWithIlligalWorkerData() {
-        assertEquals("Added Driver successfully",service.AddDriver("21258969","Nikita Kovalchuk","Driver","yes","Bank 003 111111",30.00,"22/9/2020","...","E","Negev","0525670092"));
+        assertEquals("Pay cannot be below 29.12",service.AddDriver("212589691","Nikita Kovalchuk","Driver","yes","Bank 003 111111",26.00,"22/9/2020","...","AC","Negev","0525670092"));
+    }
+
+    @Test
+    public void AddDriverWithIlligalWorkerData1() {
+        assertEquals("Id has to be 9 numbers",service.AddDriver("21258969","Nikita Kovalchuk","Driver","yes","Bank 003 111111",30.00,"22/9/2020","...","E","Negev","0525670092"));
+    }
+    @Test
+    public void DelDriver() {
+        assertEquals("Added Driver successfully",service.AddDriver("212589691","Nikita Kovalchuk","Driver","yes","Bank 003 111111",30.00,"22/9/2020","...","E","Negev","0525670092"));
+        assertEquals("Deleted worker successfully",service.DeleteWorker("212589691"));//To remove from DB
+    }
+    @Test
+    public void DelMultipleDriver() {
+        assertEquals("Added Driver successfully",service.AddDriver("212589691","Nikita Kovalchuk","Driver","yes","Bank 003 111111",30.00,"22/9/2020","...","E","Negev","0525670092"));
+        assertEquals("Added Driver successfully",service.AddDriver("212589692","Nikita Kovalchuk","Driver","yes","Bank 003 111111",30.00,"22/9/2020","...","E","Negev","0525670092"));
+        assertEquals("Deleted worker successfully",service.DeleteWorker("212589692"));//To remove from DB
+        assertEquals("Deleted worker successfully",service.DeleteWorker("212589691"));//To remove from DB
+    }
+    @Test
+    public void FailedDel() {
+        assertEquals("Added Driver successfully",service.AddDriver("212589691","Nikita Kovalchuk","Driver","yes","Bank 003 111111",30.00,"22/9/2020","...","E","Negev","0525670092"));
+        assertEquals("Wasnt able to delete worker check input",service.DeleteWorker("212589692"));//To remove from DB
+        assertEquals("Deleted worker successfully",service.DeleteWorker("212589691"));//To remove from DB
+    }
+    @Test
+    public void getAvail() {
+        assertEquals("Added Driver successfully",service.AddDriver("212589691","Nikita Kovalchuk","Driver","yes","Bank 003 111111",30.00,"22/9/2020","...","E","Negev","0525670092"));
+        assertEquals("Driver Nikita Kovalchuk id:212589691 future delivers are:\n" +
+                "Availability:\n" +
+                "\t212589691: ",service.showAvailability());
         assertEquals("Deleted worker successfully",service.DeleteWorker("212589691"));//To remove from DB
     }
     @Test
     public void AddShiftAndCheckConstraints() {
-        assertEquals("Added Driver successfully",service.AddWorker("212589691","Nikita Kovalchuk","Driver","yes","Bank 003 111111",30.00,"22/9/2020","..."));
-        assertEquals("Added Driver successfully",service.AddWorker("212589692","Nikita Kovalchuk","Driver","yes","Bank 003 111111",30.00,"22/9/2020","..."));
-        assertEquals("Added Driver successfully",service.AddWorker("212589693","Nikita Kovalchuk","Driver","yes","Bank 003 111111",30.00,"22/9/2020","..."));
-        assertEquals("Added Driver successfully",service.AddWorker("212589694","Nikita Kovalchuk","Driver","yes","Bank 003 111111",30.00,"22/9/2020","..."));
-        assertEquals("Added Driver successfully",service.AddWorker("212589695","Nikita Kovalchuk","Driver","yes","Bank 003 111111",30.00,"22/9/2020","..."));
+        assertEquals("Added worker successfully",service.AddWorker("212589691","Nikita Kovalchuk","PersonnelManager","yes","Bank 003 111111",30.00,"22/9/2020","..."));
+        assertEquals("Added worker successfully",service.AddWorker("212589692","Nikita Kovalchuk","Cashier","yes","Bank 003 111111",30.00,"22/9/2020","..."));
+        assertEquals("Added worker successfully",service.AddWorker("212589693","Nikita Kovalchuk","StoreKeeper","yes","Bank 003 111111",30.00,"22/9/2020","..."));
+        assertEquals("Added worker successfully",service.AddWorker("212589694","Nikita Kovalchuk","Usher","yes","Bank 003 111111",30.00,"22/9/2020","..."));
+        assertEquals("Added worker successfully",service.AddWorker("212589695","Nikita Kovalchuk","LogisticsManager","yes","Bank 003 111111",30.00,"22/9/2020","..."));
         assertEquals("Added Driver successfully",service.AddDriver("212589696","Nikita Kovalchuk","Driver","yes","Bank 003 111111",30.00,"22/9/2020","...","E","Negev","0525670092"));
-        assertEquals("Added Driver successfully",service.addShift("12/04/2022",0,"212589691","PersonnelManager 212589691|Cashier 212589692|StoreKeeper 212589693|Usher 212589694|LogisticsManager 212589695|Driver 212589696 "));
+        assertEquals("Added Driver successfully",service.AddDriver("212589697","Nikita Kovalchuk","Driver","yes","Bank 003 111111",30.00,"22/9/2020","...","E","Negev","0525670092"));
+        assertEquals("Added shift successfully",service.addShift("12/04/2022",0,"212589691","PersonnelManager 212589691|Cashier 212589692|StoreKeeper 212589693|Usher 212589694|LogisticsManager 212589695|Driver 212589696 "));
+        List<DriverDTO> drivers = DALController.getInstance().getAllDrivers();
+        assertEquals("31@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~28@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~31@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~30@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#1100#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~31@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~30@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~31@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~30@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~31@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~30@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~31@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~30@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000",drivers.get(0).Diary);
         assertEquals("Deleted worker successfully",service.DeleteWorker("212589691"));//To remove from DB
+        assertEquals("Deleted worker successfully",service.DeleteWorker("212589692"));//To remove from DB
+        assertEquals("Deleted worker successfully",service.DeleteWorker("212589693"));//To remove from DB
+        assertEquals("Deleted worker successfully",service.DeleteWorker("212589694"));//To remove from DB
+        assertEquals("Deleted worker successfully",service.DeleteWorker("212589695"));//To remove from DB
+        assertEquals("Deleted worker successfully",service.DeleteWorker("212589696"));//To remove from DB
+        assertEquals("Deleted worker successfully",service.DeleteWorker("212589697"));//To remove from DB
     }
+
+    @Test
+    public void AddShiftAndCheckConstraintsMutipleDrivers() {
+        assertEquals("Added worker successfully",service.AddWorker("212589691","Nikita Kovalchuk","PersonnelManager","yes","Bank 003 111111",30.00,"22/9/2020","..."));
+        assertEquals("Added worker successfully",service.AddWorker("212589692","Nikita Kovalchuk","Cashier","yes","Bank 003 111111",30.00,"22/9/2020","..."));
+        assertEquals("Added worker successfully",service.AddWorker("212589693","Nikita Kovalchuk","StoreKeeper","yes","Bank 003 111111",30.00,"22/9/2020","..."));
+        assertEquals("Added worker successfully",service.AddWorker("212589694","Nikita Kovalchuk","Usher","yes","Bank 003 111111",30.00,"22/9/2020","..."));
+        assertEquals("Added worker successfully",service.AddWorker("212589695","Nikita Kovalchuk","LogisticsManager","yes","Bank 003 111111",30.00,"22/9/2020","..."));
+        assertEquals("Added Driver successfully",service.AddDriver("212589696","Nikita Kovalchuk","Driver","yes","Bank 003 111111",30.00,"22/9/2020","...","E","Negev","0525670092"));
+        assertEquals("Added Driver successfully",service.AddDriver("212589697","Nikita Kovalchuk","Driver","yes","Bank 003 111111",30.00,"22/9/2020","...","E","Negev","0525670092"));
+        assertEquals("Added Driver successfully",service.AddDriver("212589698","Nikita Kovalchuk","Driver","yes","Bank 003 111111",30.00,"22/9/2020","...","E","Negev","0525670092"));
+        assertEquals("Added Driver successfully",service.AddDriver("212589699","Nikita Kovalchuk","Driver","yes","Bank 003 111111",30.00,"22/9/2020","...","E","Negev","0525670092"));
+        assertEquals("Added shift successfully",service.addShift("12/04/2022",0,"212589691","PersonnelManager 212589691|Cashier 212589692|StoreKeeper 212589693|Usher 212589694|LogisticsManager 212589695|Driver 212589696 "));
+        List<DriverDTO> drivers = DALController.getInstance().getAllDrivers();
+        assertEquals("31@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~28@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~31@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~30@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#1100#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~31@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~30@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~31@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~30@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~31@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~30@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~31@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~30@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000",drivers.get(0).Diary);
+        assertEquals("31@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~28@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~31@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~30@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#1100#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~31@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~30@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~31@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~30@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~31@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~30@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~31@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~30@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000",drivers.get(1).Diary);
+        assertEquals("31@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~28@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~31@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~30@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#1100#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~31@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~30@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~31@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~30@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~31@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~30@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~31@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000~30@0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000#0000",drivers.get(2).Diary);
+        assertEquals("Deleted worker successfully",service.DeleteWorker("212589691"));//To remove from DB
+        assertEquals("Deleted worker successfully",service.DeleteWorker("212589692"));//To remove from DB
+        assertEquals("Deleted worker successfully",service.DeleteWorker("212589693"));//To remove from DB
+        assertEquals("Deleted worker successfully",service.DeleteWorker("212589694"));//To remove from DB
+        assertEquals("Deleted worker successfully",service.DeleteWorker("212589695"));//To remove from DB
+        assertEquals("Deleted worker successfully",service.DeleteWorker("212589696"));//To remove from DB
+        assertEquals("Deleted worker successfully",service.DeleteWorker("212589697"));//To remove from DB
+    }
+
 
 }
