@@ -1,5 +1,7 @@
 package SuppliersModule.DomainLayer;
 
+import DAL.DAO.SupplierDAO;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -47,6 +49,10 @@ public class Contract {
         for(CatalogProduct cp : catalog){
             this.catalog.add(cp);
         }
+    }
+
+    public void loadQuantityAgreement(SupplierDAO dao){
+        //dao.getQuantityAgreementFromDB(this);
     }
 
     //  order methods

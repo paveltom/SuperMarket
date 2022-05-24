@@ -7,9 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class SupplierDAO {
     DataBaseConnection conn;
@@ -91,4 +89,15 @@ public class SupplierDAO {
         return new Order(o[1], o[0], o[4], o[5],
                 localDate, o[3], true);
     }
+
+//    public QuantityAgreement getQuantityAgreementFromDB(Contract c){
+//        String[] paramsW = {"supplier_id"} ;
+//        String[] paramsWV = {c.getsId()};
+//        List<String[]> discounts = conn.select("QuantityAgreements", paramsW, paramsWV);
+//
+//        Map<String, Map<Integer, Float>> Discounts = new Hashtable<>();
+//
+//
+//        QuantityAgreement qa = new QuantityAgreement();
+//    }
 }
