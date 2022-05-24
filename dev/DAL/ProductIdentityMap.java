@@ -10,7 +10,6 @@ import java.util.List;
 
 public class ProductIdentityMap {
     private List<Product> cachedProducts;
-    private DataBaseConnection conn;
     private static ProductIdentityMap instance = null;
 
     public static ProductIdentityMap getInstance(){
@@ -20,7 +19,6 @@ public class ProductIdentityMap {
     }
     private ProductIdentityMap(){
         cachedProducts = new ArrayList<>();
-        conn = new DataBaseConnection();
     }
 
     public void cach(Product p){

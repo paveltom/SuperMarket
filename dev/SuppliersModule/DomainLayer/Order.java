@@ -50,7 +50,7 @@ public class Order {
     public void addProduct(String pId, float catalogPrice, int amount, float discount, float finalPrice){
         if(hasProduct(pId))
             throw new IllegalArgumentException("product already exists in the order");
-        products.add(new OrderProduct(pId,catalogPrice,amount,discount,finalPrice));
+        products.add(new OrderProduct(supId, id, pId,catalogPrice,amount,discount,finalPrice));
     }
 
     public void changeProduct(String pId, int amount, float discount, float finalPrice){

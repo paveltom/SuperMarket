@@ -6,8 +6,9 @@ public class CatalogProduct {
     private String catalogNum;
     private float price;
     private boolean inPeriodicOrder = false;
-
+    private String sId;
     // getters and setters
+    public String getsId(){return sId;}
     public String getId(){return id;}
     public String getCatalogNum() {
         return catalogNum;
@@ -31,7 +32,7 @@ public class CatalogProduct {
     }
 
     // constructor
-    public CatalogProduct(String id, String catalogNum, float price){
+    public CatalogProduct(String sId, String id, String catalogNum, float price){
         this.id = id;
         setCatalogNum(catalogNum);
         setPrice(price);

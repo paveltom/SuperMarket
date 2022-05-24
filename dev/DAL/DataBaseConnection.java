@@ -28,13 +28,22 @@ public class DataBaseConnection {
         put("Contacts", contacts);
         put("Product_Order", product_order);
         put("Products", products);
-        put("Product_Contract", product_contract);
-        put("QuantityAgreements", quantityAgreements);
-        put("Discounts", discounts);
         put("Orders", orders);
+
+        put("Product_Contract", product_contract);
+
+        put("QuantityAgreements", quantityAgreements);
+
+        put("Discounts", discounts);
+
+
+
         put("Items", items);
+
         put("Discount_Product", discount_product);
+
         put("Category", category);
+
         put("Product_Category", product_category);
     }};
 
