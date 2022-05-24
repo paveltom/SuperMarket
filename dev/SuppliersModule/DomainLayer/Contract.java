@@ -29,7 +29,7 @@ public class Contract {
     public QuantityAgreement getQa() {
         return qa;
     }
-    public List<String> getOrderProduct(){
+    public List<String> getOrderProducts(){
         return catalog.stream().filter(CatalogProduct::isInPeriodicOrder).map(CatalogProduct::getId).collect(Collectors.toList());
     }
 
@@ -54,7 +54,7 @@ public class Contract {
     //return list of products to order
     public List<String> endDay(){
         if(supplyTime.endDay())
-            return getOrderProduct();
+            return getOrderProducts();
         return null;
     }
     public int getPeriodicOrderInterval(){
@@ -123,13 +123,8 @@ public class Contract {
         return qa.getDiscounts();
     }
 
-    public List<CatalogProduct> searchProduct(String pId){
-        List<CatalogProduct> p = new LinkedList<>();
-        for(CatalogProduct cp :catalog){
-            if(cp.getId().equals(pId))
-                p.add(cp);
-        }
-        return p;
+    public CatalogProduct searchProduct(String pId){
+        return catalog.stream().filter(catalogProduct -> catalogProduct.getId().equals(pId)).findFirst().orElse(null);
     }
     public float getCatalogPrice(String pId) {
         return catalog.stream().filter(catalogProduct -> catalogProduct.getId().equals(pId)).findFirst().get().getPrice();
@@ -151,5 +146,10 @@ public class Contract {
     }
 
 
+    public void updatePeriodicOrderProduct(String pId, boolean state) {
+        CatalogProduct cp = searchProduct(pId);
+        if(cp!=null)
+            cp.setInPeriodicOrder(state);
+    }
 }
 

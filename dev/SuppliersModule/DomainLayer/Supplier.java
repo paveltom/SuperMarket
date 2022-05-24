@@ -132,7 +132,7 @@ public class Supplier {
     public Map<String, Map<Integer, Float>> getDiscounts() {
         return contract.getDiscount();
     }
-    public List<CatalogProduct> searchProduct(String pId){
+    public CatalogProduct searchProduct(String pId){
         return contract.searchProduct(pId);
     }
 

@@ -192,9 +192,9 @@ public class SupplierServices {
         }
     }
 
-    public ResponseT<List<CatalogProduct>> searchProduct(String name){
+    public ResponseT<List<Supplier>> searchProduct(String pId){
         try{
-            return ResponseT.FromValue(sc.searchProduct(name));
+            return ResponseT.FromValue(sc.searchProduct(pId));
         }catch (Exception e){
             return ResponseT.FromError(e.getMessage());
         }

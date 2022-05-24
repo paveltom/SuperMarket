@@ -1,10 +1,14 @@
 package SuppliersModule.DomainLayer;
 
+import DAL.ProductDataMapper;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class SupplierController {
     private final List<Supplier> suppliers = new LinkedList<>();
+    private final ProductDataMapper pdm = new ProductDataMapper();
+    private final OrderController oc = OrderController.getInstance();
 
     // getters
     public List<Supplier> getSuppliers() {
@@ -43,9 +47,14 @@ public class SupplierController {
         checkSupplier(sId);
         getSupplier(sId).setMaxSupplyDays(maxSupplyDays);
     }
-    public void setSupplyCycle(String sId, int supplyCycle){
+    public void setSupplyCycle(String sId, int supplyCycle) {
         checkSupplier(sId);
-        getSupplier(sId).setSupplyCycle(supplyCycle);}
+        getSupplier(sId).setSupplyCycle(supplyCycle);
+        List<String> products = getSupplier(sId).getContract().getOrderProducts();
+        for (String pId : products) {
+            updateBestSeller(pId);
+        }
+    }
     public void setDeliveryService(String sId, boolean deliveryService) {
         checkSupplier(sId);
         getSupplier(sId).setDeliveryService(deliveryService);
@@ -67,7 +76,6 @@ public class SupplierController {
     }
 
     public void orderShortage(Map<Supplier, Integer> suppQuantities, String pId){
-        //TODO decide the best deliver and order from him
         Supplier bestSupp = null;
         int bestQuantity = -1;
         float bestDiscount = -1;
@@ -90,12 +98,23 @@ public class SupplierController {
                             String pId, String catNumber, float price){
         if(hasSupp(sId))
             throw new IllegalArgumentException("supplier with id " + sId + " already exist!");
-        suppliers.add(new Supplier(sId, name, address, bankAccount, cash, credit,    //TODO check if pId exist
+        // TODO if(pdm.getProduct())
+        //    throw new IllegalArgumentException("no such product in stock system, first add product at stock");
+        suppliers.add(new Supplier(sId, name, address, bankAccount, cash, credit,
                 contactName, phoneNum, supplyDays, maxSupplyDays,
                 supplCycle, deliveryService, pId, catNumber, price));
+
+        updateBestSeller(pId);
     }
+
     public void removeSupplier(String sId){
-        suppliers.remove(getSupplier(sId));
+        checkSupplier(sId);
+        Supplier s = getSupplier(sId);
+        List<String> products = s.getContract().getOrderProducts();
+        suppliers.remove(s);
+        for(String pId : products){
+            updateBestSeller(pId);
+        }
     }
     public void addContact(String sId, String contactName, String phoneNum){
         checkSupplier(sId);
@@ -110,10 +129,12 @@ public class SupplierController {
     public void addProduct(String sId, String pId, String catalogNum, float price) {
         checkSupplier(sId);
         getSupplier(sId).addProduct(pId, catalogNum, price);
+        updateBestSeller(pId);
     }
     public void removeProduct(String sId, String pId) {
         checkSupplier(sId);
         getSupplier(sId).removeProduct(pId);
+        updateBestSeller(pId);
     }
     public void updateCatalogNum(String sId, String pId, String newCatalogNum) {
         checkSupplier(sId);
@@ -128,6 +149,7 @@ public class SupplierController {
     public void updateDiscount(String sId, String pId, int quantity, float discount){
         checkSupplier(sId);
         getSupplier(sId).updateDiscount(pId, quantity, discount);
+        updateBestSeller(pId);
     }
     public Map<Integer, Float> getDiscounts(String sId, String pId){
         checkSupplier(sId);
@@ -141,12 +163,13 @@ public class SupplierController {
         checkSupplier(sId);
         return getSupplier(sId).getDiscounts();
     }
-    public List<CatalogProduct> searchProduct(String name){
-        List<CatalogProduct> products = new LinkedList<>();
-        for(Supplier s:suppliers){
-            products.addAll(s.searchProduct(name));
+    public List<Supplier> searchProduct(String pId){
+        List<Supplier> prodSupp = new LinkedList<>();
+        for(Supplier s: suppliers){
+            if(s.searchProduct(pId)!=null)
+                prodSupp.add(s);
         }
-        return products;
+        return prodSupp;
     }
 
     private boolean hasSupp(String sId){
@@ -170,5 +193,37 @@ public class SupplierController {
     public void changeDaysOfDelivery(String sId, int day, boolean state) {
         checkSupplier(sId);
         getSupplier(sId).changeDaysOfDelivery(day, state);
+        List<String> products = getSupplier(sId).getContract().getOrderProducts();
+        for(String pId : products){
+            updateBestSeller(pId);
+        }
+    }
+
+    private void updateBestSeller(String pId) {
+        List<Supplier> providers = getSuppliers(pId);
+        Map<Supplier, Integer> suppQuantities = new HashMap<>();
+        for(Supplier s : providers){
+            suppQuantities.put(s, oc.getQuantity(pId, s.getPeriodicOrderInterval()));
+        }
+
+        Supplier bestSupp = null;
+        float bestDiscount = -1;
+        for (Map.Entry<Supplier, Integer> entry : suppQuantities.entrySet()){
+            float currentDiscount = entry.getKey().getContract().getDiscount(pId, entry.getValue());
+            if(currentDiscount > bestDiscount){
+                bestSupp = entry.getKey();
+                bestDiscount = currentDiscount;
+            }
+        }
+        if(bestSupp != null){
+            for(Supplier s : providers){
+                s.getContract().updatePeriodicOrderProduct(pId, false);
+            }
+            bestSupp.getContract().updatePeriodicOrderProduct(pId, true);
+        }
+    }
+
+    public List<Supplier> getSuppliers(String pId){
+        return suppliers.stream().filter(supplier -> supplier.hasProduct(pId)).collect(Collectors.toList());
     }
 }

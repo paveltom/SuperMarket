@@ -38,11 +38,14 @@ public class OrderController {
         Map<Supplier, Integer> suppDays = supc.getSuppliersDays(pId); //return amount of days until next supply for each supplier
         Map<Supplier, Integer> suppQuantities = new HashMap<>();
         for (Map.Entry<Supplier, Integer> entry : suppDays.entrySet()) {
-            int quantity = stc.getQuantityForOrder(pId, entry.getValue());
+            int quantity = getQuantity(pId, entry.getValue());
             suppQuantities.put(entry.getKey(), quantity);
         }
         supc.orderShortage(suppQuantities, pId);
     }
 
+    public int getQuantity(String pId, int days){
+        return stc.getQuantityForOrder(pId, days);
+    }
 
 }
