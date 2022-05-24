@@ -19,11 +19,15 @@ public class CatalogProduct {
     public float getPrice() {
         return price;
     }
-    public void setCatalogNum(String catalogNum) { this.catalogNum = catalogNum; }
+    public void setCatalogNum(String catalogNum) {
+        this.catalogNum = catalogNum;
+        dao.setCatalogNum(this);
+    }
     public void setPrice(float price) {
         if (price < 0 )
             throw new IllegalArgumentException("product price cannot be negative");
         this.price = price;
+        dao.setPrice(this);
     }
 
     public boolean isInPeriodicOrder() {
@@ -32,6 +36,7 @@ public class CatalogProduct {
 
     public void setInPeriodicOrder(boolean inPeriodicOrder) {
         this.inPeriodicOrder = inPeriodicOrder;
+        dao.setInPeriodicOrder(this);
     }
 
     // constructor

@@ -3,6 +3,10 @@ package DAL.DAO;
 import DAL.DataBaseConnection;
 import SuppliersModule.DomainLayer.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -62,5 +66,29 @@ public class SupplierDAO {
 
     private CatalogProduct makeCatalogProduct(String[] p){
         return new CatalogProduct(p[0], p[1], p[4], Float.valueOf(p[2]), Boolean.valueOf(p[3]));
+    }
+
+    public List<Order> getOrdersFromDB(String sId){
+        List<Order> output = new ArrayList<>();
+        String[] paramsW = {"supplier_id"};
+        String[] paramsWV = {sId};
+        List<String[]> sFromDB = conn.select("Orders", paramsW, paramsWV);
+
+        for(String[] o : sFromDB){
+            output.add(0, makeOrder(o));
+        }
+
+        return output;
+    }
+
+    private Order makeOrder(String[] o){
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String date = o[2];
+
+        LocalDate localDate = LocalDate.parse(date, formatter);
+
+        return new Order(o[1], o[0], o[4], o[5],
+                localDate, o[3], true);
     }
 }

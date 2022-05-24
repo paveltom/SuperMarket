@@ -110,6 +110,10 @@ public class Supplier {
         contract = new Contract(sId, dao.getSupplyTimeFromDB(sId), dao.getCatalogProductsFromDB(this));
 
         oc = OrderController.getInstance();
+
+        for ( Order o : dao.getOrdersFromDB(sId)){
+            orders.add(o);
+        }
     }
 
 
