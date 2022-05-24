@@ -12,16 +12,16 @@ public class ProductDataMapper {
         conn = new DataBaseConnection();
     }
 
-    public void addProduct(String pId, String name, String manufacturer,int amountToNotify,  int categoryID, Date supplyTime, int demand){
-        String[] params = {pId, name, manufacturer, String.valueOf(amountToNotify), String.valueOf(categoryID),
-                String.valueOf(supplyTime), String.valueOf(demand)};
-        conn.insert("Producs", params);
-    }
-    public void removeProduct(String pId){
-        String[] keys = {"product_id"};
-        String[] keysVals = {pId};
-        conn.delete("Products", keys, keysVals);
-    }
+//    public void addProduct(String pId, String name, String manufacturer,int amountToNotify,  int categoryID, Date supplyTime, int demand){
+//        String[] params = {pId, name, manufacturer, String.valueOf(amountToNotify), String.valueOf(categoryID),
+//                String.valueOf(supplyTime), String.valueOf(demand)};
+//        conn.insert("Producs", params);
+//    }
+//    public void removeProduct(String pId){
+//        String[] keys = {"product_id"};
+//        String[] keysVals = {pId};
+//        conn.delete("Products", keys, keysVals);
+//    }
     public void updateAmount(String pId, int amount){
         String[] keys = {"product_id"};
         String[] keysVals = {pId};

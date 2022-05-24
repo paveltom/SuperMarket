@@ -1,5 +1,8 @@
 package SuppliersModule.DomainLayer;
 
+import DAL.DAO.SupplierDAO;
+import SuppliersModule.DomainLayer.Contract;
+
 import java.time.LocalDate;
 import java.util.*;
 
@@ -10,10 +13,10 @@ public class Supplier {
     private final String bankAccount;
     private final boolean[] paymentMethods = new boolean[2];
     private final Map<String,String> contacts = new HashMap<>();
-    private boolean deliveryService;
-    private final Contract contract;
-    private final OrderController oc;
-    private final List<Order> orders = new LinkedList<>();
+    private final SuppliersModule.DomainLayer.Contract contract;
+    private final SuppliersModule.DomainLayer.OrderController oc;
+    private final List<SuppliersModule.DomainLayer.Order> orders = new LinkedList<>();
+    private SupplierDAO dao;
 
     //  getters
     public String getsId(){
@@ -38,7 +41,7 @@ public class Supplier {
     }
     public int getSupplyCycle(){return contract.getOrderCycle();}
     public boolean hasDeliveryService() {
-        return deliveryService;
+        return contract.hasDeliveryService();
     }
     public Contract getContract(){
         return contract;
@@ -59,7 +62,11 @@ public class Supplier {
         contract.setMaxDeliveryDuration(maxSupplyDays);
     }
     public void setSupplyCycle(int supplyCycle){contract.setOrderCycle(supplyCycle);}
-    public void setDeliveryService(boolean deliveryService) {this.deliveryService = deliveryService;}
+    public void setDeliveryService(boolean deliveryService) {
+        contract.setDeliveryService(deliveryService);
+
+        dao.setDeliveryService(this);
+    }
     public void addContact(String contactName, String phoneNum){
         contacts.put(contactName, phoneNum);
     }
@@ -76,10 +83,12 @@ public class Supplier {
         this.bankAccount = bankAccount;
         this.paymentMethods[0] = cash;
         this.paymentMethods[1] = credit;
-        this.deliveryService = deliveryService;
         addContact(contactName, phoneNum);
-        contract = new Contract(supplyDays, MaxSupplyDays, supplCycle, pId, catNumber, price);
+        contract = new Contract(sId, supplyDays, MaxSupplyDays, supplCycle, deliveryService, pId, catNumber, price);
         oc = OrderController.getInstance();
+        dao = new SupplierDAO();
+
+        dao.insert(this);
     }
 
 
@@ -89,24 +98,13 @@ public class Supplier {
         if(cp != null) {
             Map<String, Integer> prodQuantities = oc.orderPeriodic(cp, contract.getPeriodicOrderInterval());
             String phone = contacts.entrySet().stream().findFirst().get().getValue();
-            Order order = new Order(sId+LocalDate.now(), sId, name, address, LocalDate.now(), phone);
+            Order order = new Order("todo", sId, name, address, LocalDate.now(), phone); //TODO
             for (Map.Entry<String, Integer> entry : prodQuantities.entrySet()) {
                 String pId = entry.getKey();
                 int amount = entry.getValue();
                 order.addProduct(pId, contract.getCatalogPrice(pId), amount, contract.getDiscount(pId, amount), contract.getFinalPrice(pId, amount));
             }
-            addOrder(order);
         }
-    }
-    public void makeShortageOrder(String pId, int quantity, float discount) {
-        String phone = contacts.entrySet().stream().findFirst().get().getValue();
-        Order order = new Order(sId+LocalDate.now(), sId, name, address, LocalDate.now(), phone);
-        order.addProduct(pId, contract.getCatalogPrice(pId), quantity, discount, contract.getFinalPrice(pId, quantity));
-        addOrder(order);
-    }
-    private void addOrder(Order order){
-        orders.add(order);
-        //TODO save in db
     }
     public int getPeriodicOrderInterval(){return contract.getPeriodicOrderInterval();}
     public int getDaysForShortageOrder(){return contract.getDaysForShortageOrder();}

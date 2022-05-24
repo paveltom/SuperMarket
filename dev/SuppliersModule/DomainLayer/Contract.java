@@ -1,18 +1,18 @@
 package SuppliersModule.DomainLayer;
 
-import DAL.DataBaseConnection;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class Contract {
     private final SupplyTime supplyTime;
-
+    private boolean deliveryService;
     private final List<CatalogProduct> catalog = new LinkedList<>();
     private QuantityAgreement qa;
+    private final String sId;
 
-    DataBaseConnection conn;
+    DAL.DataBaseConnection conn;
     // getters
+    public String getsId(){return sId;}
     public boolean[] getDaysOfDelivery() {
         return supplyTime.getDaysOfDelivery();
     }
@@ -20,6 +20,9 @@ public class Contract {
         return supplyTime.getMaxDeliveryDuration();
     }
     public int getOrderCycle(){return supplyTime.getOrderCycle();}
+    public boolean hasDeliveryService() {
+        return deliveryService;
+    }
     public List<CatalogProduct> getCatalog() {
         return catalog;
     }
@@ -32,13 +35,16 @@ public class Contract {
 
     //setters
     public void changeDaysOfDelivery(int day, boolean state) {supplyTime.changeDaysOfDelivery(day, state);}
+    public void setDeliveryService(boolean deliveryService) {this.deliveryService = deliveryService;}
     public void setMaxDeliveryDuration(int maxDeliveryDuration) { supplyTime.setMaxDeliveryDuration(maxDeliveryDuration);}
     public void setOrderCycle(int orderCycle) { supplyTime.setOrderCycle(orderCycle);}
 
     //  constructor
-    public Contract(boolean[] daysOfDelivery, int maxDeliveryDuration, int orderCycle,
+    public Contract( String sId, boolean[] daysOfDelivery, int maxDeliveryDuration, int orderCycle, boolean deliveryService,
                     String pId, String catalogNum, float price){
-        supplyTime = new SupplyTime(daysOfDelivery, maxDeliveryDuration, orderCycle);
+        this.sId = sId;
+        supplyTime = new SupplyTime(sId, daysOfDelivery, maxDeliveryDuration, orderCycle);
+        setDeliveryService(deliveryService);
         catalog.add(new CatalogProduct(pId, catalogNum, price));
         this.conn = conn;
     }
@@ -135,7 +141,7 @@ public class Contract {
             if (getDaysOfDelivery()[i])
                 suppDays.append(suppDays).append(" ").append(i);
         }
-        return "delivery service: " + "supply days:" + suppDays +
+        return "delivery service: "  + hasDeliveryService() + "supply days:" + suppDays +
                 " | max days for delivery " + getMaxDeliveryDuration() + " | number of item in catalog: " + getCatalog().size();
     }
 

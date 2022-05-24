@@ -1,38 +1,41 @@
 package DAL;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class DataBaseConnection {
-    private String[] suppliers = {"supplier_id", "bankAccount", "cash", "credit", "supplyDays",
-                                    "MaxSupplyDays", "supplCycle", "deliveryService"};
-    private String[] supplier_contacts = {"supplier_id", "contactName", "phoneNum"};
-
+    private String[] suppliers = {"supplier_id", "name", "address", "bank", "cash", "credit", "deliveryService"};
+    private String[] supplyTimes = {"supplier_id", "daysOfDelivery", "maxDeliveryDuration", "orderCycle", "daysAcc"};
+    private String[] contacts = {"supplier_id", "contactName", "phoneNum"};
+    private String[] product_order = {"supplier_id", "product_id", "order_id", "quantity", "discount", "finalPrice", "catalogPrice"};
     private String[] products = {"product_id", "name", "manufacturer", "amountToNotify", "categoryID", "supplyTime", "demand"};
-
-    private String[] quantityAgreement = {"supplier_id", "product_id", "quantity", "discount"};
-    private String[] items = {"product_id", "location", "expireDate", "isDefect", "isExpired", "amount"};
-
     private String[] product_contract = {"supplier_id", "product_id", "price", "is_periodic_order", "catalogNum"};
-    private String[] discount = {"discount_id", "product_id", "discountStartDate", "discountEndDate", "discountAmount", "discountType"};
+    private String[] quantityAgreements = {"supplier_id", "product_id", "quantity", "discount"};
+    private String[] discounts = {"discount_id", "product_id", "discountStartDate", "discountEndDate", "discountAmount", "discountType"};
+    private String[] orders = {"supplier_id", "id", "date", "contactPhone", "supName", "supAddress"};
+    private String[] items = {"product_id", "location", "expireDate", "isDefect", "isExpired", "amount"};
     private String[] discount_product = {"discount_id", "quantity", "discount"};
     private String[] category = {"category_id", "name", "parentCategory", "subCategories"};
-    private String[] purchase = {"purchase_id", "purchaseDate"};
+    private String[] product_category = {"product_id", "category_id"};
 
     // add other strings
     private final Map<String, String[]> tablesWithParams = new HashMap<String, String[]>() {{
         put("Suppliers", suppliers);
-        put("QuantityAgreement", quantityAgreement);
-        put("Items", items);
+        put("SupplyTimes", supplyTimes);
+        put("Contacts", contacts);
+        put("Product_Order", product_order);
         put("Products", products);
         put("Product_Contract", product_contract);
-        put("Discounts", discount);
+        put("QuantityAgreements", quantityAgreements);
+        put("Discounts", discounts);
+        put("Orders", orders);
+        put("Items", items);
         put("Discount_Product", discount_product);
         put("Category", category);
-        put("Supplier_Contacts", category);
-        put("Purchases", purchase);
-        // add other values
+        put("Product_Category", product_category);
     }};
 
     // Connect to a database
@@ -52,6 +55,7 @@ public class DataBaseConnection {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             return null;
+
         }
     }
 
@@ -61,9 +65,9 @@ public class DataBaseConnection {
         try {
             conn = connect();
             stmt = conn.createStatement();
-            String sql = "INSERT INTO " + tableNAME + "  VALUES (" + params[0] + ",";
+            String sql = "INSERT INTO " + tableNAME + "  VALUES ('" + params[0] + "',";
             for (int i = 1; i < params.length; i++)
-                sql += "," + params[i];
+                sql += "'" + params[i]+ "',";
             if(sql.endsWith(","))
                 sql=sql.substring(0, sql.length()-1);
             sql += ");";
@@ -137,5 +141,44 @@ public class DataBaseConnection {
             System.err.println(e.getClass().getName() + ": " + e.getMessage() + ". Delete method. On table: " + tableNAME);
             return false;
         }
+
     }
+
+    public List<String[]> select(String tableNAME, String[] paramsWHERE, String[] paramsWHEREValues) {
+        Connection conn = null;
+        Statement stmt = null;
+
+        try {
+            conn = connect();
+            conn.setAutoCommit(false);
+            stmt = conn.createStatement();
+
+            StringBuilder sql = new StringBuilder("SELECT * from  " + tableNAME);
+            if(paramsWHERE != null){
+                sql.append(" where ").append(paramsWHERE[0]).append("=").append(paramsWHEREValues[0]);
+                for (int i = 1; i < paramsWHERE.length; i++)
+                    sql.append(" AND ").append(paramsWHERE[i]).append("=").append(paramsWHEREValues[i]);
+            }
+            sql.append(";");
+
+            ResultSet resultSet = stmt.executeQuery(sql.toString());
+            String[] resRow = tablesWithParams.get(tableNAME);
+            String[] resValues = new String[resRow.length];
+            List<String[]> output = new ArrayList<>();
+            while(resultSet.next()){
+                for(int i = 0; i < resRow.length; i++)
+                    resValues[i] = resultSet.getString(resRow[i]);
+                output.add(resValues);
+            }
+
+            resultSet.close();
+            stmt.close();
+            conn.close();
+            return output;
+        } catch ( Exception e ) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage() + ". Select method. On table: " + tableNAME);
+            return null;
+        }
+    }
+
 }
