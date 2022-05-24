@@ -92,10 +92,7 @@ public class Supplier {
         dao.insert(this);
     }
 
-    public Supplier(String sId, String name, String address, String bankAccount, boolean cash, boolean credit,
-                    Map<String,String> contact,
-                    SupplyTime supplyTime,
-                    List<CatalogProduct> catalogProducts){
+    public Supplier(String sId, String name, String address, String bankAccount, boolean cash, boolean credit){
 
         dao = new SupplierDAO();
         this.sId = sId;
@@ -104,8 +101,11 @@ public class Supplier {
         this.bankAccount = bankAccount;
         this.paymentMethods[0] = cash;
         this.paymentMethods[1] = credit;
-        for(String key : contact.keySet()){
-            addContact(key, contact.get(key));
+
+        Map<String,String> c = dao.getContactsFromDB(sId);
+
+        for(String key : c.keySet()){
+            addContact(key, c.get(key));
         }
         contract = new Contract(sId, dao.getSupplyTimeFromDB(sId), dao.getCatalogProductsFromDB(this));
 

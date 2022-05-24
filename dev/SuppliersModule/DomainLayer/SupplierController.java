@@ -1,5 +1,6 @@
 package SuppliersModule.DomainLayer;
 
+import DAL.DAO.SupplierDAO;
 import DAL.ProductDataMapper;
 
 import java.util.*;
@@ -7,9 +8,18 @@ import java.util.stream.Collectors;
 
 public class SupplierController {
 
-    private final List<Supplier> suppliers = new LinkedList<>();
+    private final List<Supplier> suppliers;
     private final ProductDataMapper pdm = new ProductDataMapper();
     private final OrderController oc = OrderController.getInstance();
+
+    public SupplierController(){
+        suppliers = new LinkedList<>();
+    }
+
+    public SupplierController(boolean loadData){
+        SupplierDAO dao = new SupplierDAO();
+        suppliers = dao.loadSuppliers();
+    }
 
     // getters
     public List<Supplier> getSuppliers() {
@@ -59,10 +69,6 @@ public class SupplierController {
     public void setDeliveryService(String sId, boolean deliveryService) {
         checkSupplier(sId);
         getSupplier(sId).setDeliveryService(deliveryService);
-    }
-
-    public SupplierController() {
-        //TODO loadData();
     }
 
     //  order methods
