@@ -1,4 +1,4 @@
-import DomainLayer.QuantityAgreement;
+import SuppliersModule.DomainLayer.QuantityAgreement;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,71 +12,35 @@ public class QuantityAgreementTest {
     }
 
     @Test
-    public void addDiscountPerItemTest() {
-        q.addDiscountPerItem("1", 5, 10);
+    public void addDiscount() {
+        q.updateDiscount("1", 5, 10);
         try{
-            assert (q.getDiscountsForProductPerItem("1").get(5) == 10);
+            assert (q.getDiscount("1", 5) == 10);
         } catch (Exception e) {
             assert false;
         }
-
-    }
-
-    @Test
-    public void addDiscountPerOrderTest() {
-        q.addDiscountPerOrder("1", 5, 10);
-
-        try {
-            assert (q.getDiscountsForProductPerOrder("1").get(5) == 10);
-        } catch (Exception e) {
-            assert false;
-        }
-
-    }
-
-    @Test
-    public void updateDiscountPerItemTest() {
-        q.addDiscountPerItem("1", 5, 10);
         try{
-            q.updateDiscountPerItem("1", 5, 5);
-            assert (q.getDiscountsForProductPerItem("1").get(5) == 5);
+            q.updateDiscount("1", 5, 0);
+            assert(q.getDiscount("1", 5) == 0) ;
         } catch (Exception e) {
-            assert false;
+            assert true;
         }
-
+        try{
+            q.updateDiscount("1", 0, 10);
+            assert false;
+        } catch (Exception e) {
+            assert true;
+        }
     }
 
     @Test
-    public void removeDiscountPerItem() {
-        q.addDiscountPerItem("1", 5, 10);
+    public void removeDiscount() {
+        q.updateDiscount("2", 20, 50);
         try {
-            q.removeDiscountPerItem("1", 5);
-            assert (q.getDiscountsForProductPerItem("1").get(5)==null);
+            q.updateDiscount("2", 20, 0);
+            assert (q.getDiscount("2", 20) == 0);
         } catch (Exception e) {
             assert (e.getMessage().equals("element ot found"));
         }
     }
-
-    @Test
-    public void updateDiscountPerOrder() {
-        q.addDiscountPerOrder("1", 5, 10);
-        try{
-            q.updateDiscountPerOrder("1", 5, 5);
-            assert (q.getDiscountsForProductPerOrder("1").get(5) == 5);
-        } catch (Exception e) {
-            assert false;
-        }
-    }
-
-    @Test
-    public void removeDiscountPerOrder() {
-        q.addDiscountPerOrder("1", 5, 10);
-        try {
-            q.removeDiscountPerOrder("1", 5);
-            assert (q.getDiscountsForProductPerOrder("1").get(5)==null);
-        } catch (Exception e) {
-            assert (e.getMessage().equals("element ot found"));
-        }
-    }
-
 }

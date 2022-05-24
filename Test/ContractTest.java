@@ -1,23 +1,24 @@
 import SuppliersModule.DomainLayer.Contract;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Objects;
 
 public class ContractTest {
 
-    Contract contract = new Contract(new boolean[]{false, false, true, false, true, false, false}, 3, true);
+    Contract contract;
 
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
-        contract = new Contract(new boolean[]{false, false, true, false, true, false, false}, 3, true);
+        contract = new Contract("10", new boolean[]{false, false, true, false, true, false, false}, 1, -1, "111", "1", 50.5f);
     }
 
     @Test
     public void addSupplyDay() {
-        contract.addSupplyDay(2);
+        contract.changeDaysOfDelivery(1, true);
         try {
-            assert(contract.getSupplyDays()[1]);
+            assert(contract.getDaysOfDelivery()[0]);
         } catch (Exception e) {
             assert false;
         }
@@ -25,15 +26,15 @@ public class ContractTest {
 
     @Test
     public void setSupplyMaxDays() {
-        contract.setSupplyMaxDays(5);
+        contract.setMaxDeliveryDuration(5);
         try {
-            assert(contract.getSupplyMaxDays() == 5);
+            assert(contract.getMaxDeliveryDuration() == 5);
         } catch (Exception e) {
             assert false;
         }
 
         try {
-            contract.setSupplyMaxDays(-5);
+            contract.setMaxDeliveryDuration(-5);
             assert false;
         } catch (Exception e) {
             assert true;
@@ -42,7 +43,7 @@ public class ContractTest {
 
     @Test
     public void addProduct() {
-        contract.addProduct("5", "milk", 9.99f);
+        contract.addProduct("5", "2", 9.99f);
         try {
             assert(contract.getCatalog().size() == 1);
         } catch (Exception e) {
@@ -50,7 +51,7 @@ public class ContractTest {
         }
 
         try {
-            contract.addProduct("5", "sugar", 12.99f);
+            contract.addProduct("5", "4", 12.99f);
             assert false;
         } catch (Exception e) {
             assert true;
@@ -59,8 +60,8 @@ public class ContractTest {
 
     @Test
     public void updateProductCatalogNum() {
-        contract.addProduct("2", "coffee", 20.05f);
-        contract.updateProductCatalogNum("2","5");
+        contract.addProduct("2", "1", 20.05f);
+        contract.updateCatalogNum("2","5");
         try {
             assert(Objects.equals(contract.getCatalog().get(0).getCatalogNum(), "5"));
         } catch (Exception e) {

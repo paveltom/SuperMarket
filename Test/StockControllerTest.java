@@ -1,4 +1,3 @@
-package BusinessLogicLayer;
 
 import StockModule.BusinessLogicLayer.StockController;
 import StockModule.BusinessLogicLayer.Type;
