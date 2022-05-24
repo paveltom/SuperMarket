@@ -1,7 +1,6 @@
 package SuppliersModule.DomainLayer;
 
 import DAL.DAO.SupplierDAO;
-import DAL.ProductDataMapper;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -9,7 +8,6 @@ import java.util.stream.Collectors;
 public class SupplierController {
 
     private final List<Supplier> suppliers;
-    private final ProductDataMapper pdm = new ProductDataMapper();
     private final OrderController oc = OrderController.getInstance();
 
     public SupplierController(){

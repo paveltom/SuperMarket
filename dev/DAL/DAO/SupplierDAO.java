@@ -64,7 +64,7 @@ public class SupplierDAO {
         return makeSupplyTimeFromDB(st.get(0));
     }
     private SupplyTime makeSupplyTimeFromDB(String[] s){
-        String[] splitDaysOfDelivery = s[1].substring(1, s[1].length()-2).split(",");
+        String[] splitDaysOfDelivery = s[1].substring(1, s[1].length()-1).split(", ");
         boolean[] daysOfDelivery = new boolean[7];
         for(int i = 0; i < 7; i++){
             daysOfDelivery[i] = Boolean.valueOf(splitDaysOfDelivery[i]);

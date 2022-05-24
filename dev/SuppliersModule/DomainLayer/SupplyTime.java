@@ -80,9 +80,9 @@ public class SupplyTime {
     }
     //constructor from db
     public SupplyTime(String sId, boolean[] daysOfDelivery, int maxDeliveryDuration, int orderCycle, int daysAcc){
-        setDaysOfDelivery(daysOfDelivery);
-        setMaxDeliveryDuration(maxDeliveryDuration);
-        setOrderCycle(orderCycle);
+        this.daysOfDelivery = daysOfDelivery;
+        this.maxDeliveryDuration = maxDeliveryDuration;
+        this.orderCycle = orderCycle;
         daysAcc = orderCycle - 1; //if cycle delivery then an order would be placed at the end of the day
         this.sId = sId;
         this.daysAcc = daysAcc;
