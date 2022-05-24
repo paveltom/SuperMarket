@@ -2,10 +2,11 @@ package SuppliersModule.DomainLayer;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import DAL.DataBaseConnection;
+
 
 public class Contract {
     private final SupplyTime supplyTime;
-    private boolean deliveryService;
     private final List<CatalogProduct> catalog = new LinkedList<>();
     private QuantityAgreement qa;
     private final String sId;
@@ -20,9 +21,6 @@ public class Contract {
         return supplyTime.getMaxDeliveryDuration();
     }
     public int getOrderCycle(){return supplyTime.getOrderCycle();}
-    public boolean hasDeliveryService() {
-        return deliveryService;
-    }
     public List<CatalogProduct> getCatalog() {
         return catalog;
     }
@@ -35,18 +33,16 @@ public class Contract {
 
     //setters
     public void changeDaysOfDelivery(int day, boolean state) {supplyTime.changeDaysOfDelivery(day, state);}
-    public void setDeliveryService(boolean deliveryService) {this.deliveryService = deliveryService;}
     public void setMaxDeliveryDuration(int maxDeliveryDuration) { supplyTime.setMaxDeliveryDuration(maxDeliveryDuration);}
     public void setOrderCycle(int orderCycle) { supplyTime.setOrderCycle(orderCycle);}
 
     //  constructor
-    public Contract( String sId, boolean[] daysOfDelivery, int maxDeliveryDuration, int orderCycle, boolean deliveryService,
+    public Contract( String sId, boolean[] daysOfDelivery, int maxDeliveryDuration, int orderCycle,
                     String pId, String catalogNum, float price){
         this.sId = sId;
         supplyTime = new SupplyTime(sId, daysOfDelivery, maxDeliveryDuration, orderCycle);
-        setDeliveryService(deliveryService);
-        catalog.add(new CatalogProduct(pId, catalogNum, price));
-        this.conn = conn;
+        catalog.add(new CatalogProduct(sId, pId, catalogNum, price));
+        this.conn = conn; //TODO
     }
 
     //  order methods
@@ -70,7 +66,7 @@ public class Contract {
             throw new IllegalArgumentException("Product already exists.");
         if(hasCatalogNum(catalogNum))
             throw new IllegalArgumentException("trying to add product with a used catalog number.");
-        catalog.add(new CatalogProduct(pId, catalogNum, price));
+        catalog.add(new CatalogProduct(sId, pId, catalogNum, price));
     }
     public boolean removeProduct(String pId) {  //TODO change functionality to delete supplier when when reached 0 catalog product
         catalog.removeIf(catalogProduct -> catalogProduct.getId().equals(pId));
@@ -141,7 +137,7 @@ public class Contract {
             if (getDaysOfDelivery()[i])
                 suppDays.append(suppDays).append(" ").append(i);
         }
-        return "delivery service: "  + hasDeliveryService() + "supply days:" + suppDays +
+        return "delivery service: " + "supply days:" + suppDays +
                 " | max days for delivery " + getMaxDeliveryDuration() + " | number of item in catalog: " + getCatalog().size();
     }
 
