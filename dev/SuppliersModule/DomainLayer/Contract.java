@@ -131,16 +131,13 @@ public class Contract {
         return price - price* getDiscount(pId, amount)/100;
     }
 
-    public String toString(){
-        StringBuilder suppDays = new StringBuilder();
-        for (int i = 0; i< getDaysOfDelivery().length; i++) {
-            if (getDaysOfDelivery()[i])
-                suppDays.append(suppDays).append(" ").append(i);
-        }
-        return "delivery service: " + "supply days:" + suppDays +
-                " | max days for delivery " + getMaxDeliveryDuration() + " | number of item in catalog: " + getCatalog().size();
-    }
 
+    @Override
+    public String toString() {
+        return  "supplyTime=" + supplyTime +
+                "\n catalog=" + catalog +
+                "\nqa=" + qa;
+    }
 
     public void updatePeriodicOrderProduct(String pId, boolean state) {
         CatalogProduct cp = searchProduct(pId);

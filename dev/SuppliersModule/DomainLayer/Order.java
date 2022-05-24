@@ -69,4 +69,16 @@ public class Order {
         Optional<OrderProduct> op =  products.stream().filter(OrderProduct -> OrderProduct.getId().equals(pId)).findFirst();
         return op.map(OrderProduct::getAmount).orElse(0);
     }
+
+    @Override
+    public String toString() {
+        return  "{id='" + id + '\'' +
+                ", supId='" + supId + '\'' +
+                ", supName='" + supName + '\'' +
+                ", supAddress='" + supAddress + '\'' +
+                ", date=" + date +
+                ", contactPhone='" + contactPhone + '\'' +
+                "\n products:" + products +
+                '}';
+    }
 }

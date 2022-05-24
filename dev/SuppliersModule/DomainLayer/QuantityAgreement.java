@@ -60,4 +60,7 @@ public class QuantityAgreement {
         }
     }
 
+    public String toString() {
+        return Discounts.toString();
+    }
 }

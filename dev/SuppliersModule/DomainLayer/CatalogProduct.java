@@ -41,7 +41,11 @@ public class CatalogProduct {
     // methods
 
 
-    public String toString(){
-        return "id: " + getId() + "catalogNum: " + getCatalogNum() + " price: " + price;
+    @Override
+    public String toString() {
+        return  "id='" + id + '\'' +
+                ", catalogNum='" + catalogNum + '\'' +
+                ", price=" + price +
+                ", inPeriodicOrder=" + inPeriodicOrder;
     }
 }

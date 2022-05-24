@@ -75,4 +75,12 @@ public class OrderProduct {
         setFinalPrice(finalPrice);
     }
 
+    @Override
+    public String toString() {
+        return  "id='" + id + '\'' +
+                ", catalogPrice=" + catalogPrice +
+                ", amount=" + amount +
+                ", discount=" + discount +
+                ", finalPrice=" + finalPrice;
+    }
 }

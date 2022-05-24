@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class SupplierController {
+
     private final List<Supplier> suppliers = new LinkedList<>();
     private final ProductDataMapper pdm = new ProductDataMapper();
     private final OrderController oc = OrderController.getInstance();
@@ -58,6 +59,10 @@ public class SupplierController {
     public void setDeliveryService(String sId, boolean deliveryService) {
         checkSupplier(sId);
         getSupplier(sId).setDeliveryService(deliveryService);
+    }
+
+    public SupplierController() {
+        //TODO loadData();
     }
 
     //  order methods
@@ -225,5 +230,10 @@ public class SupplierController {
 
     public List<Supplier> getSuppliers(String pId){
         return suppliers.stream().filter(supplier -> supplier.hasProduct(pId)).collect(Collectors.toList());
+    }
+
+    public List<Order> getOrders(String sId) {
+        checkSupplier(sId);
+        return getSupplier(sId).getOrders();
     }
 }

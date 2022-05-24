@@ -3,6 +3,7 @@ package SuppliersModule.DomainLayer;
 import DAL.DAO.SupplyTimeDAO;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 
 public class SupplyTime {
     private boolean[] daysOfDelivery; //|7| from sunday:= 0 to saturday:=7
@@ -142,5 +143,12 @@ public class SupplyTime {
             else
                 return getPeriodicOrderInterval();
         }
+    }
+
+    public String toString() {
+        return  "daysOfDelivery=" + Arrays.toString(daysOfDelivery) +
+                "\n maxDeliveryDuration=" + maxDeliveryDuration +
+                ", orderCycle=" + orderCycle +
+                ", daysAcc=" + daysAcc ;
     }
 }

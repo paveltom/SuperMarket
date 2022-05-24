@@ -149,16 +149,16 @@ public class Supplier {
         return contract.searchProduct(pId);
     }
 
-    public String toString(){
-        String cash, credit;
-        if (hasCashPayment())
-            cash = "y";
-        else cash = "n";
-        if (hasCreditPayment())
-            credit = "y";
-        else credit = "n";
-
-        return "supplier id: " + getsId() + " | Bank Account: " + getBankAccount() +
-                " | payments: cash-" + cash + " credit-" + credit + " | contacts:\n" + contacts;
+    public String toString() {
+        return "Supplier " + sId + "\n" +
+                "name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", bankAccount='" + bankAccount + '\'' +
+                ", paymentMethods=" + Arrays.toString(paymentMethods) +
+                "\n contacts=" + contacts +
+                "\n deliveryService=" + deliveryService +
+                "\n contract=" + contract ;
     }
+
+
 }

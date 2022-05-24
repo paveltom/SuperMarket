@@ -48,7 +48,7 @@ public class SupplierDataMapper {
             return null;
 
         for(String[] s: catalogProducts){
-            loadedCatalogProducts.add(0, new CatalogProduct(s[1], s[4], Float.valueOf(s[2])));
+            loadedCatalogProducts.add(0, new CatalogProduct(supID, s[1], s[4], Float.valueOf(s[2])));
         }
         return loadedCatalogProducts;
     }

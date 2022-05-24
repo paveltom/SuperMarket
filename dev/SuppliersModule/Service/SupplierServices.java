@@ -208,4 +208,21 @@ public class SupplierServices {
             return new Response(e.getMessage());
         }
     }
+
+    public Response setSupplyCycle(String suppId, int parseInt) {
+        try{
+            sc.setSupplyCycle(suppId, parseInt);
+            return new Response();
+        }catch (Exception e){
+            return new Response(e.getMessage());
+        }
+    }
+
+    public ResponseT<List<Order>> getOrders(String sId) {
+        try{
+            return ResponseT.FromValue(sc.getOrders(sId));
+        }catch (Exception e){
+            return ResponseT.FromError(e.getMessage());
+        }
+    }
 }

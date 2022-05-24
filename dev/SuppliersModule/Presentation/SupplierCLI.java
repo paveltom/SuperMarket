@@ -2,6 +2,7 @@ package SuppliersModule.Presentation;
 
 import SuppliersModule.DomainLayer.CatalogProduct;
 import SuppliersModule.DomainLayer.Contract;
+import SuppliersModule.DomainLayer.Order;
 import SuppliersModule.DomainLayer.Supplier;
 import SuppliersModule.Service.Response;
 import SuppliersModule.Service.ResponseT;
@@ -17,16 +18,6 @@ public class SupplierCLI {
     public SupplierCLI() {
         in = new Scanner(System.in);
         ss = new SupplierServices();
-        //loadData();
-    }
-
-    private void loadData() {
-        LoadDataForTesting ld;
-        System.out.println("load testing data? y/n");
-        String input = in.nextLine();
-        if (input.equals("y")) {
-            ld = new LoadDataForTesting(ss);
-        }
     }
 
     public void run(){
@@ -37,44 +28,60 @@ public class SupplierCLI {
         System.out.println("\n at any stage insert “$” to roll back to the main menu " +
                 "\n at any stage insert “b” to go back to the previous window " +
                 "\n insert one of the following numbers to select action" +
-                "\n\n1. add supplier " +
+                "\npress 0 to exit suppliers system" +
+                "\n1. add supplier " +
                 "\n2. show suppliers" +
                 "\n3. search product");
 
         String input = in.nextLine();
-        if (input.equals("1"))
-            addingSupplierWindow();
-        else if(input.equals("2"))
-            showSuppliersWindow();
-        else if(input.equals("3"))
-            searchProductWindow();
-        else if(input.equals("$") || input.equals("b"))
-            displayMainMenu();
-        else{
-            System.out.println("incorrect input\n");
-            displayMainMenu();
+        switch (input) {
+            case "0":
+                break;
+            case "1":
+                addingSupplierWindow();
+                break;
+            case "2":
+                showSuppliersWindow();
+                break;
+            case "3":
+                searchProductSuppliersWindow();
+                break;
+            case "$":
+            case "b":
+                displayMainMenu();
+                break;
+            default:
+                System.out.println("incorrect input\n");
+                displayMainMenu();
+                break;
         }
     }
 
     private void addingSupplierWindow() {
-        System.out.println("\ninsert supplier id, bank account, using cash?, using credit?, contact name, contact phone-number," +
-                           "\nsupply days, max supply days, supply cycle, delivery Service?, product id, catalog number, price" +
-                           "\ne.g 235 6456684 n y yossi 0524679565 ");
+        System.out.println("\ninsert:" +
+                           "\nsupplier id, bank account, name, address, using cash?, using credit?, contact name, contact phone-number," +
+                           "\nsupply days, max supply days, supply cycle, delivery Service?, " +
+                           "\nproduct id, catalog number, price" +
+                           "\ne.g 235 6456684 tara hagiborim-7-dimona n y yossi 0524679565 0100100 3 -1 y 13 1 10 ");
 
         String input = in.nextLine();
         if(input.equals("$") || input.equals("b"))
             displayMainMenu();
         else{
             String[] splitted = input.split(" ");
-            if (splitted.length != 13 || (!splitted[2].equals("y") && !splitted[2].equals("n")) || (!splitted[3].equals("y") && !splitted[3].equals("n"))) {
+            if (splitted.length != 15 || (!splitted[4].equals("y") && !splitted[4].equals("n")) || (!splitted[5].equals("y") && !splitted[5].equals("n"))
+                        || splitted[8].length()!=7  ||(!isStringInt(splitted[9]) || Integer.parseInt(splitted[9]) < -1) || (!isStringInt(splitted[10]) || (Integer.parseInt(splitted[10]) < -1) || Integer.parseInt(splitted[10]) == 0) || (!splitted[11].equals("y") && !splitted[11].equals("n"))
+                        || (!isStringInt(splitted[12]) || Integer.parseInt(splitted[12]) < 0) || (!isStringFloat(splitted[13]) || Float.parseFloat(splitted[13]) <= 0)) {
                 System.out.println("incorrect input\n");
                 addingSupplierWindow();
             } else {
                 boolean[] days = new boolean[7];
-                days[Integer.parseInt(splitted[1]) - 1] = splitted[2].equals("y");
+                for(int i=0; i<7; i++){
+                    days[i] = splitted[8].charAt(i) != '0';
+                }
                 Response r = ss.addSupplier(splitted[0], splitted[1], splitted[2], splitted[3], splitted[4].equals("y"), splitted[5].equals("y"), splitted[6], splitted[7],
-                                            days, Integer.parseInt(splitted[9]), Integer.parseInt(splitted[10]), splitted[11].equals("y"),    //TODO days
-                                            splitted[10], splitted[11], Float.parseFloat(splitted[12]));
+                                            days, Integer.parseInt(splitted[9]), Integer.parseInt(splitted[10]), splitted[11].equals("y"),
+                                            splitted[12], splitted[13], Float.parseFloat(splitted[14]));
                 if (r.ErrorOccurred()) {
                     System.out.println("action failed, " + r.getErrorMessage() + "\n");
                     addingSupplierWindow();
@@ -111,7 +118,7 @@ public class SupplierCLI {
         }
     }
 
-    private void searchProductWindow() {
+    private void searchProductSuppliersWindow() {
         System.out.println("\ninsert product id");
 
         String input = in.nextLine();
@@ -120,10 +127,12 @@ public class SupplierCLI {
         else {
             ResponseT<List<Supplier>> r = ss.searchProduct(input);
             if (!r.ErrorOccurred()) {
-                displayProductsWindow(r.getValue());
+                for (Supplier s : r.getValue()) {
+                    System.out.println(s.getsId());
+                }
             } else if (r.ErrorOccurred()) {
                 System.out.println("action failed, " + r.getErrorMessage() + "\n");
-                searchProductWindow();
+                searchProductSuppliersWindow();
             }
         }
     }
@@ -131,54 +140,48 @@ public class SupplierCLI {
     private void supplierInfoWindow(String suppId) {
         System.out.println("\n1. display products" +
                 "\n2. display quantity agreement\n" +
-                "3. display contract\n" +
+                "3. display supply time\n" +
                 "4. display contacts\n" +
-                "5. delete supplier");
+                "5. delete supplier" +
+                "6. show orders");
 
         String input = in.nextLine();
-        if(input.equals("1"))
-            displayProductsWindow(suppId);
-        else if(input.equals("2"))
-            displayQuantityAgreementWindow(suppId);
-        else if(input.equals("3"))
-            displayContractWindow(suppId);
-        else if(input.equals("4"))
-            displayContactsWindow(suppId);
-        else if(input.equals("5"))
-            displayMainMenu();
-        else if(input.equals("$"))
-            displayMainMenu();
-        else if(input.equals("b"))
-            showSuppliersWindow();
-        else {
-            System.out.println("incorrect input\n");
-            supplierInfoWindow(suppId);
+        switch (input) {
+            case "1":
+                displayProductsWindow(suppId);
+                break;
+            case "2":
+                displayQuantityAgreementWindow(suppId);
+                break;
+            case "3":
+                displaySupplyTimeWindow(suppId);
+                break;
+            case "4":
+                displayContactsWindow(suppId);
+                break;
+            case "5":
+                displayMainMenu();
+                break;
+            case "6":
+                displayOrdersWindow(suppId);
+            case "$":
+                displayMainMenu();
+                break;
+            case "b":
+                showSuppliersWindow();
+                break;
+            default:
+                System.out.println("incorrect input\n");
+                supplierInfoWindow(suppId);
+                break;
         }
-
-
-
     }
 
     private void showProducts(List<CatalogProduct> products) {
-        String productsString = "";
+        String productsString = "\nproducts:\n";
         for (CatalogProduct sp : products) {
-            productsString = productsString + sp.toString() + "\n";
+            System.out.println( sp  + "\n");
         }
-
-        System.out.println("\nproducts: \n" + productsString + "\n");
-    }
-
-    private void displayProductsWindow(List<Supplier> products) {
-        /*showProducts(products);
-
-        System.out.println("\nproducts: \n" + "\n");
-
-        String input = in.nextLine();
-        String[] splitted = input.split(" ");
-        if(input.equals("$"))
-            displayMainMenu();
-        else if(input.equals("b"))
-            searchProductWindow();*/
     }
 
     private void invalidproductAction(String sId){
@@ -186,6 +189,17 @@ public class SupplierCLI {
         displayProductsWindow(sId);
     }
 
+    private void displayOrdersWindow(String sId) {
+        ResponseT<List<Order>> r = ss.getOrders(sId);
+        if(r.ErrorOccurred())
+            System.out.println("action failed: " + r.getErrorMessage());
+        else{
+            System.out.println("orders:\n");
+            for(Order order : r.getValue()){
+                System.out.println(order.toString());
+            }
+        }
+    }
     private void displayProductsWindow(String sId) {
         ResponseT<List<CatalogProduct>> p = ss.getCatalog(sId);
         if (!p.ErrorOccurred())
@@ -208,60 +222,61 @@ public class SupplierCLI {
         else{
             Response r;
 
-            if(splitted[0].equals("1")) {
-                if(splitted.length != 4 || !isStringFloat(splitted[3]))
-                    invalidproductAction(sId);
-                r = ss.addProduct(sId, splitted[1], splitted[2], Float.parseFloat(splitted[3]));
-                if (!r.ErrorOccurred()) {
-                    displayProductsWindow(sId);
-                } else {
-                    System.out.println("action failed, " + r.getErrorMessage() + "\n");
-                    displayProductsWindow(sId);
-                }
+            switch (splitted[0]) {
+                case "1":
+                    if (splitted.length != 4 || !isStringFloat(splitted[3]))
+                        invalidproductAction(sId);
+                    r = ss.addProduct(sId, splitted[1], splitted[2], Float.parseFloat(splitted[3]));
+                    if (!r.ErrorOccurred()) {
+                        displayProductsWindow(sId);
+                    } else {
+                        System.out.println("action failed, " + r.getErrorMessage() + "\n");
+                        displayProductsWindow(sId);
+                    }
+                    break;
+                case "2":
+                    if (splitted.length != 2)
+                        invalidproductAction(sId);
+                    r = ss.removeProduct(sId, splitted[1]);
+                    if (!r.ErrorOccurred()) {
+                        displayProductsWindow(sId);
+                    } else {
+                        System.out.println("action failed, " + r.getErrorMessage() + "\n");
+                        displayProductsWindow(sId);
+                    }
 
-            }
-            else if(splitted[0].equals("2")) {
-                if(splitted.length != 2)
-                    invalidproductAction(sId);
-                r = ss.removeProduct(sId, splitted[1]);
-                if (!r.ErrorOccurred()) {
-                    displayProductsWindow(sId);
-                } else {
-                    System.out.println("action failed, " + r.getErrorMessage() + "\n");
-                    displayProductsWindow(sId);
-                }
+                    break;
+                case "3":
+                    if (splitted.length != 3)
+                        invalidproductAction(sId);
+                    if (!isStringFloat(splitted[2])) {
+                        System.out.println("action failed, price must be float" + "\n");
+                        displayProductsWindow(sId);
+                    }
+                    r = ss.updateProductPrice(sId, splitted[1], Float.parseFloat(splitted[2]));
+                    if (!r.ErrorOccurred()) {
+                        displayProductsWindow(sId);
+                    } else {
+                        System.out.println("action failed, " + r.getErrorMessage() + "\n");
+                        displayProductsWindow(sId);
+                    }
 
-            }
-            else if(splitted[0].equals("3")) {
-                if(splitted.length != 3)
-                    invalidproductAction(sId);
-                if (!isStringFloat(splitted[2])) {
-                    System.out.println("action failed, price must be float" + "\n");
+                    break;
+                case "4":
+                    if (splitted.length != 3)
+                        invalidproductAction(sId);
+                    r = ss.updateProductCatalogNum(sId, splitted[1], splitted[2]);
+                    if (!r.ErrorOccurred()) {
+                        displayProductsWindow(sId);
+                    } else {
+                        System.out.println("action failed, " + r.getErrorMessage() + "\n");
+                        displayProductsWindow(sId);
+                    }
+                    break;
+                default:
+                    System.out.println("action failed, invalid argumets" + "\n");
                     displayProductsWindow(sId);
-                }
-                r = ss.updateProductPrice(sId, splitted[1], Float.parseFloat(splitted[2]));
-                if (!r.ErrorOccurred()) {
-                    displayProductsWindow(sId);
-                } else {
-                    System.out.println("action failed, " + r.getErrorMessage() + "\n");
-                    displayProductsWindow(sId);
-                }
-
-            }
-            else if(splitted[0].equals("4")) {
-                if(splitted.length != 3)
-                    invalidproductAction(sId);
-                r = ss.updateProductCatalogNum(sId, splitted[1], splitted[2]);
-                if (!r.ErrorOccurred()) {
-                    displayProductsWindow(sId);
-                } else {
-                    System.out.println("action failed, " + r.getErrorMessage() + "\n");
-                    displayProductsWindow(sId);
-                }
-            }
-            else {
-                System.out.println("action failed, invalid argumets" + "\n");
-                displayProductsWindow(sId);
+                    break;
             }
         }
     }
@@ -301,7 +316,7 @@ public class SupplierCLI {
         printQuantityAgreementMap(m1.getValue());
 
         System.out.println("\nto update a discount enter product id, quantity and discount" +
-                            "\ne.g 5234 100 20\n");
+                            "\ne.g 5234 100 20\ne.g “153 30 0”");
 
         String input = in.nextLine();
         String[] splitted = input.split(" ");
@@ -324,7 +339,7 @@ public class SupplierCLI {
         }
     }
 
-    private void displayContractWindow(String suppId) {
+    private void displaySupplyTimeWindow(String suppId) {
         ResponseT<Contract> r = ss.getContract(suppId);
         if (r.ErrorOccurred()) {
             System.out.println("action failed, " + r.getErrorMessage() + "\n");
@@ -335,82 +350,83 @@ public class SupplierCLI {
                     "\ne.g 2 5 will change the max delivery days to 5" +
                     "\n\n1. change delivery day (expecting a day in the week as a number between 1-7 and y/n)" +
                     "\n2. change max delivery days (any not negative number or -1 for no max delivery days)" +
-                    "\n3. change delivery service status (y/n)");
+                    "\n3. change supply cycle (any positive number or -1 for no supply cycle)");
 
             String input = in.nextLine();
             String[] splitted = input.split(" ");
 
-            if(splitted[0].equals("1")){
-                try {
-                    if (!splitted[2].equals("y") && !splitted[2].equals("n")) {
+            switch (splitted[0]) {
+                case "1":
+                    try {
+                        if (!splitted[2].equals("y") && !splitted[2].equals("n")) {
+                            System.out.println("incorrect input\n");
+                            displaySupplyTimeWindow(suppId);
+                        } else {
+                            Response r2 = ss.changeDaysOfDelivery(suppId, Integer.parseInt(splitted[1]), splitted[2].equals("y"));
+                            if (r2.ErrorOccurred()) {
+                                System.out.println("incorrect input\n");
+                                displaySupplyTimeWindow(suppId);
+                            } else {
+                                System.out.println("action succeed\n");
+                                displaySupplyTimeWindow(suppId);
+                            }
+                        }
+                    } catch (Exception e) {
                         System.out.println("incorrect input\n");
-                        displayContractWindow(suppId);
-                    } else {
-                        Response r2 = ss.changeDaysOfDelivery(suppId, Integer.parseInt(splitted[1]), splitted[2].equals("y"));
+                        displaySupplyTimeWindow(suppId);
+                    }
+                    break;
+                case "2":
+                    try {
+                        Response r2 = ss.setSupplyMaxDays(suppId, Integer.parseInt(splitted[1]));
                         if (r2.ErrorOccurred()) {
                             System.out.println("incorrect input\n");
-                            displayContractWindow(suppId);
+                            displaySupplyTimeWindow(suppId);
                         } else {
                             System.out.println("action succeed\n");
-                            displayContractWindow(suppId);
+                            displaySupplyTimeWindow(suppId);
                         }
-                    }
-                } catch (Exception e) {
-                    System.out.println("incorrect input\n");
-                    displayContractWindow(suppId);
-                }
-            }
-            else if(splitted[0].equals("2")){
-                try {
-                    Response r2 = ss.setSupplyMaxDays(suppId, Integer.parseInt(splitted[1]));
-                    if (r2.ErrorOccurred()) {
+                    } catch (Exception e) {
                         System.out.println("incorrect input\n");
-                        displayContractWindow(suppId);
-                    } else {
-                        System.out.println("action succeed\n");
-                        displayContractWindow(suppId);
+                        displaySupplyTimeWindow(suppId);
                     }
-                } catch (Exception e) {
-                    System.out.println("incorrect input\n");
-                    displayContractWindow(suppId);
-                }
-            }
-            else if(splitted[0].equals("3")){
-                try {
-                    if (!splitted[1].equals("y") && !splitted[1].equals("n")) {
-                        System.out.println("incorrect input\n");
-                        displayContractWindow(suppId);
-                    } else {
-                        Response r2 = ss.setDeliveryService(suppId, splitted[1].equals("y"));
-                        if (r2.ErrorOccurred()) {
+                    break;
+                case "3":
+                    try {
+                        if (!isStringInt(splitted[1]) || Integer.parseInt(splitted[1]) == 0 || Integer.parseInt(splitted[1]) < 1) {
                             System.out.println("incorrect input\n");
-                            displayContractWindow(suppId);
+                            displaySupplyTimeWindow(suppId);
                         } else {
-                            System.out.println("action succeed\n");
-                            displayContractWindow(suppId);
+                            Response r2 = ss.setSupplyCycle(suppId,  Integer.parseInt(splitted[1]));
+                            if (r2.ErrorOccurred()) {
+                                System.out.println("incorrect input\n");
+                                displaySupplyTimeWindow(suppId);
+                            } else {
+                                System.out.println("action succeed\n");
+                                displaySupplyTimeWindow(suppId);
+                            }
                         }
+                    } catch (Exception e) {
+                        System.out.println("incorrect input\n");
+                        displaySupplyTimeWindow(suppId);
                     }
-                } catch (Exception e) {
+                    break;
+                case "$":
+                    displayMainMenu();
+                    break;
+                case "b":
+                    supplierInfoWindow(suppId);
+                    break;
+                default:
                     System.out.println("incorrect input\n");
-                    displayContractWindow(suppId);
-                }
-            }
-            else if(splitted[0].equals("$")){
-                displayMainMenu();
-            }
-            else if(splitted[0].equals("b")){
-                supplierInfoWindow(suppId);
-            }
-            else{
-                System.out.println("incorrect input\n");
-                displayContractWindow(suppId);
+                    displaySupplyTimeWindow(suppId);
+                    break;
             }
         }
     }
 
     private void displayContactsWindow(String suppId) {
         System.out.println(" \nto add \"1\" and contact insert name and phone number\nto delete a contact enter \"2\" and contacts name");
-
         ResponseT<Map<String, String>> p = ss.getContacts(suppId);
         if (p.ErrorOccurred())
             supplierInfoWindow(suppId);
@@ -446,10 +462,19 @@ public class SupplierCLI {
     private boolean isStringFloat(String testString) {
         try {
             float f = Float.parseFloat(testString);
-            return true;
         } catch (Exception e) {
             return false;
         }
+        return true;
+    }
+
+    private boolean isStringInt(String testString) {
+        try {
+            int i = Integer.parseInt(testString);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 
 }
