@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CategoryTest {
-
+/*
     public Category parent_category;
     public Category subcategory;
 
@@ -35,5 +35,5 @@ class CategoryTest {
         Category newParent = new Category(3, "Meaty");
         subcategory.setAsParent(newParent);
         assertEquals(newParent, subcategory.getParentCategory());
-    }
+    }*/
 }

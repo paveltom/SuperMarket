@@ -31,7 +31,9 @@ public class SupplierCLI {
                 "\npress 0 to exit suppliers system" +
                 "\n1. add supplier " +
                 "\n2. show suppliers" +
-                "\n3. search product");
+                "\n3. search product"+
+                "\n4. end day");
+
 
         String input = in.nextLine();
         switch (input) {
@@ -45,6 +47,11 @@ public class SupplierCLI {
                 break;
             case "3":
                 searchProductSuppliersWindow();
+                break;
+            case "4":
+                Response r = ss.endDay();
+                if(r.ErrorOccurred())
+                    System.out.println("action failed" + r.getErrorMessage());
                 break;
             case "$":
             case "b":
