@@ -118,9 +118,18 @@ public class SupplierDAO {
 //        String[] paramsWV = {c.getsId()};
 //        List<String[]> discounts = conn.select("QuantityAgreements", paramsW, paramsWV);
 //
+//        if(discounts.isEmpty())
+//            return null;
+//
 //        Map<String, Map<Integer, Float>> Discounts = new Hashtable<>();
+//        QuantityAgreement qa = new QuantityAgreement(c.getsId());
+//        for(String[] s : discounts){
+//            qa.updateDiscount(s[1],Integer.valueOf(s[2]), Float.valueOf(s[3]));
+//
+//        }
 //
 //
-//        QuantityAgreement qa = new QuantityAgreement();
+//        //QuantityAgreement qa = new QuantityAgreement(Discounts);
+//        return null;
 //    }
 }

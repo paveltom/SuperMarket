@@ -33,7 +33,6 @@ public class Product {
 
         dao = new ProductDAO();
         dao.insert(this);
-
     }
 
     public Product(String name, String manufacturer,int amountToNotify,  int categoryID, Date supplyTime, int demand, boolean isFromDB)

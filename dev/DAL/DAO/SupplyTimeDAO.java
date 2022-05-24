@@ -39,7 +39,4 @@ public class SupplyTimeDAO {
         String[] keysVals = {st.getsId()};
         conn.update("SupplyTimes", keys, keysVals, "orderCycle", String.valueOf(st.getOrderCycle()));
     }
-
-
-
 }
