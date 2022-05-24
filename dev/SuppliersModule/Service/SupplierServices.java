@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class SupplierServices {
 
-    private final SupplierController sc = new SupplierController();
+    private final SupplierController sc = new SupplierController(true);
 
     public ResponseT<List<Supplier>> getSuppliers() {
         try {
