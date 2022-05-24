@@ -118,7 +118,7 @@ public class SupplierCLI {
         if(input.equals("$") || input.equals("b"))
             displayMainMenu();
         else {
-            ResponseT<List<CatalogProduct>> r = ss.searchProduct(input);
+            ResponseT<List<Supplier>> r = ss.searchProduct(input);
             if (!r.ErrorOccurred()) {
                 displayProductsWindow(r.getValue());
             } else if (r.ErrorOccurred()) {
@@ -168,8 +168,8 @@ public class SupplierCLI {
         System.out.println("\nproducts: \n" + productsString + "\n");
     }
 
-    private void displayProductsWindow(List<CatalogProduct> products) {
-        showProducts(products);
+    private void displayProductsWindow(List<Supplier> products) {
+        /*showProducts(products);
 
         System.out.println("\nproducts: \n" + "\n");
 
@@ -178,7 +178,7 @@ public class SupplierCLI {
         if(input.equals("$"))
             displayMainMenu();
         else if(input.equals("b"))
-            searchProductWindow();
+            searchProductWindow();*/
     }
 
     private void invalidproductAction(String sId){
