@@ -1,4 +1,6 @@
+import DAL.DataBaseConnection;
 import StockModule.PresentationLayer.StockCLI;
+import SuppliersModule.DomainLayer.Supplier;
 import SuppliersModule.Presentation.SupplierCLI;
 
 import java.util.Scanner;
@@ -6,6 +8,14 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
+
+        DataBaseConnection conn = new DataBaseConnection();
+        boolean[] supdays = {true,true,true,true,true,true,true};
+        Supplier s = new Supplier("00", "yoni", "beer7", "poalim", true, true,
+                "beni", "050505505", supdays, 2, -1, true, "12",
+                "12", 12);
+
+
 
 //        SupplierCLI suppCLI = new SupplierCLI();
 //        StockCLI stockCLI = new StockCLI();

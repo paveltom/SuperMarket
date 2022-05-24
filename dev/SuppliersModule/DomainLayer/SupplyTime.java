@@ -68,12 +68,12 @@ public class SupplyTime {
 
     //  constructor
     public SupplyTime(String sId, boolean[] daysOfDelivery, int maxDeliveryDuration, int orderCycle){
+        dao = new SupplyTimeDAO();
         setDaysOfDelivery(daysOfDelivery);
         setMaxDeliveryDuration(maxDeliveryDuration);
         setOrderCycle(orderCycle);
         daysAcc = orderCycle - 1; //if cycle delivery then an order would be placed at the end of the day
         this.sId = sId;
-        dao = new SupplyTimeDAO();
 
         dao.insert(this);
     }

@@ -45,9 +45,10 @@ public class Contract {
         this.sId = sId;
         supplyTime = new SupplyTime(sId, daysOfDelivery, maxDeliveryDuration, orderCycle);
         setDeliveryService(deliveryService);
-        catalog.add(new CatalogProduct(pId, catalogNum, price));
+        catalog.add(new CatalogProduct(sId, pId, catalogNum, price));
         this.conn = conn;
     }
+
 
     //  order methods
 
@@ -70,7 +71,7 @@ public class Contract {
             throw new IllegalArgumentException("Product already exists.");
         if(hasCatalogNum(catalogNum))
             throw new IllegalArgumentException("trying to add product with a used catalog number.");
-        catalog.add(new CatalogProduct(pId, catalogNum, price));
+        catalog.add(new CatalogProduct(sId, pId, catalogNum, price));
     }
     public boolean removeProduct(String pId) {  //TODO change functionality to delete supplier when when reached 0 catalog product
         catalog.removeIf(catalogProduct -> catalogProduct.getId().equals(pId));
