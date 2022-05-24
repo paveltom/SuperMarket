@@ -58,7 +58,7 @@ public class DataBaseConnection {
             // create a connection to the database
             conn = DriverManager.getConnection(url);
 
-            System.out.println("Connection to SQLite has been established.");
+            //System.out.println("Connection to SQLite has been established.");
             return conn;
 
         } catch (SQLException e) {
