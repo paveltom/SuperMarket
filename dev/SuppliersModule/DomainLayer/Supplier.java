@@ -96,6 +96,8 @@ public class Supplier {
                     Map<String,String> contact,
                     SupplyTime supplyTime,
                     List<CatalogProduct> catalogProducts){
+
+        dao = new SupplierDAO();
         this.sId = sId;
         this.name = name;
         this.address = address;
@@ -105,10 +107,9 @@ public class Supplier {
         for(String key : contact.keySet()){
             addContact(key, contact.get(key));
         }
-        //contract = new Contract(sId, supplyDays, MaxSupplyDays, supplCycle, deliveryService, pId, catNumber, price);
+        contract = new Contract(sId, dao.getSupplyTimeFromDB(sId), dao.getCatalogProductsFromDB(this));
 
         oc = OrderController.getInstance();
-        dao = new SupplierDAO();
     }
 
 
