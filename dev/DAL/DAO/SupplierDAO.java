@@ -32,6 +32,29 @@ public class SupplierDAO {
         conn.update("Suppliers", keys, keysVals, "deliveryService", String.valueOf(s.hasDeliveryService()));
     }
 
+    public List<Supplier> loadSuppliers(){
+        List<String[]> st = conn.select("Suppliers",null, null);
+        List<Supplier> output = new ArrayList<>();
+
+        for(String[] s : st){
+            output.add(0, new Supplier(s[0], s[1], s[2], s[3], Boolean.valueOf(s[4]), Boolean.valueOf(s[5])));
+        }
+        return output;
+    }
+
+    public Map<String,String> getContactsFromDB(String sId){
+        String[] paramsW = {"supplier_id"};
+        String[] paramsWV = {sId};
+        List<String[]> st = conn.select("Contacts",paramsW, paramsWV);
+
+        Map<String,String> contacts = new Hashtable<>();
+        for(String[] s : st){
+            contacts.put(s[1], s[2]);
+        }
+
+        return contacts;
+    }
+
     public SupplyTime getSupplyTimeFromDB(String sId){
         String[] paramsW = {"supplier_id"};
         String[] paramsWV = {sId};

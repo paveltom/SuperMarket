@@ -3,6 +3,7 @@ package DAL.DAO;
 import DAL.DataBaseConnection;
 import SuppliersModule.DomainLayer.SupplyTime;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class SupplyTimeDAO {
@@ -10,7 +11,7 @@ public class SupplyTimeDAO {
     public SupplyTimeDAO(){ conn = new DataBaseConnection(); }
 
     public void insert(SupplyTime st){
-        String[] params = {st.getsId(), String.valueOf(st.getDaysOfDelivery()), String.valueOf(st.getMaxDeliveryDuration()),
+        String[] params = {st.getsId(), Arrays.toString(st.getDaysOfDelivery()), String.valueOf(st.getMaxDeliveryDuration()),
                     String.valueOf(st.getOrderCycle()), String.valueOf(st.getDaysAcc())};
         conn.insert("SupplyTimes", params);
     }
