@@ -61,4 +61,16 @@ public class Item {
     public int getAmount(){
         return amount;
     }
+
+    public String getProductID() {
+        return productID;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public Date getExpireDate() {
+        return expireDate;
+    }
 }
