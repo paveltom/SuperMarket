@@ -67,6 +67,8 @@ public class OrderProduct {
         this.discount = discount;
         this.finalPrice = finalPrice;
         dao = new OrderProductDAO();
+
+        dao.insert(this);
     }
 
     public void update( int amount, float discount, float finalPrice){

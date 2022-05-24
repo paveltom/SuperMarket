@@ -1,11 +1,14 @@
 package SuppliersModule.DomainLayer;
 
+import DAL.DAO.CatalogProductDAO;
+
 public class CatalogProduct {
 
     private final String id;
     private String catalogNum;
     private float price;
     private boolean inPeriodicOrder = false;
+    private CatalogProductDAO dao;
     private String sId;
     // getters and setters
     public String getsId(){return sId;}
@@ -16,11 +19,15 @@ public class CatalogProduct {
     public float getPrice() {
         return price;
     }
-    public void setCatalogNum(String catalogNum) { this.catalogNum = catalogNum; }
+    public void setCatalogNum(String catalogNum) {
+        this.catalogNum = catalogNum;
+        dao.setCatalogNum(this);
+    }
     public void setPrice(float price) {
         if (price < 0 )
             throw new IllegalArgumentException("product price cannot be negative");
         this.price = price;
+        dao.setPrice(this);
     }
 
     public boolean isInPeriodicOrder() {
@@ -29,10 +36,21 @@ public class CatalogProduct {
 
     public void setInPeriodicOrder(boolean inPeriodicOrder) {
         this.inPeriodicOrder = inPeriodicOrder;
+        dao.setInPeriodicOrder(this);
     }
 
     // constructor
     public CatalogProduct(String sId, String id, String catalogNum, float price){
+        dao = new CatalogProductDAO();
+        this.id = id;
+        setCatalogNum(catalogNum);
+        setPrice(price);
+
+        dao.insert(this);
+    }
+    // from db
+    public CatalogProduct(String sId, String id, String catalogNum, float price, boolean isPeriodic){
+        dao = new CatalogProductDAO();
         this.id = id;
         setCatalogNum(catalogNum);
         setPrice(price);

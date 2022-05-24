@@ -1,5 +1,7 @@
 package SuppliersModule.DomainLayer;
 
+import DAL.DAO.OrderDAO;
+
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,6 +16,7 @@ public class Order {
     private final LocalDate date;
     private final String contactPhone;
     private final List<OrderProduct> products = new LinkedList<>();
+    private OrderDAO dao;
 
     //  getters
     public String getId() {
@@ -39,6 +42,19 @@ public class Order {
     }
 
     public Order(String id, String supId, String supName, String supAddress, LocalDate date, String contactPhone) {
+        dao = new OrderDAO();
+        this.id = id;
+        this.supId = supId;
+        this.supName = supName;
+        this.supAddress = supAddress;
+        this.date = date;
+        this.contactPhone = contactPhone;
+
+        dao.insert(this);
+    }
+    //for db
+    public Order(String id, String supId, String supName, String supAddress, LocalDate date, String contactPhone, boolean isFromDB) {
+        dao = new OrderDAO();
         this.id = id;
         this.supId = supId;
         this.supName = supName;

@@ -1,17 +1,15 @@
 package SuppliersModule.DomainLayer;
 
+import DAL.DAO.SupplierDAO;
+
 import java.util.*;
 import java.util.stream.Collectors;
-import DAL.DataBaseConnection;
-
 
 public class Contract {
     private final SupplyTime supplyTime;
     private final List<CatalogProduct> catalog = new LinkedList<>();
     private QuantityAgreement qa;
     private final String sId;
-
-    DAL.DataBaseConnection conn;
     // getters
     public String getsId(){return sId;}
     public boolean[] getDaysOfDelivery() {
@@ -42,7 +40,18 @@ public class Contract {
         this.sId = sId;
         supplyTime = new SupplyTime(sId, daysOfDelivery, maxDeliveryDuration, orderCycle);
         catalog.add(new CatalogProduct(sId, pId, catalogNum, price));
-        this.conn = conn; //TODO
+    }
+
+    public Contract(String sId, SupplyTime st, List<CatalogProduct> catalog){
+        this.sId = sId;
+        supplyTime = st;
+        for(CatalogProduct cp : catalog){
+            this.catalog.add(cp);
+        }
+    }
+
+    public void loadQuantityAgreement(SupplierDAO dao){
+        //dao.getQuantityAgreementFromDB(this);
     }
 
     //  order methods

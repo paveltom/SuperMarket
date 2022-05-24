@@ -92,8 +92,8 @@ public class SupplierController {
                 bestDiscount = currentDiscount;
             }
         }
-        if(bestSupp != null)
-            bestSupp.makeShortageOrder(pId, bestQuantity, bestDiscount);
+//        if(bestSupp != null)
+//            bestSupp.makeShortageOrder(pId, bestQuantity, bestDiscount);
     }
 
     //  other methods
