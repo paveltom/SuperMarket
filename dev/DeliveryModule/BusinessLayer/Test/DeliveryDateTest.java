@@ -34,4 +34,9 @@ public class DeliveryDateTest implements Testable
         test_encode();
         test_decode();
     }
+    @Override
+    public String toString()
+    {
+        return "DeliveryDate";
+    }
 }

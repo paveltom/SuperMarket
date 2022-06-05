@@ -25,16 +25,15 @@ class DeliveryControllerTest implements Testable
     {
         Site supplier = new Site(ShippingZone.Shfela_JerusalemMountains, "Ashdod Rotshield 25", "Nir Malka", "0548826400");
         Site client = new Site(ShippingZone.Sharon, "Neve Tzedek", "Pavel tomshin", "0545555555");
-        int order_1 = 0;
+        int order_1 = 6;
         List<Product> products = Arrays.asList(new Product(12,354.123,7896), new Product(1789,17.19313,14), new Product(777,32441.111,32));
         Date submissionDate = new Date(cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.YEAR));
-        ShippingZone shippingZone = ShippingZone.Shfela_JerusalemMountains;
-        DeliveryOrder deliveryOrder_1 = new DeliveryOrder(supplier, client, order_1, products, submissionDate, shippingZone);
-        DeliveryOrder deliveryOrder_2 = new DeliveryOrder(supplier, client, order_1 + 1, products, submissionDate, shippingZone);
-        DeliveryOrder deliveryOrder_3 = new DeliveryOrder(supplier, client, order_1 + 2, products, submissionDate, shippingZone);
-        DeliveryOrder deliveryOrder_4 = new DeliveryOrder(supplier, client, order_1 + 3, products, submissionDate, shippingZone);
-        DeliveryOrder deliveryOrder_5 = new DeliveryOrder(supplier, client, order_1 + 4, products, submissionDate, shippingZone);
-        DeliveryOrder deliveryOrder_6 = new DeliveryOrder(supplier, client, order_1 + 5, products, submissionDate, shippingZone);
+        DeliveryOrder deliveryOrder_1 = new DeliveryOrder(supplier, client, order_1, products, submissionDate);
+        DeliveryOrder deliveryOrder_2 = new DeliveryOrder(supplier, client, order_1 + 1, products, submissionDate);
+        DeliveryOrder deliveryOrder_3 = new DeliveryOrder(supplier, client, order_1 + 2, products, submissionDate);
+        DeliveryOrder deliveryOrder_4 = new DeliveryOrder(supplier, client, order_1 + 3, products, submissionDate);
+        DeliveryOrder deliveryOrder_5 = new DeliveryOrder(supplier, client, order_1 + 4, products, submissionDate);
+        DeliveryOrder deliveryOrder_6 = new DeliveryOrder(supplier, client, order_1 + 5, products, submissionDate);
 
         Recipe deliveryRecipe_1 = testObject.Deliver(deliveryOrder_1);
         Recipe deliveryRecipe_2 = testObject.Deliver(deliveryOrder_2);
@@ -43,14 +42,7 @@ class DeliveryControllerTest implements Testable
         Recipe deliveryRecipe_5 = testObject.Deliver(deliveryOrder_5);
         Recipe deliveryRecipe_6 = testObject.Deliver(deliveryOrder_6);
 
-        assert(deliveryRecipe_5 instanceof DeliveryRecipe);
         assert(deliveryRecipe_6 instanceof DeliveryRecipe);
-
-
-
-
-        DeliveryDate exptected = new DeliveryDate(submissionDate.Month,submissionDate.Year, new Shift(submissionDate.Day+1,((DeliveryRecipe)deliveryRecipe_5).DueDate.Shift + 1));
-        assertEquals(exptected, ((DeliveryRecipe)deliveryRecipe_6).DueDate);
     }
 
     /*
@@ -67,7 +59,7 @@ class DeliveryControllerTest implements Testable
         List<Product> products = Arrays.asList(new Product(12,153,1000000));
         Date submissionDate = new Date(31, cal.get(Calendar.MONTH) + 1, cal.get(Calendar.YEAR));
         ShippingZone shippingZone = ShippingZone.Shfela_JerusalemMountains;
-        DeliveryOrder deliveryOrder_1 = new DeliveryOrder(supplier, client, order_1, products, submissionDate, shippingZone);
+        DeliveryOrder deliveryOrder_1 = new DeliveryOrder(supplier, client, order_1, products, submissionDate);
 
         Recipe deliveryRecipe_1 = testObject.Deliver(deliveryOrder_1);
 

@@ -3,6 +3,7 @@ package DeliveryModule.BusinessLayer.Controller;
 import DAL.DALController;
 import DAL.DTO.DeliveryRecipeDTO;
 import DeliveryModule.BusinessLayer.Element.*;
+import DeliveryModule.BusinessLayer.Type.Pair;
 import DeliveryModule.BusinessLayer.Type.VehicleLicenseCategory;
 
 import java.util.HashMap;
@@ -12,32 +13,40 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class DeliveryExecutorController
 {
-    private AtomicInteger DeliveryIds;
-    private final int INCREMENT = 1;
-    private Map<Integer, DeliveryRecipe> Deliveries;
+    private final AtomicInteger DeliveryIds;
+    private final Map<Integer, DeliveryRecipe> Deliveries;
 
     public DeliveryExecutorController()
     {
-        DeliveryIds = new AtomicInteger(-1);
+        DeliveryIds = new AtomicInteger(0);
         Deliveries = new HashMap<>();
         Init();
     }
 
     private void Init()
     {
-//        List<DeliveryRecipeDTO> deliveriesData = DALController.getInstance().getAllDeliveries();
-//        for(DeliveryRecipeDTO src : deliveriesData)
-//            Deliveries.put(Integer.parseInt(src.DeliveryId), new DeliveryRecipe(src));
+        int deliveryId;
+        List<DeliveryRecipeDTO> deliveriesData = DALController.getInstance().getAllDeliveries();
+        for(DeliveryRecipeDTO src : deliveriesData)
+        {
+            deliveryId = Integer.parseInt(src.DeliveryId);
+            Deliveries.put(deliveryId, new DeliveryRecipe(src));
+            if(DeliveryIds.get() < deliveryId)
+            {
+                DeliveryIds.set(deliveryId);
+            }
+        }
     }
 
     public Recipe Deliver(DeliveryOrder deliveryOrder)
     {
+        final int INCREMENT = 1;
         int deliverId = DeliveryIds.addAndGet(INCREMENT);
         double CargoWeight = 0;
         final double MaxCargoWeight = VehicleLicenseCategory.GetMaxLoadWeight();
 
         boolean exceedMaxLoadWeight = false;
-        // Calculate total cargo weight. Validate it doesnt exceed max load weight.
+        // Calculate total cargo weight. Validate it doesn't exceed max load weight.
         for(Product product : deliveryOrder.RequestedProducts)
         {
             double totalProductWeight = product.Amount * product.WeightPerUnit;
@@ -58,7 +67,8 @@ public class DeliveryExecutorController
         else
         {
             // Find available driver & truck
-            DeliveryResources deliveryResources = DeliveryController.GetInstance().GetDeliveryResources(deliveryOrder.SubmissionDate, deliveryOrder.Supplier.Zone, CargoWeight);
+            DeliveryResources deliveryResources = DeliveryController.GetInstance().GetDeliveryResources
+                    (deliveryOrder.SubmissionDate, deliveryOrder.Supplier.Zone, CargoWeight, deliveryOrder.SupplierWorkingDays);
 
             // if either driver or truck are unavailable, an error recipe will be returned
            output = deliveryResources.DeliveryDriver == null ? new NoAvailableDriver(deliveryOrder.OrderId) :
@@ -71,6 +81,17 @@ public class DeliveryExecutorController
         if(output instanceof DeliveryRecipe)
             DocumentDelivery(deliverId, (DeliveryRecipe)output);
         return output;
+    }
+
+    public CancelDeliveryRecipients CancelDelivery(int deliveryId)
+    {
+        DeliveryRecipe recipe = Deliveries.getOrDefault(deliveryId, null);
+        if(recipe != null)
+        {
+            DALController.getInstance().removeDelivery(deliveryId);
+            return new CancelDeliveryRecipients(recipe.DriverId, recipe.TruckLicenseNumber, recipe.DueDate);
+        }
+        return null;
     }
 
     private void DocumentDelivery(int deliverId, DeliveryRecipe recipe)

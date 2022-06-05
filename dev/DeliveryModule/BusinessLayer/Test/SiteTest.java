@@ -33,4 +33,10 @@ public class SiteTest implements Testable
         test_encode();
         test_decode();
     }
+
+    @Override
+    public String toString()
+    {
+        return "Site";
+    }
 }

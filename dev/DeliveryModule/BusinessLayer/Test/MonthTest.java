@@ -15,6 +15,7 @@ class MonthTest implements Testable{
     private Month testObject;
 
 
+
     /*
     * init: Set 3 shipments on same day.
     * Step: call GetAvailableShift.
@@ -26,11 +27,14 @@ class MonthTest implements Testable{
         testObject = new Month(JANUARY);
         final int shipmentDay = 31;
 
+        final boolean[] SupplierWorkingDays = new boolean[7];
+        Arrays.fill(SupplierWorkingDays, true);
+
         testObject.SetOccupied(new Shift(shipmentDay, 0));
         testObject.SetOccupied(new Shift(shipmentDay, 1));
         testObject.SetOccupied(new Shift(shipmentDay, 2));
 
-        Shift returnedShift = testObject.GetAvailableShift(shipmentDay);
+        Shift returnedShift = testObject.GetAvailableShift(shipmentDay, SupplierWorkingDays);
         Shift expectedShift = new Shift (shipmentDay, 3);
 
         assertEquals(returnedShift, expectedShift);
@@ -47,6 +51,9 @@ class MonthTest implements Testable{
     {
         testObject = new Month(JANUARY);
         final int shipmentDay = 30;
+        final boolean[] SupplierWorkingDays = new boolean[7];
+        Arrays.fill(SupplierWorkingDays, true);
+
 
         testObject.SetOccupied(new Shift(shipmentDay, 0));
         testObject.SetOccupied(new Shift(shipmentDay, 1));
@@ -54,7 +61,7 @@ class MonthTest implements Testable{
         testObject.SetOccupied(new Shift(shipmentDay, 3));
 
 
-        Shift returnedShift = testObject.GetAvailableShift(shipmentDay);
+        Shift returnedShift = testObject.GetAvailableShift(shipmentDay, SupplierWorkingDays);
         Shift expectedShift = new Shift(shipmentDay + 1, 0);
 
         assertEquals(returnedShift, expectedShift);
@@ -76,7 +83,10 @@ class MonthTest implements Testable{
                 testObject.SetOccupied(new Shift(day, shift));
         }
 
-        Shift returnedShift = testObject.GetAvailableShift(1);
+        final boolean[] SupplierWorkingDays = new boolean[7];
+        Arrays.fill(SupplierWorkingDays, true);
+
+        Shift returnedShift = testObject.GetAvailableShift(1, SupplierWorkingDays);
         Shift expectedShift = null;
 
         assertEquals(returnedShift, expectedShift);
@@ -93,7 +103,11 @@ class MonthTest implements Testable{
     {
         testObject = new Month(JANUARY);
         final int someDay = 3;
-        Shift returnedShift = testObject.GetAvailableShift(someDay);
+
+        final boolean[] SupplierWorkingDays = new boolean[7];
+        Arrays.fill(SupplierWorkingDays, true);
+
+        Shift returnedShift = testObject.GetAvailableShift(someDay, SupplierWorkingDays);
         Shift expectedShift = new Shift(someDay, 0);
 
         assertEquals(returnedShift, expectedShift);
@@ -110,7 +124,11 @@ class MonthTest implements Testable{
     {
         testObject = new Month(FEBRUARY);
         final int invalidDay = 30;
-        Shift returnedShift = testObject.GetAvailableShift(invalidDay);
+
+        final boolean[] SupplierWorkingDays = new boolean[7];
+        Arrays.fill(SupplierWorkingDays, true);
+
+        Shift returnedShift = testObject.GetAvailableShift(invalidDay, SupplierWorkingDays);
        Shift expectedShift = null;
 
         assertEquals(returnedShift, expectedShift);

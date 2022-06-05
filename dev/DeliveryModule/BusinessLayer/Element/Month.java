@@ -62,13 +62,14 @@ public class Month
     /*
      * return null if all shifts of this month are occupied.
      * else, return available Shift
+     * Take into account supplier working days.
      */
-    public Shift GetAvailableShift(int day)
+    public Shift GetAvailableShift(int day, boolean[] supplierWorkingDays)
     {
         if(day >= 1 && day <= NumOfDays) { // validate legal input
             for (int i = day; i <= NumOfDays; i++) {
                 for (int j = 0; j < ShiftsPerDay; j++) {
-                    if (!Shifts[i][j]) // Available shift
+                    if (!Shifts[i][j] && supplierWorkingDays[(i % 7)])
                     {
                         Shifts[i][j] = true;
                         return new Shift(i, j);
@@ -83,6 +84,11 @@ public class Month
     {
         Shifts[shift.Day][shift.Shift] = true;
     }
+    public void SetAvailable(Shift shift)
+    {
+        Shifts[shift.Day][shift.Shift] = false;
+    }
+
 
     public void SetConstraints(List<Shift> constraints)
     {

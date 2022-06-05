@@ -42,6 +42,6 @@ public class DeliveryRecipeDTO implements DTO
 
     @Override
     public String toString() {
-        return null;
+        return "DeliveryRecipeDTO";
     }
 }

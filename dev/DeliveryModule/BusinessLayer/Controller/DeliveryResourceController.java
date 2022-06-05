@@ -89,7 +89,6 @@ public class DeliveryResourceController {
             Trucks.put(truck.VehicleLicenseNumber, truck);
             TrucksDistribution[truck.Zone.ordinal()][truck.AuthorizedLicense.ordinal()] = trucksList;
         }
-
 //        final double DUMMY_NW = 10000000.00;
 //        long DUMMY_VEHICLE_NUMBER = 5555555;
 //        final String DUMMY_TRUCK_MODEL = "DUMMY_TRUCK_MODEL";
@@ -108,11 +107,15 @@ public class DeliveryResourceController {
     }
 
     // return closest delivery day.
-    public DeliveryResources GetDeliveryResources(Date date, ShippingZone zone, double weight)
+    public DeliveryResources GetDeliveryResources(Date date, ShippingZone zone, double weight, boolean[] supplierWorkingDays)
     {
         /* Find the Driver & Truck capable to deliver cargo of param weight one closest day */
-        Pair<Driver, DeliveryDate> pDriver = FindAvailableDriver(date, zone, weight);
-        Pair<Truck, DeliveryDate> pTruck = FindAvailableTruck(date, zone, weight);
+        Pair<Driver, DeliveryDate> pDriver = FindAvailableDriver(date, zone, weight, supplierWorkingDays);
+        if(pDriver.First == null)
+            return new DeliveryResources(null, null, null);
+        Pair<Truck, DeliveryDate> pTruck = FindAvailableTruck(date, zone, weight, supplierWorkingDays);
+        if(pTruck.First == null)
+            return new DeliveryResources(null, null, null);
         int deliveryDateDiff = pDriver.Second.compareTo(pTruck.Second);
         /* Choose the latest delivery date */
         DeliveryDate deliveryDate = (deliveryDateDiff > 0) ? pDriver.Second : pTruck.Second;
@@ -123,67 +126,77 @@ public class DeliveryResourceController {
     }
 
     // return a Driver works at param zone, certified to transport a cargo of param weight at the closest day to param date.
-    private Pair<Driver, DeliveryDate> FindAvailableDriver(Date date, ShippingZone zone, double weight)
+    private Pair<Driver, DeliveryDate> FindAvailableDriver(Date date, ShippingZone zone, double weight, boolean[] supplierWorkingDays)
     {
         VehicleLicenseCategory matchingLicense = VehicleLicenseCategory.FindLicense(weight);
         List<String> driverIds = DriversDistribution[zone.ordinal()][matchingLicense.ordinal()];
         Driver resDriver = null;
         DeliveryDate resDate = null;
-        for(String driverId : driverIds)
+        if(driverIds != null)
         {
-            Driver driver = Drivers.get(driverId);
-            if(resDriver != null)
-            {
-                DeliveryDate d = driver.GetAvailableDeliveryDate(date.Month, date.Day);
-                int diff = resDate.compareTo(d);
-                if(diff > 0)
+            for (String driverId : driverIds) {
+                Driver driver = Drivers.get(driverId);
+                if (resDriver != null)
                 {
-                    /* Found driver available on earlier date */
-                    resDriver = driver;
-                    resDate = d;
+                    DeliveryDate d = driver.GetAvailableDeliveryDate(date.Month, date.Day, supplierWorkingDays);
+                    if(d != null)
+                    {
+                        int diff = resDate.compareTo(d);
+                        if (diff > 0) {
+                            /* Found driver available on earlier date */
+                            resDriver = driver;
+                            resDate = d;
+                        }
+                    }
                 }
-            }
-            else
-            {
-                /* initialize res at first iteration */
-                resDriver = driver;
-                resDate = driver.GetAvailableDeliveryDate(date.Month, date.Day);
-            }
+                else
+                {
+                    /* initialize res at first iteration */
+                    resDriver = driver;
+                    resDate = driver.GetAvailableDeliveryDate(date.Month, date.Day, supplierWorkingDays);
+                }
 
+            }
+            return new Pair<>(resDriver, resDate);
         }
-        return new Pair<>(resDriver, resDate);
+        return new Pair<>(null, null);
     }
 
-    // return a Driver works at param zone, certified to transport a cargo of param weight at the closest day to param date.
-    private Pair<Truck, DeliveryDate> FindAvailableTruck(Date date, ShippingZone zone, double weight)
+    // return a Truck works at param zone, able to load a cargo of param weight at the closest day to param date.
+    private Pair<Truck, DeliveryDate> FindAvailableTruck(Date date, ShippingZone zone, double weight, boolean[] supplierWorkingDays)
     {
         VehicleLicenseCategory matchingLicense = VehicleLicenseCategory.FindLicense(weight);
         List<Long> trucksIds = TrucksDistribution[zone.ordinal()][matchingLicense.ordinal()];
         Truck resTruck = null;
         DeliveryDate resDate = null;
-        for(Long truckId : trucksIds)
+        if(trucksIds != null)
         {
-            Truck truck = Trucks.get(truckId);
-            if(resTruck != null)
-            {
-                DeliveryDate d = truck.GetAvailableDeliveryDate(date.Month, date.Day);
-                int diff = resDate.compareTo(d);
-                if(diff > 0)
+            for (Long truckId : trucksIds) {
+                Truck truck = Trucks.get(truckId);
+                if (resTruck != null)
                 {
-                    /* Found truck available on earlier date */
-                    resTruck = truck;
-                    resDate = d;
+                    DeliveryDate d = truck.GetAvailableDeliveryDate(date.Month, date.Day, supplierWorkingDays);
+                    if(d != null)
+                    {
+                        int diff = resDate.compareTo(d);
+                        if (diff > 0) {
+                            /* Found truck available on earlier date */
+                            resTruck = truck;
+                            resDate = d;
+                        }
+                    }
                 }
-            }
-            else
-            {
-                /* initialize res at first iteration */
-                resTruck = truck;
-                resDate = truck.GetAvailableDeliveryDate(date.Month, date.Day);
-            }
+                else
+                {
+                    /* initialize res at first iteration */
+                    resTruck = truck;
+                    resDate = truck.GetAvailableDeliveryDate(date.Month, date.Day, supplierWorkingDays);
+                }
 
+            }
+            return new Pair<>(resTruck, resDate);
         }
-        return new Pair<>(resTruck, resDate);
+        return new Pair<>(null, null);
     }
 
 
@@ -307,8 +320,13 @@ public class DeliveryResourceController {
 
     public void Clear()
     {
+        for(Driver driver : Drivers.values())
+            RemoveDriver(driver.Id);
+        for(Truck truck : Trucks.values())
+            RemoveTruck(truck.VehicleLicenseNumber);
         Drivers.clear();
         Trucks.clear();
+
         for(ShippingZone zone : ShippingZone.values())
         {
             for(VehicleLicenseCategory licenseCategory : VehicleLicenseCategory.values())
@@ -317,6 +335,23 @@ public class DeliveryResourceController {
                 TrucksDistribution[zone.ordinal()][licenseCategory.ordinal()].clear();
             }
         }
+    }
+
+    public boolean CancelDelivery(CancelDeliveryRecipients cancelDeliveryRecipients)
+    {
+        if(cancelDeliveryRecipients != null)
+        {
+            Driver driver = Drivers.getOrDefault(cancelDeliveryRecipients.DriverId, null);
+            Truck truck = Trucks.getOrDefault(cancelDeliveryRecipients.TruckId, null);
+            if(driver != null && truck != null)
+            {
+                driver.SetAvailable(cancelDeliveryRecipients.DueDate);
+                truck.SetAvailable(cancelDeliveryRecipients.DueDate);
+                return true;
+            }
+        }
+        return false;
+
     }
 
 }

@@ -1,10 +1,7 @@
 package DAL;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DataBaseConnection {
     private String[] truckValues = {"VehicleLicenseNumber", "MaxLoadWeight", "NetWeight", "Model", "ShippingZone", "Diary", "AuthorizedLicense"};
@@ -171,7 +168,7 @@ public class DataBaseConnection {
             while(resultSet.next()){
                 for(int i = 0; i < resRow.length; i++)
                     resValues[i] = resultSet.getString(resRow[i]);
-                output.add(resValues);
+                output.add(Arrays.copyOf(resValues, resValues.length));
             }
 
             resultSet.close();

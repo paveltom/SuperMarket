@@ -63,14 +63,20 @@ public class Driver
                 Name, Id,Cellphone, VehicleLicenseCategory.GetVehicleLicenseCategoryName(License), Zone);
     }
 
-    public DeliveryDate GetAvailableDeliveryDate(int month, int day)
+    public DeliveryDate GetAvailableDeliveryDate(int month, int day, boolean[] supplierWorkingDays)
     {
-        return Diary.GetAvailableDeliveryDate(month, day);
+        return Diary.GetAvailableDeliveryDate(month, day, supplierWorkingDays);
     }
 
     public void SetOccupied(DeliveryDate occupiedDate)
     {
         Diary.SetOccupied(occupiedDate);
+        PersistDiary();
+    }
+
+    public void SetAvailable(DeliveryDate occupiedDate)
+    {
+        Diary.SetAvailable(occupiedDate);
         PersistDiary();
     }
 

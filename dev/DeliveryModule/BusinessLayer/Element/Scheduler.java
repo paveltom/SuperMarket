@@ -39,14 +39,15 @@ public class Scheduler
     /*
      * return null if all shift throughout the year are occupied.
      * else, return available delivery day.
+     * Take into account supplier working days.
      */
-    public DeliveryDate GetAvailableDeliveryDate(int month, int day)
+    public DeliveryDate GetAvailableDeliveryDate(int month, int day, boolean[] supplierWorkingDays)
     {
         int i = month, j = day;
         while(i <= NumOfMonths)
         {
             /* Month i has available slot on day >= j */
-            Shift shift = Dairy[i].GetAvailableShift(j);
+            Shift shift = Dairy[i].GetAvailableShift(j, supplierWorkingDays);
             if(shift != null)
             {
                 return new DeliveryDate(i, Year, shift);
@@ -65,6 +66,11 @@ public class Scheduler
     public void SetOccupied(DeliveryDate occupiedDate)
     {
         Dairy[occupiedDate.Date.Month].SetOccupied(new Shift(occupiedDate.Date.Day, occupiedDate.Shift));
+    }
+
+    public void SetAvailable(DeliveryDate occupiedDate)
+    {
+        Dairy[occupiedDate.Date.Month].SetAvailable(new Shift(occupiedDate.Date.Day, occupiedDate.Shift));
     }
 
     public void SetConstraint(Constraint constraint)

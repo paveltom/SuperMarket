@@ -38,7 +38,7 @@ public class DeliveryService {
             ShippingZone zone = ShippingZone.valueOf(origin.getZone());
             Site supplier = new Site(zone, origin.getAddress(), origin.getContactName(), origin.getCellphone());
             Site client = new Site(ShippingZone.valueOf(destination.getZone()), destination.getAddress(), destination.getContactName(), destination.getCellphone());
-            DeliveryOrder delOrder = new DeliveryOrder(supplier, client, Integer.parseUnsignedInt(orderId), products, delSubmissionDate, zone);
+            DeliveryOrder delOrder = new DeliveryOrder(supplier, client, Integer.parseUnsignedInt(orderId), products, delSubmissionDate);
             Recipe delRec = delController.Deliver(delOrder);
             if(delRec instanceof DeliveryRecipe) {
                 FacadeDriver facadeDriver = new FacadeDriver(((DeliveryRecipe) delRec).DriverId, ((DeliveryRecipe) delRec).DriverName, "", "", ((DeliveryRecipe) delRec).DriverCellphone);

@@ -1,6 +1,7 @@
 package DeliveryModule.BusinessLayer.Controller;
 
 import DeliveryModule.BusinessLayer.Element.*;
+import DeliveryModule.BusinessLayer.Type.Pair;
 import DeliveryModule.BusinessLayer.Type.ShippingZone;
 import DeliveryModule.BusinessLayer.Element.Truck;
 import DeliveryModule.BusinessLayer.Type.VehicleLicenseCategory;
@@ -35,8 +36,14 @@ public class DeliveryController {
         return Executor.GetDeliveriesHistory();
     }
 
-    public DeliveryResources GetDeliveryResources(Date date, ShippingZone zone, double weight) {
-        return Resource.GetDeliveryResources(date, zone, weight);
+    public DeliveryResources GetDeliveryResources(Date date, ShippingZone zone, double weight, boolean[] supplierWorkingDays)
+    {
+        return Resource.GetDeliveryResources(date, zone, weight, supplierWorkingDays);
+    }
+
+    public boolean CancelDelivery(int deliveryId)
+    {
+        return Resource.CancelDelivery(Executor.CancelDelivery(deliveryId));
     }
 
     public String GetDrivers() {

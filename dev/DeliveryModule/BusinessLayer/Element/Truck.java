@@ -55,14 +55,20 @@ public class Truck
         return String.format("Truck\nModel: %s\nVehicleLicenseNumber: %d\nZone: %s\nMaxLoadWeight: %f\nNetWeight: %f\n", Model, VehicleLicenseNumber, Zone, MaxLoadWeight, NetWeight);
     }
 
-    public DeliveryDate GetAvailableDeliveryDate(int month, int day)
+    public DeliveryDate GetAvailableDeliveryDate(int month, int day, boolean[] supplierWorkingDays)
     {
-        return Diary.GetAvailableDeliveryDate(month, day);
+        return Diary.GetAvailableDeliveryDate(month, day, supplierWorkingDays);
     }
 
     public void SetOccupied(DeliveryDate occupiedDate)
     {
         Diary.SetOccupied(occupiedDate);
+        PersistDiary();
+    }
+
+    public void SetAvailable(DeliveryDate occupiedDate)
+    {
+        Diary.SetAvailable(occupiedDate);
         PersistDiary();
     }
 

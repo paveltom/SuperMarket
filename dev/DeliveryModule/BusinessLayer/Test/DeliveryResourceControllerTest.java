@@ -8,6 +8,9 @@ import DeliveryModule.BusinessLayer.Element.Truck;
 import DeliveryModule.BusinessLayer.Type.ShippingZone;
 import DeliveryModule.BusinessLayer.Type.VehicleLicenseCategory;
 import org.junit.Test;
+
+import java.util.Arrays;
+
 import static org.junit.Assert.*;
 
 class DeliveryResourceControllerTest implements Testable{
@@ -21,17 +24,19 @@ class DeliveryResourceControllerTest implements Testable{
      * Expect: True: The assigned delivery driver is certified to deliver the cargo && cargo isn't exceeds vehicle max load restriction.
      * */
     @Test
-    void getDeliveryDate()
+    public void getDeliveryDate()
     {
         final Date DATE = new Date(24, 4, 2022);
         final ShippingZone ZONE = ShippingZone.Shfela_JerusalemMountains;
         int i = 0;
         final double[] deliveryWeights = {3496351.00, 10045670.00, 16190000.0354};
+        final boolean[] SupplierWorkingDays = new boolean[7];
+        Arrays.fill(SupplierWorkingDays, true);
 
 
         for(VehicleLicenseCategory licenseCategory : VehicleLicenseCategory.values())
         {
-            DeliveryResources res = testObject.GetDeliveryResources(DATE, ZONE, deliveryWeights[i]);
+            DeliveryResources res = testObject.GetDeliveryResources(DATE, ZONE, deliveryWeights[i], SupplierWorkingDays);
             assertEquals(res.DeliveryDriver.License, licenseCategory);
             assertTrue(res.DeliveryTruck.MaxLoadWeight >= deliveryWeights[i]);
             i++;
@@ -44,7 +49,7 @@ class DeliveryResourceControllerTest implements Testable{
      * Expect: True: returned instance equals to other instance with same ID.
      * */
     @Test
-    void addDriver()
+    public void addDriver()
     {
         final String ID = "35467861";
         final String FNAME = "ADDED_DRIVER_FNAME";
@@ -67,7 +72,7 @@ class DeliveryResourceControllerTest implements Testable{
      * Expect: True: returned instance equals to other instance with same ID.
      * */
     @Test
-    void addTruck()
+    public void addTruck()
     {
         final double NET_WEIGHT = 10000000.00;
         final double MAXIMAL_LOAD_WEIGHT = 20000000.00;
@@ -88,7 +93,7 @@ class DeliveryResourceControllerTest implements Testable{
      * Expect: null: no truck is found.
      * */
     @Test
-    void removeDriver()
+    public void removeDriver()
     {
         final String ID = "35410004788";
         final String FNAME = "ADDED_DRIVER_FNAME";
@@ -114,7 +119,7 @@ class DeliveryResourceControllerTest implements Testable{
      * Expect: null: no truck is found.
      * */
     @Test
-    void removeTruck()
+    public void removeTruck()
     {
         final double NET_WEIGHT = 10000000.00;
         final double MAXIMAL_LOAD_WEIGHT = 20000000.00;

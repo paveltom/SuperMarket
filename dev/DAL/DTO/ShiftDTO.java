@@ -29,6 +29,6 @@ public class ShiftDTO implements DTO {
 
     @Override
     public String toString() {
-        return null;
+        return "ShiftDTO";
     }
 }
