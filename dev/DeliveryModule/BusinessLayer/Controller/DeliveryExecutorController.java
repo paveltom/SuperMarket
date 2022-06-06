@@ -50,7 +50,7 @@ public class DeliveryExecutorController
         for(Product product : deliveryOrder.RequestedProducts)
         {
             double totalProductWeight = product.Amount * product.WeightPerUnit;
-            if(CargoWeight + totalProductWeight < MaxCargoWeight)
+            if(CargoWeight < 0 || CargoWeight + totalProductWeight < MaxCargoWeight)
                 CargoWeight += totalProductWeight;
             else // cargo's weight exceeds the maximal load weights.
             {

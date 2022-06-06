@@ -45,20 +45,30 @@ public class DeliveryResourceController {
      */
     private void Init()
     {
+        InitDistributionTable();
         InitDrivers();
         InitTrucks();
     }
 
+    private void InitDistributionTable()
+    {
+        for (ShippingZone zone : ShippingZone.values())
+        {
+            for (VehicleLicenseCategory licenseCategory : VehicleLicenseCategory.values())
+            {
+                DriversDistribution[zone.ordinal()][licenseCategory.ordinal()] = new ArrayList<>();
+                TrucksDistribution[zone.ordinal()][licenseCategory.ordinal()] = new ArrayList<>();
+            }
+        }
+    }
     private void InitDrivers()
     {
         List<DriverDTO> driversData = DALController.getInstance().getAllDrivers();
         for(DriverDTO src : driversData)
         {
             Driver driver = new Driver(src);
-            List<String> driversList = new ArrayList<String>();
-            driversList.add(driver.Id);
             Drivers.put(driver.Id, driver);
-            DriversDistribution[driver.Zone.ordinal()][driver.License.ordinal()] = driversList;
+            DriversDistribution[driver.Zone.ordinal()][driver.License.ordinal()].add(driver.Id);
         }
 //        long Init_Driver_Id = 0;
 //        String Init_Driver_Name = "Augustin Louis Cauchy";
@@ -84,10 +94,8 @@ public class DeliveryResourceController {
         for(TruckDTO src : trucksData)
         {
             Truck truck = new Truck(src);
-            List<Long> trucksList = new ArrayList<>();
-            trucksList.add(truck.VehicleLicenseNumber);
             Trucks.put(truck.VehicleLicenseNumber, truck);
-            TrucksDistribution[truck.Zone.ordinal()][truck.AuthorizedLicense.ordinal()] = trucksList;
+            TrucksDistribution[truck.Zone.ordinal()][truck.AuthorizedLicense.ordinal()].add(src.VehicleLicenseNumber);
         }
 //        final double DUMMY_NW = 10000000.00;
 //        long DUMMY_VEHICLE_NUMBER = 5555555;
@@ -292,7 +300,7 @@ public class DeliveryResourceController {
     public String GetDrivers()
     {
         StringBuilder sb = new StringBuilder();
-        sb.append("------------------------------ Trucks ------------------------------\n");
+        sb.append("------------------------------ Drivers ------------------------------\n");
         for(Driver driver : Drivers.values())
             sb.append(String.format("%s\n", driver));
         return sb.toString();

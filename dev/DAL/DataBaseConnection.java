@@ -27,7 +27,7 @@ public class DataBaseConnection {
         try {
             // db parameters
             String dir = System.getProperty("user.dir");
-            String url = "jdbc:sqlite:" + dir + "\\PerDel.db";
+            String url = "jdbc:sqlite:" + dir + "/PerDel.db";
             //System.out.println("url: " + url);
             Class.forName("org.sqlite.JDBC");
 

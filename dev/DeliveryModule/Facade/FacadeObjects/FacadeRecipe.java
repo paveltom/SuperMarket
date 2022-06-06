@@ -12,7 +12,7 @@ public class FacadeRecipe {
     private final FacadeDriver DeliveryPerson;
     private final FacadeTruck DeliveryTruck;
 
-    private String errorMsg;
+    private String errorMsg = null;
 
     public FacadeRecipe(String errMsg){
         this.errorMsg = errMsg;
@@ -37,6 +37,10 @@ public class FacadeRecipe {
 
     public int getOrderId() {
         return OrderId;
+    }
+
+    public String getErrorMsg() {
+        return errorMsg;
     }
 
     public int getDeliveryId() {

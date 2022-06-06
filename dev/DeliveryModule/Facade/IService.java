@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface IService {
 
-    public ResponseT<FacadeRecipe> deliver(FacadeSite origin, FacadeSite destination, String orderId, List<FacadeProduct> facProducts, FacadeDate facSubDate);
+    public ResponseT<String> deliver(FacadeSite origin, FacadeSite destination, String orderId, List<FacadeProduct> facProducts, FacadeDate facSubDate);
 
     public ResponseT<String> getDeliveryHistory();
 

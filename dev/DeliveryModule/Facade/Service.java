@@ -26,18 +26,8 @@ public class Service implements IService{
 
 
 
-    public ResponseT<FacadeRecipe> deliver(FacadeSite origin, FacadeSite destination, String orderId, List<FacadeProduct> facProducts, FacadeDate facSubDate){
-        ResponseT<FacadeRecipe> res = deliveryService.deliver(origin, destination, orderId, facProducts, facSubDate);
-        if(res.getErrorOccurred()){
-            return res;
-        }
-        String driverID = res.getValue().getDeliveryPerson().getId();
-        FacadeDate date = res.getValue().getDueDate();
-        int shiftType = res.getValue().getDueDate().getShift();
-        if(shiftType > 1) shiftType = 1;
-        else shiftType = 0;
-//        pmService.addDriverFuture(driverID, date, shiftType); // sends new occupied driver's shift to Personel Module, shiftType - 0 or 1
-        return res;
+    public ResponseT<String> deliver(FacadeSite origin, FacadeSite destination, String orderId, List<FacadeProduct> facProducts, FacadeDate facSubDate){
+        return deliveryService.deliver(origin, destination, orderId, facProducts, facSubDate);
     }
 
     public ResponseT<String> getDeliveryHistory(){

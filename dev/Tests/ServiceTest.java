@@ -147,7 +147,7 @@ public class ServiceTest {
     //-----------------------------Shared Tests---------------------------------------
     @Test
     public void deleteWorkerDriver() {
-      //  assertEquals("Added Driver successfully",service.AddDriver("212589691","Nikita Kovalchuk","Driver","yes","Bank 003 111111",30.00,"22/9/2020","...","E","Negev","0525670092"));
+        assertEquals("Added Driver successfully",service.AddDriver("212589691","Nikita Kovalchuk","Driver","yes","Bank 003 111111",30.00,"22/9/2020","...","E","Negev","0525670092"));
         assertEquals("Deleted worker successfully",service.DeleteWorker("212589691"));//To remove from DB
     }
     @Test
