@@ -47,6 +47,34 @@ public class DeliveryService {
         }
     }
 
+    public ResponseT<Recipe> deliver(FacadeSite origin,
+                                     FacadeSite destination,
+                                     String orderId,
+                                     List<FacadeProduct> facProducts,
+                                     FacadeDate facSubDate,
+                                     boolean[] supplierWorkingDays)
+    {
+        try {
+
+            List<Product> products = new ArrayList<>();
+            for (FacadeProduct curr : facProducts) {
+                Product temp = new Product(curr.getId(), curr.getWeight(), curr.getAmount());
+                products.add(temp);
+            }
+
+            Date delSubmissionDate = new Date(facSubDate.getDay(), facSubDate.getMonth(), facSubDate.getYear());
+            ShippingZone zone = ShippingZone.valueOf(origin.getZone());
+            Site supplier = new Site(zone, origin.getAddress(), origin.getContactName(), origin.getCellphone());
+            Site client = new Site(ShippingZone.valueOf(destination.getZone()), destination.getAddress(), destination.getContactName(), destination.getCellphone());
+            DeliveryOrder delOrder = new DeliveryOrder(supplier, client, Integer.parseUnsignedInt(orderId), products, delSubmissionDate, supplierWorkingDays);
+            Recipe delRec = delController.Deliver(delOrder);
+            return (delRec instanceof DeliveryRecipe) ? new ResponseT<>(delRec, true) : new ResponseT<>(delRec, false);
+        }
+        catch(Exception e) {
+            return new ResponseT<>(e.getMessage());
+        }
+    }
+
     public ResponseT<String> getDeliveryHistory(){
         try {
             return new ResponseT<>(delController.GetDeliveriesHistory(), true);

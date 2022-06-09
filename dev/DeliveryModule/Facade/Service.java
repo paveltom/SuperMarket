@@ -1,5 +1,6 @@
 package DeliveryModule.Facade;
 
+import DeliveryModule.BusinessLayer.Element.Recipe;
 import DeliveryModule.Facade.FacadeObjects.*;
 import java.util.List;
 
@@ -25,9 +26,12 @@ public class Service implements IService{
     }
 
 
-
     public ResponseT<String> deliver(FacadeSite origin, FacadeSite destination, String orderId, List<FacadeProduct> facProducts, FacadeDate facSubDate){
         return deliveryService.deliver(origin, destination, orderId, facProducts, facSubDate);
+    }
+
+    public ResponseT<Recipe> deliver(FacadeSite origin, FacadeSite destination, String orderId, List<FacadeProduct> facProducts, FacadeDate facSubDate, boolean[] supplierWorkingDays){
+        return deliveryService.deliver(origin, destination, orderId, facProducts, facSubDate, supplierWorkingDays);
     }
 
     public ResponseT<String> getDeliveryHistory(){

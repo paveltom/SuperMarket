@@ -70,9 +70,10 @@ public class DeliveryExecutorController
             DeliveryResources deliveryResources = DeliveryController.GetInstance().GetDeliveryResources
                     (deliveryOrder.SubmissionDate, deliveryOrder.Supplier.Zone, CargoWeight, deliveryOrder.SupplierWorkingDays);
 
-            // if either driver or truck are unavailable, an error recipe will be returned
+            // if driver or truck are unavailable, or closest delivery date exceeds one week latency, an error recipe will be returned
            output = deliveryResources.DeliveryDriver == null ? new NoAvailableDriver(deliveryOrder.OrderId) :
                     deliveryResources.DeliveryTruck == null ? new NoAvailableTruck(deliveryOrder.OrderId) :
+                    (deliveryResources.DueDate.Date.Day - deliveryOrder.SubmissionDate.Day > 7) ? new CannotDeliveryWithinWeek(deliveryOrder.OrderId, deliveryResources.DueDate):
                     new DeliveryRecipe(deliveryOrder.OrderId, deliverId, deliveryOrder.Supplier, deliveryOrder.Client,
                             deliveryOrder.RequestedProducts, deliveryResources.DueDate,
                             deliveryResources.DeliveryDriver.Name, deliveryResources.DeliveryDriver.Cellphone,
