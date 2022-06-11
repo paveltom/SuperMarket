@@ -1,7 +1,7 @@
 package SuppliersModule.DomainLayer;
 
-import DAL.DAO.SupplierDAO;
-import SuppliersModule.DomainLayer.Contract;
+import DAL.DAOS.SupplierObjects.OrderDao;
+import DAL.DAOS.SupplierObjects.SupplierDao;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -17,7 +17,7 @@ public class Supplier {
     private final SuppliersModule.DomainLayer.Contract contract;
     private final SuppliersModule.DomainLayer.OrderController oc;
     private final List<SuppliersModule.DomainLayer.Order> orders = new LinkedList<>();
-    private final SupplierDAO dao;
+    private final SupplierDao dao;
 
     //  getters
     public String getsId(){
@@ -77,6 +77,7 @@ public class Supplier {
     public Supplier(String sId, String name, String address, String bankAccount, boolean cash, boolean credit, String contactName, String phoneNum,
                     boolean[] supplyDays, int MaxSupplyDays, int supplCycle, boolean deliveryService,
                     String pId, String catNumber, float price){
+        dao = new SupplierDao();
         this.sId = sId;
         this.name = name;
         this.address = address;
@@ -87,30 +88,34 @@ public class Supplier {
         addContact(contactName, phoneNum);
         contract = new Contract(sId, supplyDays, MaxSupplyDays, supplCycle, pId, catNumber, price);
         oc = OrderController.getInstance();
-        dao = new SupplierDAO();
 
         dao.insert(this);
     }
 
+    //db
     public Supplier(String sId, String name, String address, String bankAccount, boolean cash, boolean credit){
-
-        dao = new SupplierDAO();
+        dao = new SupplierDao();
         this.sId = sId;
         this.name = name;
         this.address = address;
         this.bankAccount = bankAccount;
         this.paymentMethods[0] = cash;
         this.paymentMethods[1] = credit;
+        oc = OrderController.getInstance();
+
+        SupplyTime st = dao.getSupplyTimeFromDB(sId);
+
+        List<CatalogProduct> catalogProducts = dao.getCatalogProductsFromDB(this);
+        QuantityAgreement qa = dao.getQuantityAgreementFromDB(sId);
+
+        this.contract = new Contract(sId, st, catalogProducts, qa);
 
         Map<String,String> c = dao.getContactsFromDB(sId);
-
         for(String key : c.keySet()){
             addContact(key, c.get(key));
         }
-        contract = new Contract(sId, dao.getSupplyTimeFromDB(sId), dao.getCatalogProductsFromDB(this));
 
-        oc = OrderController.getInstance();
-
+        List<Order> os = dao.getOrdersFromDB(sId);
         for ( Order o : dao.getOrdersFromDB(sId)){
             orders.add(o);
         }
@@ -141,7 +146,6 @@ public class Supplier {
     }
     private void addOrder(Order order){
         orders.add(order);
-        //TODO save in db
     }
     public int getPeriodicOrderInterval(){return contract.getPeriodicOrderInterval();}
     public int getDaysForShortageOrder(){return contract.getDaysForShortageOrder();}

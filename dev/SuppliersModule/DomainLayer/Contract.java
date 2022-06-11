@@ -1,6 +1,6 @@
 package SuppliersModule.DomainLayer;
 
-import DAL.DAO.SupplierDAO;
+//import DAL.DAO.SupplierDAO;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -42,17 +42,18 @@ public class Contract {
         catalog.add(new CatalogProduct(sId, pId, catalogNum, price));
     }
 
-    public Contract(String sId, SupplyTime st, List<CatalogProduct> catalog){
+    //from db
+    public Contract(String sId, SupplyTime st, List<CatalogProduct> c, QuantityAgreement qa){
         this.sId = sId;
         supplyTime = st;
-        for(CatalogProduct cp : catalog){
-            this.catalog.add(cp);
+
+        if(c != null) {
+            for (CatalogProduct p : c)
+                catalog.add(p);
         }
+        this.qa = qa;
     }
 
-    public void loadQuantityAgreement(SupplierDAO dao){
-        //dao.getQuantityAgreementFromDB(this);
-    }
 
     //  order methods
 
@@ -103,7 +104,7 @@ public class Contract {
 
     // Quantity Agreement methods
     public void addQuantityAgreement(QuantityAgreement qa){
-        if(getQa()==null)
+        if(getQa()!=null)
             throw new RuntimeException("Can not add Quantity agreement because the supplier already has one.");
         this.qa = qa;
     }
@@ -111,7 +112,7 @@ public class Contract {
         if(!hasProduct(pId))
             throw new IllegalArgumentException("product not exist.");
         if(getQa()==null)
-            addQuantityAgreement(new QuantityAgreement()); //TODO make contract the only creator of qa according to grasp
+            addQuantityAgreement(new QuantityAgreement(sId)); //TODO make contract the only creator of qa according to grasp
         qa.updateDiscount(pId, quantity, discount);
     }
     public Map<Integer, Float> getDiscount(String pId){

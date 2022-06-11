@@ -164,9 +164,9 @@ public class DataBaseConnection {
 
             StringBuilder sql = new StringBuilder("SELECT * from  " + tableNAME);
             if(paramsWHERE != null){
-                sql.append(" where ").append(paramsWHERE[0]).append("=").append(paramsWHEREValues[0]);
+                sql.append(" where ").append(paramsWHERE[0]).append("='").append(paramsWHEREValues[0]+"'");
                 for (int i = 1; i < paramsWHERE.length; i++)
-                    sql.append(" AND ").append(paramsWHERE[i]).append("=").append(paramsWHEREValues[i]);
+                    sql.append(" AND ").append(paramsWHERE[i]).append("='").append(paramsWHEREValues[i]+"'");
             }
             sql.append(";");
 

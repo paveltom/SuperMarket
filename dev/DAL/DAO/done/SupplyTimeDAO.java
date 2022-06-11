@@ -1,4 +1,4 @@
-package DAL.DAO;
+package DAL.DAO.done;
 
 import DAL.DataBaseConnection;
 import SuppliersModule.DomainLayer.SupplyTime;

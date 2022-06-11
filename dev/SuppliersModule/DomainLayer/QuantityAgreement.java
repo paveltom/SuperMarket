@@ -1,24 +1,49 @@
 package SuppliersModule.DomainLayer;
 
+import DAL.DAOS.SupplierObjects.QuantityAgreementDao;
+
 import java.util.Hashtable;
 import java.util.Map;
 
 public class QuantityAgreement {
+    private final QuantityAgreementDao dao;
+    private String sId;
     private final Map<String, Map<Integer, Float>> Discounts = new Hashtable<>();
     public Map<String, Map<Integer, Float>> getDiscounts() {
         return Discounts;
+    }
+
+    public QuantityAgreement(String sId){
+        this.sId = sId;
+        dao = new QuantityAgreementDao();
     }
     public void updateDiscount(String pId, int quantity, float discount){
         validParams(quantity, discount);
         if (discount == 0 && hasInDiscounts(pId)){
             Discounts.get(pId).remove(quantity);
+            dao.removeDiscount(sId, pId, quantity);
             if(Discounts.get(pId).isEmpty()){
                 Discounts.remove(pId);
             }
         }
         else if (discount > 0) {
-            if (!hasInDiscounts(pId))
+            if (!hasInDiscounts(pId)) {
                 Discounts.put(pId, new Hashtable<>());
+                dao.addDiscount(sId, pId, quantity, discount);
+                Discounts.get(pId).put(quantity, discount);
+            }
+            else {
+                Discounts.get(pId).put(quantity, discount);
+                dao.updateDiscount(sId, pId, quantity, discount);
+            }
+        }
+    }
+    public void loadDiscountFromDB(String pId, int quantity, float discount){
+        if (!hasInDiscounts(pId)) {
+            Discounts.put(pId, new Hashtable<>());
+            Discounts.get(pId).put(quantity, discount);
+        }
+        else {
             Discounts.get(pId).put(quantity, discount);
         }
     }

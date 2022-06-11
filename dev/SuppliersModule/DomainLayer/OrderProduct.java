@@ -1,6 +1,8 @@
 package SuppliersModule.DomainLayer;
 
-import DAL.DAO.OrderProductDAO;
+//import DAL.DAO.OrderProductDAO;
+
+import DAL.DAOS.SupplierObjects.OrderProductDao;
 
 public class OrderProduct {
     private final String id;
@@ -10,7 +12,7 @@ public class OrderProduct {
     private float finalPrice;
     private String sId;
     private String oId;
-    private OrderProductDAO dao;
+    private OrderProductDao dao;
 
     // getters and setters
     public String getsId(){return sId;}
@@ -61,14 +63,29 @@ public class OrderProduct {
         if(catalogPrice <= 0 )
             throw new IllegalArgumentException("price of product must be positive");
 
+        dao = new OrderProductDao();
         this.id = id;
         this.catalogPrice = catalogPrice;
         this.amount = amount;
         this.discount = discount;
         this.finalPrice = finalPrice;
-        dao = new OrderProductDAO();
 
         dao.insert(this);
+    }
+
+    //db
+    public OrderProduct(String sId, String oId, String id, float catalogPrice, int amount, float discount, float finalPrice,
+                        boolean fromDB) {
+        if(catalogPrice <= 0 )
+            throw new IllegalArgumentException("price of product must be positive");
+
+        dao = new OrderProductDao();
+        this.id = id;
+        this.catalogPrice = catalogPrice;
+        this.amount = amount;
+        this.discount = discount;
+        this.finalPrice = finalPrice;
+
     }
 
     public void update( int amount, float discount, float finalPrice){

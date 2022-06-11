@@ -41,4 +41,16 @@ public class Discount
     public Map<Integer, Type> getType() {
         return this.discount;
     }
+
+    public Date getDiscountStartDate() {
+        return discountStartDate;
+    }
+
+    public Date getDiscountEndDate() {
+        return discountEndDate;
+    }
+
+    public Map<Integer, Type> getDiscount() {
+        return discount;
+    }
 }

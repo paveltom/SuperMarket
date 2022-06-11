@@ -1,6 +1,7 @@
 package SuppliersModule.DomainLayer;
 
-import DAL.DAO.SupplyTimeDAO;
+
+import DAL.DAOS.SupplierObjects.SupplyTimeDao;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -11,7 +12,7 @@ public class SupplyTime {
     private int orderCycle; //when no weekly deliver, determines the amount of days between orders
     private int daysAcc; //when no weekly deliver, determines the amount of days past from last order
     private String sId;
-    private SupplyTimeDAO dao;
+    private SupplyTimeDao dao;
 
     //  getters
     public String getsId(){ return sId; }
@@ -34,6 +35,7 @@ public class SupplyTime {
         if (daysOfDelivery == null || daysOfDelivery.length != 7 )
             throw new IllegalArgumentException("incorrect format at days of delivery");
         this.daysOfDelivery = daysOfDelivery;
+
 
         dao.changeDaysOfDelivery(this);
     }
@@ -69,7 +71,7 @@ public class SupplyTime {
 
     //  constructor
     public SupplyTime(String sId, boolean[] daysOfDelivery, int maxDeliveryDuration, int orderCycle){
-        dao = new SupplyTimeDAO();
+        dao = new SupplyTimeDao();
         setDaysOfDelivery(daysOfDelivery);
         setMaxDeliveryDuration(maxDeliveryDuration);
         setOrderCycle(orderCycle);
@@ -83,10 +85,10 @@ public class SupplyTime {
         this.daysOfDelivery = daysOfDelivery;
         this.maxDeliveryDuration = maxDeliveryDuration;
         this.orderCycle = orderCycle;
-        daysAcc = orderCycle - 1; //if cycle delivery then an order would be placed at the end of the day
+        daysAcc = orderCycle - 1;
         this.sId = sId;
         this.daysAcc = daysAcc;
-        dao = new SupplyTimeDAO();
+        dao = new SupplyTimeDao();
     }
 
     //methods

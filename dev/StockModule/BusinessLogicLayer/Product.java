@@ -1,6 +1,8 @@
 package StockModule.BusinessLogicLayer;
 
-import DAL.DAO.ProductDAO;
+//import DAL.DAO.ProductDAO;
+
+import DAL.DAOS.StockObjects.ProductDao;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,10 +19,11 @@ public class Product {
     private Date supplyTime;
     private int demand; // Demand means amount of units sold per week.
     private List<Item> items;
-    private ProductDAO dao;
+    private ProductDao dao;
 
     public Product(String name, String manufacturer, int categoryID, Date supplyTime, int demand)
     {
+        dao = new ProductDao();
         this.ID = name+manufacturer;
         this.name = name;
         this.manufacturer = manufacturer;
@@ -31,10 +34,10 @@ public class Product {
         this.demand = demand;
         this.items = new LinkedList<>();
 
-        dao = new ProductDAO();
         dao.insert(this);
     }
 
+    //db
     public Product(String name, String manufacturer,int amountToNotify,  int categoryID, Date supplyTime, int demand, boolean isFromDB)
     {
         this.ID = name+manufacturer;
@@ -46,6 +49,8 @@ public class Product {
         this.supplyTime = supplyTime;
         this.demand = demand;
         this.items = new LinkedList<>();
+        
+        this.items = dao.loadItems(getID());
     }
 
 

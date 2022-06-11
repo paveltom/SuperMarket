@@ -1,72 +1,70 @@
 package SuppliersModule.DomainLayer;
 
-import DAL.DAO.SupplierDAO;
+//import DAL.DAO.SupplierDAO;
+
+import DAL.DAOS.SupplierObjects.SupplierDao;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class SupplierController {
-
+    private final SupplierDao dao;
     private final List<Supplier> suppliers;
     private final OrderController oc = OrderController.getInstance();
 
     public SupplierController(){
         suppliers = new LinkedList<>();
+        dao = new SupplierDao();
     }
 
     public SupplierController(boolean loadData){
-        SupplierDAO dao = new SupplierDAO();
-        suppliers = dao.loadSuppliers();
+        suppliers = new LinkedList<>();
+        dao = new SupplierDao();
+        dao.getAll();
     }
 
     // getters
     public List<Supplier> getSuppliers() {
-        return suppliers;
+        //return suppliers;
+        return dao.getAll();
     }
     public Contract getContract(String sId){
-        checkSupplier(sId);
-        return getSupplier(sId).getContract();
+        return dao.get(sId).getContract();
     }
     public List<CatalogProduct> getCatalog(String sId){
-        checkSupplier(sId);
-        return getSupplier(sId).getCatalog();
+        return dao.get(sId).getCatalog();
     }
     public QuantityAgreement getQa(String sId) {
-        checkSupplier(sId);
-        return getSupplier(sId).getQuantityAgreement();
+        return dao.get(sId).getQuantityAgreement();
     }
     public boolean[] getSupplyDays(String sId) {
-        checkSupplier(sId);
-        return getSupplier(sId).getSupplyDays();
+        return dao.get(sId).getSupplyDays();
     }
     public int getSupplyMaxDays(String sId) {
-        checkSupplier(sId);
-        return getSupplier(sId).getMaxSupplyDays();
+        return dao.get(sId).getMaxSupplyDays();
     }
     public int getSupplyCycle(String sId){
-        checkSupplier(sId);
-        return getSupplier(sId).getSupplyCycle();}
+        return dao.get(sId).getSupplyCycle();}
     public boolean hasDeliveryService(String sId) {
-        checkSupplier(sId);
-        return getSupplier(sId).hasDeliveryService();
+//        checkSupplier(sId);
+//        return getSupplier(sId).hasDeliveryService();
+
+        return dao.get(sId).hasDeliveryService();
     }
 
     //  setters
     public void setMaxSupplyDays(String sId, int maxSupplyDays) {
-        checkSupplier(sId);
-        getSupplier(sId).setMaxSupplyDays(maxSupplyDays);
+        dao.get(sId).setMaxSupplyDays(maxSupplyDays);
     }
     public void setSupplyCycle(String sId, int supplyCycle) {
-        checkSupplier(sId);
-        getSupplier(sId).setSupplyCycle(supplyCycle);
+        dao.get(sId).setSupplyCycle(supplyCycle);
         List<String> products = getSupplier(sId).getContract().getOrderProducts();
         for (String pId : products) {
             updateBestSeller(pId);
         }
     }
     public void setDeliveryService(String sId, boolean deliveryService) {
-        checkSupplier(sId);
-        getSupplier(sId).setDeliveryService(deliveryService);
+        dao.get(sId).setDeliveryService(deliveryService);
     }
 
     //  order methods
@@ -117,8 +115,7 @@ public class SupplierController {
     }
 
     public void removeSupplier(String sId){
-        checkSupplier(sId);
-        Supplier s = getSupplier(sId);
+        Supplier s = dao.get(sId);
         List<String> products = s.getContract().getOrderProducts();
         suppliers.remove(s);
         for(String pId : products){
@@ -126,51 +123,41 @@ public class SupplierController {
         }
     }
     public void addContact(String sId, String contactName, String phoneNum){
-        checkSupplier(sId);
-        getSupplier(sId).addContact(contactName, phoneNum);
+        dao.get(sId).addContact(contactName, phoneNum);
     }
     public void removeContact(String sId, String name){
-        checkSupplier(sId);
-        getSupplier(sId).removeContact(name);
+        dao.get(sId).removeContact(name);
     }
 
     //products methods
     public void addProduct(String sId, String pId, String catalogNum, float price) {
-        checkSupplier(sId);
-        getSupplier(sId).addProduct(pId, catalogNum, price);
+        dao.get(sId).addProduct(pId, catalogNum, price);
         updateBestSeller(pId);
     }
     public void removeProduct(String sId, String pId) {
-        checkSupplier(sId);
-        getSupplier(sId).removeProduct(pId);
+        dao.get(sId).removeProduct(pId);
         updateBestSeller(pId);
     }
     public void updateCatalogNum(String sId, String pId, String newCatalogNum) {
-        checkSupplier(sId);
-        getSupplier(sId).updateCatalogNum(pId, newCatalogNum);
+        dao.get(sId).updateCatalogNum(pId, newCatalogNum);
     }
     public void updateProductPrice(String sId, String pId, float price) {
-        checkSupplier(sId);
-        getSupplier(sId).updateProductPrice(pId, price);
+        dao.get(sId).updateProductPrice(pId, price);
     }
     
     // Quantity Agreement methods
     public void updateDiscount(String sId, String pId, int quantity, float discount){
-        checkSupplier(sId);
-        getSupplier(sId).updateDiscount(pId, quantity, discount);
+        dao.get(sId).updateDiscount(pId, quantity, discount);
         updateBestSeller(pId);
     }
     public Map<Integer, Float> getDiscounts(String sId, String pId){
-        checkSupplier(sId);
-        return getSupplier(sId).getDiscounts(pId);
+        return dao.get(sId).getDiscounts(pId);
     }
     public Map<String,String> getContacts(String sId){
-        checkSupplier(sId);
-        return getSupplier(sId).getContacts();
+        return dao.get(sId).getContacts();
     }
     public Map<String, Map<Integer, Float>> getDiscounts(String sId) {
-        checkSupplier(sId);
-        return getSupplier(sId).getDiscounts();
+        return dao.get(sId).getDiscounts();
     }
     public List<Supplier> searchProduct(String pId){
         List<Supplier> prodSupp = new LinkedList<>();
@@ -200,8 +187,7 @@ public class SupplierController {
     }
 
     public void changeDaysOfDelivery(String sId, int day, boolean state) {
-        checkSupplier(sId);
-        getSupplier(sId).changeDaysOfDelivery(day, state);
+        dao.get(sId).changeDaysOfDelivery(day, state);
         List<String> products = getSupplier(sId).getContract().getOrderProducts();
         for(String pId : products){
             updateBestSeller(pId);
@@ -237,7 +223,6 @@ public class SupplierController {
     }
 
     public List<Order> getOrders(String sId) {
-        checkSupplier(sId);
-        return getSupplier(sId).getOrders();
+        return dao.get(sId).getOrders();
     }
 }

@@ -1,6 +1,6 @@
 package SuppliersModule.DomainLayer;
 
-import DAL.DAO.CatalogProductDAO;
+import DAL.DAOS.SupplierObjects.CatalogProductDao;
 
 public class CatalogProduct {
 
@@ -8,7 +8,7 @@ public class CatalogProduct {
     private String catalogNum;
     private float price;
     private boolean inPeriodicOrder = false;
-    private CatalogProductDAO dao;
+    private CatalogProductDao dao;
     private String sId;
     // getters and setters
     public String getsId(){return sId;}
@@ -41,7 +41,8 @@ public class CatalogProduct {
 
     // constructor
     public CatalogProduct(String sId, String id, String catalogNum, float price){
-        dao = new CatalogProductDAO();
+        dao = new CatalogProductDao();
+        this.sId = sId;
         this.id = id;
         setCatalogNum(catalogNum);
         setPrice(price);
@@ -50,10 +51,11 @@ public class CatalogProduct {
     }
     // from db
     public CatalogProduct(String sId, String id, String catalogNum, float price, boolean isPeriodic){
-        dao = new CatalogProductDAO();
+        dao = new CatalogProductDao();
         this.id = id;
         setCatalogNum(catalogNum);
         setPrice(price);
+        inPeriodicOrder = isPeriodic;
     }
 
     // methods

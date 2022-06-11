@@ -1,5 +1,7 @@
 package StockModule.BusinessLogicLayer;
 
+import DAL.DAOS.StockObjects.ItemDao;
+
 import java.util.Date;
 
 public class Item {
@@ -9,15 +11,32 @@ public class Item {
     private boolean isDefect;
     private boolean isExpired;
     private int amount;
+    private ItemDao dao;
 
     public Item(String _location, String _productID, Date _expireDate, boolean _isDefect, int _amount)
     {
+        dao = new ItemDao();
         location = _location;
         productID = _productID;
         expireDate = _expireDate;
         isDefect = _isDefect;
         checkIfExpired();
         amount = _amount;
+
+        dao.insert(this);
+    }
+
+    //db
+    public Item(String _location, String _productID, Date _expireDate, boolean _isDefect, boolean isExpired, int _amount, boolean isFromDB)
+    {
+        dao = new ItemDao();
+        location = _location;
+        productID = _productID;
+        expireDate = _expireDate;
+        isDefect = _isDefect;
+        checkIfExpired();
+        amount = _amount;
+        this.isExpired = isExpired;
     }
 
     public String toString(){

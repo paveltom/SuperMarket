@@ -1,6 +1,7 @@
 package SuppliersModule.DomainLayer;
 
-import DAL.DAO.OrderDAO;
+
+import DAL.DAOS.SupplierObjects.OrderDao;
 
 import java.time.LocalDate;
 import java.util.LinkedList;
@@ -16,7 +17,7 @@ public class Order {
     private final LocalDate date;
     private final String contactPhone;
     private final List<OrderProduct> products = new LinkedList<>();
-    private OrderDAO dao;
+    private OrderDao dao;
 
     //  getters
     public String getId() {
@@ -42,7 +43,7 @@ public class Order {
     }
 
     public Order(String id, String supId, String supName, String supAddress, LocalDate date, String contactPhone) {
-        dao = new OrderDAO();
+        dao = new OrderDao();
         this.id = id;
         this.supId = supId;
         this.supName = supName;
@@ -52,15 +53,23 @@ public class Order {
 
         dao.insert(this);
     }
+
     //for db
     public Order(String id, String supId, String supName, String supAddress, LocalDate date, String contactPhone, boolean isFromDB) {
-        dao = new OrderDAO();
+        dao = new OrderDao();
         this.id = id;
         this.supId = supId;
         this.supName = supName;
         this.supAddress = supAddress;
         this.date = date;
         this.contactPhone = contactPhone;
+
+        List<OrderProduct> p = dao.loadAllOrderProducts(this);
+        if(p != null) {
+            for (OrderProduct op : p) {
+                products.add(op);
+            }
+        }
     }
 
     public void addProduct(String pId, float catalogPrice, int amount, float discount, float finalPrice){
@@ -71,8 +80,9 @@ public class Order {
 
     public void changeProduct(String pId, int amount, float discount, float finalPrice){
         Optional<OrderProduct> op =  products.stream().filter(OrderProduct -> OrderProduct.getId().equals(pId)).findFirst();
-        if(op.isPresent())
+        if(op.isPresent()) {
             op.get().update(amount, discount, finalPrice);
+        }
         else
             throw new IllegalArgumentException("product doesn't exist in the order");
     }
