@@ -1,5 +1,6 @@
 package DeliveryModule.BusinessLayer.Element;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,16 +15,26 @@ public class Month
     public final int NumOfDays;
     private final char NumOfDaysDelimiter = '@';
     private final char DaysDelimiter = '#';
+    private int NextShift, NextDay;
 
     /*
      * @INV: Shifts[i][j] = true iff shift j at day i is occupied.
      */
     private final boolean[][] Shifts;
 
+    private void Init()
+    {
+        LocalDateTime currDay = LocalDateTime.now();
+        int currTime = currDay.getHour();
+        NextShift = currTime <= 6 ? 0 : currTime <= 9 ? 1 : currTime <= 12 ? 2 : currTime <= 15 ? 3 : 4;
+        NextDay = currDay.getDayOfMonth();
+    }
+
     public Month(int numOfDays)
     {
         NumOfDays = numOfDays;
         Shifts = new boolean[NumOfDays+1][ShiftsPerDay];
+        Init();
     }
 
     /* Create Month instance via parsing encoded string persisted in the DB */
@@ -57,6 +68,7 @@ public class Month
         }
         Shifts = res;
         NumOfDays = numOfDays;
+        Init();
     }
 
     /*
@@ -64,17 +76,40 @@ public class Month
      * else, return available Shift
      * Take into account supplier working days.
      */
-    public Shift GetAvailableShift(int day, boolean[] supplierWorkingDays)
+    public Shift NextShift(int day, boolean[] supplierWorkingDays)
     {
-        if(day >= 1 && day <= NumOfDays) { // validate legal input
-            for (int i = day; i <= NumOfDays; i++) {
-                for (int j = 0; j < ShiftsPerDay; j++) {
+        if(day >= 1 && day <= NumOfDays) // validate legal input
+        {
+            for (int i = NextDay; i <= NumOfDays; i++)
+            {
+                for (int j = NextShift; j < ShiftsPerDay; j++)
+                {
                     if (!Shifts[i][j] && supplierWorkingDays[(i % 7)])
-                    {
-                        Shifts[i][j] = true;
                         return new Shift(i, j);
-                    }
                 }
+                NextShift = 0;
+            }
+        }
+        return null; // This month is fully occupied.
+    }
+
+    /*
+     * return null if all shifts of this month are occupied.
+     * else, return available Shift
+     * Doesn't take into account supplier working days.
+     */
+    public Shift NextShift(int day)
+    {
+        if(day >= 1 && day <= NumOfDays) // validate legal input
+        {
+            for (int i = NextDay; i <= NumOfDays; i++)
+            {
+                for (int j = NextShift; j < ShiftsPerDay; j++)
+                {
+                    if (!Shifts[i][j])
+                        return new Shift(i, j);
+                }
+                NextShift = 0;
             }
         }
         return null; // This month is fully occupied.
@@ -83,10 +118,14 @@ public class Month
     public void SetOccupied(Shift shift)
     {
         Shifts[shift.Day][shift.Shift] = true;
+        NextDay = shift.Day;
+        NextShift = shift.Shift;
     }
     public void SetAvailable(Shift shift)
     {
         Shifts[shift.Day][shift.Shift] = false;
+        NextDay = shift.Day;
+        NextShift = shift.Shift;
     }
 
 

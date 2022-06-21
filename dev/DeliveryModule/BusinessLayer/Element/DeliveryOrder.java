@@ -45,7 +45,7 @@ public class DeliveryOrder
         sb.append(String.format("Order: %d\nSupplier Zone: %s\nClient Zone: %s\nSubmissionDate: %s\n\nOrigin\n%s\nDestination\n%s\n", OrderId, Supplier.Zone, Client.Zone, SubmissionDate, Supplier, Client));
         sb.append("Requested Products:\n");
         for(Product p: RequestedProducts)
-            sb.append(String.format("\nProduct: %d\nRequested amount: %d\n", p.Id, p.Amount));
+            sb.append(String.format("%s\n", p));
         return sb.toString();
     }
 }

@@ -6,9 +6,9 @@ import java.util.*;
 public class DataBaseConnection {
     private String[] truckValues = {"VehicleLicenseNumber", "MaxLoadWeight", "NetWeight", "Model", "ShippingZone", "Diary", "AuthorizedLicense"};
     private String[] driverValues = {"Id", "Name", "Cellphone", "VehicleLicenseCategory", "ShippingZone", "Diary", "FutureShifts"};
-    private String[] deliveryValues = {"OrderId", "DeliveryId", "SupplierZone", "SupplierAddress", "SupplierName", "SupplierCellphone",
+    private String[] deliveryValues = {"OrderId", "SupplierZone", "SupplierAddress", "SupplierName", "SupplierCellphone",
             "ClientZone", "ClientAddress", "ClientName", "ClientCellphone", "DeliverdProducts", "DueDate",
-            "DriverId", "DriverName", "DriverCellphone", "TruckLicenseNumber"};
+            "DriverId", "TruckLicenseNumber", "Status"};
     private String[] shiftValues = {"Date", "Type", "Manager", "Workers"};
     private String[] workerValues = {"Id","Name","Job","SMQual","BankDetails","Pay","StartDate","SocialConditions","Availability"};
     // add other strings
@@ -73,7 +73,7 @@ public class DataBaseConnection {
             return res;
 
         } catch (Exception e){
-            System.err.println(e.getClass().getName() + ": " + e.getMessage() + ". Insert method. On table: " + tableNAME);
+//            System.err.println(e.getClass().getName() + ": " + e.getMessage() + ". Insert method. On table: " + tableNAME);
             return false;
         }
     }
@@ -102,7 +102,7 @@ public class DataBaseConnection {
             return res;
 
         } catch ( Exception e ) {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage() + ". Update method. On table: " + tableNAME);
+//            System.err.println(e.getClass().getName() + ": " + e.getMessage() + ". Update method. On table: " + tableNAME);
             return false;
         }
     }
@@ -131,7 +131,7 @@ public class DataBaseConnection {
             return res;
 
         } catch ( Exception e ) {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage() + ". Delete method. On table: " + tableNAME);
+//            System.err.println(e.getClass().getName() + ": " + e.getMessage() + ". Delete method. On table: " + tableNAME);
             return false;
         }
 
@@ -176,7 +176,7 @@ public class DataBaseConnection {
             conn.close();
             return output;
         } catch ( Exception e ) {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage() + ". Select method. On table: " + tableNAME);
+//            System.err.println(e.getClass().getName() + ": " + e.getMessage() + ". Select method. On table: " + tableNAME);
             return null;
         }
     }
@@ -198,17 +198,17 @@ public class DataBaseConnection {
                 " FutureShifts TEXT NOT NULL)";
 
         String trucksTableCreation = "CREATE TABLE Trucks " +
-                "(VehicleLicenseNumber TEXT PRIMARY KEY NOT NULL," +
+                "(VehicleLicenseNumber TEXT NOT NULL," +
                 " MaxLoadWeight TEXT NOT NULL," +
                 " NetWeight TEXT NOT NULL," +
                 " Model TEXT NOT NULL," +
                 " ShippingZone TEXT NOT NULL," +
                 " Diary TEXT NOT NULL," +
-                " AuthorizedLicense TEXT NOT NULL)";
+                " AuthorizedLicense TEXT NOT NULL," +
+                " PRIMARY KEY(VehicleLicenseNumber))";
 
         String deliveriesTableCreation = "CREATE TABLE Deliveries (" +
                 "OrderId TEXT," +
-                " DeliveryId TEXT," +
                 " SupplierZone TEXT," +
                 " SupplierAddress TEXT," +
                 " SupplierName TEXT," +
@@ -220,10 +220,9 @@ public class DataBaseConnection {
                 " DeliverdProducts TEXT," +
                 " DueDate TEXT," +
                 " DriverID TEXT," +
-                " DriverName TEXT," +
-                " DriverCellphone TEXT," +
-                " TruckLicenseNumber REAL," +
-                " PRIMARY KEY(DeliveryId)" + ")";
+                " TruckLicenseNumber INTEGER," +
+                " Status INTEGER," +
+                " PRIMARY KEY(OrderId)" + ")";
 
         String shiftsTableCreation = "CREATE TABLE Shifts (" +
                 "Date TEXT NOT NULL," +

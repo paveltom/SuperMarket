@@ -1,8 +1,8 @@
 package DeliveryModule.Facade;
 
+import DeliveryModule.BusinessLayer.Controller.DeliveryController;
 import DeliveryModule.BusinessLayer.Element.*;
 import DeliveryModule.BusinessLayer.Type.*;
-import DeliveryModule.BusinessLayer.Controller.DeliveryController;
 import DeliveryModule.Facade.FacadeObjects.*;
 
 import java.util.ArrayList;
@@ -40,7 +40,7 @@ public class DeliveryService {
             Site client = new Site(ShippingZone.valueOf(destination.getZone()), destination.getAddress(), destination.getContactName(), destination.getCellphone());
             DeliveryOrder delOrder = new DeliveryOrder(supplier, client, Integer.parseUnsignedInt(orderId), products, delSubmissionDate);
             Recipe delRec = delController.Deliver(delOrder);
-            return (delRec instanceof DeliveryRecipe) ? new ResponseT<>(delRec.toString(), true) : new ResponseT<>(delRec.toString(), false);
+            return (delRec.Status==RetCode.SuccessfulDelivery) ? new ResponseT<>(delRec.toString(), true) : new ResponseT<>(delRec.toString(), false);
         }
         catch(Exception e) {
            return new ResponseT<>(e.getMessage());
@@ -68,7 +68,7 @@ public class DeliveryService {
             Site client = new Site(ShippingZone.valueOf(destination.getZone()), destination.getAddress(), destination.getContactName(), destination.getCellphone());
             DeliveryOrder delOrder = new DeliveryOrder(supplier, client, Integer.parseUnsignedInt(orderId), products, delSubmissionDate, supplierWorkingDays);
             Recipe delRec = delController.Deliver(delOrder);
-            return (delRec instanceof DeliveryRecipe) ? new ResponseT<>(delRec, true) : new ResponseT<>(delRec, false);
+            return (delRec.Status==RetCode.SuccessfulDelivery) ? new ResponseT<>(delRec, true) : new ResponseT<>(delRec, false);
         }
         catch(Exception e) {
             return new ResponseT<>(e.getMessage());

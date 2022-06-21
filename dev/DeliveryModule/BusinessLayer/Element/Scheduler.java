@@ -1,5 +1,6 @@
 package DeliveryModule.BusinessLayer.Element;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 
 public class Scheduler
@@ -41,17 +42,39 @@ public class Scheduler
      * else, return available delivery day.
      * Take into account supplier working days.
      */
-    public DeliveryDate GetAvailableDeliveryDate(int month, int day, boolean[] supplierWorkingDays)
+    public Date NextShift(int month, int day, boolean[] supplierWorkingDays)
     {
         int i = month, j = day;
         while(i <= NumOfMonths)
         {
-            /* Month i has available slot on day >= j */
-            Shift shift = Dairy[i].GetAvailableShift(j, supplierWorkingDays);
+            Shift shift = Dairy[i].NextShift(j, supplierWorkingDays);
             if(shift != null)
+                /* Month i has available slot on day >= j */
+                return new Date(shift.Day, i, Year, shift.Shift);
+            /* Month i has no available slot
+             * Proceed to successive month from day 1 */
+            else
             {
-                return new DeliveryDate(i, Year, shift);
+                j = 1;
+                i++;
             }
+        }
+        return null;
+    }
+    /*
+     * return null if all shift throughout the year are occupied.
+     * else, return available delivery day.
+     * Take into account supplier working days.
+     */
+    public Date NextShift(int month, int day)
+    {
+        int i = month, j = day;
+        while(i <= NumOfMonths)
+        {
+            Shift shift = Dairy[i].NextShift(j);
+            if(shift != null)
+                /* Month i has available slot on day >= j */
+                return new Date(shift.Day, i, Year, shift.Shift);
             /* Month i has no available slot
              * Proceed to successive month from day 1 */
             else
@@ -63,14 +86,14 @@ public class Scheduler
         return null;
     }
 
-    public void SetOccupied(DeliveryDate occupiedDate)
+    public void SetOccupied(Date occupiedDate)
     {
-        Dairy[occupiedDate.Date.Month].SetOccupied(new Shift(occupiedDate.Date.Day, occupiedDate.Shift));
+        Dairy[occupiedDate.Month].SetOccupied(new Shift(occupiedDate.Day, occupiedDate.Shift));
     }
 
-    public void SetAvailable(DeliveryDate occupiedDate)
+    public void SetAvailable(Date occupiedDate)
     {
-        Dairy[occupiedDate.Date.Month].SetAvailable(new Shift(occupiedDate.Date.Day, occupiedDate.Shift));
+        Dairy[occupiedDate.Month].SetAvailable(new Shift(occupiedDate.Day, occupiedDate.Shift));
     }
 
     public void SetConstraint(Constraint constraint)
@@ -86,7 +109,7 @@ public class Scheduler
         {
             boolean isOccupied = Dairy[i].IsOccupied(j);
             if(isOccupied) /* Month i has pre-determined shift */
-                return false;
+                return true;
             /* Proceed to check successive month from day 1 */
             j = 1;
             i++;

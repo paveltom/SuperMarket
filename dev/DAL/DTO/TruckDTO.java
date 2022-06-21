@@ -1,7 +1,7 @@
 package DAL.DTO;
 
 
-public class TruckDTO implements DTO
+public class        TruckDTO implements DTO
 {
 
     public double MaxLoadWeight,NetWeight;
