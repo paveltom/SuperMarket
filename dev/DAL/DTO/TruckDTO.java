@@ -1,7 +1,7 @@
 package DAL.DTO;
 
 
-public class TruckDTO implements DTO
+public class        TruckDTO implements DTO
 {
 
     public double MaxLoadWeight,NetWeight;
@@ -24,11 +24,11 @@ public class TruckDTO implements DTO
 
     @Override
     public String getKey() {
-        return null;
+        return String.valueOf(VehicleLicenseNumber);
     }
 
     @Override
     public String toString() {
-        return null;
+        return "TruckDTO";
     }
 }

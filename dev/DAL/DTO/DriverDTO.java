@@ -28,7 +28,7 @@ public class DriverDTO implements DTO
 
     @Override
     public String toString() {
-        return null;
+        return "DriverDTO";
     }
 
 }

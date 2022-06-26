@@ -2,7 +2,6 @@ package DeliveryModule.Facade.FacadeObjects;
 
 
 import DeliveryModule.BusinessLayer.Element.Date;
-import DeliveryModule.BusinessLayer.Element.DeliveryDate;
 
 public class FacadeDate {
 
@@ -13,17 +12,11 @@ public class FacadeDate {
 
     public FacadeDate(){}
 
+
     public FacadeDate(Date date){
         this.day = date.Day;
         this.month = date.Month;
         this.year = date.Year;
-        this.shift = -1;
-    }
-
-    public FacadeDate(DeliveryDate date){
-        this.day = date.Date.Day;
-        this.month = date.Date.Month;
-        this.year = date.Date.Year;
         this.shift = date.Shift;
     }
 

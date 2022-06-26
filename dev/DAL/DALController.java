@@ -6,7 +6,6 @@ import java.util.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 public class DALController {
 
@@ -52,11 +51,11 @@ public class DALController {
         return out;
     }
 
-    public List<DeliveryRecipeDTO> getAllDeliveries(){
+    public List<RecipeDTO> getAllDeliveries(){
         List<DTO> res = deliveriesDAO.getAllObjsFromDB();
-        List<DeliveryRecipeDTO> out = new ArrayList<>();
+        List<RecipeDTO> out = new ArrayList<>();
         for(DTO temp : res){
-            out.add((DeliveryRecipeDTO) temp);
+            out.add((RecipeDTO) temp);
         }
         return out;
     }
@@ -71,9 +70,9 @@ public class DALController {
         return (TruckDTO) trucksDAO.getObj(keys);
     }
 
-    public DeliveryRecipeDTO getDelivery(String key){
+    public RecipeDTO getDelivery(String key){
         String[] keys = {key};
-        return (DeliveryRecipeDTO) deliveriesDAO.getObj(keys);
+        return (RecipeDTO) deliveriesDAO.getObj(keys);
     }
 
     public boolean updateDriver(DriverDTO driver){
@@ -84,7 +83,7 @@ public class DALController {
         return trucksDAO.updateObj(truck);
     }
 
-    public boolean updateDelivery(DeliveryRecipeDTO deliveryRecipe){
+    public boolean updateDelivery(RecipeDTO deliveryRecipe){
         return deliveriesDAO.updateObj(deliveryRecipe);
     }
 
@@ -96,7 +95,7 @@ public class DALController {
         return trucksDAO.updateTruckDiary(String.valueOf(key), shifts);
     }
 
-     public boolean addDelivery(DeliveryRecipeDTO recipeToAdd){
+     public boolean addDelivery(RecipeDTO recipeToAdd){
         return deliveriesDAO.storeObjToDB(recipeToAdd);
      }
 
@@ -121,6 +120,11 @@ public class DALController {
     public boolean removeDriver(String key){
         String[] keys = {String.valueOf(key)};
         return driversDAO.deleteObj(keys);
+    }
+
+    public boolean removeDelivery(int deliveryId)
+    {
+        return deliveriesDAO.deleteObj(new String[]{String.valueOf(deliveryId)});
     }
 
     public boolean addDriverFutureShifts(String key, String toAdd){

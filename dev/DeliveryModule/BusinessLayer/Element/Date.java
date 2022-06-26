@@ -1,12 +1,20 @@
 package DeliveryModule.BusinessLayer.Element;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Period;
+
 public class Date implements Comparable<Date>
 {
     public final int Day;
     public final int Month;
     public final int Year;
+    public final int Shift;
     public String Name;
+    private final LocalDate localDate;
 
+    private final int NSHIFTS = 4;
+    private final String[] Shifts = {"06:00-09:00", "09:00-12:00", "12:00-15:00", "15:00-18:00"};
     private final String[] KEY_VALUE_METHOD_DAY_REMINDER = {"Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
     private final int[] KEY_VALUE_METHOD_MONTH_ORDIANL = {0, 1,	4, 4, 0,	2,	5,	0,	3,	6,	1,	4, 6};
     private final String[] MONTHS_NAME = {"PIVOT", "January", "February", "March", "April", "May", "June", "July",
@@ -18,18 +26,36 @@ public class Date implements Comparable<Date>
         Day = day;
         Month = month;
         Year = year;
+        localDate = LocalDate.of(Year, Month, Day);
+        Shift = 0;
         KeyValueMethod();
     }
 
+    public Date(int day, int month, int year, int shift)
+    {
+        Day = day;
+        Month = month;
+        Year = year;
+        localDate = LocalDate.of(Year, Month, Day);
+        Shift = shift;
+        KeyValueMethod();
+    }
+
+
     public Date(String encoded)
     {
-        final int NAME_INDEX = 0, MONTH_INDEX = 1, DAY_INDEX = 2, YEAR_INDEX = 3;
+        final int NAME_INDEX = 0, MONTH_INDEX = 1, DAY_INDEX = 2, YEAR_INDEX = 3, SHIFT_INDEX = 4;
         String[] tokens = encoded.split(Delimiter);
         Name = tokens[NAME_INDEX];
         Month = Integer.parseInt(tokens[MONTH_INDEX]);
         Day = Integer.parseInt(tokens[DAY_INDEX]);
         Year = Integer.parseInt(tokens[YEAR_INDEX]);
+//        Shift = Integer.parseInt(tokens[SHIFT_INDEX]);
+        Shift = 1;
+        localDate = LocalDate.of(Year, Month, Day);
+        KeyValueMethod();
     }
+
 
     /*
     * Calculating day of week given date.
@@ -50,14 +76,20 @@ public class Date implements Comparable<Date>
 
     public String Encode()
     {
-        return String.format("%s %d %d %d", Name, Month, Day, Year);
+        return String.format("%s %d %d %d %d", Name, Month, Day, Year, Shift);
     }
 
 
     @Override
     public String toString()
     {
-        return String.format("%s %s %s %d", Name, MONTHS_NAME[Month], Day, Year);
+        return String.format("%s %s %d %d %s", Name, MONTHS_NAME[Month], Day, Year, Shifts[Shift]);
+    }
+
+    public int DifferenceBetweenTwoDates(Date other)
+    {
+        Period diff = Period.between(localDate, other.localDate);
+        return diff.getYears() * 365 + diff.getMonths() * 30 + diff.getDays();
     }
 
     @Override
@@ -70,7 +102,8 @@ public class Date implements Comparable<Date>
         else
         {
             Date other = (Date) obj;
-            return Year == other.Year && Month == other.Month && Day == other.Day;
+            int diff = localDate.compareTo(other.localDate);
+            return diff == 0 && Shift == other.Shift;
         }
     }
 
@@ -79,14 +112,7 @@ public class Date implements Comparable<Date>
     {
         if(o == null)
             return -1;
-        /* If one of the condition is satisfied, this proceed other */
-        if(Year < o.Year || Year == o.Year && Month < o.Month || Year == o.Year && Month == o.Month && Day < o.Day)
-            return -1;
-        /* If one of the condition is satisfied, this is later than other */
-        else if(Year > o.Year || Month > o.Month || Day > o.Day)
-            return 1;
-        /* Both are equals */
-        else
-            return 0;
+        int diff = localDate.compareTo(o.localDate);
+        return diff == 0 ? Shift-o.Shift : diff;
     }
 }

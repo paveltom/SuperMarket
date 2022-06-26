@@ -5,7 +5,9 @@ import DAL.DTO.TruckDTO;
 import DeliveryModule.BusinessLayer.Type.ShippingZone;
 import DeliveryModule.BusinessLayer.Type.VehicleLicenseCategory;
 
-public class Truck
+import java.time.LocalDate;
+
+public class Truck implements Comparable<Truck>
 {
     public final double MaxLoadWeight,NetWeight;
     public final long VehicleLicenseNumber;
@@ -13,6 +15,17 @@ public class Truck
     public final String Model;
     public final ShippingZone Zone;
     private Scheduler Diary;
+    public Date NextAvailableShift;
+
+    public Truck(long vehicleLicenseNumber)
+    {
+        VehicleLicenseNumber = vehicleLicenseNumber;
+        MaxLoadWeight = -1;
+        NetWeight = -1;
+        AuthorizedLicense = null;
+        Model = null;
+        Zone = null;
+    }
 
     public Truck(double mlw, double nw, long vln, String m, ShippingZone z, VehicleLicenseCategory authorizedLicense)
     {
@@ -23,6 +36,8 @@ public class Truck
         Zone = z;
         AuthorizedLicense = authorizedLicense;
         Diary = new Scheduler();
+        LocalDate currDay = LocalDate.now();
+        NextAvailableShift = Diary.NextShift(currDay.getMonthValue(), currDay.getDayOfMonth());
         Persist();
     }
 
@@ -35,9 +50,11 @@ public class Truck
         Zone = ShippingZone.CreateShippingZoneByName(src.Zone);
         AuthorizedLicense = VehicleLicenseCategory.CreateShippingZoneByName(src.AuthorizedLicense);
         Diary = new Scheduler(src.Diary);
+        LocalDate currDay = LocalDate.now();
+        NextAvailableShift = Diary.NextShift(currDay.getMonthValue(), currDay.getDayOfMonth());
     }
 
-    private void Persist()
+    public void Persist()
     {
         TruckDTO persist = new TruckDTO(MaxLoadWeight, NetWeight, VehicleLicenseNumber, Model, ShippingZone.GetShippingZoneName(Zone),
                 Diary.Encode(), VehicleLicenseCategory.GetVehicleLicenseCategoryName(AuthorizedLicense));
@@ -52,19 +69,27 @@ public class Truck
     @Override
     public String toString()
     {
-        return String.format("Truck\nModel: %s\nVehicleLicenseNumber: %d\nZone: %s\nMaxLoadWeight: %f\nNetWeight: %f\n", Model, VehicleLicenseNumber, Zone, MaxLoadWeight, NetWeight);
+        return String.format("Truck\nModel: %s\nVehicleLicenseNumber: %d\nZone: %s\nMaxLoadWeight: %f\nNetWeight: %f\nAuthorizedLicense: %s\n",
+                Model, VehicleLicenseNumber, Zone, MaxLoadWeight, NetWeight, AuthorizedLicense);
     }
 
-    public DeliveryDate GetAvailableDeliveryDate(int month, int day)
-    {
-        return Diary.GetAvailableDeliveryDate(month, day);
-    }
-
-    public void SetOccupied(DeliveryDate occupiedDate)
+    public void SetOccupied(Date occupiedDate)
     {
         Diary.SetOccupied(occupiedDate);
+        NextAvailableShift = Diary.NextShift(NextAvailableShift.Month, NextAvailableShift.Day);
         PersistDiary();
     }
+
+    public void SetAvailable(Date occupiedDate)
+    {
+        if(occupiedDate.compareTo(NextAvailableShift) < 0)
+        {
+            Diary.SetAvailable(NextAvailableShift);
+            NextAvailableShift = occupiedDate;
+            PersistDiary();
+        }
+    }
+
 
     @Override
     public boolean equals(Object obj)
@@ -80,4 +105,24 @@ public class Truck
         }
     }
 
+    @Override
+    public int compareTo(Truck o) {
+        return o == null ? 1 : NextAvailableShift.compareTo(o.NextAvailableShift);
+    }
+
+    public Date Next()
+    {
+        Date res = NextAvailableShift;
+        SetOccupied(res);
+        NextAvailableShift = Diary.NextShift(res.Month, res.Day);
+        return res;
+    }
+
+    public Date Next(boolean[] supplierWorkingDays)
+    {
+        Date res = NextAvailableShift;
+        SetOccupied(res);
+        NextAvailableShift = Diary.NextShift(res.Month, res.Day, supplierWorkingDays);
+        return res;
+    }
 }

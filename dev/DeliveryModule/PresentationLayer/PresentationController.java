@@ -152,12 +152,8 @@ public class PresentationController {
         FacadeDate facDate = new FacadeDate(currTime.getDayOfMonth(), currTime.getMonthValue(), currTime.getYear());
 
         String id = Integer.toUnsignedString((int)System.currentTimeMillis()); //unique order Id
-        ResponseT<FacadeRecipe> res = service.deliver(origin, destination, id, productList, facDate);
-        if(res.getErrorOccurred())
-            operateOutput("Couldn't create a delivery for this order.\n" + res.getErrorMessage());
-        else
-            operateOutput("Delivery for the order " + id + " was successfully created.");
-        operateOutput(res.toString());
+        ResponseT<String> res = service.deliver(origin, destination, id, productList, facDate);
+        operateOutput(res.getValue());
         operateOutput("");
         return 0;
     }

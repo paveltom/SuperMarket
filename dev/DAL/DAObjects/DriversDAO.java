@@ -124,7 +124,8 @@ public class DriversDAO implements IDAO{
     @Override
     public void loadAllObjsFromDB() {
         List<String[]> res = dbconn.select("Drivers", null, null);
-        for(String[] driver : res){
+        for(String[] driver : res)
+        {
             DriverDTO toCache = new DriverDTO(driver[0], driver[3], driver[4], driver[1], driver[2], driver[5], driver[6]);
             driversIM.cacheObject(toCache);
         }

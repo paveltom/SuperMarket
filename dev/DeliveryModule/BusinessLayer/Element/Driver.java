@@ -1,15 +1,19 @@
 package DeliveryModule.BusinessLayer.Element;
+
 import DAL.DALController;
 import DAL.DTO.DriverDTO;
 import DeliveryModule.BusinessLayer.Type.ShippingZone;
 import DeliveryModule.BusinessLayer.Type.VehicleLicenseCategory;
 
-public class Driver
+import java.time.LocalDate;
+
+public class Driver implements Comparable<Driver>
 {
     public final String Id, Name, Cellphone;
     public final VehicleLicenseCategory License;
     public final ShippingZone Zone;
-    private Scheduler Diary;
+    private final Scheduler Diary;
+    public Date NextAvailableShift;
 
     public Driver(String id,String name, String cellphone, VehicleLicenseCategory license, ShippingZone zone)
     {
@@ -19,7 +23,8 @@ public class Driver
         Name = name;
         Cellphone = cellphone;
         Diary = new Scheduler();
-        Persist();
+        LocalDate currDay = LocalDate.now();
+        NextAvailableShift = Diary.NextShift(currDay.getMonthValue(), currDay.getDayOfMonth());
     }
 
     public Driver(String id, String name, String cellphone, VehicleLicenseCategory license, ShippingZone zone, Constraint constraint)
@@ -31,7 +36,8 @@ public class Driver
         Cellphone = cellphone;
         Diary = new Scheduler();
         SetConstraint(constraint);
-        Persist();
+        LocalDate currDay = LocalDate.now();
+        NextAvailableShift = Diary.NextShift(currDay.getMonthValue(), currDay.getDayOfMonth());
     }
 
     public Driver(DriverDTO src)
@@ -42,9 +48,11 @@ public class Driver
         Name = src.Name;
         Cellphone = src.Cellphone;
         Diary = new Scheduler(src.Diary);
+        LocalDate currDay = LocalDate.now();
+        NextAvailableShift = Diary.NextShift(currDay.getMonthValue(), currDay.getDayOfMonth());
     }
 
-    private void Persist()
+    public void Persist()
     {
         DriverDTO persist = new DriverDTO(Id, VehicleLicenseCategory.GetVehicleLicenseCategoryName(License),
                 ShippingZone.GetShippingZoneName(Zone),Name, Cellphone, Diary.Encode(),"");
@@ -59,24 +67,33 @@ public class Driver
     @Override
     public String toString()
     {
-        return String.format("Driver: %s\nID: %s\n Cellphone: %s\nLicense: %s\nZone: %s\n",
+        return String.format("Driver: %s\nID: %s\nCellphone: %s\nLicense: %s\nZone: %s\n",
                 Name, Id,Cellphone, VehicleLicenseCategory.GetVehicleLicenseCategoryName(License), Zone);
     }
 
-    public DeliveryDate GetAvailableDeliveryDate(int month, int day)
-    {
-        return Diary.GetAvailableDeliveryDate(month, day);
-    }
 
-    public void SetOccupied(DeliveryDate occupiedDate)
+    public void SetOccupied(Date occupiedDate)
     {
         Diary.SetOccupied(occupiedDate);
+        NextAvailableShift = Diary.NextShift(NextAvailableShift.Month, NextAvailableShift.Day);
         PersistDiary();
+    }
+
+    public void SetAvailable(Date occupiedDate)
+    {
+        if(occupiedDate.compareTo(NextAvailableShift) < 0)
+        {
+            Diary.SetAvailable(NextAvailableShift);
+            NextAvailableShift = occupiedDate;
+            PersistDiary();
+        }
     }
 
     public void SetConstraint(Constraint constraint)
     {
         Diary.SetConstraint(constraint);
+        LocalDate currDay = LocalDate.now();
+        NextAvailableShift = Diary.NextShift(currDay.getMonthValue(), currDay.getDayOfMonth());
         PersistDiary();
     }
 
@@ -100,5 +117,25 @@ public class Driver
         }
     }
 
+    @Override
+    public int compareTo(Driver o)
+    {
+        return o == null ? 1 : NextAvailableShift.compareTo(o.NextAvailableShift);
+    }
 
+    public Date Next()
+    {
+        Date res = NextAvailableShift;
+        SetOccupied(res);
+        NextAvailableShift = Diary.NextShift(res.Month, res.Day);
+        return res;
+    }
+
+    public Date Next(boolean[] supplierWorkingDays)
+    {
+        Date res = NextAvailableShift;
+        SetOccupied(res);
+        NextAvailableShift = Diary.NextShift(res.Month, res.Day, supplierWorkingDays);
+        return res;
+    }
 }

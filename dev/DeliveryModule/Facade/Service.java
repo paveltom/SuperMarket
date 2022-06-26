@@ -1,5 +1,6 @@
 package DeliveryModule.Facade;
 
+import DeliveryModule.BusinessLayer.Element.Recipe;
 import DeliveryModule.Facade.FacadeObjects.*;
 import java.util.List;
 
@@ -25,19 +26,12 @@ public class Service implements IService{
     }
 
 
+    public ResponseT<String> deliver(FacadeSite origin, FacadeSite destination, String orderId, List<FacadeProduct> facProducts, FacadeDate facSubDate){
+        return deliveryService.deliver(origin, destination, orderId, facProducts, facSubDate);
+    }
 
-    public ResponseT<FacadeRecipe> deliver(FacadeSite origin, FacadeSite destination, String orderId, List<FacadeProduct> facProducts, FacadeDate facSubDate){
-        ResponseT<FacadeRecipe> res = deliveryService.deliver(origin, destination, orderId, facProducts, facSubDate);
-        if(res.getErrorOccurred()){
-            return res;
-        }
-        String driverID = res.getValue().getDeliveryPerson().getId();
-        FacadeDate date = res.getValue().getDueDate();
-        int shiftType = res.getValue().getDueDate().getShift();
-        if(shiftType > 1) shiftType = 1;
-        else shiftType = 0;
-//        pmService.addDriverFuture(driverID, date, shiftType); // sends new occupied driver's shift to Personel Module, shiftType - 0 or 1
-        return res;
+    public ResponseT<Recipe> deliver(FacadeSite origin, FacadeSite destination, String orderId, List<FacadeProduct> facProducts, FacadeDate facSubDate, boolean[] supplierWorkingDays){
+        return deliveryService.deliver(origin, destination, orderId, facProducts, facSubDate, supplierWorkingDays);
     }
 
     public ResponseT<String> getDeliveryHistory(){
