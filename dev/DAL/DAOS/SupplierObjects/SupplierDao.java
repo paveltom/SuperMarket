@@ -50,7 +50,7 @@ public class SupplierDao extends DAO {
             List<Supplier> output = new ArrayList<>();
 
             for (String[] s : st) {
-                Supplier sup = new Supplier(s[0], s[1], s[2], s[3], Boolean.valueOf(s[4]), Boolean.valueOf(s[5]));
+                Supplier sup = new Supplier(s[0], s[2], s[3], s[1], Boolean.valueOf(s[4]), Boolean.valueOf(s[5]));
                 suppliersIdentityMap.cache(sup);
                 output.add(0, sup);
             }
