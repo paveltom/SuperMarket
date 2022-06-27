@@ -54,6 +54,7 @@ public class CatalogProduct {
         dao = new CatalogProductDao();
         this.sId = sId;
         this.id = id;
+        this.sId = sId;
         setCatalogNum(catalogNum);
         setPrice(price);
         inPeriodicOrder = isPeriodic;
