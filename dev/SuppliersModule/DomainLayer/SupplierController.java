@@ -15,14 +15,15 @@ public class SupplierController {
     public SupplierController(){
         suppliers = new LinkedList<>();
         dao = new SupplierDao();
-        dao.getAll();
+        oc.registerSuppliers(this);
     }
 
-    /*public SupplierController(boolean loadData){
+    public SupplierController(boolean loadData){
         suppliers = new LinkedList<>();
         dao = new SupplierDao();
         dao.getAll();
-    }*/
+        oc.registerSuppliers(this);
+    }
 
     // getters
     public List<Supplier> getSuppliers() {
@@ -70,7 +71,7 @@ public class SupplierController {
 
     //  order methods
     public void endDay(){
-        for (Supplier s: suppliers ){
+        for (Supplier s: getSuppliers() ){
             s.endDay();}
     }
     public Map<Supplier, Integer> getSuppliersDays(String pId){
