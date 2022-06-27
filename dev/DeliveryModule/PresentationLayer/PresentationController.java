@@ -140,7 +140,8 @@ public class PresentationController {
             operateOutput("");
             productId = Integer.parseInt(operateInput("Product ID: "));
             if(productId == 0) break;
-            while (productId != 123) {
+            while (productId != 123)
+            {
                 operateOutput("No such product...");
                 productId = Integer.parseInt(operateInput("Product ID (only Milk - 123): "));
             }

@@ -5,22 +5,22 @@ import java.util.Arrays;
 
 public class Scheduler
 {
-    private final int NumOfMonths = 12;
-    private final int Year = 2022;
-    private final String Delimiter = "~";
+    private static final int NumOfMonths = 12;
+    private static final int Year = 2022;
+    private static final String Delimiter = "~";
 
     private Month[] Dairy;
 
     public Scheduler()
     {
         Dairy = new Month[NumOfMonths + 1];
-        final int January = 1, February = 2;
-        Dairy[January] = new Month(31);
-        Dairy[February] = new Month(28);
+        final int January = 1, February = 2, January_Ndays = 31, February_Ndays = 28;
+        Dairy[January] = new Month(January_Ndays, January);
+        Dairy[February] = new Month(February_Ndays, February);
         int numOfdays = 31;
         for(int month = 3; month <= NumOfMonths; month++)
         {
-            Dairy[month] = new Month(numOfdays);
+            Dairy[month] = new Month(numOfdays, month);
             /* Odd month has 31 days, whereas even month has 30 days excludes February which initialize before */
             numOfdays = ((month & 1) == 0) ? 31 : 30;
         }

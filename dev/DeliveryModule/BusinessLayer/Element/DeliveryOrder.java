@@ -9,13 +9,13 @@ import java.util.List;
 public class DeliveryOrder
 {
     public final Site Supplier, Client;
-    public final int OrderId;
+    public final String OrderId;
     public final List<Product> RequestedProducts; /* Enumerate amount requested for each product. */
     public final Date SubmissionDate;
     public final boolean[] SupplierWorkingDays;
 
 
-    public DeliveryOrder(Site supplier, Site client, int orderId, List<Product> requestedProducts, Date submissionDate)
+    public DeliveryOrder(Site supplier, Site client, String orderId, List<Product> requestedProducts, Date submissionDate)
     {
         Supplier = supplier;
         Client = client;
@@ -26,7 +26,7 @@ public class DeliveryOrder
         Arrays.fill(SupplierWorkingDays, true);
     }
 
-    public DeliveryOrder(Site supplier, Site client, int orderId, List<Product> requestedProducts,
+    public DeliveryOrder(Site supplier, Site client, String orderId, List<Product> requestedProducts,
                          Date submissionDate, boolean[] supplierWorkingDays)
     {
         Supplier = supplier;
@@ -42,7 +42,7 @@ public class DeliveryOrder
     {
         StringBuilder sb = new StringBuilder();
         sb.append("---------- Delivery Order ----------\n");
-        sb.append(String.format("Order: %d\nSupplier Zone: %s\nClient Zone: %s\nSubmissionDate: %s\n\nOrigin\n%s\nDestination\n%s\n", OrderId, Supplier.Zone, Client.Zone, SubmissionDate, Supplier, Client));
+        sb.append(String.format("Order: %s\nSupplier Zone: %s\nClient Zone: %s\nSubmissionDate: %s\n\nOrigin\n%s\nDestination\n%s\n", OrderId, Supplier.Zone, Client.Zone, SubmissionDate, Supplier, Client));
         sb.append("Requested Products:\n");
         for(Product p: RequestedProducts)
             sb.append(String.format("%s\n", p));

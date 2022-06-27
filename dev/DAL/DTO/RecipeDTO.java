@@ -53,10 +53,10 @@ public class RecipeDTO implements DTO
         Status = status;
     }
 
-    public RecipeDTO(int status, int orderId)
+    public RecipeDTO(int status, String orderId)
     {
         Status = String.valueOf(status);
-        OrderId = String.valueOf(orderId);
+        OrderId = orderId;
         SupplierZone = null;
         SupplierAddress = null;
         SupplierName = null;
