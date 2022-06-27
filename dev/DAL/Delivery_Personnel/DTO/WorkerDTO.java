@@ -1,7 +1,4 @@
-package DAL.DTO;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
+package DAL.Delivery_Personnel.DTO;
 
 public class WorkerDTO implements DTO {
     public String wId;

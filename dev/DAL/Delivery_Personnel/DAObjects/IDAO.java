@@ -1,6 +1,6 @@
-package DAL.DAObjects;
+package DAL.Delivery_Personnel.DAObjects;
 
-import DAL.DTO.*;
+import DAL.Delivery_Personnel.DTO.*;
 import java.util.List;
 
 public interface IDAO {

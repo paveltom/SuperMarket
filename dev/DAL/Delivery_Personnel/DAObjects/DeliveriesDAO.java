@@ -1,9 +1,9 @@
-package DAL.DAObjects;
+package DAL.Delivery_Personnel.DAObjects;
 
-import DAL.DTO.DTO;
-import DAL.DTO.RecipeDTO;
-import DAL.DataBaseConnection;
-import DAL.IdentityMap;
+import DAL.Delivery_Personnel.DTO.DTO;
+import DAL.Delivery_Personnel.DTO.RecipeDTO;
+import DAL.Delivery_Personnel.DataBaseConnection;
+import DAL.Delivery_Personnel.IdentityMap;
 
 import java.util.List;
 

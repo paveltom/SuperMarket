@@ -1,7 +1,7 @@
 package PersonelModule.BusinessLayer.LogicLayer;
 
-import DAL.DALController;
-import DAL.DTO.WorkerDTO;
+import DAL.Delivery_Personnel.DALController;
+import DAL.Delivery_Personnel.DTO.WorkerDTO;
 
 import java.util.HashMap;
 import java.util.LinkedList;

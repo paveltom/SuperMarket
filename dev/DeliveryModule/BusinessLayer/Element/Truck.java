@@ -1,7 +1,7 @@
 package DeliveryModule.BusinessLayer.Element;
 
-import DAL.DALController;
-import DAL.DTO.TruckDTO;
+import DAL.Delivery_Personnel.DALController;
+import DAL.Delivery_Personnel.DTO.TruckDTO;
 import DeliveryModule.BusinessLayer.Type.ShippingZone;
 import DeliveryModule.BusinessLayer.Type.VehicleLicenseCategory;
 

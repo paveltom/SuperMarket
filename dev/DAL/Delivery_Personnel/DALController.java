@@ -1,7 +1,7 @@
-package DAL;
+package DAL.Delivery_Personnel;
 
-import DAL.DAObjects.*;
-import DAL.DTO.*;
+import DAL.Delivery_Personnel.DAObjects.*;
+import DAL.Delivery_Personnel.DTO.*;
 import java.util.*;
 import java.util.ArrayList;
 import java.util.LinkedList;

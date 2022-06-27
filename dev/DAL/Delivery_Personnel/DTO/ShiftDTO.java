@@ -1,4 +1,4 @@
-package DAL.DTO;
+package DAL.Delivery_Personnel.DTO;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

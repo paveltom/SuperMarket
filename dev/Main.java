@@ -5,6 +5,9 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args){
+
+        // Stock and Suppliers main need to be added!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
         PersonelModule.PresentationLayer.Main pmMain = new PersonelModule.PresentationLayer.Main();
         Service pmService = new Service();
         PresentationController delPC = new PresentationController(pmService);

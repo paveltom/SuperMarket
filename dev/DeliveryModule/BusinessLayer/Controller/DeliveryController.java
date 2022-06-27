@@ -1,9 +1,9 @@
 package DeliveryModule.BusinessLayer.Controller;
 
-import DAL.DALController;
-import DAL.DTO.DriverDTO;
-import DAL.DTO.RecipeDTO;
-import DAL.DTO.TruckDTO;
+import DAL.Delivery_Personnel.DALController;
+import DAL.Delivery_Personnel.DTO.DriverDTO;
+import DAL.Delivery_Personnel.DTO.RecipeDTO;
+import DAL.Delivery_Personnel.DTO.TruckDTO;
 import DeliveryModule.BusinessLayer.Element.*;
 import DeliveryModule.BusinessLayer.Element.Date;
 import DeliveryModule.BusinessLayer.Type.RetCode;

@@ -1,4 +1,4 @@
-package DAL.DTO;
+package DAL.Delivery_Personnel.DTO;
 
 public interface DTO {
     public String getKey();

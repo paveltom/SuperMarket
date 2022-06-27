@@ -1,10 +1,10 @@
-package DAL;
+package DAL.Delivery_Personnel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import DAL.DTO.DTO;
+import DAL.Delivery_Personnel.DTO.DTO;
 
 public class IdentityMap {
     private Map<String, DTO> cachedObjects;
