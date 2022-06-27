@@ -356,7 +356,7 @@ public class DeliveryControllerTest {
         testObj.AddTruck(TRUCK_LOAD_WEIGHT, TRUCK_NET_WEIGHT, TRUCK_LICENSE_NUMBER, TRUCK_MODEL, srcZone);
 
         Date prev_date = null;
-        int norders = 28;
+        int norders = 32;
         while (norders-- > 0)
         {
             DeliveryOrder deliveryOrder = new DeliveryOrder(supplier, client, String.valueOf(norders), products, submissionDate);

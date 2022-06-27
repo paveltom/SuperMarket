@@ -122,9 +122,6 @@ public class DeliveryResourcesService {
         return new ResponseT<>(delController.GetTrucks(), true);
     }
 
-    public ResponseT<String> showShippingZones(){
-        return new ResponseT<>(delController.ShowShippingZone(), true);
-    }
 
     public ResponseT<String> showLicenseCategories(){
         VehicleLicenseCategory[] cats = VehicleLicenseCategory.values();

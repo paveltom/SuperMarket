@@ -40,7 +40,7 @@ public class DeliveryService {
             Site client = new Site(ShippingZone.valueOf(destination.getZone()), destination.getAddress(), destination.getContactName(), destination.getCellphone());
             DeliveryOrder delOrder = new DeliveryOrder(supplier, client, orderId, products, delSubmissionDate);
             Recipe delRec = delController.Deliver(delOrder);
-            return (delRec.Status==RetCode.SuccessfulDelivery) ? new ResponseT<>(delRec.toString(), true) : new ResponseT<>(delRec.toString(), false);
+            return (delRec.Status==RetCode.SuccessfulDelivery) ? new ResponseT<>(delRec.toString(), true) : new ResponseT<>(delRec.toString());
         }
         catch(Exception e) {
            return new ResponseT<>(e.getMessage());
@@ -82,6 +82,19 @@ public class DeliveryService {
         catch (Exception e){
             return new ResponseT<>(e.getMessage());
         }
+    }
+
+    public ResponseT<String> cancelDelivery(String deliveryId){
+        try {
+            delController.CancelDelivery(deliveryId);
+            return new ResponseT("", true);
+        }catch (Exception e){
+            return new ResponseT<>(e.getMessage());
+        }
+    }
+
+    public ResponseT<String> showShippingZones(){
+        return new ResponseT<>(delController.ShowShippingZone(), true);
     }
 
 //    public ResponseT<List<String>> getDeliveryHistoryBySupplierId(String SupplierId){
