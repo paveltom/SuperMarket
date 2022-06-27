@@ -53,6 +53,7 @@ public class CatalogProduct {
     public CatalogProduct(String sId, String id, String catalogNum, float price, boolean isPeriodic){
         dao = new CatalogProductDao();
         this.id = id;
+        this.sId = sId;
         setCatalogNum(catalogNum);
         setPrice(price);
         inPeriodicOrder = isPeriodic;
