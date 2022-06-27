@@ -1,5 +1,7 @@
 package StockModule.BusinessLogicLayer;
 
+import StockModule.ServiceLayer.Response;
+
 import java.util.*;
 
 public class StockController {
@@ -166,6 +168,9 @@ public class StockController {
             return false;
 
         return isAncestorOf(child.getParentCategory().getID(), parentCategoryID);
+    }
 
+    public boolean updateProductAttribute(String productID, int Attribute, Object Value) {
+        return products.get(productID).updateAttributes(Attribute, Value);
     }
 }
