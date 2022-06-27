@@ -122,10 +122,10 @@ public class DALController {
         return driversDAO.deleteObj(keys);
     }
 
-    public boolean removeDelivery(int deliveryId)
-    {
-        return deliveriesDAO.deleteObj(new String[]{String.valueOf(deliveryId)});
-    }
+//    public boolean removeDelivery(int deliveryId)
+//    {
+//        return deliveriesDAO.deleteObj(new String[]{String.valueOf(deliveryId)});
+//    }
 
     public boolean addDriverFutureShifts(String key, String toAdd){
         return driversDAO.addDriverFutureShifts(key, toAdd);

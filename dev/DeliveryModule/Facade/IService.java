@@ -15,15 +15,17 @@ public interface IService {
 
     public Response addTruck(FacadeTruck facadeTruck);
 
-    public Response removeTruck(int licensePlate);
+    public Response removeTruck(long licensePlate);
 
     public Response removeDriver(String id);
 
     public ResponseT<FacadeDriver> getDriverById(String id);
 
-    public ResponseT<FacadeTruck> getTruckByPlate(int licPlate);
+    public ResponseT<FacadeTruck> getTruckByPlate(long licPlate);
 
     public ResponseT<String> showDrivers();
+
+    public ResponseT<String> cancelDelivery(String deliveryId);
 
     public ResponseT<String> showTrucks();
 
