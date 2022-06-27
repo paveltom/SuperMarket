@@ -38,7 +38,7 @@ public class Product {
     }
 
     //db
-    public Product(String name, String manufacturer,int amountToNotify,  int categoryID, Date supplyTime, int demand, boolean isFromDB)
+    public Product(String name, String manufacturer,int amountToNotify,  int categoryID, int demand, boolean isFromDB)
     {
         this.ID = name+manufacturer;
         this.name = name;
@@ -46,7 +46,6 @@ public class Product {
         this.amount = 0;
         this.amountToNotify = amountToNotify;
         this.categoryID = categoryID;
-        this.supplyTime = supplyTime;
         this.demand = demand;
         this.items = new LinkedList<>();
         
