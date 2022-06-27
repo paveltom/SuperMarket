@@ -111,4 +111,8 @@ public class BranchController{
     public void deleteItem(int branchID, int productID,int itemID) throws Exception {
         branches.get(branchID).deleteItem(productID, itemID);
     }
+
+    public boolean updateProductAttribute(int branchID, String productID, int Attribute, Object Value) {
+        return branches.get(branchID).updateProductAttribute(productID, Attribute, Value);
+    }
 }
