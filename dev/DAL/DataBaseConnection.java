@@ -173,6 +173,7 @@ public class DataBaseConnection {
             ResultSet resultSet = stmt.executeQuery(sql.toString());
             String[] resRow = tablesWithParams.get(tableNAME);
 
+
             List<String[]> output = new ArrayList<>();
             while(resultSet.next()){
                 String[] resValues = new String[resRow.length];
