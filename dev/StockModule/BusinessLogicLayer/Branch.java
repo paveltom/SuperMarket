@@ -1,5 +1,7 @@
 package StockModule.BusinessLogicLayer;
 
+import StockModule.ServiceLayer.Response;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -108,5 +110,9 @@ public class Branch {
     public void deleteItem(int productID,int itemID) throws Exception
     {
         stockController.deleteItem(productID, itemID);
+    }
+
+    public boolean updateProductAttribute(String productID, int Attribute, Object Value) {
+        return stockController.updateProductAttribute(productID, Attribute, Value);
     }
 }
