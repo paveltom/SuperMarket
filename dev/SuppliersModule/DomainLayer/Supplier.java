@@ -1,7 +1,8 @@
 package SuppliersModule.DomainLayer;
 
-import DAL.DAOS.SupplierObjects.OrderDao;
+import DAL.DAOS.StockObjects.ProductDao;
 import DAL.DAOS.SupplierObjects.SupplierDao;
+import StockModule.BusinessLogicLayer.Product;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -17,8 +18,8 @@ public class Supplier {
     private final SuppliersModule.DomainLayer.Contract contract;
     private final SuppliersModule.DomainLayer.OrderController oc;
     private final List<SuppliersModule.DomainLayer.Order> orders = new LinkedList<>();
-    private final SupplierDao dao;
-
+    private final SupplierDao sDao;
+    private final ProductDao pDao;
     //  getters
     public String getsId(){
         return sId;
@@ -65,7 +66,7 @@ public class Supplier {
     public void setSupplyCycle(int supplyCycle){contract.setOrderCycle(supplyCycle);}
     public void setDeliveryService(boolean deliveryService) {
         this.deliveryService = deliveryService;
-        dao.setDeliveryService(this);
+        sDao.setDeliveryService(this);
     }
     public void addContact(String contactName, String phoneNum){
         contacts.put(contactName, phoneNum);
@@ -77,7 +78,8 @@ public class Supplier {
     public Supplier(String sId, String name, String address, String bankAccount, boolean cash, boolean credit, String contactName, String phoneNum,
                     boolean[] supplyDays, int MaxSupplyDays, int supplCycle, boolean deliveryService,
                     String pId, String catNumber, float price){
-        dao = new SupplierDao();
+        sDao = new SupplierDao();
+        pDao = new ProductDao();
         this.sId = sId;
         this.name = name;
         this.address = address;
@@ -89,12 +91,13 @@ public class Supplier {
         contract = new Contract(sId, supplyDays, MaxSupplyDays, supplCycle, pId, catNumber, price);
         oc = OrderController.getInstance();
 
-        dao.insert(this);
+        sDao.insert(this);
     }
 
     //db
     public Supplier(String sId, String name, String address, String bankAccount, boolean cash, boolean credit){
-        dao = new SupplierDao();
+        sDao = new SupplierDao();
+        pDao = new ProductDao();
         this.sId = sId;
         this.name = name;
         this.address = address;
@@ -103,20 +106,20 @@ public class Supplier {
         this.paymentMethods[1] = credit;
         oc = OrderController.getInstance();
 
-        SupplyTime st = dao.getSupplyTimeFromDB(sId);
+        SupplyTime st = sDao.getSupplyTimeFromDB(sId);
 
-        List<CatalogProduct> catalogProducts = dao.getCatalogProductsFromDB(this);
-        QuantityAgreement qa = dao.getQuantityAgreementFromDB(sId);
+        List<CatalogProduct> catalogProducts = sDao.getCatalogProductsFromDB(this);
+        QuantityAgreement qa = sDao.getQuantityAgreementFromDB(sId);
 
         this.contract = new Contract(sId, st, catalogProducts, qa);
 
-        Map<String,String> c = dao.getContactsFromDB(sId);
+        Map<String,String> c = sDao.getContactsFromDB(sId);
         for(String key : c.keySet()){
             addContact(key, c.get(key));
         }
 
-        List<Order> os = dao.getOrdersFromDB(sId);
-        for ( Order o : dao.getOrdersFromDB(sId)){
+        List<Order> os = sDao.getOrdersFromDB(sId);
+        for ( Order o : sDao.getOrdersFromDB(sId)){
             orders.add(o);
         }
     }
@@ -152,9 +155,14 @@ public class Supplier {
 
     //products methods
     public void addProduct(String pId, String catalogNum, float price) { //TODO 1.calculating and setting product in periodic order 2. checking that pid exist
+        try{
+            pDao.getProduct(pId);
+        }catch(Exception e){
+            throw new IllegalArgumentException("product id doesn't exist in stock, first add it there");
+        }
         contract.addProduct(pId, catalogNum, price);
     }
-    public boolean removeProduct(String pId) {
+    public boolean removeProduct(String pId) { //Todo delete supplier if has no product
         return contract.removeProduct(pId);
     }
     public void updateCatalogNum(String pId, String newCatalogNum) {

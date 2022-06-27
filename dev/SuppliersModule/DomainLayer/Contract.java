@@ -86,8 +86,8 @@ public class Contract {
     public void updateCatalogNum(String pId, String newCatalogNum) {
         if(!hasProduct(pId))
             throw new IllegalArgumentException("Product doesn't exists.");
-        if(!hasCatalogNum(newCatalogNum))
-            throw new IllegalArgumentException("trying to update product's catalog number with a used onr.");
+        if(hasCatalogNum(newCatalogNum))
+            throw new IllegalArgumentException("trying to update product's catalog number with a used one.");
         catalog.stream().filter(catalogProduct -> catalogProduct.getId().equals(pId)).findFirst().get().setCatalogNum(newCatalogNum);
     }
     public void updateProductPrice(String pId, float price) {
