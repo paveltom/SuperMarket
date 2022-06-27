@@ -1,5 +1,6 @@
 package SuppliersModule.DomainLayer;
 
+import DAL.DAOS.SupplierObjects.CatalogProductDao;
 import DAL.DAOS.SupplierObjects.OrderDao;
 import DAL.DAOS.SupplierObjects.SupplierDao;
 
@@ -18,6 +19,7 @@ public class Supplier {
     private final SuppliersModule.DomainLayer.OrderController oc;
     private final List<SuppliersModule.DomainLayer.Order> orders = new LinkedList<>();
     private final SupplierDao dao;
+    private final CatalogProductDao CPdao;
 
     //  getters
     public String getsId(){
@@ -90,6 +92,7 @@ public class Supplier {
         oc = OrderController.getInstance();
 
         dao.insert(this);
+        CPdao = new CatalogProductDao();
     }
 
     //db
@@ -119,6 +122,8 @@ public class Supplier {
         for ( Order o : dao.getOrdersFromDB(sId)){
             orders.add(o);
         }
+
+        CPdao = new CatalogProductDao();
     }
 
 
@@ -155,6 +160,8 @@ public class Supplier {
         contract.addProduct(pId, catalogNum, price);
     }
     public boolean removeProduct(String pId) {
+        CatalogProduct cp = searchProduct(pId);
+        CPdao.delete(cp);
         return contract.removeProduct(pId);
     }
     public void updateCatalogNum(String pId, String newCatalogNum) {

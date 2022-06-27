@@ -52,6 +52,7 @@ public class CatalogProduct {
     // from db
     public CatalogProduct(String sId, String id, String catalogNum, float price, boolean isPeriodic){
         dao = new CatalogProductDao();
+        this.sId = sId;
         this.id = id;
         setCatalogNum(catalogNum);
         setPrice(price);
