@@ -40,10 +40,9 @@ public class ProductDao extends DAO {
         //assuming uniqe pid's
         try {
             return new Product(p.get(0)[1], p.get(0)[2], Integer.valueOf(p.get(0)[3]),
-                    Integer.valueOf(p.get(0)[4]),
-                    new SimpleDateFormat("dd/MM/yyyy").parse(p.get(0)[4]), Integer.valueOf(p.get(0)[4]), true);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
+                    Integer.valueOf(p.get(0)[4]), Integer.valueOf(p.get(0)[6]), true);
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException();
         }
     }
 
