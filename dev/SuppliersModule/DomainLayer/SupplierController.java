@@ -15,13 +15,14 @@ public class SupplierController {
     public SupplierController(){
         suppliers = new LinkedList<>();
         dao = new SupplierDao();
+        dao.getAll();
     }
 
-    public SupplierController(boolean loadData){
+    /*public SupplierController(boolean loadData){
         suppliers = new LinkedList<>();
         dao = new SupplierDao();
         dao.getAll();
-    }
+    }*/
 
     // getters
     public List<Supplier> getSuppliers() {
