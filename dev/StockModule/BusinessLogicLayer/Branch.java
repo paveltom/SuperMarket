@@ -120,5 +120,8 @@ public class Branch {
         return stockController.updateCategoryName(categoryID, name);
     }
 
+    public boolean updateItemAttribute(String productID,int ItemID, int Attribute, Object Value) {
+        return stockController.updateItemAttribute(productID,ItemID,Attribute, Value);
+    }
 
 }
