@@ -115,6 +115,16 @@ public class Service
         return scs.deleteItem(branchID,productID,itemID);
     }
 
+    public Response updateProductAttribute(int branchID,String productID, int Attribute, Object Value) {
+        return scs.updateProductAttribute(branchID, productID, Attribute, Value);
+    }
+
+    public Response updateCategoryName(int branchID,String categoryID, String name) {
+        return scs.updateCategoryName(branchID, categoryID, name);
+    }
+
+
+
     public void LoadDefaultData()
     {
         addNewBranch("Shop-Eilat");

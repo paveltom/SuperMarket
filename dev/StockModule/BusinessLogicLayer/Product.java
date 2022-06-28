@@ -126,5 +126,104 @@ public class Product {
         items.get(itemID).reduce(amountToReduce);
         updateAmount();
     }
+
+    public void setID(String ID) {
+        this.ID = ID;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setManufacturer(String manufacturer) {
+        this.manufacturer = manufacturer;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
+    public void setAmountToNotify(int amountToNotify) {
+        this.amountToNotify = amountToNotify;
+    }
+
+    public void setCategoryID(int categoryID) {
+        this.categoryID = categoryID;
+    }
+
+
+    public void setDemand(int demand) {
+        this.demand = demand;
+    }
+
+    public void setItems(List<Item> items) {
+        this.items = items;
+    }
+
+    public void setDao(ProductDao dao) {
+        this.dao = dao;
+    }
+
+    public String getAttributesString(){
+        return ".0. ID "+"\n"+".1. Name"+"\n"+".2. Manufacturer"+"\n"+ ".3. Amount"+"\n"+".4. AmountToNotify"+"\n"+ ".5. CategoryID"+"\n"+ ".6. Demand";
+    }
+
+    public boolean updateAttributes(int Attribute, Object Value){
+        switch (Attribute) {
+            case 0: {
+                try {
+                    setID((String) Value);
+                } catch (Exception e) {
+                    return false;
+                }
+            }
+            case 1: {
+                try {
+                    setName((String) Value);
+                } catch (Exception e) {
+                    return false;
+                }
+            }
+            case 2: {
+                try {
+                    setManufacturer((String) Value);
+                } catch (Exception e) {
+                    return false;
+                }
+            }
+            case 3: {
+                try {
+                    setAmount((int) Value);
+                } catch (Exception e) {
+                    return false;
+                }
+            }
+            case 4: {
+                try {
+                    setAmountToNotify((int) Value);
+                } catch (Exception e) {
+                    return false;
+                }
+            }
+            case 5: {
+                try {
+                    setCategoryID((int) Value);
+                } catch (Exception e) {
+                    return false;
+                }
+            }
+            case 6: {
+                try {
+                    setDemand((int) Value);
+                } catch (Exception e) {
+                    return false;
+                }
+
+            }
+        }
+        return true;
+    }
+
+
 }
 

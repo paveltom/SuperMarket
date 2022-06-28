@@ -65,4 +65,8 @@ public class Category {
         dao.updateSubCategories(this);
     }
 
+    public boolean setName(String name) {
+        this.name = name;
+        return true;
+    }
 }
