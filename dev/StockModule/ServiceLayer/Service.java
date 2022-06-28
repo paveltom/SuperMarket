@@ -119,6 +119,10 @@ public class Service
         return scs.updateProductAttribute(branchID, productID, Attribute, Value);
     }
 
+    public Response updateCategoryName(int branchID,String categoryID, String name) {
+        return scs.updateCategoryName(branchID, categoryID, name);
+    }
+
 
 
     public void LoadDefaultData()
