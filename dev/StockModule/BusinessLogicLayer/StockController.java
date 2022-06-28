@@ -177,4 +177,8 @@ public class StockController {
         return categories.get(categoryID).setName(name);
     }
 
+    public boolean updateItemAttribute(String productID,int ItemID, int Attribute, Object Value) {
+        return products.get(productID).updateItemAttribute(ItemID,Attribute, Value);
+    }
+
 }

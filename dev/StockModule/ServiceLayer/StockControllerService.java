@@ -300,4 +300,9 @@ public class StockControllerService
     public Response updateCategoryName(int branchID,String categoryID, String name) {
         return ResponseT.FromValue(bc.updateCategoryName(branchID, categoryID, name));
     }
+
+    public Response updateItemAttribute(int branchID,String productID,int ItemID, int Attribute, Object Value) {
+        return ResponseT.FromValue(bc.updateItemAttribute(branchID, productID,ItemID,Attribute, Value));
+    }
+
 }

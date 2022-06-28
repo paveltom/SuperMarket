@@ -3,6 +3,7 @@ package StockModule.BusinessLogicLayer;
 //import DAL.DAO.ProductDAO;
 
 import DAL.DAOS.StockObjects.ProductDao;
+import StockModule.ServiceLayer.Response;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -222,6 +223,10 @@ public class Product {
             }
         }
         return true;
+    }
+
+    public boolean updateItemAttribute(int ItemID, int Attribute, Object Value) {
+        return items.get(ItemID).updateAttribute(Attribute, Value);
     }
 
 
