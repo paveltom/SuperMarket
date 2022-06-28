@@ -16,7 +16,7 @@ public class DeliveryController
 {
     private final PriorityQueue<Driver>[][] Drivers;
     private final PriorityQueue<Truck>[][] Trucks;
-    private final Map<Integer, Recipe> Recipes;
+    private final Map<String, Recipe> Recipes;
     private final int NZONES = 9, NLICENSES = 3;
 
     private static class DeliveryControllerHolder2
@@ -78,7 +78,7 @@ public class DeliveryController
     {
         List<RecipeDTO> recipes = DALController.getInstance().getAllDeliveries();
         for(RecipeDTO src : recipes)
-            Recipes.put(Integer.valueOf(src.OrderId), new Recipe(src));
+            Recipes.put(src.OrderId, new Recipe(src));
     }
 
     private double CalculateDeliveryWeight(List<Product> products)
@@ -162,7 +162,7 @@ public class DeliveryController
     public Recipe Deliver(DeliveryOrder deliveryOrder)
     {
         Recipe res;
-        int orderId = deliveryOrder.OrderId;
+        String orderId = deliveryOrder.OrderId;
         double CargoWeight = CalculateDeliveryWeight(deliveryOrder.RequestedProducts);
         if(CargoWeight == -1)
         {
@@ -191,8 +191,8 @@ public class DeliveryController
             return res;
         }
 
-        Date driverDueDate = selectedDriver.Next(deliveryOrder.SupplierWorkingDays);
-        Date truckDueDate = selectedTruck.Next(deliveryOrder.SupplierWorkingDays);
+        Date driverDueDate = selectedDriver.Next(deliveryOrder.SubmissionDate, deliveryOrder.SupplierWorkingDays);
+        Date truckDueDate = selectedTruck.Next(deliveryOrder.SubmissionDate, deliveryOrder.SupplierWorkingDays);
 
         // determine delivery day
         Date selectedDueDate = driverDueDate.compareTo(truckDueDate) > 0 ? driverDueDate : truckDueDate;
@@ -205,11 +205,6 @@ public class DeliveryController
             return res;
         }
 
-        // free none-chosen shift & set the chosen one.
-        if(driverDueDate.equals(selectedDueDate))
-            selectedTruck.SetAvailable(truckDueDate);
-        else
-            selectedDriver.SetAvailable(driverDueDate);
 
         selectedDriver.SetOccupied(selectedDueDate);
         selectedTruck.SetOccupied(selectedDueDate);
@@ -273,7 +268,7 @@ public class DeliveryController
         return driver;
     }
 
-    public Recipe RemoveRecipe(int orderId)
+    public Recipe RemoveRecipe(String orderId)
     {
         Recipe r = Recipes.getOrDefault(orderId, null);
         if(r != null)
@@ -313,11 +308,11 @@ public class DeliveryController
             }
         }
 
-        for(Integer i : Recipes.keySet())
+        for(String i : Recipes.keySet())
             RemoveRecipe(i);
     }
 
-    public void CancelDelivery(int orderId)
+    public void CancelDelivery(String orderId)
     {
         Recipe recipe = Recipes.getOrDefault(orderId, null);
         if(recipe != null && recipe.Status == RetCode.SuccessfulDelivery)

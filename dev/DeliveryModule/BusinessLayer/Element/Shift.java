@@ -27,4 +27,10 @@ public class Shift
             return Day == other.Day && Shift == other.Shift;
         }
     }
+
+    @Override
+    public String toString()
+    {
+        return String.format("Shift ---- Day: %d ---- Shift: %d\n", Day, Shift);
+    }
 }

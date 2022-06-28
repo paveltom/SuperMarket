@@ -75,18 +75,17 @@ public class Driver implements Comparable<Driver>
     public void SetOccupied(Date occupiedDate)
     {
         Diary.SetOccupied(occupiedDate);
-        NextAvailableShift = Diary.NextShift(NextAvailableShift.Month, NextAvailableShift.Day);
+        if(NextAvailableShift.compareTo(occupiedDate) >= 0)
+            NextAvailableShift = Diary.NextShift(occupiedDate.Month, occupiedDate.Day);
         PersistDiary();
     }
 
     public void SetAvailable(Date occupiedDate)
     {
-        if(occupiedDate.compareTo(NextAvailableShift) < 0)
-        {
-            Diary.SetAvailable(NextAvailableShift);
-            NextAvailableShift = occupiedDate;
-            PersistDiary();
-        }
+        Diary.SetAvailable(occupiedDate);
+        if(occupiedDate.compareTo(NextAvailableShift) <= 0)
+            NextAvailableShift = Diary.NextShift(occupiedDate.Month, occupiedDate.Day);
+        PersistDiary();
     }
 
     public void SetConstraint(Constraint constraint)
@@ -131,11 +130,8 @@ public class Driver implements Comparable<Driver>
         return res;
     }
 
-    public Date Next(boolean[] supplierWorkingDays)
+    public Date Next(Date submissionDate,boolean[] supplierWorkingDays)
     {
-        Date res = NextAvailableShift;
-        SetOccupied(res);
-        NextAvailableShift = Diary.NextShift(res.Month, res.Day, supplierWorkingDays);
-        return res;
+        return Diary.NextShift(submissionDate.Month, submissionDate.Day, supplierWorkingDays);
     }
 }

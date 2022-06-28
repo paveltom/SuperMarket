@@ -76,20 +76,18 @@ public class Truck implements Comparable<Truck>
     public void SetOccupied(Date occupiedDate)
     {
         Diary.SetOccupied(occupiedDate);
-        NextAvailableShift = Diary.NextShift(NextAvailableShift.Month, NextAvailableShift.Day);
+        if(NextAvailableShift.compareTo(occupiedDate) >= 0)
+            NextAvailableShift = Diary.NextShift(occupiedDate.Month, occupiedDate.Day);
         PersistDiary();
     }
 
     public void SetAvailable(Date occupiedDate)
     {
-        if(occupiedDate.compareTo(NextAvailableShift) < 0)
-        {
-            Diary.SetAvailable(NextAvailableShift);
-            NextAvailableShift = occupiedDate;
-            PersistDiary();
-        }
+        Diary.SetAvailable(occupiedDate);
+        if(occupiedDate.compareTo(NextAvailableShift) <= 0)
+            NextAvailableShift = Diary.NextShift(occupiedDate.Month, occupiedDate.Day);
+        PersistDiary();
     }
-
 
     @Override
     public boolean equals(Object obj)
@@ -110,19 +108,8 @@ public class Truck implements Comparable<Truck>
         return o == null ? 1 : NextAvailableShift.compareTo(o.NextAvailableShift);
     }
 
-    public Date Next()
+    public Date Next(Date submissionDate,boolean[] supplierWorkingDays)
     {
-        Date res = NextAvailableShift;
-        SetOccupied(res);
-        NextAvailableShift = Diary.NextShift(res.Month, res.Day);
-        return res;
-    }
-
-    public Date Next(boolean[] supplierWorkingDays)
-    {
-        Date res = NextAvailableShift;
-        SetOccupied(res);
-        NextAvailableShift = Diary.NextShift(res.Month, res.Day, supplierWorkingDays);
-        return res;
+        return Diary.NextShift(submissionDate.Month, submissionDate.Day, supplierWorkingDays);
     }
 }

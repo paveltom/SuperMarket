@@ -12,7 +12,7 @@ public class Recipe
 {
 
     public final RetCode Status;
-    public final int OrderId;
+    public final String OrderId;
     public Site Supplier, Client;
     public List<Product> DeliveredProducts;
     public Date DueDate;
@@ -23,7 +23,7 @@ public class Recipe
 
 
     public Recipe(RetCode status,
-                  int orderId,
+                  String orderId,
                   Site supplier,
                   Site client,
                   List<Product> deliveredProducts,
@@ -41,7 +41,7 @@ public class Recipe
         Truck = truck;
     }
 
-    public Recipe(RetCode status, int orderId)
+    public Recipe(RetCode status, String orderId)
     {
         Status = status;
         OrderId = orderId;
@@ -49,7 +49,7 @@ public class Recipe
 
     public Recipe(RecipeDTO src)
     {
-        OrderId = Integer.parseInt(src.OrderId);
+        OrderId = src.OrderId;
         Status = RetCode.Ordinal2RetCode(Integer.parseInt(src.Status));
         if(Status == RetCode.SuccessfulDelivery)
         {
@@ -99,7 +99,7 @@ public class Recipe
             // encode products delivered as a string
             String deliveredProducts = EncodeProducts();
             String dueDate = DueDate.Encode();
-            addMe = new RecipeDTO(String.valueOf(OrderId), supplierZone, supplierAddress, supplierName, supplierCellphone,
+            addMe = new RecipeDTO(OrderId, supplierZone, supplierAddress, supplierName, supplierCellphone,
                     clientZone, clientAddress, clientName, clientCellphone, deliveredProducts, dueDate, Driver.Id, Truck.VehicleLicenseNumber, Status.ordinal());
         }
         else
@@ -115,12 +115,12 @@ public class Recipe
         {
             StringBuilder sb = new StringBuilder();
             sb.append("---------- Delivery Recipe ----------\n");
-            sb.append(String.format("Order: %d\nDue Date: %s\n\nSupplier\n%s\nClient\n%s\n%s" +
+            sb.append(String.format("Order: %s\nDue Date: %s\n\nSupplier\n%s\nClient\n%s\n%s" +
                             "\n%s\nDelivered Products:\n%s\n",
                              OrderId, DueDate, Supplier, Client, Driver, Truck, ConcatenateProducts()));
             return sb.toString();
         }
-        return String.format("Order id: %d\n%s\n", OrderId, RetCode.GetRetCodeName(Status));
+        return String.format("Order id: %s\n%s\n", OrderId, RetCode.GetRetCodeName(Status));
     }
 
     private String ConcatenateProducts()

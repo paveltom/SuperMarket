@@ -1,5 +1,8 @@
 package DeliveryModule.BusinessLayer.Element;
 
+import com.sun.org.apache.xpath.internal.operations.Or;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -11,11 +14,14 @@ Assumption: there are 4 shifts per day, each last 3 hours.
  */
 public class Month
 {
-    public final int ShiftsPerDay = 4;
-    public final int NumOfDays;
-    private final char NumOfDaysDelimiter = '@';
-    private final char DaysDelimiter = '#';
+
+    public final int NumOfDays, Ordinal;
     private int NextShift, NextDay;
+    private final char NumOfDaysDelimiter = '@';
+    private static final char DaysDelimiter = '#';
+    private static final char OrdinalDelimiter = '_';
+    private static final int ShiftsPerDay = 4;
+
 
     /*
      * @INV: Shifts[i][j] = true iff shift j at day i is occupied.
@@ -26,14 +32,24 @@ public class Month
     {
         LocalDateTime currDay = LocalDateTime.now();
         int currTime = currDay.getHour();
-        NextShift = currTime <= 6 ? 0 : currTime <= 9 ? 1 : currTime <= 12 ? 2 : currTime <= 15 ? 3 : 4;
-        NextDay = currDay.getDayOfMonth();
+        int currMonth = currDay.getMonthValue();
+        if(currMonth == Ordinal)
+        {
+            NextShift = currTime <= 6 ? 0 : currTime <= 9 ? 1 : currTime <= 12 ? 2 : currTime <= 15 ? 3 : 4;
+            NextDay = currDay.getDayOfMonth();
+        }
+        else
+        {
+            NextDay = 1;
+            NextShift = 0;
+        }
     }
 
-    public Month(int numOfDays)
+    public Month(int numOfDays, int ordinal)
     {
         NumOfDays = numOfDays;
         Shifts = new boolean[NumOfDays+1][ShiftsPerDay];
+        Ordinal = ordinal;
         Init();
     }
 
@@ -50,8 +66,7 @@ public class Month
         }
         i++;
         boolean[][] res = new boolean[numOfDays + 1][ShiftsPerDay];
-        int length = encoded.length();
-        while(i<length)
+        while(chars[i] != OrdinalDelimiter)
         {
             ch = chars[i];
             if(ch != DaysDelimiter)
@@ -68,6 +83,12 @@ public class Month
         }
         Shifts = res;
         NumOfDays = numOfDays;
+        int ordinal = 0;
+        i++; // escape delimiter
+        int length = encoded.length();
+        while(i<length) // month might be consisted of two digits
+            ordinal = ordinal * 10 + chars[i++] - '0';
+        Ordinal = ordinal;
         Init();
     }
 
@@ -80,12 +101,12 @@ public class Month
     {
         if(day >= 1 && day <= NumOfDays) // validate legal input
         {
-            for (int i = NextDay; i <= NumOfDays; i++)
+            for (; NextDay <= NumOfDays; NextDay++)
             {
-                for (int j = NextShift; j < ShiftsPerDay; j++)
+                for (; NextShift < ShiftsPerDay; NextShift++)
                 {
-                    if (!Shifts[i][j] && supplierWorkingDays[(i % 7)])
-                        return new Shift(i, j);
+                    if (!Shifts[NextDay][NextShift] && supplierWorkingDays[(NextDay % 7)])
+                        return new Shift(NextDay, NextShift);
                 }
                 NextShift = 0;
             }
@@ -102,12 +123,13 @@ public class Month
     {
         if(day >= 1 && day <= NumOfDays) // validate legal input
         {
-            for (int i = NextDay; i <= NumOfDays; i++)
+            for (; NextDay <= NumOfDays; NextDay++)
             {
-                for (int j = NextShift; j < ShiftsPerDay; j++)
+                for (; NextShift < ShiftsPerDay; NextShift++)
                 {
-                    if (!Shifts[i][j])
-                        return new Shift(i, j);
+                    if (!Shifts[NextDay][NextShift]) {
+                        return new Shift(NextDay, NextShift);
+                    }
                 }
                 NextShift = 0;
             }
@@ -115,11 +137,10 @@ public class Month
         return null; // This month is fully occupied.
     }
 
+
     public void SetOccupied(Shift shift)
     {
         Shifts[shift.Day][shift.Shift] = true;
-        NextDay = shift.Day;
-        NextShift = shift.Shift;
     }
     public void SetAvailable(Shift shift)
     {
@@ -127,7 +148,6 @@ public class Month
         NextDay = shift.Day;
         NextShift = shift.Shift;
     }
-
 
     public void SetConstraints(List<Shift> constraints)
     {
@@ -169,6 +189,8 @@ public class Month
             i++;
             delimiters--;
         }
+        stringBuilder.append(OrdinalDelimiter);
+        stringBuilder.append(Ordinal);
         return stringBuilder.toString();
     }
 
@@ -184,7 +206,7 @@ public class Month
         else
         {
             Month other = (Month) obj;
-            if(Shifts.length != other.Shifts.length || Shifts[0].length != other.Shifts[0].length)
+            if(Ordinal != other.Ordinal || NumOfDays != other.NumOfDays || Shifts.length != other.Shifts.length || Shifts[0].length != other.Shifts[0].length)
                 return false;
             int i = 0, n = Shifts.length;
             while(i < n)
