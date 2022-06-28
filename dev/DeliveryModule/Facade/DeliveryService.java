@@ -16,11 +16,16 @@ public class DeliveryService {
         delController = DeliveryController.GetInstance();
     }
 
-    public DeliveryService(String code){
-        if(code.equals("sudo"))
-            delController = DeliveryController.newInstanceForTests("sudo");
-        else
-            delController = DeliveryController.GetInstance();
+    public DeliveryController tearDownDelControllerSingletone(String code, DeliveryController delc){
+        if(delc != null)
+            delController = delc;
+        else {
+            if (code.equals("sudo"))
+                delController = DeliveryController.newInstanceForTests("sudo");
+            else
+                delController = DeliveryController.GetInstance();
+        }
+        return delController;
     }
 
 
@@ -40,7 +45,7 @@ public class DeliveryService {
             Site client = new Site(ShippingZone.valueOf(destination.getZone()), destination.getAddress(), destination.getContactName(), destination.getCellphone());
             DeliveryOrder delOrder = new DeliveryOrder(supplier, client, orderId, products, delSubmissionDate);
             Recipe delRec = delController.Deliver(delOrder);
-            return (delRec.Status==RetCode.SuccessfulDelivery) ? new ResponseT<>(delRec.toString(), true) : new ResponseT<>(delRec.toString());
+            return (delRec.Status==RetCode.SuccessfulDelivery) ? new ResponseT<>(delRec.toString(), true) : new ResponseT<>(RetCode.GetRetCodeName(delRec.Status));
         }
         catch(Exception e) {
            return new ResponseT<>(e.getMessage());

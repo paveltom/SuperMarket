@@ -1,5 +1,6 @@
 package DeliveryModule.Facade;
 
+import DeliveryModule.BusinessLayer.Controller.DeliveryController;
 import DeliveryModule.BusinessLayer.Element.Recipe;
 import DeliveryModule.Facade.FacadeObjects.*;
 import java.util.List;
@@ -61,6 +62,11 @@ public class Service implements IService{
     public ResponseT<String> showShippingZones(){ return deliveryService.showShippingZones(); }
 
     public ResponseT<String> showLicenseCategories(){ return deliveryResourcesService.showLicenseCategories(); }
+
+    public void tearDownDelControllerSingletone(){
+        DeliveryController delc = deliveryResourcesService.tearDownDelControllerSingletone("sudo", null);
+        deliveryService.tearDownDelControllerSingletone("", delc);
+    }
 
     public void addConstraints(String ID, FacadeDate date, int shift){
         // method that called by PersonelModule - sends constraints to Business Layer

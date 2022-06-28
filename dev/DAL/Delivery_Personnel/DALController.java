@@ -262,7 +262,8 @@ public class DALController {
     }
 
     public void deleteDB(){
-
+        deliveriesDAO.deleteDB();
+        DALControllerHolder.instance = new DALController();
     }
 
 

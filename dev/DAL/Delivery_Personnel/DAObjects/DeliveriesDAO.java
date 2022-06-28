@@ -117,6 +117,6 @@ public class DeliveriesDAO implements IDAO{
 
     @Override
     public void deleteDB() {
-
+        dbconn.deleteDB();
     }
 }

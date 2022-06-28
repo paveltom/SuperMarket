@@ -1,16 +1,21 @@
 package Tests;
 
+import DAL.Delivery_Personnel.DALController;
+import DAL.Delivery_Personnel.DataBaseConnection;
 import DeliveryModule.BusinessLayer.Element.Product;
 import DeliveryModule.BusinessLayer.Element.Recipe;
 import DeliveryModule.BusinessLayer.Type.ShippingZone;
+import DeliveryModule.BusinessLayer.Type.VehicleLicenseCategory;
 import DeliveryModule.Facade.*;
 import DeliveryModule.Facade.FacadeObjects.*;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.Connection;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,13 +29,16 @@ public class DeliveryTests {
 
     @Before
     public void setUp() throws Exception {
-        String dir = System.getProperty("user.dir");
-        File f = new File(dir + "/PerDel.db");
-        if(f.exists()) f.delete();
+        DALController.getInstance().deleteDB();
+//        String dir = System.getProperty("user.dir");
+//        File f = new File(dir + "/dev/DataBase/PerDel.db");
+//        boolean deleted = false;
+//        boolean exists = f.exists();
+//        if(exists) deleted = f.delete();
         perService = new PersonelModule.BusinessLayer.ServiceLayer.Service();
         service = new Service(perService);
+        service.tearDownDelControllerSingletone();
     }
-
 
 //    @Test
 //    public void changeSMQual() {
@@ -40,44 +48,135 @@ public class DeliveryTests {
 //    }
 
     @Test
-    public void regularDeliver() { // add delivery, add same id delivery
+    public void regularDelivery() { // add delivery, add same id delivery
+        addDriver("987654321", "Golan", null);
+        addTruck(123456789, "Golan", 0);
 
-
-    }
-
-    public void overWeightedDelivery() { // add over-weighted delivery
-
-    }
-
-    @Test
-    public void cancelDelivery() { // add delivery => cancel it => validate through isOccupied and get history
-
-    }
-
-    @Test
-    public void getDeliveryHistory() { // validate history before adding, after adding, after deleting
         ResponseT<String> history = service.getDeliveryHistory();
         assertFalse(history.getErrorOccurred());
         assertFalse(history.getValue().contains("Order:"));
 
-        ResponseT<String> res = service.deliver(facadeSiteNumber(1), facadeSiteNumber(2), "135792468", listOfFacProducts(), facadeDate());
+        ResponseT<String> res = service.deliver(facadeSiteNumber(1, "Golan"), facadeSiteNumber(2, "Golan"), "135792468", listOfFacProducts(), facadeDate());
         assertFalse(res.getErrorOccurred());
-        String[] included = {"Order: 135792468", "Supplier", "testAddress1", "testContact1", "0123456789",
-                                                 "Client", "testAddress2", "testContact2", "9876543210",
+
+        res = service.getDeliveryHistory();
+        assertFalse(res.getErrorOccurred());
+
+        assertTrue(res.getValue().contains("Order: 135792468"));
+        assertTrue(res.getValue().contains("testAddress1"));
+    }
+
+    @Test
+    public void sameIDDelivery() {
+        addDriver("987654321", "Golan", null);
+        addTruck(123456789, "Golan", 0);
+
+        ResponseT<String> history = service.getDeliveryHistory();
+        assertFalse(history.getErrorOccurred());
+        assertFalse(history.getValue().contains("Order:"));
+
+        ResponseT<String> res1 = service.deliver(facadeSiteNumber(1, "Golan"), facadeSiteNumber(2, "Golan"), "135792468", listOfFacProducts(), facadeDate());
+        assertFalse(res1.getErrorOccurred());
+
+        ResponseT<String> res2 = service.deliver(facadeSiteNumber(3, "Negev"), facadeSiteNumber(4, "Negev"), "135792468", listOfFacProducts(), facadeDate());
+        assertTrue(res2.getErrorOccurred());
+
+        history = service.getDeliveryHistory();
+
+        assertTrue(history.getValue().contains("Order: 135792468"));
+        assertTrue(history.getValue().contains("testAddress1"));
+        assertFalse(history.getValue().contains("testAddress3"));
+    }
+
+
+    @Test
+    public void noDriverDelivery() {
+        //addDriver("987654321", "Golan", null);
+        addTruck(123456789, "Golan", 0);
+
+        ResponseT<String> history = service.getDeliveryHistory();
+        assertFalse(history.getErrorOccurred());
+        assertFalse(history.getValue().contains("Order:"));
+
+        ResponseT<String> res = service.deliver(facadeSiteNumber(1, "Golan"), facadeSiteNumber(2, "Golan"), "135792468", listOfFacProducts(), facadeDate());
+        assertTrue(res.getErrorOccurred());
+    }
+
+    @Test
+    public void noTruckDelivery() {
+        addDriver("987654321", "Golan", null);
+        //addTruck(123456789, "Golan", 0);
+
+        ResponseT<String> history = service.getDeliveryHistory();
+        assertFalse(history.getErrorOccurred());
+        assertFalse(history.getValue().contains("Order:"));
+
+        ResponseT<String> res = service.deliver(facadeSiteNumber(1, "Golan"), facadeSiteNumber(2, "Golan"), "135792468", listOfFacProducts(), facadeDate());
+        assertTrue(res.getErrorOccurred());
+    }
+
+    @Test
+    public void overWeightedDelivery() {
+        addDriver("987654321", "Golan", null);
+        addTruck(123456789, "Golan", 10);
+
+        ResponseT<String> history = service.getDeliveryHistory();
+        assertFalse(history.getErrorOccurred());
+        assertFalse(history.getValue().contains("Order:"));
+
+        ResponseT<String> res = service.deliver(facadeSiteNumber(1, "Golan"), facadeSiteNumber(2, "Golan"), "135792468", listOfFacProducts(), facadeDate());
+        assertTrue(res.getErrorOccurred());
+    }
+
+    @Test
+    public void cancelDelivery() { // add delivery => cancel it => validate through isOccupied and get history
+        addDriver("987654321", "Golan", null);
+        addTruck(123456789, "Golan", 0);
+
+        ResponseT<String> history = service.getDeliveryHistory();
+        assertFalse(history.getErrorOccurred());
+        assertFalse(history.getValue().contains("Order:"));
+
+        ResponseT<String> res = service.deliver(facadeSiteNumber(1, "Golan"), facadeSiteNumber(2, "Golan"), "135792468", listOfFacProducts(), facadeDate());
+        assertFalse(res.getErrorOccurred());
+
+        history = service.getDeliveryHistory();
+        assertFalse(history.getErrorOccurred());
+        assertTrue(history.getValue().contains("135792468"));
+
+        service.cancelDelivery("135792468"); // restore after Nir updates RemoveRecipe
+        history = service.getDeliveryHistory();
+        assertFalse(history.getErrorOccurred());
+        assertFalse(history.getValue().contains("135792468"));
+    }
+
+    @Test
+    public void getDeliveryHistory() { // validate history before adding, after adding, after deleting
+        addDriver("987654321", "Golan", null);
+        addTruck(123456789, "Golan", 0);
+
+        ResponseT<String> history = service.getDeliveryHistory();
+        assertFalse(history.getErrorOccurred());
+        assertFalse(history.getValue().contains("Order:"));
+
+        ResponseT<String> res = service.deliver(facadeSiteNumber(1, "Golan"), facadeSiteNumber(2, "Golan"), "135792468", listOfFacProducts(), facadeDate());
+        assertFalse(res.getErrorOccurred());
+        String[] included = {"Order: 135792468", "Supplier", "testAddress1", "testContact1", "01234567891",
+                                                 "Client", "testAddress2", "testContact2", "01234567892",
                                                 ""+listOfFacProducts().get(0).getId(), ""+listOfFacProducts().get(0).getAmount(), ""+listOfFacProducts().get(0).getWeight(),
                                                 ""+listOfFacProducts().get(1).getId(), ""+listOfFacProducts().get(1).getAmount(), ""+listOfFacProducts().get(1).getWeight(),
                                                 ""+listOfFacProducts().get(2).getId(), ""+listOfFacProducts().get(2).getAmount(), ""+listOfFacProducts().get(2).getWeight()};
 
-        res = service.getDeliveryHistory();
-        assertFalse(res.getErrorOccurred());
+        history = service.getDeliveryHistory();
+        assertFalse(history.getErrorOccurred());
         for(String s : included){
-            assertTrue(res.getValue().contains(s));
+            assertTrue(history.getValue().contains(s));
         }
 
-        service.cancelDelivery("135792468");
-        res = service.getDeliveryHistory();
-        assertFalse(res.getErrorOccurred());
-        assertFalse(res.getValue().contains("135792468"));
+        service.cancelDelivery("135792468"); // restore after Nir updates RemoveRecipe
+        history = service.getDeliveryHistory();
+        assertFalse(history.getErrorOccurred());
+        assertFalse(history.getValue().contains("135792468"));
     }
 
     @Test
@@ -89,9 +188,18 @@ public class DeliveryTests {
         }
     }
 
-//    public Response addDriver(FacadeDriver facadeDriver);
-//
-//    public Response addTruck(FacadeTruck facadeTruck);
+    @Test
+    public void addTruck(){
+        ResponseT<String> res = service.showTrucks();
+        assertFalse(res.getErrorOccurred());
+
+        addTruck(326971231, "Golan", 0);
+
+        res = service.showTrucks();
+        assertFalse(res.getErrorOccurred());
+        assertTrue(res.getValue().contains("326971231"));
+
+    }
 //
 //    public Response removeTruck(long licensePlate);
 //
@@ -126,8 +234,25 @@ public class DeliveryTests {
         return list;
     }
 
-    private FacadeSite facadeSiteNumber(int number){
-        return new FacadeSite("Golan", "testAddress" + number, "testContact" + number, "0123456789" + number);
+    private FacadeSite facadeSiteNumber(int number, String zone){
+        return new FacadeSite(zone, "testAddress" + number, "testContact" + number, "0123456789" + number);
+    }
+
+    private void addDriver(String id9Digits, String area, String optionalNonNullLicense){
+        if(optionalNonNullLicense == null)
+            perService.AddDriver(id9Digits,"Nikita Kovalchuk","Driver","yes","Bank 003 111111",30.00,"22/9/2020","...","C",area,"0525670092");
+        else
+            perService.AddDriver(id9Digits,"Nikita Kovalchuk","Driver","yes","Bank 003 111111",30.00,"22/9/2020","...",optionalNonNullLicense,area,"0525670092");
+
+    }
+
+    private void addTruck(long licPlate, String area, double optionalNonZeroWeight){
+        // long licensePlate, String model, String parkingArea, double netWeight, double maxLoadWeight
+        if(optionalNonZeroWeight == 0)
+            service.addTruck(new FacadeTruck(licPlate, "model" + licPlate, area, 10000000, 10000000));
+        else
+            service.addTruck(new FacadeTruck(licPlate, "model" + licPlate, area, optionalNonZeroWeight, optionalNonZeroWeight));
+
     }
 
 }

@@ -186,11 +186,11 @@ public class PresentationController {
         LocalDate currTime = LocalDate.now();
         FacadeDate facDate = new FacadeDate(currTime.getDayOfMonth(), currTime.getMonthValue(), currTime.getYear());
 
-        //String id = Long.toUnsignedString(System.currentTimeMillis()); //unique order Id
-        String id = Integer.toUnsignedString((int)System.currentTimeMillis()); //unique order Id
+        String id = Long.toUnsignedString(System.currentTimeMillis()); //unique order Id
+        //String id = Integer.toUnsignedString((int)System.currentTimeMillis()); //unique order Id
         ResponseT<String> res = service.deliver(origin, destination, id, productList, facDate);
         if(res.getErrorOccurred()){
-            operateOutput("Cannot add this delivery: " + res.getValue());
+            operateOutput("Cannot add this delivery. " + res.getErrorMessage());
             return 0;
         }
         operateOutput(res.getValue());

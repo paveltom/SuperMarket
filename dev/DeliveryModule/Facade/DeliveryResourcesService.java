@@ -14,17 +14,22 @@ import java.util.List;
 
 public class DeliveryResourcesService {
 
-    private final DeliveryController delController;
+    private DeliveryController delController;
 
     public DeliveryResourcesService(){
         delController = DeliveryController.GetInstance();
     }
 
-    public DeliveryResourcesService(String code){
-        if(code.equals("sudo"))
-            delController = DeliveryController.newInstanceForTests("sudo");
-        else
-            delController = DeliveryController.GetInstance();
+    public DeliveryController tearDownDelControllerSingletone(String code, DeliveryController delc){
+        if(delc != null)
+            delController = delc;
+        else {
+            if (code.equals("sudo"))
+                delController = DeliveryController.newInstanceForTests("sudo");
+            else
+                delController = DeliveryController.GetInstance();
+        }
+        return delController;
     }
 
     public Response addConstraints(String ID, FacadeDate date, int shift) {
@@ -76,7 +81,7 @@ public class DeliveryResourcesService {
             boolean added = delController.AddTruck(maxLoadWeight, netWeight, licensePlate, model, parkingArea);
             if(added) {
                 String strLicPlate = licensePlate + "";
-                return new ResponseT<String>(strLicPlate, true);
+                return new ResponseT<>(strLicPlate, true);
             }
             else
                 return new Response("System cannot allow to perform this action.");

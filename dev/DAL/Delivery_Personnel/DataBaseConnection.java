@@ -1,7 +1,9 @@
 package DAL.Delivery_Personnel;
 
+import java.io.File;
 import java.sql.*;
 import java.util.*;
+import java.util.concurrent.Executor;
 
 public class DataBaseConnection {
     private String[] truckValues = {"VehicleLicenseNumber", "MaxLoadWeight", "NetWeight", "Model", "ShippingZone", "Diary", "AuthorizedLicense"};
@@ -74,6 +76,11 @@ public class DataBaseConnection {
 
         } catch (Exception e){
 //            System.err.println(e.getClass().getName() + ": " + e.getMessage() + ". Insert method. On table: " + tableNAME);
+            try {
+                conn.close();
+                stmt.close();
+            } catch (SQLException ex) {
+            }
             return false;
         }
     }
@@ -103,6 +110,11 @@ public class DataBaseConnection {
 
         } catch ( Exception e ) {
 //            System.err.println(e.getClass().getName() + ": " + e.getMessage() + ". Update method. On table: " + tableNAME);
+            try {
+                conn.close();
+                stmt.close();
+            } catch (SQLException ex) {
+            }
             return false;
         }
     }
@@ -132,6 +144,11 @@ public class DataBaseConnection {
 
         } catch ( Exception e ) {
 //            System.err.println(e.getClass().getName() + ": " + e.getMessage() + ". Delete method. On table: " + tableNAME);
+            try {
+                conn.close();
+                stmt.close();
+            } catch (SQLException ex) {
+            }
             return false;
         }
 
@@ -177,12 +194,18 @@ public class DataBaseConnection {
             return output;
         } catch ( Exception e ) {
 //            System.err.println(e.getClass().getName() + ": " + e.getMessage() + ". Select method. On table: " + tableNAME);
+            try {
+                conn.close();
+                stmt.close();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
             return null;
         }
     }
 
     private boolean createCrucialTables(Connection conn) {
-        Statement statement;
+        Statement stmt = null;
         String existence = "SELECT count(*) "
                 + "FROM information_schema.tables "
                 + "WHERE table_name = ?"
@@ -251,7 +274,7 @@ public class DataBaseConnection {
                 return true;
             }
 
-            Statement stmt = conn.createStatement();
+            stmt = conn.createStatement();
             stmt.execute(driversTableCreation);
             stmt.execute(trucksTableCreation);
             stmt.execute(deliveriesTableCreation);
@@ -262,8 +285,29 @@ public class DataBaseConnection {
             resultSet.close();
             return true;
         } catch (SQLException e) {
+            try {
+                conn.close();
+                stmt.close();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public void deleteDB(){
+        try {
+            Connection conn = connect();
+            conn.close();
+        }catch (Exception e){
+
+        }
+        String dir = System.getProperty("user.dir");
+        File f = new File(dir + "/dev/DataBase/PerDel.db");
+        if(f.exists()){
+
+            f.delete();
         }
     }
 

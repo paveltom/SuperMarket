@@ -33,6 +33,8 @@ public interface IService {
 
     public ResponseT<String> showLicenseCategories();
 
+    public void tearDownDelControllerSingletone();
+
     public void addConstraints(String ID, FacadeDate date, int shift);
 
     public boolean isOccupied(String driverID, int month, int day);
