@@ -8,18 +8,19 @@ import java.util.Map;
 
 public class StockControllerService
 {
-    BranchController bc;
+    StockController sc;
 
     StockControllerService()
     {
-        bc = new BranchController();
+        sc = new StockController();
     }
 
+    /*
     public Response addNewBranch(String name)
     {
         try
         {
-            bc.addNewBranch(name);
+            sc.addNewBranch(name);
             return new Response();
         } catch (Exception e)
         {
@@ -31,7 +32,7 @@ public class StockControllerService
     {
         try
         {
-            bc.deleteBranch(branchID);
+            sc.deleteBranch(branchID);
             return new Response();
         } catch (Exception e)
         {
@@ -39,10 +40,12 @@ public class StockControllerService
         }
 
     }
-    public Response setSubCategory(int branchID,int subCategoryID,int parentID){
+    */
+
+    public Response setSubCategory(int subCategoryID,int parentID){
         try
         {
-            bc.setSubCategory(branchID,subCategoryID,parentID);
+            sc.setSubCategory(subCategoryID,parentID);
             return new Response();
         }
         catch (Exception e)
@@ -50,12 +53,12 @@ public class StockControllerService
             return new Response(e.getMessage());
         }
     }
-    public ResponseT<List<Product>> getProductsInStock(int branchID)
+    public ResponseT<List<Product>> getProductsInStock()
     {
         //Requirement 2
         try
         {
-            return ResponseT.FromValue(bc.getProductsInStock(branchID));
+            return ResponseT.FromValue(sc.getProductsInStock());
         }
         catch (Exception e)
         {
@@ -63,12 +66,12 @@ public class StockControllerService
         }
     }
 
-    public ResponseT<List<Purchase>> getPurchasesHistoryReport(int branchID)
+    public ResponseT<List<Purchase>> getPurchasesHistoryReport()
     {
         //Requirement 3
         try
         {
-            return ResponseT.FromValue(bc.getPurchasesHistoryReport(branchID));
+            return ResponseT.FromValue(sc.getPurchasesHistoryReport());
         }
         catch (Exception e)
         {
@@ -76,11 +79,11 @@ public class StockControllerService
         }
     }
 
-    public ResponseT<List<Discount>> getCurrentDiscounts(int branchID)
+    public ResponseT<List<Discount>> getCurrentDiscounts()
     {
         //Requirement 4
         try{
-            return ResponseT.FromValue(bc.getCurrentDiscounts(branchID));
+            return ResponseT.FromValue(sc.getCurrentDiscounts());
         }
         catch (Exception e)
         {
@@ -90,12 +93,12 @@ public class StockControllerService
 
     }
 
-    public ResponseT<List<Category>> getCategories(int branchID)
+    public ResponseT<List<Category>> getCategories()
     {
         //Requirement 5
         try
         {
-            return ResponseT.FromValue(bc.getCategories(branchID));
+            return ResponseT.FromValue(sc.getCategories());
         }
         catch (Exception e)
         {
@@ -103,11 +106,11 @@ public class StockControllerService
         }
     }
 
-    public ResponseT<List<Item>> getStockReport(int branchID)
+    public ResponseT<List<Item>> getStockReport()
     {
         //Requirement 6
         try{
-            return ResponseT.FromValue(bc.getStockReport(branchID));
+            return ResponseT.FromValue(sc.getStockReport());
         }
         catch (Exception e)
         {
@@ -115,11 +118,11 @@ public class StockControllerService
         }
     }
 
-    public ResponseT<List<Item>> getStockReportByCategory(int branchID, int categoryID)
+    public ResponseT<List<Item>> getStockReportByCategory(int categoryID)
     {
         //Requirement 7
         try{
-            return ResponseT.FromValue(bc.getStockReportByCategory(branchID, categoryID));
+            return ResponseT.FromValue(sc.getStockReportByCategory(categoryID));
         }
         catch (Exception e)
         {
@@ -128,12 +131,12 @@ public class StockControllerService
 
     }
 
-    public ResponseT<List<Item>> getDefectedItemsReport(int branchID)
+    public ResponseT<List<Item>> getDefectedItemsReport()
     {
         //Requirement 8+9
         try
         {
-            return ResponseT.FromValue(bc.getDefectedItemsReport(branchID));
+            return ResponseT.FromValue(sc.getDefectedItemsReport());
         }
         catch (Exception e)
         {
@@ -141,10 +144,10 @@ public class StockControllerService
         }
     }
 
-    public ResponseT<List<Item>> getExpiredItemsReport(int branchID) {
+    public ResponseT<List<Item>> getExpiredItemsReport() {
         try
         {
-            return ResponseT.FromValue(bc.getExpiredItemsReport(branchID));
+            return ResponseT.FromValue(sc.getExpiredItemsReport());
         }
         catch (Exception e)
         {
@@ -152,11 +155,11 @@ public class StockControllerService
         }
     }
 
-    public Response insertNewProduct(int branchID, String productName, String productManufacturer, int categoryID, Date supplyTime, int demand)
+    public Response insertNewProduct(String productName, String productManufacturer, int categoryID, Date supplyTime, int demand)
     {
         try
         {
-            bc.insertNewProduct(branchID, productName, productManufacturer, categoryID, supplyTime, demand);
+            sc.insertNewProduct(productName, productManufacturer, categoryID, supplyTime, demand);
             return new Response();
         } catch (Exception e)
         {
@@ -164,11 +167,11 @@ public class StockControllerService
         }
     }
 
-    public Response insertNewItem(int branchID, int productID, String location, Date expireDate, boolean isUsable, int amount)
+    public Response insertNewItem(int productID, String location, Date expireDate, boolean isUsable, int amount)
     {
         try
         {
-            bc.insertNewItem(branchID,productID,location,expireDate,isUsable,amount);
+            sc.insertNewItem(productID,location,expireDate,isUsable,amount);
             return new Response();
         }
         catch (Exception e)
@@ -177,10 +180,10 @@ public class StockControllerService
         }
     }
 
-    public Response reduceItemAmount(int branchID, int productID,int itemID,int amountToReduce){
+    public Response reduceItemAmount(int productID,int itemID,int amountToReduce){
         try
         {
-            bc.reduceItemAmount(branchID,productID,itemID,amountToReduce);
+            sc.reduceItemAmount(productID,itemID,amountToReduce);
             return new Response();
         }
         catch (Exception e)
@@ -189,10 +192,10 @@ public class StockControllerService
         }
     }
 
-    public Response insertNewCategory(int branchID,String categoryName){
+    public Response insertNewCategory(String categoryName){
         try
         {
-            bc.insertNewCategory(branchID, categoryName);
+            sc.insertNewCategory(categoryName);
             return new Response();
         }
         catch (Exception e)
@@ -201,10 +204,10 @@ public class StockControllerService
         }
     }
 
-    public Response insertNewDiscount(int branchID, int productID, Date startDate, Date endDate, int amount, Type t){
+    public Response insertNewDiscount(int productID, Date startDate, Date endDate, int amount, Type t){
         try
         {
-            bc.insertNewDiscount(branchID, productID, startDate, endDate, amount, t);
+            sc.insertNewDiscount(productID, startDate, endDate, amount, t);
             return new Response();
         }
         catch (Exception e)
@@ -214,10 +217,10 @@ public class StockControllerService
 
     }
 
-    public Response insertNewPurchase(int branchID, Date purchaseDate, Map<Integer, Map<Integer, Integer>> products){
+    public Response insertNewPurchase(Date purchaseDate, Map<Integer, Map<Integer, Integer>> products){
         try
         {
-            bc.insertNewPurchase(branchID, purchaseDate, products);
+            sc.insertNewPurchase(purchaseDate, products);
             return new Response();
         }
         catch (Exception e)
@@ -226,10 +229,10 @@ public class StockControllerService
         }
     }
 
-    public Response deleteProduct(int branchID, int productID){
+    public Response deleteProduct(int productID){
         try
         {
-            bc.deleteProduct(branchID, productID);
+            sc.deleteProduct(productID);
             return new Response();
         }
         catch (Exception e)
@@ -238,10 +241,10 @@ public class StockControllerService
         }
     }
 
-    public Response deleteCategory(int branchID, int categoryID) {
+    public Response deleteCategory(int categoryID) {
         try
         {
-            bc.deleteCategory(branchID, categoryID);
+            sc.deleteCategory(categoryID);
             return new Response();
         }
         catch (Exception e)
@@ -251,10 +254,10 @@ public class StockControllerService
     }
 
 
-    public Response deleteDiscount(int branchID, int discountID){
+    public Response deleteDiscount(int discountID){
         try
         {
-            bc.deleteDiscount(branchID, discountID);
+            sc.deleteDiscount(discountID);
             return new Response();
         }
         catch (Exception e)
@@ -263,9 +266,9 @@ public class StockControllerService
         }
     }
 
-    public Response deletePurchase(int branchID, int purchaseID){
+    public Response deletePurchase(int purchaseID){
         try{
-            bc.deletePurchase(branchID, purchaseID);
+            sc.deletePurchase(purchaseID);
             return new Response();
         }
         catch (Exception e)
@@ -273,9 +276,9 @@ public class StockControllerService
             return new Response(e.getMessage());
         }
     }
-    public Response deleteItem(int branchID, int productID,int itemID){
+    public Response deleteItem(int productID,int itemID){
         try{
-            bc.deleteItem(branchID, productID,itemID);
+            sc.deleteItem(productID,itemID);
             return new Response();
         }
         catch (Exception e)
@@ -283,9 +286,11 @@ public class StockControllerService
             return new Response(e.getMessage());
         }
     }
+
+    /*
     public ResponseT<List<Branch>> getBranches(){
         try{
-            return ResponseT.FromValue(bc.getBranches());
+            return ResponseT.FromValue(sc.getBranches());
         }
         catch (Exception e)
         {
@@ -293,16 +298,18 @@ public class StockControllerService
         }
     }
 
-    public Response updateProductAttribute(int branchID,String productID, int Attribute, Object Value) {
-        return ResponseT.FromValue(bc.updateProductAttribute(branchID, productID, Attribute, Value));
+     */
+
+    public Response updateProductAttribute(String productID, int Attribute, Object Value) {
+        return ResponseT.FromValue(sc.updateProductAttribute(productID, Attribute, Value));
     }
 
-    public Response updateCategoryName(int branchID,String categoryID, String name) {
-        return ResponseT.FromValue(bc.updateCategoryName(branchID, categoryID, name));
+    public Response updateCategoryName(String categoryID, String name) {
+        return ResponseT.FromValue(sc.updateCategoryName(categoryID, name));
     }
 
-    public Response updateItemAttribute(int branchID,String productID,int ItemID, int Attribute, Object Value) {
-        return ResponseT.FromValue(bc.updateItemAttribute(branchID, productID,ItemID,Attribute, Value));
+    public Response updateItemAttribute(String productID,int ItemID, int Attribute, Object Value) {
+        return ResponseT.FromValue(sc.updateItemAttribute(productID,ItemID,Attribute, Value));
     }
 
 }
