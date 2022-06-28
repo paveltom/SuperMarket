@@ -123,4 +123,8 @@ public class BranchController{
         return branches.get(branchID).updateCategoryName(categoryID, name);
     }
 
+    public boolean updateItemAttribute(int branchID,String productID,int ItemID, int Attribute, Object Value) {
+        return branches.get(branchID).updateItemAttribute(productID,ItemID,Attribute, Value);
+    }
+
 }
