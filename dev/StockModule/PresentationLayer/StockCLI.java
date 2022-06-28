@@ -9,9 +9,7 @@ public class StockCLI {
     public void main(String[] args) {
         run();
     }
-    static int SelectedBranchID = -1;
 
-    static boolean branchSelected = false;
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
     static boolean terminate = false;
@@ -121,17 +119,17 @@ public class StockCLI {
                     int day = toRead.nextInt();
                     System.out.println("Enter the minimum demand for this product.");
                     int demand = toRead.nextInt();
-                    System.out.println(s.insertNewProduct(SelectedBranchID, productName, productManufacturer, categoryID, new Date(year, month - 1, day), demand).ErrorMessage);
+                    System.out.println(s.insertNewProduct(productName, productManufacturer, categoryID, new Date(year, month - 1, day), demand).ErrorMessage);
                     break;
                 }
                 case "2": {
                     System.out.print("Enter product ID to remove : ");
-                    if (!s.deleteProduct(SelectedBranchID, toRead.nextInt()).ErrorOccured())
+                    if (!s.deleteProduct(toRead.nextInt()).ErrorOccured())
                         System.out.print("Product removed successfully.");
                     break;
                 }
                 case "3": {
-                    System.out.println(s.getProductsInStock(SelectedBranchID).Value);
+                    System.out.println(s.getProductsInStock().Value);
                     break;
                 }
                 case "4": {
@@ -141,7 +139,7 @@ public class StockCLI {
                     int attribute = toRead.nextInt();
                     System.out.println("Enter new value : ");
                     Object value = toRead.next();
-                    s.updateProductAttribute(SelectedBranchID, productID, attribute, value);
+                    s.updateProductAttribute(productID, attribute, value);
                     break;
                 }
                 case "9": {
@@ -194,7 +192,7 @@ public class StockCLI {
                     }
                     System.out.println("Enter amount of items : ");
                     int amountAddItem = toRead.nextInt();
-                    if (!s.insertNewItem(SelectedBranchID, ProductIDAddItem, Location, expireDate, isUsable.equals("Yes"), amountAddItem).ErrorOccured())
+                    if (!s.insertNewItem(ProductIDAddItem, Location, expireDate, isUsable.equals("Yes"), amountAddItem).ErrorOccured())
                         System.out.print("Added item successfully.");
                     break;
 
@@ -204,24 +202,24 @@ public class StockCLI {
                     int ProductIDRemoveItem = toRead.nextInt();
                     System.out.println("Enter item ID : ");
                     int ItemID = toRead.nextInt();
-                    System.out.println(s.deleteItem(SelectedBranchID, ProductIDRemoveItem, ItemID).ErrorMessage);
+                    System.out.println(s.deleteItem(ProductIDRemoveItem, ItemID).ErrorMessage);
                     break;
                 }
                 case "3": {
-                    System.out.println(s.getStockReport(SelectedBranchID).Value);
+                    System.out.println(s.getStockReport().Value);
                     break;
                 }
                 case "4": {
                     System.out.println("Enter product ID to filter : ");
-                    System.out.println(s.getStockReportByCategory(SelectedBranchID, toRead.nextInt()).Value);
+                    System.out.println(s.getStockReportByCategory(toRead.nextInt()).Value);
                     break;
                 }
                 case "5": {
-                    System.out.println(s.getDefectedProductsReport(SelectedBranchID).Value);
+                    System.out.println(s.getDefectedProductsReport().Value);
                     break;
                 }
                 case "6": {
-                    System.out.println(s.getExpiredProductsReport(SelectedBranchID).Value);
+                    System.out.println(s.getExpiredProductsReport().Value);
                     break;
                 }
                 case "7": {
@@ -240,7 +238,7 @@ public class StockCLI {
                     System.out.println("Enter the new value :");
                     Object value = toRead.next();
 
-                    System.out.println(s.updateItemAttribute(SelectedBranchID, productID, itemID, attribute, value).ErrorMessage);
+                    System.out.println(s.updateItemAttribute(productID, itemID, attribute, value).ErrorMessage);
                     break;
                 }
                 case "8": {
@@ -250,7 +248,7 @@ public class StockCLI {
                     int itemID = toRead.nextInt();
                     System.out.println("Enter how much do you want to reduce : ");
                     int amountToReduce = toRead.nextInt();
-                    System.out.println(s.reduceItemAmount(SelectedBranchID, ProductIDReduceItemAmount, itemID, amountToReduce).ErrorMessage);
+                    System.out.println(s.reduceItemAmount(ProductIDReduceItemAmount, itemID, amountToReduce).ErrorMessage);
                     break;
                 }
                 case "9": {
@@ -278,7 +276,7 @@ public class StockCLI {
                     break;
                 }
                 case "1": {
-                    System.out.println(s.getPurchasesHistoryReport(SelectedBranchID).Value);
+                    System.out.println(s.getPurchasesHistoryReport().Value);
                     break;
                 }
                 case "2": {
@@ -296,13 +294,13 @@ public class StockCLI {
                     System.out.println("Enter actual price of product : ");
                     int actualPrice = toRead.nextInt();
                     Map<Integer, Map<Integer, Integer>> products = (Map<Integer, Map<Integer, Integer>>) new HashMap<>().put(productID, new HashMap<>().put(fixedPrice, actualPrice));
-                    if (!s.insertNewPurchase(SelectedBranchID, new Date(yearAddPurchase, monthAddPurchase - 1, dayAddPurchase), products).ErrorOccured())
+                    if (!s.insertNewPurchase(new Date(yearAddPurchase, monthAddPurchase - 1, dayAddPurchase), products).ErrorOccured())
                         System.out.print("Added purchase successfully.");
                     break;
                 }
                 case "3": {
                     System.out.println("Enter purchase ID to remove : ");
-                    if (!s.deletePurchase(SelectedBranchID, toRead.nextInt()).ErrorOccured())
+                    if (!s.deletePurchase(toRead.nextInt()).ErrorOccured())
                         System.out.print("Removed purchase successfully.");
                     break;
                 }
@@ -330,7 +328,7 @@ public class StockCLI {
                     break;
                 }
                 case "1": {
-                    System.out.println(s.getCurrentDiscounts(SelectedBranchID).Value);
+                    System.out.println(s.getCurrentDiscounts().Value);
                     break;
                 }
                 case "2": {
@@ -369,12 +367,12 @@ public class StockCLI {
                             System.out.println("Wrong value, enter 'PERCENT' or 'FIXED'");
 
                     }
-                    System.out.println(s.insertNewDiscount(SelectedBranchID, ProductID, startDate, endDate, amount, t).ErrorMessage);
+                    System.out.println(s.insertNewDiscount(ProductID, startDate, endDate, amount, t).ErrorMessage);
                     break;
                 }
                 case "3": {
                     System.out.println("Enter ID of discount to remove : ");
-                    if (!s.deleteDiscount(SelectedBranchID, toRead.nextInt()).ErrorOccured())
+                    if (!s.deleteDiscount(toRead.nextInt()).ErrorOccured())
                         System.out.print("Removed discount successfully.");
                     break;
                 }
@@ -403,18 +401,18 @@ public class StockCLI {
                     break;
                 }
                 case "1": {
-                    System.out.println(s.getCategories(SelectedBranchID).Value);
+                    System.out.println(s.getCategories().Value);
                     break;
                 }
                 case "2": {
                     System.out.println("Enter new category name : ");
-                    if (!s.insertNewCategory(SelectedBranchID, toRead.next()).ErrorOccured())
+                    if (!s.insertNewCategory(toRead.next()).ErrorOccured())
                         System.out.println("Added category successfully.");
                     break;
                 }
                 case "3": {
                     System.out.println("Enter category ID to delete :");
-                    if (!s.deleteCategory(SelectedBranchID, toRead.nextInt()).ErrorOccured())
+                    if (!s.deleteCategory(toRead.nextInt()).ErrorOccured())
                         System.out.println("Removed category successfully.");
                     break;
                 }
@@ -423,7 +421,7 @@ public class StockCLI {
                     int subCategoryID = toRead.nextInt();
                     System.out.println("Enter categoryID you want to set as parent : ");
                     int parentID = toRead.nextInt();
-                    if (!s.setSubCategory(SelectedBranchID, subCategoryID, parentID).ErrorOccured())
+                    if (!s.setSubCategory(subCategoryID, parentID).ErrorOccured())
                         System.out.println("Subcategory set successfully.");
                     break;
                 }
