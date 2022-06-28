@@ -92,4 +92,77 @@ public class Item {
     public Date getExpireDate() {
         return expireDate;
     }
+
+    public void setProductID(String productID) {
+        this.productID = productID;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public void setExpireDate(Date expireDate) {
+        this.expireDate = expireDate;
+    }
+
+    public void setDefect(boolean defect) {
+        isDefect = defect;
+    }
+
+    public void setExpired(boolean expired) {
+        isExpired = expired;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
+    public boolean updateAttribute(int Attribute, Object Value){
+        switch (Attribute) {
+            case 0: {
+                try {
+                    setProductID((String) Value);
+                } catch (Exception e) {
+                    return false;
+                }
+            }
+            case 1: {
+                try {
+                    setLocation((String) Value);
+                } catch (Exception e) {
+                    return false;
+                }
+            }
+            case 2: {
+                try {
+                    setExpireDate((Date) Value);
+                } catch (Exception e) {
+                    return false;
+                }
+            }
+            case 3: {
+                try {
+                    setDefect((boolean) Value);
+                } catch (Exception e) {
+                    return false;
+                }
+            }
+            case 4: {
+                try {
+                    setExpired((boolean) Value);
+                } catch (Exception e) {
+                    return false;
+                }
+            }
+            case 5: {
+                try {
+                    setAmount((int) Value);
+                } catch (Exception e) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
 }
