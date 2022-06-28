@@ -156,15 +156,14 @@ public class StockController {
         products.get(productID).deleteItem(itemID);
     }
 
-    public boolean isAncestorOf(int childCategoryID,int parentCategoryID)
-    {
+    public boolean isAncestorOf(int childCategoryID,int parentCategoryID) {
         Category child = categories.get(childCategoryID);
         Category parent = categories.get(parentCategoryID);
 
-        if(child == parent)
+        if (child == parent)
             return true;
 
-        if(child.getParentCategory()==null)
+        if (child.getParentCategory() == null)
             return false;
 
         return isAncestorOf(child.getParentCategory().getID(), parentCategoryID);
@@ -173,4 +172,9 @@ public class StockController {
     public boolean updateProductAttribute(String productID, int Attribute, Object Value) {
         return products.get(productID).updateAttributes(Attribute, Value);
     }
+
+    public boolean updateCategoryName(String categoryID,String name) {
+        return categories.get(categoryID).setName(name);
+    }
+
 }
