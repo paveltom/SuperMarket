@@ -6,11 +6,14 @@ import StockModule.ServiceLayer.Service;
 import java.util.*;
 
 public class StockCLI {
-
+    public void main(String[] args) {
+        run();
+    }
     static int SelectedBranchID = -1;
 
     static boolean branchSelected = false;
-
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
     static boolean terminate = false;
 
     public void run() {
@@ -20,16 +23,18 @@ public class StockCLI {
         Scanner toRead = new Scanner(System.in);
 
         String message = "";
-        System.out.println("Hello user welcome to our shop.");
-        System.out.println("Select the section you want to go :");
-        System.out.println("1 - Load data");
-        System.out.println("2 - Products");
-        System.out.println("3 - Items");
-        System.out.println("4- Purchases");
-        System.out.println("5 - Discounts");
-        System.out.println("6 - Categories");
-        System.out.println("9 - Exit stock module");
+
         while (!terminate) {
+            System.out.println(ANSI_WHITE_BACKGROUND+"Main Menu :"+ANSI_RESET);
+            System.out.println("Hello user welcome to our shop.");
+            System.out.println("Select the section you want to go :");
+            System.out.println("1 - Load data");
+            System.out.println("2 - Products");
+            System.out.println("3 - Items");
+            System.out.println("4- Purchases");
+            System.out.println("5 - Discounts");
+            System.out.println("6 - Categories");
+            System.out.println("9 - Exit stock module");
             message = toRead.next();
             Protocol(message, s, toRead);
         }
@@ -84,7 +89,7 @@ public class StockCLI {
     }
 
     public static void runProductsMenu(Service s, Scanner toRead) {
-
+        System.out.println(ANSI_WHITE_BACKGROUND+"Products Menu :"+ANSI_RESET);
         while (true) {
             System.out.println("Choose your action : ");
             System.out.println("0 - Back to previous menu");
@@ -150,6 +155,7 @@ public class StockCLI {
     }
 
     public static void runItemsMenu(Service s, Scanner toRead) {
+        System.out.println(ANSI_WHITE_BACKGROUND+"Items Menu :"+ANSI_RESET);
         System.out.println("Choose your action : ");
         System.out.println("0 - Back to previous menu");
         System.out.println("1 - Add new item");
@@ -258,6 +264,7 @@ public class StockCLI {
     }
 
     public static void runPurchasesMenu(Service s, Scanner toRead) {
+        System.out.println(ANSI_WHITE_BACKGROUND+"Purchases Menu :"+ANSI_RESET);
         System.out.println("Choose your action : ");
         System.out.println("0 - Back to previous menu");
         System.out.println("1 - Show purchases history report");
@@ -309,6 +316,7 @@ public class StockCLI {
     }
 
     public static void runDiscountsMenu(Service s,Scanner toRead) {
+        System.out.println(ANSI_WHITE_BACKGROUND+"Discounts Menu :"+ANSI_RESET);
         System.out.println("Choose your action : ");
         System.out.println("0 - Back to previous menu");
         System.out.println("1 - Show current discounts report");
@@ -380,6 +388,7 @@ public class StockCLI {
     }
 
     public static void runCategoriesMenu(Service s,Scanner toRead){
+        System.out.println(ANSI_WHITE_BACKGROUND+"Categories Menu :"+ANSI_RESET);
         System.out.println("Choose your action : ");
         System.out.println("0 - Back to previous menu");
         System.out.println("1 - Show categories");
