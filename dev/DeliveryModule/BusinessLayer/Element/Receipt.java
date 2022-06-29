@@ -1,7 +1,7 @@
 package DeliveryModule.BusinessLayer.Element;
 
-import DAL.DALController;
-import DAL.DTO.RecipeDTO;
+import DAL.Delivery_Personnel.DALController;
+import DAL.Delivery_Personnel.DTO.RecipeDTO;
 import DeliveryModule.BusinessLayer.Type.RetCode;
 import DeliveryModule.BusinessLayer.Type.ShippingZone;
 

@@ -1,8 +1,7 @@
 package Tests;
 
-import DAL.DALController;
-import DAL.DTO.DriverDTO;
-import DeliveryModule.PresentationLayer.PresentationController;
+import DAL.Delivery_Personnel.DALController;
+import DAL.Delivery_Personnel.DTO.DriverDTO;
 import PersonelModule.BusinessLayer.ServiceLayer.Service;
 import org.junit.Before;
 import org.junit.Test;
