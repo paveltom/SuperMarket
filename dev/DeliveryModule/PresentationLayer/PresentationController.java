@@ -235,12 +235,12 @@ public class PresentationController {
         operateOutput("----------Enter '0' at any field to cancel----------");
         showShippingZones();
         //showLicenseCategories(); => there is no need to show them cause its defined automatically considering net weight
-        String[] details = {"License Plate", "Model", "Parking area", "Net weight", "Max load weight"};
+        String[] details = {"License Plate", "Model", "Parking area", "Net weight(5,000,000 - 15,000,000)", "Max load weight"};
         for(int i = 0; i < details.length; i++){
             String input = operateInput(details[i] + ": ");
             input = input.trim();
             if(input.equals("0")) return 0;
-            if(!checkAddTruckInput(i , input)) {
+            if(!checkAddTruckInput(i , input, details)) {
                 operateOutput("Bad input. Try again...");
                 i--;
                 continue;
@@ -389,7 +389,7 @@ public class PresentationController {
         return 0;
     }
 
-    private boolean checkAddTruckInput(int i, String input) {
+    private boolean checkAddTruckInput(int i, String input, String[] details) {
         // "License Plate", "Model", "Parking area", "Net weight", "Max load weight"
         boolean res = true;
         try {
@@ -414,11 +414,17 @@ public class PresentationController {
                     }
                     break;
                 case 3:
-                case 4:
-                    if(Double.parseDouble(input) < 3500000){
-                        operateOutput("Cannot be less than 3500000.");
+                    if(Double.parseDouble(input) < 5000000 || Double.parseDouble(input) > 15000000){
+                        operateOutput("Cannot be less than 5,000,000 or greater than 15,000,000.");
                         res = false;
                     }
+                    break;
+                case 4:
+                    if(Double.parseDouble(input) < Double.parseDouble(details[i-1])){
+                        operateOutput("Cannot be less than " + details[i-1] + ".");
+                        res = false;
+                    }
+                    break;
             }
         }catch (Exception e){
             res = false;

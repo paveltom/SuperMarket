@@ -263,16 +263,20 @@ public class DeliveryController
     public Truck RemoveTruck(long vln)
     {
         Truck truck = FindTruck(vln);
-        if(truck != null)
+        if(truck != null) {
             DALController.getInstance().removeTruck(vln);
+            Trucks[truck.Zone.ordinal()][truck.AuthorizedLicense.ordinal()].remove(truck);
+        }
         return truck;
     }
 
     public Driver RemoveDriver(String id)
     {
         Driver driver = FindDriver(id);
-        if(driver != null)
+        if(driver != null) {
             DALController.getInstance().removeDriver(id);
+            Drivers[driver.Zone.ordinal()][driver.License.ordinal()].remove(driver);
+        }
         return driver;
     }
 
