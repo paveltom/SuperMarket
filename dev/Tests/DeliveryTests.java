@@ -50,7 +50,7 @@ public class DeliveryTests {
     @Test
     public void regularDelivery() { // add delivery, add same id delivery
         addDriver("987654321", "Golan", null);
-        addTruck(123456789, "Golan", 0);
+        addTruck("123456789", "Golan", 0);
 
         ResponseT<String> history = service.getDeliveryHistory();
         assertFalse(history.getErrorOccurred());
@@ -69,7 +69,7 @@ public class DeliveryTests {
     @Test
     public void sameIDDelivery() {
         addDriver("987654321", "Golan", null);
-        addTruck(123456789, "Golan", 0);
+        addTruck("123456789", "Golan", 0);
 
         ResponseT<String> history = service.getDeliveryHistory();
         assertFalse(history.getErrorOccurred());
@@ -93,7 +93,7 @@ public class DeliveryTests {
     @Test
     public void noDriverDelivery() {
         //addDriver("987654321", "Golan", null);
-        addTruck(123456789, "Golan", 0);
+        addTruck("123456789", "Golan", 0);
 
         ResponseT<String> history = service.getDeliveryHistory();
         assertFalse(history.getErrorOccurred());
@@ -106,7 +106,7 @@ public class DeliveryTests {
     @Test
     public void noTruckDelivery() {
         addDriver("987654321", "Golan", null);
-        //addTruck(123456789, "Golan", 0);
+        //addTruck("123456789", "Golan", 0);
 
         ResponseT<String> history = service.getDeliveryHistory();
         assertFalse(history.getErrorOccurred());
@@ -119,7 +119,7 @@ public class DeliveryTests {
     @Test
     public void overWeightedDelivery() { // mistakenly passes due to 'E' license category, although max load weight is 10 grams.
         addDriver("987654321", "Golan", null);
-        addTruck(123456789, "Golan", 10);
+        addTruck("123456789", "Golan", 10);
 
         ResponseT<String> history = service.getDeliveryHistory();
         assertFalse(history.getErrorOccurred());
@@ -132,7 +132,7 @@ public class DeliveryTests {
     @Test
     public void cancelDelivery() { // add delivery => cancel it => validate through isOccupied and get history
         addDriver("987654321", "Golan", null);
-        addTruck(123456789, "Golan", 0);
+        addTruck("123456789", "Golan", 0);
 
         ResponseT<String> history = service.getDeliveryHistory();
         assertFalse(history.getErrorOccurred());
@@ -154,7 +154,7 @@ public class DeliveryTests {
     @Test
     public void getDeliveryHistory() { // validate history before adding, after adding, after deleting
         addDriver("987654321", "Golan", null);
-        addTruck(123456789, "Golan", 0);
+        addTruck("123456789", "Golan", 0);
 
         ResponseT<String> history = service.getDeliveryHistory();
         assertFalse(history.getErrorOccurred());
@@ -194,7 +194,7 @@ public class DeliveryTests {
         ResponseT<String> res = service.showTrucks();
         assertFalse(res.getErrorOccurred());
 
-        addTruck(326971231, "Golan", 0);
+        addTruck("326971231", "Golan", 0);
 
         res = service.showTrucks();
         assertFalse(res.getErrorOccurred());
@@ -204,12 +204,12 @@ public class DeliveryTests {
 
     @Test
     public void removeTruck(){
-        Response res = service.removeTruck(11223344);
+        Response res = service.removeTruck("11223344");
         assertTrue(res.getErrorOccurred());
 
-        addTruck(11223344, "Golan", 0);
+        addTruck("11223344", "Golan", 0);
 
-        res = service.removeTruck(11223344);
+        res = service.removeTruck("11223344");
         assertFalse(res.getErrorOccurred());
 
     }
@@ -228,14 +228,14 @@ public class DeliveryTests {
 
     @Test
     public void getTruckByPlate(){
-        ResponseT<FacadeTruck> res = service.getTruckByPlate(987654322);
+        ResponseT<FacadeTruck> res = service.getTruckByPlate("987654322");
         assertTrue(res.getErrorOccurred());
 
-        addTruck(987654322, "Golan", 0);
+        addTruck("987654322", "Golan", 0);
 
-        res = service.getTruckByPlate(987654322);
+        res = service.getTruckByPlate("987654322");
         assertFalse(res.getErrorOccurred());
-        assertEquals(res.getValue().getLicensePlate(), 987654322);
+        assertEquals(res.getValue().getLicensePlate(), "987654322");
     }
 
     @Test
@@ -260,10 +260,10 @@ public class DeliveryTests {
         ResponseT<String> res = service.showTrucks();
         assertFalse(res.getValue().contains("Model"));
 
-        addTruck(326971231, "Golan", 0);
-        addTruck(326971249, "Negev", 0);
-        addTruck(326971200, "Golan", 0);
-        addTruck(326971111, "Golan", 0);
+        addTruck("326971231", "Golan", 0);
+        addTruck("326971249", "Negev", 0);
+        addTruck("326971200", "Golan", 0);
+        addTruck("326971111", "Golan", 0);
 
         res = service.showTrucks();
 
@@ -274,7 +274,7 @@ public class DeliveryTests {
 
     @Test
     public void addConstraints(){
-        addTruck(326971231, "Golan", 0);
+        addTruck("326971231", "Golan", 0);
         addDriver("987654321", "Golan", null);
 
         FacadeDate facDate = facadeDate(1);
@@ -324,7 +324,7 @@ public class DeliveryTests {
 
     }
 
-    private void addTruck(long licPlate, String area, double optionalNonZeroWeight){
+    private void addTruck(String licPlate, String area, double optionalNonZeroWeight){
         // long licensePlate, String model, String parkingArea, double netWeight, double maxLoadWeight
         if(optionalNonZeroWeight == 0)
             service.addTruck(new FacadeTruck(licPlate, "model" + licPlate, area, 10000000, 10000000));

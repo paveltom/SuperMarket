@@ -247,7 +247,7 @@ public class PresentationController {
             }
             details[i] = input;
         }
-        FacadeTruck facTruck = new FacadeTruck(Integer.parseInt(details[0]), details[1], details[2], Double.parseDouble(details[3]), Double.parseDouble(details[4]));
+        FacadeTruck facTruck = new FacadeTruck(details[0], details[1], details[2], Double.parseDouble(details[3]), Double.parseDouble(details[4]));
         Response res = service.addTruck(facTruck);
         if(res.getErrorOccurred()) {
             operateOutput("Couldn't add a new truck. " + res.getErrorMessage());
@@ -284,8 +284,8 @@ public class PresentationController {
 
     private int removeTruck(){
         try {
-            long input = Long.parseLong(operateInput("Truck's license plate (enter '0' to cancel): "));
-            if (input == 0) return 0;
+            String input = operateInput("Truck's license plate (enter '0' to cancel): ");
+            if (input.equals("0")) return 0;
             Response res = service.removeTruck(input);
             if (res.getErrorOccurred()) {
                 operateOutput("Couldn't remove a truck " + input + ". " + res.getErrorMessage());
@@ -338,8 +338,8 @@ public class PresentationController {
 
     private int getTruckByPlate(){
         try {
-            long input = Long.parseLong(operateInput("Truck's license plate (enter '0' to cancel): "));
-            if (input == 0) return 0;
+            String input = operateInput("Truck's license plate (enter '0' to cancel): ");
+            if (input.equals("0")) return 0;
             ResponseT<FacadeTruck> res = service.getTruckByPlate(input);
             if(!res.getErrorOccurred()) operateOutput(res.getValue().toString());
             else{

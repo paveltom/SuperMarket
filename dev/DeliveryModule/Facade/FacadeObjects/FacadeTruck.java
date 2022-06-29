@@ -4,7 +4,7 @@ package DeliveryModule.Facade.FacadeObjects;
 import DeliveryModule.BusinessLayer.Element.Truck;
 
 public class FacadeTruck {
-    private long licensePlate;
+    private String licensePlate;
     private String model, parkingArea;
     private double netWeight, maxLoadWeight;
 
@@ -18,7 +18,7 @@ public class FacadeTruck {
         this.parkingArea = truck.Zone.name();
     }
 
-    public FacadeTruck(long licensePlate, String model, String parkingArea, double netWeight, double maxLoadWeight){
+    public FacadeTruck(String licensePlate, String model, String parkingArea, double netWeight, double maxLoadWeight){
         this.licensePlate = licensePlate;
         this.model = model;
         this.parkingArea = parkingArea;
@@ -30,7 +30,7 @@ public class FacadeTruck {
         return licensePlate + ", " + model + ", " + parkingArea + ", net weight - " + netWeight + ", max load weight - " + maxLoadWeight;
     }
 
-    public long getLicensePlate() {
+    public String getLicensePlate() {
         return licensePlate;
     }
 

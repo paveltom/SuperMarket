@@ -75,7 +75,7 @@ public class DeliveryResourcesService {
 
     public Response addTruck(FacadeTruck facTruck){
         try {
-            long licensePlate = facTruck.getLicensePlate();
+            String licensePlate = facTruck.getLicensePlate();
             String model = facTruck.getModel();
             double netWeight = facTruck.getNetWeight();
             double maxLoadWeight = facTruck.getMaxLoadWeight();
@@ -93,7 +93,7 @@ public class DeliveryResourcesService {
         }
     }
 
-    public Response removeTruck(long licensePlate){
+    public Response removeTruck(String licensePlate){
         try {
             Truck truck = delController.RemoveTruck(licensePlate);
             if(truck != null) return new Response();
@@ -120,7 +120,7 @@ public class DeliveryResourcesService {
         return new ResponseT<>(facadeDriver, true);
     }
 
-    public ResponseT<FacadeTruck> getTruckByPlate(long licPlate){
+    public ResponseT<FacadeTruck> getTruckByPlate(String licPlate){
         Truck truck = delController.GetTruck(licPlate);
         if(truck == null) return new ResponseT<>("No truck with such license plate.");
         FacadeTruck facadeTruck = new FacadeTruck(truck);

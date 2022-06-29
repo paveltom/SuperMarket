@@ -45,13 +45,13 @@ public class Service implements IService{
 
     public Response addTruck(FacadeTruck facadeTruck){ return deliveryResourcesService.addTruck(facadeTruck); }
 
-    public Response removeTruck(long licensePlate){ return deliveryResourcesService.removeTruck(licensePlate); }
+    public Response removeTruck(String licensePlate){ return deliveryResourcesService.removeTruck(licensePlate); }
 
     public Response removeDriver(String id){ return deliveryResourcesService.removeDriver(id); }
 
     public ResponseT<FacadeDriver> getDriverById(String id){ return deliveryResourcesService.getDriverById(id); }
 
-    public ResponseT<FacadeTruck> getTruckByPlate(long licPlate){ return deliveryResourcesService.getTruckByPlate(licPlate); }
+    public ResponseT<FacadeTruck> getTruckByPlate(String licPlate){ return deliveryResourcesService.getTruckByPlate(licPlate); }
 
     public ResponseT<String> showDrivers(){ return deliveryResourcesService.showDrivers(); }
 
