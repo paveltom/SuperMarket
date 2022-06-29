@@ -29,7 +29,8 @@ public class DataBaseConnection {
         try {
             // db parameters
             String dir = System.getProperty("user.dir");
-            String url = "jdbc:sqlite:" + dir + "/dev/DataBase/PerDel.db";
+            //String url = "jdbc:sqlite:" + dir + "\\dev\\DataBase\\PerDel.db";
+            String url = "jdbc:sqlite:" + dir + "\\PerDel.db";
             //System.out.println("url: " + url);
             Class.forName("org.sqlite.JDBC");
 
@@ -304,7 +305,8 @@ public class DataBaseConnection {
 
         }
         String dir = System.getProperty("user.dir");
-        File f = new File(dir + "/dev/DataBase/PerDel.db");
+        //File f = new File(dir + "\\dev\\DataBase\\PerDel.db");
+        File f = new File(dir + "\\PerDel.db");
         if(f.exists()){
 
             f.delete();

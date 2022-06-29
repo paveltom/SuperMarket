@@ -52,7 +52,7 @@ public class DeliveryService {
         }
     }
 
-    public ResponseT<Recipe> deliver(FacadeSite origin,
+    public ResponseT<Receipt> deliver(FacadeSite origin,
                                      FacadeSite destination,
                                      String orderId,
                                      List<FacadeProduct> facProducts,

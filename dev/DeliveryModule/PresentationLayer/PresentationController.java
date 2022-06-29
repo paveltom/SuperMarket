@@ -395,19 +395,30 @@ public class PresentationController {
         try {
             switch (i) {
                 case 0:
-                case 3:
-                case 4:
-                    if (Long.parseLong(input) < 1) res = false;
+                    if (Long.parseLong(input) < 1){
+                        operateOutput("Negative number entered.");
+                        res = false;
+                    }
                     break;
                 case 1:
                     try {
                         Long.parseLong(input);
+                        operateOutput("Model cannot be a number.");
                         res = false;
                     }catch (Exception e){}
                     break;
                 case 2:
-                    if (!service.showShippingZones().getValue().replaceAll(",", "").contains(input)) res = false;
+                    if (!service.showShippingZones().getValue().replaceAll(",", "").contains(input)){
+                        operateOutput("Non-existing shipping zone.");
+                        res = false;
+                    }
                     break;
+                case 3:
+                case 4:
+                    if(Double.parseDouble(input) < 3500000){
+                        operateOutput("Cannot be less than 3500000.");
+                        res = false;
+                    }
             }
         }catch (Exception e){
             res = false;
