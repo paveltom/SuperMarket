@@ -272,7 +272,6 @@ public class DeliveryController
     public Receipt RemoveRecipe(String orderId)
     {
         Receipt r = Recipes.getOrDefault(orderId, null);
-        //Recipes.remove(r.OrderId);
         if(r != null) {
             Recipes.remove(r.OrderId);
             DALController.getInstance().removeDelivery(orderId);
