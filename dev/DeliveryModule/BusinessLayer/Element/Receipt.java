@@ -2,6 +2,7 @@ package DeliveryModule.BusinessLayer.Element;
 
 import DAL.Delivery_Personnel.DALController;
 import DAL.Delivery_Personnel.DTO.RecipeDTO;
+import DAL.Delivery_Personnel.DTO.TruckDTO;
 import DeliveryModule.BusinessLayer.Type.RetCode;
 import DeliveryModule.BusinessLayer.Type.ShippingZone;
 
@@ -58,6 +59,7 @@ public class Receipt
             DeliveredProducts = DecodeProducts(src.DeliveredProducts);
             DueDate = new Date(src.DueDate);
             Driver = new Driver(DALController.getInstance().getDriver(src.DriverId));
+            TruckDTO t = DALController.getInstance().getTruck(src.TruckLicenseNumber);
             Truck = new Truck(DALController.getInstance().getTruck(src.TruckLicenseNumber));
         }
     }
@@ -100,7 +102,8 @@ public class Receipt
             String deliveredProducts = EncodeProducts();
             String dueDate = DueDate.Encode();
             addMe = new RecipeDTO(OrderId, supplierZone, supplierAddress, supplierName, supplierCellphone,
-                    clientZone, clientAddress, clientName, clientCellphone, deliveredProducts, dueDate, Driver.Id, Truck.VehicleLicenseNumber, Status.ordinal());
+                    clientZone, clientAddress, clientName, clientCellphone, deliveredProducts, dueDate,
+                    Driver.Id, Truck.VehicleLicenseNumber, Status.ordinal());
         }
         else
             addMe = new RecipeDTO(Status.ordinal(), OrderId);

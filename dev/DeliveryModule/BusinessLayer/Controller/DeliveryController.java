@@ -9,6 +9,7 @@ import DeliveryModule.BusinessLayer.Element.Date;
 import DeliveryModule.BusinessLayer.Type.RetCode;
 import DeliveryModule.BusinessLayer.Type.ShippingZone;
 import DeliveryModule.BusinessLayer.Type.VehicleLicenseCategory;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -85,23 +86,9 @@ public class DeliveryController
     private double CalculateDeliveryWeight(List<Product> products)
     {
         double CargoWeight = 0;
-        final double MaxCargoWeight = VehicleLicenseCategory.GetMaxLoadWeight();
-
-        boolean exceedMaxLoadWeight = false;
-        // Calculate total cargo weight. Validate it doesn't exceed max load weight.
         for(Product product : products)
-        {
-            double totalProductWeight = product.Amount * product.WeightPerUnit;
-            if(CargoWeight < 0 || CargoWeight + totalProductWeight < MaxCargoWeight)
-                CargoWeight += totalProductWeight;
-            else // cargo's weight exceeds the maximal load weights.
-            {
-                exceedMaxLoadWeight = true;
-                break;
-
-            }
-        }
-        return exceedMaxLoadWeight ? -1 : CargoWeight;
+            CargoWeight += product.Amount * product.WeightPerUnit;;
+        return CargoWeight;
     }
 
     private Driver GetAvailableDriver(int shippingZoneOrdinal,  int matchingLicenseOrdinal)
@@ -114,17 +101,27 @@ public class DeliveryController
         return res;
     }
 
-    private Truck GetAvailableTruck(int shippingZoneOrdinal,  int matchingLicenseOrdinal)
+    private Truck GetAvailableTruck(int shippingZoneOrdinal,  int matchingLicenseOrdinal, byte[] flag, double cargoWeight)
     {
         Truck res = null;
 
-        for(int i = 0; i <= matchingLicenseOrdinal && res == null; i++)
-            res = Trucks[shippingZoneOrdinal][i].poll();
+        for(int i = 0; i <= matchingLicenseOrdinal; i++)
+        {
+            res = Trucks[shippingZoneOrdinal][i].peek();
+            if(res != null) {
+                flag[0] = 1;
+                if(res.MaxLoadWeight >= cargoWeight)
+                {
+                    Trucks[shippingZoneOrdinal][i].poll();
+                    break;
+                }
+            }
+        }
 
         return res;
     }
 
-    private Truck FindTruck(long vln)
+    private Truck FindTruck(String vln)
     {
         for (ShippingZone zone : ShippingZone.values())
         {
@@ -132,7 +129,7 @@ public class DeliveryController
             {
                 for(Truck truck : Trucks[zone.ordinal()][licenseCategory.ordinal()])
                 {
-                    if(truck.VehicleLicenseNumber == vln)
+                    if(truck.VehicleLicenseNumber.equals(vln))
                     {
                         return truck;
                     }
@@ -163,25 +160,26 @@ public class DeliveryController
     public Receipt Deliver(DeliveryOrder deliveryOrder)
     {
         Receipt res;
-        if(Receipts.containsKey(deliveryOrder.OrderId))
+        String orderId = deliveryOrder.OrderId;
+
+        if(Receipts.containsKey(orderId))
         {
-            res = new Receipt(RetCode.FailedDelivery_OrderIdExists, deliveryOrder.OrderId);
+            res = new Receipt(RetCode.FailedDelivery_OrderIdExists, orderId);
             Persist(res);
             return res;
         }
-        String orderId = deliveryOrder.OrderId;
 
         double CargoWeight = CalculateDeliveryWeight(deliveryOrder.RequestedProducts);
-        if(CargoWeight == -1)
+        if(CargoWeight > VehicleLicenseCategory.GetMaxLoadWeight())
         {
             res = new Receipt(RetCode.FailedDelivery_CargoExceedMaxLoadWeight, orderId);
             Persist(res);
             return res;
         }
 
-        int shippingZoneOrdinal = deliveryOrder.Supplier.Zone.ordinal();
         // license category with permission to deliver CargoWeight
         int matchingLicenseOrdinal = VehicleLicenseCategory.FindLicense(CargoWeight).ordinal();
+        int shippingZoneOrdinal = deliveryOrder.Supplier.Zone.ordinal();
 
         Driver selectedDriver = GetAvailableDriver(shippingZoneOrdinal, matchingLicenseOrdinal);
         if(selectedDriver == null)
@@ -191,10 +189,19 @@ public class DeliveryController
             return res;
         }
 
-        Truck selectedTruck = GetAvailableTruck(shippingZoneOrdinal, selectedDriver.License.ordinal());
-        if(selectedTruck == null)
+        byte[] existsTruck = new byte[] {0};
+
+        Truck selectedTruck = GetAvailableTruck(shippingZoneOrdinal, selectedDriver.License.ordinal(), existsTruck, CargoWeight);
+        if(existsTruck[0] == 0) // no available truck at the specified shipping zone
         {
             res = new Receipt(RetCode.FailedDelivery_NoAvailableTruck, orderId);
+            Persist(res);
+            return res;
+        }
+
+        if(selectedTruck == null) // cargo exceeds max load weight of all truck at the specified shipping zone
+        {
+            res = new Receipt(RetCode.FailedDelivery_CargoExceedMaxLoadWeight, orderId);
             Persist(res);
             return res;
         }
@@ -247,7 +254,7 @@ public class DeliveryController
         return false;
     }
 
-    public boolean AddTruck(double mlw, double nw, long vln, String m, ShippingZone zone)
+    public boolean AddTruck(double mlw, double nw, String vln, String m, ShippingZone zone)
     {
         VehicleLicenseCategory matchingLicense = VehicleLicenseCategory.FindLicense(mlw-nw);
         Truck newTruck = new Truck(mlw, nw, vln, m, zone, matchingLicense);
@@ -260,10 +267,11 @@ public class DeliveryController
         return false;
     }
 
-    public Truck RemoveTruck(long vln)
+    public Truck RemoveTruck(String vln)
     {
         Truck truck = FindTruck(vln);
-        if(truck != null) {
+        if(truck != null)
+        {
             DALController.getInstance().removeTruck(vln);
             Trucks[truck.Zone.ordinal()][truck.AuthorizedLicense.ordinal()].remove(truck);
         }
@@ -273,7 +281,8 @@ public class DeliveryController
     public Driver RemoveDriver(String id)
     {
         Driver driver = FindDriver(id);
-        if(driver != null) {
+        if(driver != null)
+        {
             DALController.getInstance().removeDriver(id);
             Drivers[driver.Zone.ordinal()][driver.License.ordinal()].remove(driver);
         }
@@ -376,7 +385,7 @@ public class DeliveryController
         return FindDriver(id);
     }
 
-    public Truck GetTruck(long vln)
+    public Truck GetTruck(String vln)
     {
         return FindTruck(vln);
     }

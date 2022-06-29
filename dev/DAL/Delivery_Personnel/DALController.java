@@ -66,7 +66,7 @@ public class DALController {
     }
 
     public TruckDTO getTruck(String key){
-        String[] keys = {key};
+        String[] keys = new String[]{key};
         return (TruckDTO) trucksDAO.getObj(keys);
     }
 
@@ -91,8 +91,8 @@ public class DALController {
         return driversDAO.updateDriverDiary(key, shifts);
     }
 
-    public boolean updateTruckDiary(long key, String shifts){
-        return trucksDAO.updateTruckDiary(String.valueOf(key), shifts);
+    public boolean updateTruckDiary(String key, String shifts){
+        return trucksDAO.updateTruckDiary(key, shifts);
     }
 
      public boolean addDelivery(RecipeDTO recipeToAdd){
@@ -112,8 +112,8 @@ public class DALController {
         return deliveriesDAO.deleteObj(keys);
     }
 
-    public boolean removeTruck(long key){
-        String[] keys = {String.valueOf(key)};
+    public boolean removeTruck(String key){
+        String[] keys = {key};
         return trucksDAO.deleteObj(keys);
     }
 

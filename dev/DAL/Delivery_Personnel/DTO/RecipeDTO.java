@@ -14,7 +14,7 @@ public class RecipeDTO implements DTO
     public RecipeDTO(String orderId, String supplierZone, String supplierAddress, String supplierName,
                      String supplierCellphone, String clientZone, String clientAddress, String clientName,
                      String clientCellphone, String deliveredProducts, String dueDate, String driverId,
-                     long truckLicenseNumber, int status)
+                     String truckLicenseNumber, int status)
     {
         OrderId = orderId;
         SupplierZone = supplierZone;
@@ -28,7 +28,7 @@ public class RecipeDTO implements DTO
         DeliveredProducts = deliveredProducts;
         DueDate = dueDate;
         DriverId = driverId;
-        TruckLicenseNumber = String.valueOf(truckLicenseNumber);
+        TruckLicenseNumber = truckLicenseNumber;
         Status = String.valueOf(status);
     }
 
@@ -56,7 +56,7 @@ public class RecipeDTO implements DTO
     public RecipeDTO(int status, String orderId)
     {
         Status = String.valueOf(status);
-        OrderId = String.valueOf(orderId);
+        OrderId = orderId;
         SupplierZone = null;
         SupplierAddress = null;
         SupplierName = null;
@@ -78,6 +78,6 @@ public class RecipeDTO implements DTO
 
     @Override
     public String toString() {
-        return "DeliveryRecipeDTO";
+        return "RecipeDTO";
     }
 }

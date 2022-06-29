@@ -27,8 +27,8 @@ public class DeliveryControllerTest {
 
     final double TRUCK_NET_WEIGHT = 1000000.00, TRUCK_LOAD_WEIGHT = 3500000.00,
             P1_WEIGHT = 2502.55, P2_WEIGHT = 354.123;
-    final long TRUCK_LICENSE_NUMBER = 496351;
-    final int P1_AMOUNT = 6394, P1_ID = 12, P2_AMOUNT = 78, P2_ID = 27;
+    final String TRUCK_LICENSE_NUMBER = "496351";
+    final int P1_AMOUNT = 1400, P1_ID = 12, P2_AMOUNT = 78, P2_ID = 27;
 
     final Site supplier = new Site(srcZone, srcAddr, srcName, srcCell);
     final Site client = new Site(dstZone, dstAddr, dstName, dstCell);
@@ -63,9 +63,17 @@ public class DeliveryControllerTest {
         Date submissionDate = new Date(DAY, MONTH, YEAR);
         DeliveryOrder deliveryOrder_1 = new DeliveryOrder(supplier, client, String.valueOf(norder), products, submissionDate);
 
+        testObj.AddDriver(driverId, driverName, driverCell, VehicleLicenseCategory.C, srcZone);
+        testObj.AddTruck(TRUCK_LOAD_WEIGHT, TRUCK_NET_WEIGHT, TRUCK_LICENSE_NUMBER, TRUCK_MODEL, srcZone);
+
         Receipt r = testObj.Deliver(deliveryOrder_1);
+
+        System.out.printf("Truck max load weight: %f\nCargo weight is: %f\n",
+                testObj.GetTruck(TRUCK_LICENSE_NUMBER).MaxLoadWeight, P1_WEIGHT * P1_AMOUNT );
+
         assertEquals(r.Status, RetCode.FailedDelivery_CargoExceedMaxLoadWeight);
     }
+
 
     @Test
     public void deliver_failed_no_available_driver() {
@@ -224,18 +232,21 @@ public class DeliveryControllerTest {
     public void addTruck() {
         long ntrucks = 1000;
         while (ntrucks-- > 0) {
-            testObj.AddTruck(TRUCK_LOAD_WEIGHT, TRUCK_NET_WEIGHT, ntrucks, TRUCK_MODEL, srcZone);
-            Truck truck = testObj.GetTruck(ntrucks);
-            assertEquals(truck.VehicleLicenseNumber, ntrucks);
+            String s = String.valueOf(ntrucks);
+            testObj.AddTruck(TRUCK_LOAD_WEIGHT, TRUCK_NET_WEIGHT, s, TRUCK_MODEL, srcZone);
+            Truck truck = testObj.GetTruck(s);
+            assertEquals(truck.VehicleLicenseNumber, s);
         }
     }
 
     @Test
     public void removeTruck() {
         long ntrucks = 1000;
-        while (ntrucks-- > 0) {
-            Truck currTruck = testObj.GetTruck(ntrucks);
-            Truck removedTruck = testObj.RemoveTruck(ntrucks);
+        while (ntrucks-- > 0)
+        {
+            String s = String.valueOf(ntrucks);
+            Truck currTruck = testObj.GetTruck(s);
+            Truck removedTruck = testObj.RemoveTruck(s);
             assertEquals(currTruck, removedTruck);
         }
     }
@@ -356,7 +367,6 @@ public class DeliveryControllerTest {
             Receipt r = testObj.Deliver(deliveryOrder);
             assertEquals(RetCode.SuccessfulDelivery, r.Status);
         }
-
         System.out.println(testObj.GetDeliveriesHistory());
     }
 

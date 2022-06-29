@@ -41,7 +41,7 @@ public class TrucksDAO implements IDAO{
     public DTO loadObjectFromDB(String[] keys) {
         String[] keyNames = {"VehicleLicenseNumber"};
         String[] truck = dbconn.select("Trucks", keyNames, keys).get(0);
-        DTO output = new TruckDTO(Double.parseDouble(truck[1]), Double.parseDouble(truck[2]), Long.parseLong(truck[0]), truck[3], truck[4], truck[5], truck[6]);
+        DTO output = new TruckDTO(Double.parseDouble(truck[1]), Double.parseDouble(truck[2]), truck[0], truck[3], truck[4], truck[5], truck[6]);
         return output;
     }
 
@@ -102,7 +102,7 @@ public class TrucksDAO implements IDAO{
     public void loadAllObjsFromDB() {
         List<String[]> res = dbconn.select("Trucks", null, null);
         for(String[] truck : res){
-            TruckDTO toCache = new TruckDTO(Double.parseDouble(truck[1]), Double.parseDouble(truck[2]), Long.parseLong(truck[0]), truck[3], truck[4], truck[5], truck[6]);
+            TruckDTO toCache = new TruckDTO(Double.parseDouble(truck[1]), Double.parseDouble(truck[2]), truck[0], truck[3], truck[4], truck[5], truck[6]);
             trucksIM.cacheObject(toCache);
         }
     }

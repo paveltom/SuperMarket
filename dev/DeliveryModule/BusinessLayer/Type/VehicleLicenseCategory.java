@@ -9,7 +9,7 @@ public enum VehicleLicenseCategory
     C1, //Up to 12e6 grams.
     C;   // Up to 17e6 grams.
 
-    private static final double MaxLoadWeights[] = {2500000.00, 11000000.00, 16000000.00}; // assume average truck net weight is 1e6
+    private static final double MaxLoadWeights[] = {3500000.00, 12000000.00, 17000000.00};
     private static final String VehicleLicenseCategoryNames[] = {"E", "C1", "C"};
 
     public static double MaxLoadWeightByLicense(VehicleLicenseCategory x)

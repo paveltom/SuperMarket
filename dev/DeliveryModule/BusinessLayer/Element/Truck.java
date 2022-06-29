@@ -10,14 +10,14 @@ import java.time.LocalDate;
 public class Truck implements Comparable<Truck>
 {
     public final double MaxLoadWeight,NetWeight;
-    public final long VehicleLicenseNumber;
+    public final String VehicleLicenseNumber;
     public final VehicleLicenseCategory AuthorizedLicense;
     public final String Model;
     public final ShippingZone Zone;
     private Scheduler Diary;
     public Date NextAvailableShift;
 
-    public Truck(long vehicleLicenseNumber)
+    public Truck(String vehicleLicenseNumber)
     {
         VehicleLicenseNumber = vehicleLicenseNumber;
         MaxLoadWeight = -1;
@@ -27,9 +27,9 @@ public class Truck implements Comparable<Truck>
         Zone = null;
     }
 
-    public Truck(double mlw, double nw, long vln, String m, ShippingZone z, VehicleLicenseCategory authorizedLicense)
+    public Truck(double mlw, double nw, String vln, String m, ShippingZone z, VehicleLicenseCategory authorizedLicense)
     {
-        MaxLoadWeight = mlw;
+        MaxLoadWeight = mlw - nw;
         NetWeight = nw;
         VehicleLicenseNumber = vln;
         Model = m;
@@ -69,7 +69,7 @@ public class Truck implements Comparable<Truck>
     @Override
     public String toString()
     {
-        return String.format("Truck\nModel: %s\nVehicleLicenseNumber: %d\nZone: %s\nMaxLoadWeight: %f\nNetWeight: %f\nAuthorizedLicense: %s\n",
+        return String.format("Truck\nModel: %s\nVehicleLicenseNumber: %s\nZone: %s\nMaxLoadWeight: %f\nNetWeight: %f\nAuthorizedLicense: %s\n",
                 Model, VehicleLicenseNumber, Zone, MaxLoadWeight, NetWeight, AuthorizedLicense);
     }
 

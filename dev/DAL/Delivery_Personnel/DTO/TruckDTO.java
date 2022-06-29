@@ -5,13 +5,13 @@ public class        TruckDTO implements DTO
 {
 
     public double MaxLoadWeight,NetWeight;
-    public long VehicleLicenseNumber;
+    public String VehicleLicenseNumber;
     public String AuthorizedLicense;
     public String Model;
     public String Zone;
     public String Diary;
 
-    public TruckDTO(double maxLoadWeight, double netWeight, long vehicleLicenseNumber, String model, String zone, String diary, String authorizedLicense)
+    public TruckDTO(double maxLoadWeight, double netWeight, String vehicleLicenseNumber, String model, String zone, String diary, String authorizedLicense)
     {
         MaxLoadWeight = maxLoadWeight;
         NetWeight = netWeight;
@@ -24,7 +24,7 @@ public class        TruckDTO implements DTO
 
     @Override
     public String getKey() {
-        return String.valueOf(VehicleLicenseNumber);
+        return VehicleLicenseNumber;
     }
 
     @Override
