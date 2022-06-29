@@ -12,163 +12,168 @@ public class Service
         scs = new StockControllerService();
     }
 
+    /*
     public Response addNewBranch(String name){
         return scs.addNewBranch(name);
     }
-    public Response deleteBranch(int branchID){
-        return scs.deleteBranch(branchID);
+
+    public Response deleteBranch(int ){
+        return scs.deleteBranch();
+    }
+    */
+
+
+    public Response setSubCategory(int subCategoryID,int parentID){
+        return scs.setSubCategory(subCategoryID,parentID);
     }
 
-    public Response setSubCategory(int branchID,int subCategoryID,int parentID){
-        return scs.setSubCategory(branchID,subCategoryID,parentID);
-    }
-
-    public  ResponseT<List<Branch>> getBranches(){
+    /*public  ResponseT<List<Branch>> getBranches(){
         return scs.getBranches();
     }
-
-    public ResponseT<List<Product>> getProductsInStock(int branchID){
+    */
+    public ResponseT<List<Product>> getProductsInStock(){
         //Requirement 2
-        return scs.getProductsInStock(branchID);
+        return scs.getProductsInStock();
     }
 
 
 
-    public ResponseT<List<Purchase>> getPurchasesHistoryReport(int branchID){
+    public ResponseT<List<Purchase>> getPurchasesHistoryReport(){
         //Requirement 3
-        return scs.getPurchasesHistoryReport(branchID);
+        return scs.getPurchasesHistoryReport();
     }
 
-    public ResponseT<List<Discount>> getCurrentDiscounts(int branchID){
+    public ResponseT<List<Discount>> getCurrentDiscounts(){
         //Requirement 4
-        return scs.getCurrentDiscounts(branchID);
+        return scs.getCurrentDiscounts();
     }
 
-    public ResponseT<List<Category>> getCategories(int branchID)
+    public ResponseT<List<Category>> getCategories()
     {
         //Requirement 5
-        return scs.getCategories(branchID);
+        return scs.getCategories();
     }
 
-    public ResponseT<List<Item>> getStockReport(int branchID){
+    public ResponseT<List<Item>> getStockReport(){
         //Requirement 6
-        return scs.getStockReport(branchID);
+        return scs.getStockReport();
     }
 
-    public ResponseT<List<Item>> getStockReportByCategory(int branchID, int categoryID){
+    public ResponseT<List<Item>> getStockReportByCategory( int categoryID){
         //Requirement 7
-        return scs.getStockReportByCategory(branchID,categoryID);
+        return scs.getStockReportByCategory(categoryID);
     }
 
-    public ResponseT<List<Item>> getDefectedProductsReport(int branchID){
+    public ResponseT<List<Item>> getDefectedProductsReport(){
         //Requirement 8+9
-        return scs.getDefectedItemsReport(branchID);
+        return scs.getDefectedItemsReport();
     }
 
-    public ResponseT<List<Item>> getExpiredProductsReport(int branchID) {
-        return scs.getExpiredItemsReport(branchID);
+    public ResponseT<List<Item>> getExpiredProductsReport() {
+        return scs.getExpiredItemsReport();
     }
 
-    public Response insertNewProduct(int branchID, String productName, String productManufacturer, int categoryID, Date supplyTime, int demand){
-        return scs.insertNewProduct(branchID,productName,productManufacturer,categoryID,supplyTime,demand);
+    public Response insertNewProduct( String productName, String productManufacturer, int categoryID, Date supplyTime, int demand){
+        return scs.insertNewProduct(productName,productManufacturer,categoryID,supplyTime,demand);
     }
 
-    public Response insertNewItem(int branchID, int productID, String location, Date expireDate, boolean isUsable, int amount){
-        return scs.insertNewItem(branchID,productID,location,expireDate,isUsable,amount);
+    public Response insertNewItem( int productID, String location, Date expireDate, boolean isUsable, int amount){
+        return scs.insertNewItem(productID,location,expireDate,isUsable,amount);
 
     }
 
-    public Response reduceItemAmount(int branchID, int productID,int itemID,int amountToReduce)
+    public Response reduceItemAmount(int productID,int itemID,int amountToReduce)
     {
-        return scs.reduceItemAmount(branchID, productID, itemID, amountToReduce);
+        return scs.reduceItemAmount(productID, itemID, amountToReduce);
     }
 
-    public Response insertNewCategory(int branchID,String categoryName){
-        return scs.insertNewCategory(branchID,categoryName);
+    public Response insertNewCategory(String categoryName){
+        return scs.insertNewCategory(categoryName);
     }
 
-    public Response insertNewDiscount(int branchID, int productID, Date startDate, Date endDate, int amount, Type t){
-        return scs.insertNewDiscount(branchID, productID, startDate, endDate, amount, t);
+    public Response insertNewDiscount( int productID, Date startDate, Date endDate, int amount, Type t){
+        return scs.insertNewDiscount(productID, startDate, endDate, amount, t);
     }
 
-    public Response insertNewPurchase(int branchID, Date purchaseDate, Map<Integer, Map<Integer, Integer>> products){
-        return scs.insertNewPurchase(branchID, purchaseDate, products);
+    public Response insertNewPurchase( Date purchaseDate, Map<Integer, Map<Integer, Integer>> products){
+        return scs.insertNewPurchase(purchaseDate, products);
     }
 
-    public Response deleteProduct(int branchID, int productID){
-        return scs.deleteProduct(branchID, productID);
+    public Response deleteProduct( int productID){
+        return scs.deleteProduct(productID);
     }
 
-    public Response deleteCategory(int branchID, int categoryID){
-        return scs.deleteCategory(branchID, categoryID);
+    public Response deleteCategory( int categoryID){
+        return scs.deleteCategory(categoryID);
     }
 
-    public Response deleteDiscount(int branchID, int discountID){
-        return scs.deleteDiscount(branchID, discountID);
+    public Response deleteDiscount( int discountID){
+        return scs.deleteDiscount(discountID);
     }
 
-    public Response deletePurchase(int branchID, int purchaseID){
-        return scs.deletePurchase(branchID, purchaseID);
+    public Response deletePurchase( int purchaseID){
+        return scs.deletePurchase(purchaseID);
     }
 
-    public Response deleteItem(int branchID, int productID,int itemID){
-        return scs.deleteItem(branchID,productID,itemID);
+    public Response deleteItem( int productID,int itemID){
+        return scs.deleteItem(productID,itemID);
     }
 
-    public Response updateProductAttribute(int branchID,String productID, int Attribute, Object Value) {
-        return scs.updateProductAttribute(branchID, productID, Attribute, Value);
+    public Response updateProductAttribute(String productID, int Attribute, Object Value) {
+        return scs.updateProductAttribute(productID, Attribute, Value);
     }
 
-    public Response updateCategoryName(int branchID,String categoryID, String name) {
-        return scs.updateCategoryName(branchID, categoryID, name);
+    public Response updateCategoryName(String categoryID, String name) {
+        return scs.updateCategoryName(categoryID, name);
     }
 
-    public Response updateItemAttribute(int branchID,String productID,int ItemID, int Attribute, Object Value) {
-        return scs.updateItemAttribute(branchID, productID,ItemID,Attribute, Value);
+    public Response updateItemAttribute(String productID,int ItemID, int Attribute, Object Value) {
+        return scs.updateItemAttribute(productID,ItemID,Attribute, Value);
     }
 
 
     public void LoadDefaultData()
     {
+        /*
         addNewBranch("Shop-Eilat");
         addNewBranch("Shop-Netivot");
+        */
+        insertNewCategory( "Electricity");
+        insertNewCategory( "Milk");
+        insertNewCategory( "Drinks");
 
-        insertNewCategory(0, "Electricity");
-        insertNewCategory(0, "Milk");
-        insertNewCategory(0, "Drinks");
+        insertNewCategory( "Electricity");
+        insertNewCategory( "Milk");
+        insertNewCategory( "Drinks");
 
-        insertNewCategory(1, "Electricity");
-        insertNewCategory(1, "Milk");
-        insertNewCategory(1, "Drinks");
+        insertNewProduct( "Dark Chocolate 60%", "Strauss", 1, new Date(2020,2,2), 40);
+        insertNewProduct( "Milk Chocolate", "Strauss", 1, new Date(2001, 1, 25), 40);
+        insertNewProduct( "Batteries AA", "GP Ultra", 0, new Date(2004, 5, 14), 65);
+        insertNewProduct( "Orange juice", "Primor", 2, new Date(2014, 7, 30), 65);
 
-        insertNewProduct(0, "Dark Chocolate 60%", "Strauss", 1, new Date(2020,2,2), 40);
-        insertNewProduct(0, "Milk Chocolate", "Strauss", 1, new Date(2001, 1, 25), 40);
-        insertNewProduct(0, "Batteries AA", "GP Ultra", 0, new Date(2004, 5, 14), 65);
-        insertNewProduct(0, "Orange juice", "Primor", 2, new Date(2014, 7, 30), 65);
+        insertNewProduct( "Dark Chocolate 60%", "Strauss", 1, new Date(2020,2,2), 40);
+        insertNewProduct( "Milk Chocolate", "Strauss", 1, new Date(2001, 1, 25), 40);
+        insertNewProduct( "Batteries AA", "GP Ultra", 0, new Date(2004, 5, 14), 65);
+        insertNewProduct( "Orange juice", "Primor", 2, new Date(2014, 7, 30), 65);
 
-        insertNewProduct(1, "Dark Chocolate 60%", "Strauss", 1, new Date(2020,2,2), 40);
-        insertNewProduct(1, "Milk Chocolate", "Strauss", 1, new Date(2001, 1, 25), 40);
-        insertNewProduct(1, "Batteries AA", "GP Ultra", 0, new Date(2004, 5, 14), 65);
-        insertNewProduct(1, "Orange juice", "Primor", 2, new Date(2014, 7, 30), 65);
-
-        insertNewItem(0, 0, "L5A4", new Date(2021, 4, 5), false, 30);
-        insertNewItem(0, 0, "L2A17", new Date(2022, 4, 5), true, 42);
-        insertNewItem(0, 1, "L6A8", new Date(2022, 4, 15), true, 50);
-        insertNewItem(0, 2, "L1A2", new Date(2022, 2, 3), true, 130);
-        insertNewItem(0, 3, "L9A4", new Date(2022, 1, 15), false, 280);
+        insertNewItem( 0, "L5A4", new Date(2021, 4, 5), false, 30);
+        insertNewItem( 0, "L2A17", new Date(2022, 4, 5), true, 42);
+        insertNewItem( 1, "L6A8", new Date(2022, 4, 15), true, 50);
+        insertNewItem( 2, "L1A2", new Date(2022, 2, 3), true, 130);
+        insertNewItem( 3, "L9A4", new Date(2022, 1, 15), false, 280);
 
 
-        insertNewItem(1, 0, "L5A4", new Date(2021, 4, 5), false, 30);
-        insertNewItem(1, 0, "L2A17", new Date(2022, 4, 5), true, 42);
-        insertNewItem(1, 1, "L6A8", new Date(2022, 4, 15), true, 50);
-        insertNewItem(1, 2, "L1A2", new Date(2022, 2, 3), true, 130);
-        insertNewItem(1, 3, "L9A4", new Date(2022, 1, 15), false, 280);
+        insertNewItem( 0, "L5A4", new Date(2021, 4, 5), false, 30);
+        insertNewItem( 0, "L2A17", new Date(2022, 4, 5), true, 42);
+        insertNewItem( 1, "L6A8", new Date(2022, 4, 15), true, 50);
+        insertNewItem( 2, "L1A2", new Date(2022, 2, 3), true, 130);
+        insertNewItem( 3, "L9A4", new Date(2022, 1, 15), false, 280);
 
-        insertNewDiscount(0, 3, new Date(2022, 4, 3), new Date(2022, 5, 3), 30, Type.PERCENT);
-        insertNewDiscount(1, 3, new Date(2022, 4, 3), new Date(2022, 5, 3), 30, Type.PERCENT);
+        insertNewDiscount( 3, new Date(2022, 4, 3), new Date(2022, 5, 3), 30, Type.PERCENT);
+        insertNewDiscount( 3, new Date(2022, 4, 3), new Date(2022, 5, 3), 30, Type.PERCENT);
 
         Map<Integer, Map<Integer, Integer>> products = (Map<Integer, Map<Integer, Integer>>) new HashMap<>().put(2, new HashMap<>().put(30, 25));
-        insertNewPurchase(0, new Date(2022, 4, 25), products);
-        insertNewPurchase(1, new Date(2022, 4, 25), products);
+        insertNewPurchase( new Date(2022, 4, 25), products);
+        insertNewPurchase( new Date(2022, 4, 25), products);
     }
 }

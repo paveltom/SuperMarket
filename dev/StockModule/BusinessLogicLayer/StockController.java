@@ -13,7 +13,7 @@ public class StockController {
     private HashMap<Integer,Discount> discounts;
     private int discountsCounter;
 
-    StockController(){
+    public StockController(){
         products = new HashMap<>();
         purchases = new HashMap<>();
         purchasesCounter = 0;
