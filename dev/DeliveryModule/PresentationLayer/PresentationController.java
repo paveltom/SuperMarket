@@ -235,7 +235,7 @@ public class PresentationController {
         operateOutput("----------Enter '0' at any field to cancel----------");
         showShippingZones();
         //showLicenseCategories(); => there is no need to show them cause its defined automatically considering net weight
-        String[] details = {"License Plate", "Model", "Parking area", "Net weight(5,000,000 - 15,000,000)", "Max load weight"};
+        String[] details = {"License Plate", "Model", "Parking area", "Net weight(5,000,000 - 10,000,000)", "Max load weight(excluding own weight)"};
         for(int i = 0; i < details.length; i++){
             String input = operateInput(details[i] + ": ");
             input = input.trim();
@@ -247,7 +247,7 @@ public class PresentationController {
             }
             details[i] = input;
         }
-        FacadeTruck facTruck = new FacadeTruck(details[0], details[1], details[2], Double.parseDouble(details[3]), Double.parseDouble(details[4]));
+        FacadeTruck facTruck = new FacadeTruck(details[0], details[1], details[2], Double.parseDouble(details[3]), Double.parseDouble(details[3]) + Double.parseDouble(details[4]));
         Response res = service.addTruck(facTruck);
         if(res.getErrorOccurred()) {
             operateOutput("Couldn't add a new truck. " + res.getErrorMessage());
@@ -420,8 +420,8 @@ public class PresentationController {
                     }
                     break;
                 case 4:
-                    if(Double.parseDouble(input) < Double.parseDouble(details[i-1])){
-                        operateOutput("Cannot be less than " + details[i-1] + ".");
+                    if(Double.parseDouble(input) <= 1){
+                        operateOutput("Cannot be less than 1.");
                         res = false;
                     }
                     break;

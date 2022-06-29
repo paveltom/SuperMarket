@@ -115,6 +115,8 @@ public class DeliveryController
                     Trucks[shippingZoneOrdinal][i].poll();
                     break;
                 }
+                else
+                    res = null;
             }
         }
 
@@ -196,6 +198,7 @@ public class DeliveryController
         {
             res = new Receipt(RetCode.FailedDelivery_NoAvailableTruck, orderId);
             Persist(res);
+            Drivers[shippingZoneOrdinal][selectedDriver.License.ordinal()].add(selectedDriver);
             return res;
         }
 
@@ -203,6 +206,7 @@ public class DeliveryController
         {
             res = new Receipt(RetCode.FailedDelivery_CargoExceedMaxLoadWeight, orderId);
             Persist(res);
+            Drivers[shippingZoneOrdinal][selectedDriver.License.ordinal()].add(selectedDriver);
             return res;
         }
 
