@@ -25,6 +25,7 @@ public class FacadeDate {
         this.day = day;
         this.month = month;
         this.year = year;
+        this.shift = -1;
     }
 
     public int getMonth() {

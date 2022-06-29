@@ -2,7 +2,9 @@ package DeliveryModule.Facade;
 
 import DeliveryModule.BusinessLayer.Controller.DeliveryController;
 import DeliveryModule.BusinessLayer.Element.Constraint;
+import DeliveryModule.BusinessLayer.Element.Driver;
 import DeliveryModule.BusinessLayer.Element.Shift;
+import DeliveryModule.BusinessLayer.Element.Truck;
 import DeliveryModule.BusinessLayer.Type.VehicleLicenseCategory;
 import DeliveryModule.BusinessLayer.Type.ShippingZone;
 import DeliveryModule.Facade.FacadeObjects.FacadeDate;
@@ -93,8 +95,9 @@ public class DeliveryResourcesService {
 
     public Response removeTruck(long licensePlate){
         try {
-            delController.RemoveTruck(licensePlate);
-            return new Response();
+            Truck truck = delController.RemoveTruck(licensePlate);
+            if(truck != null) return new Response();
+            else return new Response("No truck with such license plate.");
         }catch (Exception e){
             return new Response(e.getMessage());
         }
@@ -102,20 +105,25 @@ public class DeliveryResourcesService {
 
     public Response removeDriver(String id){
         try {
-            delController.RemoveDriver(id);
-            return new Response();
+            Driver driver = delController.RemoveDriver(id);
+            if(driver != null) return new Response();
+            else return new Response("No driver with such id.");
         }catch (Exception e){
             return new Response(e.getMessage());
         }
     }
 
     public ResponseT<FacadeDriver> getDriverById(String id){
-        FacadeDriver facadeDriver = new FacadeDriver(delController.GetDriver(id));
+        Driver driver = delController.GetDriver(id);
+        if(driver == null) return new ResponseT<>("No driver with such ID.");
+        FacadeDriver facadeDriver = new FacadeDriver(driver);
         return new ResponseT<>(facadeDriver, true);
     }
 
     public ResponseT<FacadeTruck> getTruckByPlate(long licPlate){
-        FacadeTruck facadeTruck = new FacadeTruck(delController.GetTruck(licPlate));
+        Truck truck = delController.GetTruck(licPlate);
+        if(truck == null) return new ResponseT<>("No truck with such license plate.");
+        FacadeTruck facadeTruck = new FacadeTruck(truck);
         return new ResponseT<>(facadeTruck, true);
     }
 

@@ -2,12 +2,12 @@ package Tests;
 
 import DAL.Delivery_Personnel.DALController;
 import DAL.Delivery_Personnel.DataBaseConnection;
-import DeliveryModule.BusinessLayer.Element.Product;
-import DeliveryModule.BusinessLayer.Element.Recipe;
+import DeliveryModule.BusinessLayer.Element.*;
 import DeliveryModule.BusinessLayer.Type.ShippingZone;
 import DeliveryModule.BusinessLayer.Type.VehicleLicenseCategory;
 import DeliveryModule.Facade.*;
 import DeliveryModule.Facade.FacadeObjects.*;
+import java.text.DateFormatSymbols;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -56,7 +56,7 @@ public class DeliveryTests {
         assertFalse(history.getErrorOccurred());
         assertFalse(history.getValue().contains("Order:"));
 
-        ResponseT<String> res = service.deliver(facadeSiteNumber(1, "Golan"), facadeSiteNumber(2, "Golan"), "135792468", listOfFacProducts(), facadeDate());
+        ResponseT<String> res = service.deliver(facadeSiteNumber(1, "Golan"), facadeSiteNumber(2, "Golan"), "135792468", listOfFacProducts(), facadeDate(0));
         assertFalse(res.getErrorOccurred());
 
         res = service.getDeliveryHistory();
@@ -75,15 +75,16 @@ public class DeliveryTests {
         assertFalse(history.getErrorOccurred());
         assertFalse(history.getValue().contains("Order:"));
 
-        ResponseT<String> res1 = service.deliver(facadeSiteNumber(1, "Golan"), facadeSiteNumber(2, "Golan"), "135792468", listOfFacProducts(), facadeDate());
+        ResponseT<String> res1 = service.deliver(facadeSiteNumber(1, "Golan"), facadeSiteNumber(2, "Golan"), "135792468", listOfFacProducts(), facadeDate(0));
         assertFalse(res1.getErrorOccurred());
 
-        ResponseT<String> res2 = service.deliver(facadeSiteNumber(3, "Negev"), facadeSiteNumber(4, "Negev"), "135792468", listOfFacProducts(), facadeDate());
-        assertTrue(res2.getErrorOccurred());
+        ResponseT<String> res2 = service.deliver(facadeSiteNumber(3, "Negev"), facadeSiteNumber(4, "Negev"), "135792468", listOfFacProducts(), facadeDate(0));
+        assertTrue(res2.getErrorOccurred()); // Fail: Unable to deliver: There is no available driver
 
         history = service.getDeliveryHistory();
 
         assertTrue(history.getValue().contains("Order: 135792468"));
+        assertFalse(history.getValue().contains("Negev"));
         assertTrue(history.getValue().contains("testAddress1"));
         assertFalse(history.getValue().contains("testAddress3"));
     }
@@ -98,7 +99,7 @@ public class DeliveryTests {
         assertFalse(history.getErrorOccurred());
         assertFalse(history.getValue().contains("Order:"));
 
-        ResponseT<String> res = service.deliver(facadeSiteNumber(1, "Golan"), facadeSiteNumber(2, "Golan"), "135792468", listOfFacProducts(), facadeDate());
+        ResponseT<String> res = service.deliver(facadeSiteNumber(1, "Golan"), facadeSiteNumber(2, "Golan"), "135792468", listOfFacProducts(), facadeDate(0));
         assertTrue(res.getErrorOccurred());
     }
 
@@ -111,12 +112,12 @@ public class DeliveryTests {
         assertFalse(history.getErrorOccurred());
         assertFalse(history.getValue().contains("Order:"));
 
-        ResponseT<String> res = service.deliver(facadeSiteNumber(1, "Golan"), facadeSiteNumber(2, "Golan"), "135792468", listOfFacProducts(), facadeDate());
+        ResponseT<String> res = service.deliver(facadeSiteNumber(1, "Golan"), facadeSiteNumber(2, "Golan"), "135792468", listOfFacProducts(), facadeDate(0));
         assertTrue(res.getErrorOccurred());
     }
 
     @Test
-    public void overWeightedDelivery() {
+    public void overWeightedDelivery() { // mistakenly passes due to 'E' license category, although max load weight is 10 grams.
         addDriver("987654321", "Golan", null);
         addTruck(123456789, "Golan", 10);
 
@@ -124,7 +125,7 @@ public class DeliveryTests {
         assertFalse(history.getErrorOccurred());
         assertFalse(history.getValue().contains("Order:"));
 
-        ResponseT<String> res = service.deliver(facadeSiteNumber(1, "Golan"), facadeSiteNumber(2, "Golan"), "135792468", listOfFacProducts(), facadeDate());
+        ResponseT<String> res = service.deliver(facadeSiteNumber(1, "Golan"), facadeSiteNumber(2, "Golan"), "135792468", listOfFacProducts(), facadeDate(0));
         assertTrue(res.getErrorOccurred());
     }
 
@@ -137,7 +138,7 @@ public class DeliveryTests {
         assertFalse(history.getErrorOccurred());
         assertFalse(history.getValue().contains("Order:"));
 
-        ResponseT<String> res = service.deliver(facadeSiteNumber(1, "Golan"), facadeSiteNumber(2, "Golan"), "135792468", listOfFacProducts(), facadeDate());
+        ResponseT<String> res = service.deliver(facadeSiteNumber(1, "Golan"), facadeSiteNumber(2, "Golan"), "135792468", listOfFacProducts(), facadeDate(0));
         assertFalse(res.getErrorOccurred());
 
         history = service.getDeliveryHistory();
@@ -159,7 +160,7 @@ public class DeliveryTests {
         assertFalse(history.getErrorOccurred());
         assertFalse(history.getValue().contains("Order:"));
 
-        ResponseT<String> res = service.deliver(facadeSiteNumber(1, "Golan"), facadeSiteNumber(2, "Golan"), "135792468", listOfFacProducts(), facadeDate());
+        ResponseT<String> res = service.deliver(facadeSiteNumber(1, "Golan"), facadeSiteNumber(2, "Golan"), "135792468", listOfFacProducts(), facadeDate(0));
         assertFalse(res.getErrorOccurred());
         String[] included = {"Order: 135792468", "Supplier", "testAddress1", "testContact1", "01234567891",
                                                  "Client", "testAddress2", "testContact2", "01234567892",
@@ -200,25 +201,102 @@ public class DeliveryTests {
         assertTrue(res.getValue().contains("326971231"));
 
     }
+
+    @Test
+    public void removeTruck(){
+        Response res = service.removeTruck(11223344);
+        assertTrue(res.getErrorOccurred());
+
+        addTruck(11223344, "Golan", 0);
+
+        res = service.removeTruck(11223344);
+        assertFalse(res.getErrorOccurred());
+
+    }
 //
-//    public Response removeTruck(long licensePlate);
-//
-//    public ResponseT<FacadeDriver> getDriverById(String id);
-//
-//    public ResponseT<FacadeTruck> getTruckByPlate(long licPlate);
-//
-//    public ResponseT<String> showDrivers();
-//
-//    public ResponseT<String> showTrucks();
-//
-//    public void addConstraints(String ID, FacadeDate date, int shift);
-//
+    @Test
+    public void getDriverById(){
+        ResponseT<FacadeDriver> res = service.getDriverById("987654321");
+        assertTrue(res.getErrorOccurred());
+
+        addDriver("987654321", "Golan", null);
+
+        res = service.getDriverById("987654321");
+        assertFalse(res.getErrorOccurred());
+        assertEquals(res.getValue().getId(), "987654321");
+    }
+
+    @Test
+    public void getTruckByPlate(){
+        ResponseT<FacadeTruck> res = service.getTruckByPlate(987654322);
+        assertTrue(res.getErrorOccurred());
+
+        addTruck(987654322, "Golan", 0);
+
+        res = service.getTruckByPlate(987654322);
+        assertFalse(res.getErrorOccurred());
+        assertEquals(res.getValue().getLicensePlate(), 987654322);
+    }
+
+    @Test
+    public void showDrivers(){
+        ResponseT<String> res = service.showDrivers();
+        assertFalse(res.getValue().contains("ID"));
+
+        addDriver("987654321", "Golan", null);
+        addDriver("987321654", "Golan", null);
+        addDriver("654321987", "Golan", null);
+        addDriver("321654987", "Golan", null);
+
+        res = service.showDrivers();
+
+        assertTrue(res.getValue().contains("987654321") && res.getValue().contains("987321654")
+                            && res.getValue().contains("654321987") && res.getValue().contains("321654987"));
+
+    }
+
+    @Test
+    public void showTrucks(){
+        ResponseT<String> res = service.showTrucks();
+        assertFalse(res.getValue().contains("Model"));
+
+        addTruck(326971231, "Golan", 0);
+        addTruck(326971249, "Negev", 0);
+        addTruck(326971200, "Golan", 0);
+        addTruck(326971111, "Golan", 0);
+
+        res = service.showTrucks();
+
+        assertTrue(res.getValue().contains("326971231") && res.getValue().contains("326971249")
+                && res.getValue().contains("326971200") && res.getValue().contains("326971111"));
+
+    }
+
+    @Test
+    public void addConstraints(){
+        addTruck(326971231, "Golan", 0);
+        addDriver("987654321", "Golan", null);
+
+        FacadeDate facDate = facadeDate(1);
+
+        service.addConstraints("987654321", facDate, 0);
+        service.addConstraints("987654321", facDate, 1);
+        ResponseT<String> res = service.deliver(facadeSiteNumber(1, "Golan"), facadeSiteNumber(2, "Golan"), "135792468", listOfFacProducts(), facDate);
+
+        assertFalse(res.getErrorOccurred());
+
+        assertFalse(res.getValue().contains("987654321") && res.getValue().contains("" + facDate.getYear())
+                            && res.getValue().contains("" + facDate.getDay()) && res.getValue().contains(new DateFormatSymbols().getMonths()[facDate.getMonth()-1]));
+
+    }
+
 //    public boolean isOccupied(String driverID, int month, int day);
 
 
 
-    private FacadeDate facadeDate(){
+    private FacadeDate facadeDate(int days){
         LocalDate currTime = LocalDate.now();
+        currTime = currTime.plusDays(days);
         FacadeDate facDate = new FacadeDate(currTime.getDayOfMonth(), currTime.getMonthValue(), currTime.getYear());
         return facDate;
     }
