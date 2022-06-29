@@ -11,7 +11,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.*;
 
 import static org.junit.Assert.*;
@@ -61,10 +60,10 @@ public class DeliveryControllerTest {
     public void deliver_failed_max_load_weight() {
         int norder = 13;
         List<Product> products = Arrays.asList(new Product(P1_ID, P1_WEIGHT, P1_AMOUNT));
-        Date submissionDate = new Date(cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.YEAR));
+        Date submissionDate = new Date(DAY, MONTH, YEAR);
         DeliveryOrder deliveryOrder_1 = new DeliveryOrder(supplier, client, String.valueOf(norder), products, submissionDate);
 
-        Recipe r = testObj.Deliver(deliveryOrder_1);
+        Receipt r = testObj.Deliver(deliveryOrder_1);
         assertEquals(r.Status, RetCode.FailedDelivery_CargoExceedMaxLoadWeight);
     }
 
@@ -72,10 +71,10 @@ public class DeliveryControllerTest {
     public void deliver_failed_no_available_driver() {
         int norder = 19;
         List<Product> products = Arrays.asList(new Product(P2_ID, P2_WEIGHT, P2_AMOUNT));
-        Date submissionDate = new Date(cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.YEAR));
+        Date submissionDate = new Date(DAY, MONTH, YEAR);
         DeliveryOrder deliveryOrder_1 = new DeliveryOrder(supplier, client, String.valueOf(norder), products, submissionDate);
 
-        Recipe r = testObj.Deliver(deliveryOrder_1);
+        Receipt r = testObj.Deliver(deliveryOrder_1);
         assertEquals(r.Status, RetCode.FailedDelivery_NoAvailableDriver);
     }
 
@@ -83,12 +82,12 @@ public class DeliveryControllerTest {
     public void deliver_failed_no_available_truck() {
         int norder = 21;
         List<Product> products = Arrays.asList(new Product(P2_ID, P2_WEIGHT, P2_AMOUNT));
-        Date submissionDate = new Date(cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.YEAR));
+        Date submissionDate = new Date(DAY, MONTH, YEAR);
         DeliveryOrder deliveryOrder_1 = new DeliveryOrder(supplier, client, String.valueOf(norder), products, submissionDate);
 
         testObj.AddDriver(driverId, driverName, driverCell, driverLicenseCategory, srcZone);
 
-        Recipe r = testObj.Deliver(deliveryOrder_1);
+        Receipt r = testObj.Deliver(deliveryOrder_1);
         assertEquals(r.Status, RetCode.FailedDelivery_NoAvailableTruck);
     }
 
@@ -119,7 +118,7 @@ public class DeliveryControllerTest {
         Constraint constraint = new Constraint(month, shifts);
         testObj.SetConstraint(driverId, constraint);
 
-        Recipe r = testObj.Deliver(deliveryOrder_1);
+        Receipt r = testObj.Deliver(deliveryOrder_1);
         assertEquals(r.Status, RetCode.FailedDelivery_CannotDeliverWithinAWeek);
     }
 
@@ -140,7 +139,7 @@ public class DeliveryControllerTest {
         Date prevDeliveryDate = null, currDeliveryDate;
         while (norders-- > 0) {
             DeliveryOrder deliveryOrder = new DeliveryOrder(supplier, client, String.valueOf(norders), products, submissionDate);
-            Recipe r = testObj.Deliver(deliveryOrder);
+            Receipt r = testObj.Deliver(deliveryOrder);
 //            System.out.println(r.DueDate);
             assertEquals(RetCode.SuccessfulDelivery, r.Status);
             currDriver = r.Driver;
@@ -157,7 +156,8 @@ public class DeliveryControllerTest {
     // insert 1000 drivers; order 28 deliveries; verify different assigned to each delivery;
     // ntrucks = ndrivers -- same delivery date for all orders
     @Test
-    public void deliver_balanced_selection_multiple_trucks() {
+    public void deliver_balanced_selection_multiple_trucks()
+    {
         List<Product> products = Arrays.asList(new Product(P2_ID, P2_WEIGHT, P2_AMOUNT));
         Date submissionDate = new Date(cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.YEAR));
 
@@ -170,7 +170,7 @@ public class DeliveryControllerTest {
         boolean firstIter = true;
         while (norders-- > 0) {
             DeliveryOrder deliveryOrder = new DeliveryOrder(supplier, client, String.valueOf(norders), products, submissionDate);
-            Recipe r = testObj.Deliver(deliveryOrder);
+            Receipt r = testObj.Deliver(deliveryOrder);
             assertEquals(RetCode.SuccessfulDelivery, r.Status);
             currDriver = r.Driver;
             assertNotEquals(currDriver, prevDriver);
@@ -239,7 +239,7 @@ public class DeliveryControllerTest {
         int norders = 28;
         while (norders-- > 0) {
             DeliveryOrder deliveryOrder = new DeliveryOrder(supplier, client, String.valueOf(norders), products, submissionDate);
-            Recipe r = testObj.Deliver(deliveryOrder);
+            Receipt r = testObj.Deliver(deliveryOrder);
             System.out.println(r.DueDate);
             assertEquals(RetCode.SuccessfulDelivery, r.Status);
             testObj.CancelDelivery(r.OrderId);
@@ -252,13 +252,13 @@ public class DeliveryControllerTest {
 
         int norder = 9876;
         List<Product> products = Arrays.asList(new Product(P2_ID, P2_WEIGHT, P2_AMOUNT));
-        Date submissionDate = new Date(cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.YEAR));
+        Date submissionDate = new Date(DAY, MONTH, YEAR);
         DeliveryOrder deliveryOrder_1 = new DeliveryOrder(supplier, client, String.valueOf(norder), products, submissionDate);
 
         testObj.AddDriver(driverId, driverName, driverCell, driverLicenseCategory, srcZone);
         testObj.AddTruck(TRUCK_LOAD_WEIGHT, TRUCK_NET_WEIGHT, TRUCK_LICENSE_NUMBER, TRUCK_MODEL, srcZone);
 
-        Recipe r = testObj.Deliver(deliveryOrder_1);
+        Receipt r = testObj.Deliver(deliveryOrder_1);
 
         assertEquals(r.Status, RetCode.SuccessfulDelivery);
         boolean res = testObj.IsDriverOccupied(driverId, cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH));
@@ -322,7 +322,7 @@ public class DeliveryControllerTest {
     @Test
     public void getDeliveriesHistory() {
         List<Product> products = Arrays.asList(new Product(P2_ID, P2_WEIGHT, P2_AMOUNT));
-        Date submissionDate = new Date(cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.YEAR));
+        Date submissionDate = new Date(DAY, MONTH, YEAR);
 
         addDriver();
         addTruck();
@@ -330,7 +330,7 @@ public class DeliveryControllerTest {
         int norders = 28;
         while (norders-- > 0) {
             DeliveryOrder deliveryOrder = new DeliveryOrder(supplier, client, String.valueOf(norders), products, submissionDate);
-            Recipe r = testObj.Deliver(deliveryOrder);
+            Receipt r = testObj.Deliver(deliveryOrder);
             assertEquals(RetCode.SuccessfulDelivery, r.Status);
         }
 
@@ -350,7 +350,7 @@ public class DeliveryControllerTest {
     public void manyOrders()
     {
         List<Product> products = Arrays.asList(new Product(P2_ID, P2_WEIGHT, P2_AMOUNT));
-        Date submissionDate = new Date(cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.YEAR));
+        Date submissionDate = new Date(DAY, MONTH, YEAR);
 
         testObj.AddDriver(driverId, driverName, driverCell, driverLicenseCategory, srcZone);
         testObj.AddTruck(TRUCK_LOAD_WEIGHT, TRUCK_NET_WEIGHT, TRUCK_LICENSE_NUMBER, TRUCK_MODEL, srcZone);
@@ -360,7 +360,7 @@ public class DeliveryControllerTest {
         while (norders-- > 0)
         {
             DeliveryOrder deliveryOrder = new DeliveryOrder(supplier, client, String.valueOf(norders), products, submissionDate);
-            Recipe r = testObj.Deliver(deliveryOrder);
+            Receipt r = testObj.Deliver(deliveryOrder);
             System.out.println(r);
             if(prev_date != null)
             {
@@ -370,7 +370,7 @@ public class DeliveryControllerTest {
             prev_date = r.DueDate;
         }
         // expect next available delivery date to be one week later than submissionDate
-        Recipe r = testObj.Deliver(new DeliveryOrder(supplier, client, String.valueOf(--norders), products, submissionDate));
+        Receipt r = testObj.Deliver(new DeliveryOrder(supplier, client, String.valueOf(--norders), products, submissionDate));
         assertEquals(RetCode.FailedDelivery_CannotDeliverWithinAWeek, r.Status);
     }
 

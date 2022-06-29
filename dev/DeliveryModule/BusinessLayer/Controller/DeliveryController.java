@@ -11,12 +11,13 @@ import DeliveryModule.BusinessLayer.Type.ShippingZone;
 import DeliveryModule.BusinessLayer.Type.VehicleLicenseCategory;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class DeliveryController
 {
     private final PriorityQueue<Driver>[][] Drivers;
     private final PriorityQueue<Truck>[][] Trucks;
-    private final Map<String, Recipe> Recipes;
+    private final Map<String, Receipt> Recipes;
     private final int NZONES = 9, NLICENSES = 3;
 
     private static class DeliveryControllerHolder2
@@ -28,7 +29,7 @@ public class DeliveryController
     {
         Drivers = new PriorityQueue[NZONES][NLICENSES];
         Trucks = new PriorityQueue[NZONES][NLICENSES];
-        Recipes = new HashMap<>();
+        Recipes = new ConcurrentHashMap<>(); // use concurrent hash map for JUnit tests.
         Init();
     }
 
@@ -78,7 +79,7 @@ public class DeliveryController
     {
         List<RecipeDTO> recipes = DALController.getInstance().getAllDeliveries();
         for(RecipeDTO src : recipes)
-            Recipes.put(src.OrderId, new Recipe(src));
+            Recipes.put(src.OrderId, new Receipt(src));
     }
 
     private double CalculateDeliveryWeight(List<Product> products)
@@ -159,14 +160,14 @@ public class DeliveryController
         return null;
     }
 
-    public Recipe Deliver(DeliveryOrder deliveryOrder)
+    public Receipt Deliver(DeliveryOrder deliveryOrder)
     {
-        Recipe res;
+        Receipt res;
         String orderId = deliveryOrder.OrderId;
         double CargoWeight = CalculateDeliveryWeight(deliveryOrder.RequestedProducts);
         if(CargoWeight == -1)
         {
-            res = new Recipe(RetCode.FailedDelivery_CargoExceedMaxLoadWeight, orderId);
+            res = new Receipt(RetCode.FailedDelivery_CargoExceedMaxLoadWeight, orderId);
             Persist(res);
             return res;
         }
@@ -178,7 +179,7 @@ public class DeliveryController
         Driver selectedDriver = GetAvailableDriver(shippingZoneOrdinal, matchingLicenseOrdinal);
         if(selectedDriver == null)
         {
-            res = new Recipe(RetCode.FailedDelivery_NoAvailableDriver, orderId);
+            res = new Receipt(RetCode.FailedDelivery_NoAvailableDriver, orderId);
             Persist(res);
             return res;
         }
@@ -186,7 +187,7 @@ public class DeliveryController
         Truck selectedTruck = GetAvailableTruck(shippingZoneOrdinal, selectedDriver.License.ordinal());
         if(selectedTruck == null)
         {
-            res = new Recipe(RetCode.FailedDelivery_NoAvailableTruck, orderId);
+            res = new Receipt(RetCode.FailedDelivery_NoAvailableTruck, orderId);
             Persist(res);
             return res;
         }
@@ -200,7 +201,7 @@ public class DeliveryController
 
         if(submissionDate.DifferenceBetweenTwoDates(selectedDueDate) > 7)
         {
-            res = new Recipe(RetCode.FailedDelivery_CannotDeliverWithinAWeek, orderId);
+            res = new Receipt(RetCode.FailedDelivery_CannotDeliverWithinAWeek, orderId);
             Persist(res);
             return res;
         }
@@ -213,7 +214,7 @@ public class DeliveryController
         Drivers[shippingZoneOrdinal][selectedDriver.License.ordinal()].add(selectedDriver);
         Trucks[shippingZoneOrdinal][selectedTruck.AuthorizedLicense.ordinal()].add(selectedTruck);
 
-        res =  new Recipe(RetCode.SuccessfulDelivery,
+        res =  new Receipt(RetCode.SuccessfulDelivery,
                             orderId,
                             deliveryOrder.Supplier,
                             deliveryOrder.Client,
@@ -268,11 +269,14 @@ public class DeliveryController
         return driver;
     }
 
-    public Recipe RemoveRecipe(String orderId)
+    public Receipt RemoveRecipe(String orderId)
     {
-        Recipe r = Recipes.getOrDefault(orderId, null);
-        if(r != null)
+        Receipt r = Recipes.getOrDefault(orderId, null);
+        //Recipes.remove(r.OrderId);
+        if(r != null) {
+            Recipes.remove(r.OrderId);
             DALController.getInstance().removeDelivery(orderId);
+        }
         return r;
     }
 
@@ -288,7 +292,7 @@ public class DeliveryController
             DALController.getInstance().removeTruck(truck.VehicleLicenseNumber);
     }
 
-    private void Persist(Recipe recipe)
+    private void Persist(Receipt recipe)
     {
         Recipes.put(recipe.OrderId, recipe);
         recipe.Persist();
@@ -314,7 +318,7 @@ public class DeliveryController
 
     public void CancelDelivery(String orderId)
     {
-        Recipe recipe = Recipes.getOrDefault(orderId, null);
+        Receipt recipe = Recipes.getOrDefault(orderId, null);
         if(recipe != null && recipe.Status == RetCode.SuccessfulDelivery)
         {
             Date canceledDeliveryDate = recipe.DueDate;
@@ -409,7 +413,7 @@ public class DeliveryController
     {
         StringBuilder sb = new StringBuilder();
         sb.append("------------------------------ Deliveries History ------------------------------\n");
-        for(Recipe recipe: Recipes.values())
+        for(Receipt recipe: Recipes.values())
         {
             if(recipe.Status == RetCode.SuccessfulDelivery)
                 sb.append(recipe);
@@ -421,7 +425,7 @@ public class DeliveryController
     {
         StringBuilder sb = new StringBuilder();
         sb.append("------------------------------ Failed Deliveries History ------------------------------\n");
-        for(Recipe recipe: Recipes.values())
+        for(Receipt recipe: Recipes.values())
         {
             if(recipe.Status != RetCode.SuccessfulDelivery)
                 sb.append(recipe);

@@ -8,7 +8,7 @@ import DeliveryModule.BusinessLayer.Type.ShippingZone;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Recipe
+public class Receipt
 {
 
     public final RetCode Status;
@@ -22,14 +22,14 @@ public class Recipe
     private final String Delimiter = "#";
 
 
-    public Recipe(RetCode status,
-                  String orderId,
-                  Site supplier,
-                  Site client,
-                  List<Product> deliveredProducts,
-                  Date dueDate,
-                  Driver driver,
-                  Truck truck)
+    public Receipt(RetCode status,
+                   String orderId,
+                   Site supplier,
+                   Site client,
+                   List<Product> deliveredProducts,
+                   Date dueDate,
+                   Driver driver,
+                   Truck truck)
     {
         Status = status;
         OrderId = orderId;
@@ -41,13 +41,13 @@ public class Recipe
         Truck = truck;
     }
 
-    public Recipe(RetCode status, String orderId)
+    public Receipt(RetCode status, String orderId)
     {
         Status = status;
         OrderId = orderId;
     }
 
-    public Recipe(RecipeDTO src)
+    public Receipt(RecipeDTO src)
     {
         OrderId = src.OrderId;
         Status = RetCode.Ordinal2RetCode(Integer.parseInt(src.Status));

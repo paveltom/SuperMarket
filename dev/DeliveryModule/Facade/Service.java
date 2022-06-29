@@ -1,6 +1,6 @@
 package DeliveryModule.Facade;
 
-import DeliveryModule.BusinessLayer.Element.Recipe;
+import DeliveryModule.BusinessLayer.Element.Receipt;
 import DeliveryModule.Facade.FacadeObjects.*;
 import java.util.List;
 
@@ -30,7 +30,7 @@ public class Service implements IService{
         return deliveryService.deliver(origin, destination, orderId, facProducts, facSubDate);
     }
 
-    public ResponseT<Recipe> deliver(FacadeSite origin, FacadeSite destination, String orderId, List<FacadeProduct> facProducts, FacadeDate facSubDate, boolean[] supplierWorkingDays){
+    public ResponseT<Receipt> deliver(FacadeSite origin, FacadeSite destination, String orderId, List<FacadeProduct> facProducts, FacadeDate facSubDate, boolean[] supplierWorkingDays){
         return deliveryService.deliver(origin, destination, orderId, facProducts, facSubDate, supplierWorkingDays);
     }
 
