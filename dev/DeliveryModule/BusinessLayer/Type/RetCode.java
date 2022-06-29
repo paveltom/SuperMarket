@@ -6,7 +6,8 @@ public enum RetCode
     FailedDelivery_NoAvailableDriver,
     FailedDelivery_NoAvailableTruck,
     FailedDelivery_CannotDeliverWithinAWeek,
-    FailedDelivery_CargoExceedMaxLoadWeight
+    FailedDelivery_CargoExceedMaxLoadWeight,
+    FailedDelivery_OrderIdExists
     ;
 
     private static final String[] RetCodeNames =
@@ -15,7 +16,8 @@ public enum RetCode
         "Unable to deliver: There is no available driver",
         "Unable to deliver: There is no available truck",
         "Unable to deliver: Cannot deliver requested cargo within a week",
-        "Unable to deliver: Requested delivery exceeds truck max load weight"
+        "Unable to deliver: Requested delivery exceeds truck max load weight",
+        "Unable to deliver: Order Id has already been served"
     };
 
     public static String GetRetCodeName(RetCode retCode)

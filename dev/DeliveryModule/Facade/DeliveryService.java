@@ -44,7 +44,7 @@ public class DeliveryService {
             Site supplier = new Site(zone, origin.getAddress(), origin.getContactName(), origin.getCellphone());
             Site client = new Site(ShippingZone.valueOf(destination.getZone()), destination.getAddress(), destination.getContactName(), destination.getCellphone());
             DeliveryOrder delOrder = new DeliveryOrder(supplier, client, orderId, products, delSubmissionDate);
-            Recipe delRec = delController.Deliver(delOrder);
+            Receipt delRec = delController.Deliver(delOrder);
             return (delRec.Status==RetCode.SuccessfulDelivery) ? new ResponseT<>(delRec.toString(), true) : new ResponseT<>(RetCode.GetRetCodeName(delRec.Status));
         }
         catch(Exception e) {
@@ -72,7 +72,7 @@ public class DeliveryService {
             Site supplier = new Site(zone, origin.getAddress(), origin.getContactName(), origin.getCellphone());
             Site client = new Site(ShippingZone.valueOf(destination.getZone()), destination.getAddress(), destination.getContactName(), destination.getCellphone());
             DeliveryOrder delOrder = new DeliveryOrder(supplier, client, orderId, products, delSubmissionDate, supplierWorkingDays);
-            Recipe delRec = delController.Deliver(delOrder);
+            Receipt delRec = delController.Deliver(delOrder);
             return (delRec.Status==RetCode.SuccessfulDelivery) ? new ResponseT<>(delRec, true) : new ResponseT<>(delRec, false);
         }
         catch(Exception e) {
