@@ -175,5 +175,6 @@ public class Service
         Map<Integer, Map<Integer, Integer>> products = (Map<Integer, Map<Integer, Integer>>) new HashMap<>().put(2, new HashMap<>().put(30, 25));
         insertNewPurchase( new Date(2022, 4, 25), products);
         insertNewPurchase( new Date(2022, 4, 25), products);
+        insertNewPurchase( new Date(2022, 4, 26), products);
     }
 }
