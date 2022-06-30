@@ -56,18 +56,18 @@ public class Product {
         return "Product Name : " + name + " , Manufacturer : " + manufacturer + " , Amount : " + amount + " , Category ID : " + categoryID + " , Demand : " + demand+ "\n";
     }
 
-    public void updateAmount() throws Exception
+    /**
+     *
+     * @return true if need to order shortage, false otherwise
+     */
+    public boolean updateAmount()
     {
         amount = 0;
         for(Item i : items){
             amount += i.getAmount();
         }
         dao.updateAmount(this);
-        if(amount < demand)
-        {
-            throw new Exception("PLEASE NOTICE : Current amount is lower than product's demand. Please refill stock.");
-        }
-
+        return amount < amountToNotify;
     }
 
     public int getAmount(){return amount;}
@@ -118,10 +118,10 @@ public class Product {
         items.remove(itemID);
         updateAmount();
     }
-    public void reduceItemAmount(int itemID,int amountToReduce) throws Exception
+    public boolean reduceItemAmount(int itemID,int amountToReduce) throws Exception
     {
         items.get(itemID).reduce(amountToReduce);
-        updateAmount();
+        return updateAmount();
     }
 }
 

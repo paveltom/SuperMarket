@@ -15,9 +15,7 @@ public class OrderController {
         registerStock();
     }
 
-    private OrderController(){
-
-    }
+    private OrderController(){}
 
     public static OrderController getInstance(){
         if(oc == null) {

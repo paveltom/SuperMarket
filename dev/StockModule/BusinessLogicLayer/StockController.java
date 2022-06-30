@@ -123,7 +123,9 @@ public class StockController {
 
     public void reduceItemAmount(String productID, int itemID, int amountToReduce) throws Exception
     {
-        getProduct(productID).reduceItemAmount(itemID, amountToReduce);
+        if (getProduct(productID).reduceItemAmount(itemID, amountToReduce)){
+            OrderController.getInstance().orderShortage(productID);
+        }
     }
 
     public void insertNewCategory(String categoryName){
