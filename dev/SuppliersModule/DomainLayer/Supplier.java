@@ -19,7 +19,7 @@ public class Supplier {
     private final SuppliersModule.DomainLayer.OrderController oc;
     private final List<SuppliersModule.DomainLayer.Order> orders = new LinkedList<>();
     private final SupplierDao sDao;
-    private final ProductDao pDao;
+
     //  getters
     public String getsId(){
         return sId;
@@ -79,7 +79,6 @@ public class Supplier {
                     boolean[] supplyDays, int MaxSupplyDays, int supplCycle, boolean deliveryService,
                     String pId, String catNumber, float price){
         sDao = new SupplierDao();
-        pDao = new ProductDao();
         this.sId = sId;
         this.name = name;
         this.address = address;
@@ -97,7 +96,6 @@ public class Supplier {
     //db
     public Supplier(String sId, String name, String address, String bankAccount, boolean cash, boolean credit){
         sDao = new SupplierDao();
-        pDao = new ProductDao();
         this.sId = sId;
         this.name = name;
         this.address = address;
@@ -154,12 +152,7 @@ public class Supplier {
     public int getDaysForShortageOrder(){return contract.getDaysForShortageOrder();}
 
     //products methods
-    public void addProduct(String pId, String catalogNum, float price) { //TODO 1.calculating and setting product in periodic order 2. checking that pid exist
-        try{
-            pDao.getProduct(pId);
-        }catch(Exception e){
-            throw new IllegalArgumentException("product id doesn't exist in stock, first add it there");
-        }
+    public void addProduct(String pId, String catalogNum, float price) { //TODO 1.calculating and setting product in periodic order
         contract.addProduct(pId, catalogNum, price);
     }
     public boolean removeProduct(String pId) { //Todo delete supplier if has no product
@@ -187,7 +180,7 @@ public class Supplier {
 
     public String toString() {
         return "Supplier " + sId + "\n" +
-                "name='" + name + '\'' +
+                "name: " + name + '\'' +
                 ", address='" + address + '\'' +
                 ", bankAccount='" + bankAccount + '\'' +
                 ", paymentMethods=" + Arrays.toString(paymentMethods) +
