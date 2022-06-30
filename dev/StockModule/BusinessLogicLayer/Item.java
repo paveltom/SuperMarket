@@ -24,6 +24,7 @@ public class Item {
         amount = _amount;
 
         dao.insert(this);
+
     }
 
     //db

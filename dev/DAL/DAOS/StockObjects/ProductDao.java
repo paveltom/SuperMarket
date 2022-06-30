@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class ProductDao extends DAO {
@@ -27,6 +28,19 @@ public class ProductDao extends DAO {
             p = getProductFromDB(pId);
         }
         return p;
+    }
+
+    public List<Product> getAllProducts(){
+        List<Product> ans = new LinkedList<>();
+        List<String[]> p = load("Products", null, null);
+
+        for(String[] s : p){
+            List<String[]> tmp = new LinkedList<>();
+            tmp.add(s);
+            ans.add(makeProduct(tmp));
+        }
+
+        return ans;
     }
 
     private Product getProductFromDB(String pId){
