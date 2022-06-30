@@ -38,8 +38,9 @@ public class Product {
     }
 
     //db
-    public Product(String name, String manufacturer,int amountToNotify,  int categoryID, int demand, boolean isFromDB)
+    public Product(String name, String manufacturer, int amountToNotify,  int categoryID, int demand, boolean isFromDB)
     {
+        this.dao = new ProductDao();
         this.ID = name+manufacturer;
         this.name = name;
         this.manufacturer = manufacturer;
@@ -48,7 +49,7 @@ public class Product {
         this.categoryID = categoryID;
         this.demand = demand;
         this.items = new LinkedList<>();
-        
+
         this.items = dao.loadItems(getID());
     }
 
