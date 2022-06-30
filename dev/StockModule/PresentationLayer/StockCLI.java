@@ -150,7 +150,9 @@ public class StockCLI {
                     int day = toRead.nextInt();
                     System.out.println("Enter the minimum demand for this product.");
                     int demand = toRead.nextInt();
-                    System.out.println(s.insertNewProduct(SelectedBranchID, productName, productManufacturer, categoryID, demand).ErrorMessage);
+                    System.out.println("Enter the amount to notify the suppliers.");
+                    int amountToNotify = toRead.nextInt();
+                    System.out.println(s.insertNewProduct(SelectedBranchID, productName, productManufacturer, amountToNotify, categoryID, demand).ErrorMessage);
                     break;
 
                 case "RemoveProduct":

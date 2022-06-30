@@ -152,11 +152,11 @@ public class StockControllerService
         }
     }
 
-    public Response insertNewProduct(int branchID, String productName, String productManufacturer, int categoryID, int demand)
+    public Response insertNewProduct(int branchID, String productName, String productManufacturer, int amountToNotify, int categoryID, int demand)
     {
         try
         {
-            bc.insertNewProduct(branchID, productName, productManufacturer, categoryID, demand);
+            bc.insertNewProduct(branchID, productName, productManufacturer, amountToNotify, categoryID, demand);
             return new Response();
         } catch (Exception e)
         {

@@ -68,8 +68,8 @@ public class BranchController{
         return branches.get(branchID).getExpiredItemsReport();
     }
 
-    public void insertNewProduct(int branchID, String productName, String productManufacturer, int categoryID, int demand){
-        branches.get(branchID).insertNewProduct(productName, productManufacturer, categoryID, demand);
+    public void insertNewProduct(int branchID, String productName, String productManufacturer, int amountToNotify, int categoryID, int demand){
+        branches.get(branchID).insertNewProduct(productName, productManufacturer, amountToNotify, categoryID, demand);
     }
 
     public void insertNewCategory(int branchID,String categoryName){
