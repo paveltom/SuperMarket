@@ -10,14 +10,21 @@ public class OrderController {
     private static OrderController oc = null;
     private StockController stc;
     private SupplierController supc;
-    private OrderController(){
+    private OrderController(SupplierController sc){
+        supc = sc;
         registerStock();
-        registerSuppliers();
+    }
+
+    private OrderController(){
+
     }
 
     public static OrderController getInstance(){
-        if(oc == null)
+        if(oc == null) {
             oc = new OrderController();
+            getInstance().registerStock();
+            getInstance().registerSuppliers();
+        }
         return oc;
     }
 

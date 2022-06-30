@@ -133,7 +133,7 @@ public class Service
         insertNewProduct(0, "Batteries AA", "GP Ultra", 0, 65);
         insertNewProduct(0, "Orange juice", "Primor", 2, 65);
 
-        insertNewProduct(1, "0", "", 1, 40);
+        insertNewProduct(1, "0", "",  1, 40);
         insertNewProduct(1, "Milk Chocolate", "Strauss", 1, 40);
         insertNewProduct(1, "Batteries AA", "GP Ultra", 0, 65);
         insertNewProduct(1, "Orange juice", "Primor", 2, 65);

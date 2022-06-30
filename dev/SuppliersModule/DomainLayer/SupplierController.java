@@ -11,12 +11,13 @@ public class SupplierController {
     private static SupplierController sc = null;
     private final SupplierDao sDao;
     private final ProductDao pDao;
-    private final OrderController oc = OrderController.getInstance();
+    private OrderController oc;
 
     private SupplierController(){
         sDao = new SupplierDao();
         pDao = new ProductDao();
         sDao.getAll();
+        oc = OrderController.getInstance();
     }
 
     public static SupplierController getInstance(){

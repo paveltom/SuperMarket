@@ -61,7 +61,7 @@ public class ProductDao extends DAO {
     }
 
     public void insert(Product p){
-        String[] params = {p.getID(), p.getName(), p.getManufacturer(), String.valueOf(p.getAmountToNotify()),
+        String[] params = {p.getID(), p.getName(), p.getManufacturer(),
                 String.valueOf(p.getCategoryID()), String.valueOf(p.getDemand())};
         insert("Products", params);
         identityMap.cache(p);

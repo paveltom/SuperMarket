@@ -23,6 +23,8 @@ public class StockController {
         categoriesCounter = 0;
         discounts = new HashMap<>();
         discountsCounter = 0;
+
+        OrderController.getInstance();
     }
 
     public static StockController getInstance(){
@@ -179,6 +181,6 @@ public class StockController {
     }
 
     private Product getProduct(String pid){
-        return pDao.getProduct(pid);
+        return pDao.getProduct(pid.replaceAll(" ", "_"));
     }
 }
