@@ -31,7 +31,7 @@ public class Category {
     Category(int _ID,String _name,Category _parentCategory)
     {//Constructor for non 1st-degree category
         this(_ID, _name);
-        parentCategory=_parentCategory;
+        parentCategory = _parentCategory;
     }
 
     public List<Category> getSubCategories(){
@@ -64,5 +64,4 @@ public class Category {
         subCategories.remove(subCategory);
         dao.updateSubCategories(this);
     }
-
 }

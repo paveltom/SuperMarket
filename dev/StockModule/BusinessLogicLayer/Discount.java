@@ -7,12 +7,12 @@ import java.util.Map;
 public class Discount
 {
     private int discountID;
-    private int productID;
+    private String productID;
     private Date discountStartDate;
     private Date discountEndDate;
     private Map<Integer, Type> discount;
 
-    Discount(int _productID, int _discountID, Date _discountStartDate, Date _discountEndDate,int _amount,Type _t)
+    Discount(String _productID, int _discountID, Date _discountStartDate, Date _discountEndDate,int _amount,Type _t)
     {
         productID = _productID;
         discountID = _discountID;
@@ -34,7 +34,7 @@ public class Discount
         return discountID;
     }
 
-    public int getProductID() {
+    public String getProductID() {
         return productID;
     }
 

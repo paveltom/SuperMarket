@@ -73,12 +73,12 @@ public class Service
         return scs.insertNewProduct(branchID,productName,productManufacturer,categoryID,supplyTime,demand);
     }
 
-    public Response insertNewItem(int branchID, int productID, String location, Date expireDate, boolean isUsable, int amount){
-        return scs.insertNewItem(branchID,productID,location,expireDate,isUsable,amount);
+    public Response insertNewItem(int branchID, String productID, String location, Date expireDate, boolean isUsable, int amount){
+        return scs.insertNewItem(branchID, productID, location, expireDate, isUsable, amount);
 
     }
 
-    public Response reduceItemAmount(int branchID, int productID,int itemID,int amountToReduce)
+    public Response reduceItemAmount(int branchID, String productID,int itemID,int amountToReduce)
     {
         return scs.reduceItemAmount(branchID, productID, itemID, amountToReduce);
     }
@@ -87,11 +87,11 @@ public class Service
         return scs.insertNewCategory(branchID,categoryName);
     }
 
-    public Response insertNewDiscount(int branchID, int productID, Date startDate, Date endDate, int amount, Type t){
+    public Response insertNewDiscount(int branchID, String productID, Date startDate, Date endDate, int amount, Type t){
         return scs.insertNewDiscount(branchID, productID, startDate, endDate, amount, t);
     }
 
-    public Response insertNewPurchase(int branchID, Date purchaseDate, Map<Integer, Map<Integer, Integer>> products){
+    public Response insertNewPurchase(int branchID, Date purchaseDate, Map<String, Map<Integer, Integer>> products){
         return scs.insertNewPurchase(branchID, purchaseDate, products);
     }
 
@@ -138,23 +138,23 @@ public class Service
         insertNewProduct(1, "Batteries AA", "GP Ultra", 0, new Date(2004, 5, 14), 65);
         insertNewProduct(1, "Orange juice", "Primor", 2, new Date(2014, 7, 30), 65);
 
-        insertNewItem(0, 0, "L5A4", new Date(2021, 4, 5), false, 30);
-        insertNewItem(0, 0, "L2A17", new Date(2022, 4, 5), true, 42);
-        insertNewItem(0, 1, "L6A8", new Date(2022, 4, 15), true, 50);
-        insertNewItem(0, 2, "L1A2", new Date(2022, 2, 3), true, 130);
-        insertNewItem(0, 3, "L9A4", new Date(2022, 1, 15), false, 280);
+        insertNewItem(0, "0", "L5A4", new Date(2021, 4, 5), false, 30);
+        insertNewItem(0, "0", "L2A17", new Date(2022, 4, 5), true, 42);
+        insertNewItem(0, "1", "L6A8", new Date(2022, 4, 15), true, 50);
+        insertNewItem(0, "2", "L1A2", new Date(2022, 2, 3), true, 130);
+        insertNewItem(0, "3", "L9A4", new Date(2022, 1, 15), false, 280);
 
 
-        insertNewItem(1, 0, "L5A4", new Date(2021, 4, 5), false, 30);
-        insertNewItem(1, 0, "L2A17", new Date(2022, 4, 5), true, 42);
-        insertNewItem(1, 1, "L6A8", new Date(2022, 4, 15), true, 50);
-        insertNewItem(1, 2, "L1A2", new Date(2022, 2, 3), true, 130);
-        insertNewItem(1, 3, "L9A4", new Date(2022, 1, 15), false, 280);
+        insertNewItem(1, "0", "L5A4", new Date(2021, 4, 5), false, 30);
+        insertNewItem(1, "0", "L2A17", new Date(2022, 4, 5), true, 42);
+        insertNewItem(1, "1", "L6A8", new Date(2022, 4, 15), true, 50);
+        insertNewItem(1, "2", "L1A2", new Date(2022, 2, 3), true, 130);
+        insertNewItem(1, "3", "L9A4", new Date(2022, 1, 15), false, 280);
 
-        insertNewDiscount(0, 3, new Date(2022, 4, 3), new Date(2022, 5, 3), 30, Type.PERCENT);
-        insertNewDiscount(1, 3, new Date(2022, 4, 3), new Date(2022, 5, 3), 30, Type.PERCENT);
+        insertNewDiscount(0, "3", new Date(2022, 4, 3), new Date(2022, 5, 3), 30, Type.PERCENT);
+        insertNewDiscount(1, "3", new Date(2022, 4, 3), new Date(2022, 5, 3), 30, Type.PERCENT);
 
-        Map<Integer, Map<Integer, Integer>> products = (Map<Integer, Map<Integer, Integer>>) new HashMap<>().put(2, new HashMap<>().put(30, 25));
+        Map<String, Map<Integer, Integer>> products = (Map<String, Map<Integer, Integer>>) new HashMap<>().put("2", new HashMap<>().put(30, 25));
         insertNewPurchase(0, new Date(2022, 4, 25), products);
         insertNewPurchase(1, new Date(2022, 4, 25), products);
     }

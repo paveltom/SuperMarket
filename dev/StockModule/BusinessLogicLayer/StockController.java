@@ -8,7 +8,7 @@ public class StockController {
     private int purchasesCounter;
     private HashMap<Integer,Category> categories;
     private int categoriesCounter;
-    private HashMap<Integer,Discount> discounts;
+    private HashMap<String, Discount> discounts;
     private int discountsCounter;
 
     StockController(){
@@ -37,7 +37,7 @@ public class StockController {
         return new HashMap<Integer,Purchase>(purchases);
     }
 
-    public HashMap<Integer,Discount> getCurrentDiscounts(){
+    public HashMap<String, Discount> getCurrentDiscounts(){
         //Requirement 4
         //return new ArrayList<>(discounts);
         return discounts;
@@ -106,11 +106,11 @@ public class StockController {
         subCategory.setAsParent(parent);
     }
 
-    public void insertNewItem(int productID, String location, Date expireDate, boolean isDefect, int amount){
+    public void insertNewItem(String productID, String location, Date expireDate, boolean isDefect, int amount){
         products.get(productID).addItem(location, expireDate, isDefect, amount);
     }
 
-    public void reduceItemAmount(int productID, int itemID, int amountToReduce) throws Exception
+    public void reduceItemAmount(String productID, int itemID, int amountToReduce) throws Exception
     {
         products.get(productID).reduceItemAmount(itemID, amountToReduce);
     }
@@ -121,13 +121,13 @@ public class StockController {
         categoriesCounter++;
     }
 
-    public void insertNewDiscount(int productID, Date startDate, Date endDate, int amount, Type t){
-        Discount d = new Discount(discountsCounter, productID, startDate, endDate, amount, t);
+    public void insertNewDiscount(String productID, Date startDate, Date endDate, int amount, Type t){
+        Discount d = new Discount(productID, discountsCounter, startDate, endDate, amount, t);
         discounts.put(d.getProductID(),d);
         discountsCounter++;
     }
 
-    public void insertNewPurchase(Date purchaseDate, Map<Integer, Map<Integer, Integer>> products){
+    public void insertNewPurchase(Date purchaseDate, Map<String, Map<Integer, Integer>> products){
         Purchase p = new Purchase(purchasesCounter, purchaseDate, products);
         purchases.put(p.getID(),p);
         purchasesCounter++;

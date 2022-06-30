@@ -164,11 +164,11 @@ public class StockControllerService
         }
     }
 
-    public Response insertNewItem(int branchID, int productID, String location, Date expireDate, boolean isUsable, int amount)
+    public Response insertNewItem(int branchID, String productID, String location, Date expireDate, boolean isUsable, int amount)
     {
         try
         {
-            bc.insertNewItem(branchID,productID,location,expireDate,isUsable,amount);
+            bc.insertNewItem(branchID, productID, location, expireDate, isUsable, amount);
             return new Response();
         }
         catch (Exception e)
@@ -177,7 +177,7 @@ public class StockControllerService
         }
     }
 
-    public Response reduceItemAmount(int branchID, int productID,int itemID,int amountToReduce){
+    public Response reduceItemAmount(int branchID, String productID,int itemID,int amountToReduce){
         try
         {
             bc.reduceItemAmount(branchID,productID,itemID,amountToReduce);
@@ -201,7 +201,7 @@ public class StockControllerService
         }
     }
 
-    public Response insertNewDiscount(int branchID, int productID, Date startDate, Date endDate, int amount, Type t){
+    public Response insertNewDiscount(int branchID, String productID, Date startDate, Date endDate, int amount, Type t){
         try
         {
             bc.insertNewDiscount(branchID, productID, startDate, endDate, amount, t);
@@ -214,7 +214,7 @@ public class StockControllerService
 
     }
 
-    public Response insertNewPurchase(int branchID, Date purchaseDate, Map<Integer, Map<Integer, Integer>> products){
+    public Response insertNewPurchase(int branchID, Date purchaseDate, Map<String, Map<Integer, Integer>> products){
         try
         {
             bc.insertNewPurchase(branchID, purchaseDate, products);

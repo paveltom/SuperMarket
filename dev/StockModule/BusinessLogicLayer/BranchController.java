@@ -22,14 +22,14 @@ public class BranchController{
 
     public void deleteBranch(int branchID){
         branches.remove(branchID);
-
+        counterBranches--;
     }
 
     public void setSubCategory(int branchID,int subCategoryID,int parentID){
         branches.get(branchID).setSubCategory(subCategoryID,parentID);
     }
 
-    public HashMap<String,Product> getProductsInStock(int branchID){
+    public HashMap<String, Product> getProductsInStock(int branchID){
         //Requirement 2
         return branches.get(branchID).getProductsInStock();
     }
@@ -39,7 +39,7 @@ public class BranchController{
         return branches.get(branchID).getPurchasesHistoryReport();
     }
 
-    public HashMap<Integer,Discount> getCurrentDiscounts(int branchID){
+    public HashMap<String, Discount> getCurrentDiscounts(int branchID){
         //Requirement 4
         return branches.get(branchID).getCurrentDiscounts();
     }
@@ -76,11 +76,11 @@ public class BranchController{
         branches.get(branchID).insertNewCategory(categoryName);
     }
 
-    public void insertNewDiscount(int branchID, int productID, Date startDate, Date endDate, int amount, Type t){
+    public void insertNewDiscount(int branchID, String productID, Date startDate, Date endDate, int amount, Type t){
         branches.get(branchID).insertNewDiscount(productID, startDate, endDate, amount, t);
     }
 
-    public void insertNewPurchase(int branchID, Date purchaseDate, Map<Integer, Map<Integer, Integer>> products){
+    public void insertNewPurchase(int branchID, Date purchaseDate, Map<String, Map<Integer, Integer>> products){
         branches.get(branchID).insertNewPurchase(purchaseDate, products);
     }
 
@@ -88,10 +88,10 @@ public class BranchController{
         branches.get(branchID).deleteProduct(productID);
     }
 
-    public void insertNewItem(int branchID, int productID, String location, Date expireDate, boolean isDefect, int amount){
+    public void insertNewItem(int branchID, String productID, String location, Date expireDate, boolean isDefect, int amount){
         branches.get(branchID).insertNewItem(productID, location, expireDate, isDefect, amount);
     }
-    public void reduceItemAmount(int branchID, int productID, int itemID, int amountToReduce) throws Exception
+    public void reduceItemAmount(int branchID, String productID, int itemID, int amountToReduce) throws Exception
     {
         branches.get(branchID).reduceItemAmount(productID, itemID, amountToReduce);
     }

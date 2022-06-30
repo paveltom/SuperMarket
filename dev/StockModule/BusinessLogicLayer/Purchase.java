@@ -7,9 +7,9 @@ import java.util.Map;
 public class Purchase {
     private static int purchaseID;
     private Date purchaseDate;
-    private Map<Integer, Map<Integer, Integer>> products; //<ProductID, <Fixed price, Actual Price (discount?)>>
+    private Map<String, Map<Integer, Integer>> products; //<ProductID, <Fixed price, Actual Price (discount?)>>
 
-    public Purchase(int _purchaseID, Date _purchaseDate, Map<Integer, Map<Integer, Integer>> _products)
+    public Purchase(int _purchaseID, Date _purchaseDate, Map<String, Map<Integer, Integer>> _products)
     {
         purchaseID = _purchaseID;
         purchaseID++;
