@@ -84,7 +84,7 @@ public class BranchController{
         branches.get(branchID).insertNewPurchase(purchaseDate, products);
     }
 
-    public void deleteProduct(int branchID, int productID){
+    public void deleteProduct(int branchID, String productID){
         branches.get(branchID).deleteProduct(productID);
     }
 
@@ -108,7 +108,7 @@ public class BranchController{
         branches.get(branchID).deletePurchase(purchaseID);
     }
 
-    public void deleteItem(int branchID, int productID,int itemID) throws Exception {
+    public void deleteItem(int branchID, String productID,int itemID) throws Exception {
         branches.get(branchID).deleteItem(productID, itemID);
     }
 }

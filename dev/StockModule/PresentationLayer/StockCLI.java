@@ -155,7 +155,7 @@ public class StockCLI {
 
                 case "RemoveProduct":
                     System.out.print("Enter product ID to remove : ");
-                    if (!s.deleteProduct(SelectedBranchID, toRead.nextInt()).ErrorOccurred())
+                    if (!s.deleteProduct(SelectedBranchID, toRead.next()).ErrorOccurred())
                         System.out.print("Product removed successfully.");
                     break;
 
@@ -266,7 +266,7 @@ public class StockCLI {
 
                 case "RemoveItem":
                     System.out.println("Enter product ID : ");
-                    int ProductIDRemoveItem = toRead.nextInt();
+                    String ProductIDRemoveItem = toRead.next();
                     System.out.println("Enter item ID : ");
                     int ItemID = toRead.nextInt();
                     System.out.println(s.deleteItem(SelectedBranchID, ProductIDRemoveItem, ItemID).ErrorMessage);

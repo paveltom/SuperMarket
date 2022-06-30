@@ -82,9 +82,9 @@ public class StockController {
     public List<Item> getDefectedItemsReport(){
         //Requirement 8+9
         List<Item> output = new ArrayList<>();
-        for (String s : products.keySet())
+        for (String pID : products.keySet())
         {
-            Product p = products.get(s);
+            Product p = getProduct(pID);
             output.addAll(p.getDefectedItems());
         }
         return output;
@@ -93,17 +93,16 @@ public class StockController {
     public List<Item> getExpiredItemsReport() {
         List<Item> output = new ArrayList<>();
 
-        for (String s : products.keySet())
+        for (String pID : products.keySet())
         {
-            Product p = products.get(s);
+            Product p = getProduct(pID);
             output.addAll(p.getExpiredItems());
         }
         return output;
     }
 
     public void insertNewProduct(String productName, String productManufacturer, int categoryID, Date supplyTime, int demand){
-        Product p = new Product(productName, productManufacturer, categoryID, supplyTime, demand);
-        products.put(p.getID(),p);
+        new Product(productName, productManufacturer, categoryID, supplyTime, demand);
     }
 
     public void setSubCategory(int subCategoryID,int parentID){
@@ -113,12 +112,12 @@ public class StockController {
     }
 
     public void insertNewItem(String productID, String location, Date expireDate, boolean isDefect, int amount){
-        products.get(productID).addItem(location, expireDate, isDefect, amount);
+        getProduct(productID).addItem(location, expireDate, isDefect, amount);
     }
 
     public void reduceItemAmount(String productID, int itemID, int amountToReduce) throws Exception
     {
-        products.get(productID).reduceItemAmount(itemID, amountToReduce);
+        getProduct(productID).reduceItemAmount(itemID, amountToReduce);
     }
 
     public void insertNewCategory(String categoryName){
@@ -139,8 +138,8 @@ public class StockController {
         purchasesCounter++;
     }
 
-    public void deleteProduct(int productID){
-        products.remove(productID);
+    public void deleteProduct(String productID){
+        pDao.delete(getProduct(productID));
     }
 
     public void deleteCategory(int categoryID){
@@ -155,9 +154,9 @@ public class StockController {
         purchases.remove(purchaseID);
     }
 
-    public void deleteItem(int productID,int itemID) throws Exception
+    public void deleteItem(String productID,int itemID) throws Exception
     {
-        products.get(productID).deleteItem(itemID);
+        getProduct(productID).deleteItem(itemID);
     }
 
     public boolean isAncestorOf(int childCategoryID,int parentCategoryID)

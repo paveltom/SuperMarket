@@ -95,7 +95,7 @@ public class Service
         return scs.insertNewPurchase(branchID, purchaseDate, products);
     }
 
-    public Response deleteProduct(int branchID, int productID){
+    public Response deleteProduct(int branchID, String productID){
         return scs.deleteProduct(branchID, productID);
     }
 
@@ -111,7 +111,7 @@ public class Service
         return scs.deletePurchase(branchID, purchaseID);
     }
 
-    public Response deleteItem(int branchID, int productID,int itemID){
+    public Response deleteItem(int branchID, String productID,int itemID){
         return scs.deleteItem(branchID,productID,itemID);
     }
 

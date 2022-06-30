@@ -226,7 +226,7 @@ public class StockControllerService
         }
     }
 
-    public Response deleteProduct(int branchID, int productID){
+    public Response deleteProduct(int branchID, String productID){
         try
         {
             bc.deleteProduct(branchID, productID);
@@ -273,7 +273,7 @@ public class StockControllerService
             return new Response(e.getMessage());
         }
     }
-    public Response deleteItem(int branchID, int productID,int itemID){
+    public Response deleteItem(int branchID, String productID,int itemID){
         try{
             bc.deleteItem(branchID, productID,itemID);
             return new Response();

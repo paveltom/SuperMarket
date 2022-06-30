@@ -89,7 +89,7 @@ public class Branch {
         stockController.insertNewPurchase(purchaseDate, products);
     }
 
-    public void deleteProduct(int productID){
+    public void deleteProduct(String productID){
         stockController.deleteProduct(productID);
     }
 
@@ -105,7 +105,7 @@ public class Branch {
         stockController.deletePurchase(purchaseID);
     }
 
-    public void deleteItem(int productID,int itemID) throws Exception
+    public void deleteItem(String productID,int itemID) throws Exception
     {
         stockController.deleteItem(productID, itemID);
     }
