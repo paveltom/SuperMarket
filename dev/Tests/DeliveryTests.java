@@ -285,8 +285,9 @@ public class DeliveryTests {
 
         assertFalse(res.getErrorOccurred());
 
-        assertFalse(res.getValue().contains("987654321") && res.getValue().contains("" + facDate.getYear())
-                            && res.getValue().contains("" + facDate.getDay()) && res.getValue().contains(new DateFormatSymbols().getMonths()[facDate.getMonth()-1]));
+
+
+        assertFalse(res.getValue().contains("987654321") && res.getValue().contains(new DateFormatSymbols().getMonths()[facDate.getMonth()-1] + " " + facDate.getDay() + " " + facDate.getYear()));
 
     }
 
@@ -327,9 +328,9 @@ public class DeliveryTests {
     private void addTruck(String licPlate, String area, double optionalNonZeroWeight){
         // long licensePlate, String model, String parkingArea, double netWeight, double maxLoadWeight
         if(optionalNonZeroWeight == 0)
-            service.addTruck(new FacadeTruck(licPlate, "model" + licPlate, area, 10000000, 10000000));
+            service.addTruck(new FacadeTruck(licPlate, "model" + licPlate, area, 5000000, 10000000));
         else
-            service.addTruck(new FacadeTruck(licPlate, "model" + licPlate, area, optionalNonZeroWeight, optionalNonZeroWeight));
+            service.addTruck(new FacadeTruck(licPlate, "model" + licPlate, area, optionalNonZeroWeight, 2*optionalNonZeroWeight));
 
     }
 

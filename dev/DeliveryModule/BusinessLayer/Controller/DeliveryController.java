@@ -101,23 +101,28 @@ public class DeliveryController
         return res;
     }
 
-    private Truck GetAvailableTruck(int shippingZoneOrdinal,  int matchingLicenseOrdinal, byte[] flag, double cargoWeight)
+    private Truck GetAvailableTruck(int shippingZoneOrdinal,  int matchingLicenseOrdinal, double cargoWeight)
     {
         Truck res = null;
+        List<Truck> backup = new ArrayList<>();
+        PriorityQueue<Truck> pq;
+        boolean found = false;
+        int i = 0;
 
-        for(int i = 0; i <= matchingLicenseOrdinal; i++)
+        while(i <= matchingLicenseOrdinal && !found)
         {
-            res = Trucks[shippingZoneOrdinal][i].peek();
-            if(res != null) {
-                flag[0] = 1;
+            pq = Trucks[shippingZoneOrdinal][i];
+            while(!pq.isEmpty() && !found)
+            {
+                res = pq.poll();
                 if(res.MaxLoadWeight >= cargoWeight)
-                {
-                    Trucks[shippingZoneOrdinal][i].poll();
-                    break;
-                }
+                    found = true;
                 else
-                    res = null;
+                    backup.add(res);
             }
+            pq.addAll(backup);
+            backup.clear();
+            i++;
         }
 
         return res;
@@ -159,6 +164,16 @@ public class DeliveryController
         return null;
     }
 
+    private boolean ExistsTruck(int shippingZoneOrdinal)
+    {
+        for(VehicleLicenseCategory licenseCategory : VehicleLicenseCategory.values())
+        {
+            if(!Trucks[shippingZoneOrdinal][licenseCategory.ordinal()].isEmpty())
+                return true;
+        }
+        return false;
+    }
+
     public Receipt Deliver(DeliveryOrder deliveryOrder)
     {
         Receipt res;
@@ -191,22 +206,20 @@ public class DeliveryController
             return res;
         }
 
-        byte[] existsTruck = new byte[] {0};
-
-        Truck selectedTruck = GetAvailableTruck(shippingZoneOrdinal, selectedDriver.License.ordinal(), existsTruck, CargoWeight);
-        if(existsTruck[0] == 0) // no available truck at the specified shipping zone
+        Truck selectedTruck = GetAvailableTruck(shippingZoneOrdinal, selectedDriver.License.ordinal(), CargoWeight);
+        if(selectedTruck == null) // no available truck at the specified shipping zone
         {
             res = new Receipt(RetCode.FailedDelivery_NoAvailableTruck, orderId);
-            Persist(res);
             Drivers[shippingZoneOrdinal][selectedDriver.License.ordinal()].add(selectedDriver);
+            Persist(res);
             return res;
         }
 
-        if(selectedTruck == null) // cargo exceeds max load weight of all truck at the specified shipping zone
+        if(selectedTruck.MaxLoadWeight < CargoWeight) // cargo exceeds max load weight of all truck at the specified shipping zone
         {
             res = new Receipt(RetCode.FailedDelivery_CargoExceedMaxLoadWeight, orderId);
-            Persist(res);
             Drivers[shippingZoneOrdinal][selectedDriver.License.ordinal()].add(selectedDriver);
+            Persist(res);
             return res;
         }
 
@@ -223,7 +236,6 @@ public class DeliveryController
             Persist(res);
             return res;
         }
-
 
         selectedDriver.SetOccupied(selectedDueDate);
         selectedTruck.SetOccupied(selectedDueDate);

@@ -25,10 +25,10 @@ public class DeliveryControllerTest {
     final String srcAddr = "Ashdod Rotshield 25", srcName = "Nir Malka", srcCell = "0548826400";
     final String dstAddr = "Neve Tzedek", dstName = "Pavel tomshin", dstCell = "0545555555";
 
-    final double TRUCK_NET_WEIGHT = 1000000.00, TRUCK_LOAD_WEIGHT = 3500000.00,
+    final double TRUCK_NET_WEIGHT = 1000000.00, TRUCK_LOAD_WEIGHT = 4500000.00,
             P1_WEIGHT = 2502.55, P2_WEIGHT = 354.123;
     final String TRUCK_LICENSE_NUMBER = "496351";
-    final int P1_AMOUNT = 1400, P1_ID = 12, P2_AMOUNT = 78, P2_ID = 27;
+    final int P1_AMOUNT = 2000, P1_ID = 12, P2_AMOUNT = 78, P2_ID = 27;
 
     final Site supplier = new Site(srcZone, srcAddr, srcName, srcCell);
     final Site client = new Site(dstZone, dstAddr, dstName, dstCell);
@@ -81,6 +81,8 @@ public class DeliveryControllerTest {
         List<Product> products = Arrays.asList(new Product(P2_ID, P2_WEIGHT, P2_AMOUNT));
         Date submissionDate = new Date(DAY, MONTH, YEAR);
         DeliveryOrder deliveryOrder_1 = new DeliveryOrder(supplier, client, String.valueOf(norder), products, submissionDate);
+
+        testObj.AddTruck(TRUCK_LOAD_WEIGHT, TRUCK_NET_WEIGHT, TRUCK_LICENSE_NUMBER, TRUCK_MODEL, srcZone);
 
         Receipt r = testObj.Deliver(deliveryOrder_1);
         assertEquals(r.Status, RetCode.FailedDelivery_NoAvailableDriver);
@@ -368,15 +370,6 @@ public class DeliveryControllerTest {
             assertEquals(RetCode.SuccessfulDelivery, r.Status);
         }
         System.out.println(testObj.GetDeliveriesHistory());
-    }
-
-    @Test
-    public void getFailedDeliveriesHistory() {
-        deliver_failed_max_load_weight();
-        deliver_failed_cannot_deliver_within_a_week();
-        deliver_failed_no_available_driver();
-        deliver_failed_no_available_truck();
-        System.out.println(testObj.GetFailedDeliveriesHistory());
     }
 
     @Test
