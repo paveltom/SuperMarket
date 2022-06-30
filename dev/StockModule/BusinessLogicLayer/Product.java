@@ -16,12 +16,11 @@ public class Product {
     private int amount;
     private int amountToNotify;
     private int categoryID;
-    private Date supplyTime;
     private int demand; // Demand means amount of units sold per week.
     private List<Item> items;
     private ProductDao dao;
 
-    public Product(String name, String manufacturer, int categoryID, Date supplyTime, int demand)
+    public Product(String name, String manufacturer, int categoryID, int demand)
     {
         dao = new ProductDao();
         this.ID = name+manufacturer;
@@ -30,7 +29,6 @@ public class Product {
         this.amount = 0;
         this.amountToNotify = 0;
         this.categoryID = categoryID;
-        this.supplyTime = supplyTime;
         this.demand = demand;
         this.items = new LinkedList<>();
 
@@ -55,7 +53,7 @@ public class Product {
 
 
     public String toString(){
-        return "Product Name : " + name + " , Manufacturer : " + manufacturer + " , Amount : " + amount + " , Category ID : " + categoryID + " , Supply Time : " + supplyTime + " , Demand : " + demand+ "\n";
+        return "Product Name : " + name + " , Manufacturer : " + manufacturer + " , Amount : " + amount + " , Category ID : " + categoryID + " , Demand : " + demand+ "\n";
     }
 
     public void updateAmount() throws Exception
@@ -72,7 +70,6 @@ public class Product {
 
     }
 
-    public Date getSupplyTime(){return supplyTime;}
     public int getAmount(){return amount;}
     public int getAmountToNotify(){return amountToNotify;}
     public String getManufacturer(){return manufacturer;}

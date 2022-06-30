@@ -53,8 +53,8 @@ public class ProductDao extends DAO {
     private Product makeProduct(List<String[]> p){
         //assuming uniqe pid's
         try {
-            return new Product(p.get(0)[1], p.get(0)[2], Integer.valueOf(p.get(0)[3]),
-                    Integer.valueOf(p.get(0)[4]), Integer.valueOf(p.get(0)[6]), true);
+            return new Product(p.get(0)[1], p.get(0)[2], Integer.parseInt(p.get(0)[3]),
+                    Integer.parseInt(p.get(0)[4]), Integer.parseInt(p.get(0)[6]), true);
         } catch (NumberFormatException e) {
             throw new NumberFormatException();
         }
@@ -62,7 +62,7 @@ public class ProductDao extends DAO {
 
     public void insert(Product p){
         String[] params = {p.getID(), p.getName(), p.getManufacturer(), String.valueOf(p.getAmountToNotify()),
-                String.valueOf(p.getCategoryID()), String.valueOf(p.getSupplyTime()), String.valueOf(p.getDemand())};
+                String.valueOf(p.getCategoryID()), String.valueOf(p.getDemand())};
         insert("Products", params);
         identityMap.cache(p);
     }
@@ -100,7 +100,7 @@ public class ProductDao extends DAO {
         try {
             return new Item(s[1], s[0],
                     new SimpleDateFormat("dd/MM/yyyy").parse(s[2]),
-                    Boolean.valueOf(s[3]), Boolean.valueOf(s[4]), Integer.valueOf(s[5]),
+                    Boolean.parseBoolean(s[3]), Boolean.parseBoolean(s[4]), Integer.parseInt(s[5]),
                     true);
         } catch (ParseException e) {
             throw new RuntimeException(e);
