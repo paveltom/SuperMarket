@@ -28,7 +28,7 @@ public class StockCLI {
         System.out.println("Ok, bye.");
     }
 
-    public static void Protocol(String msg,Service s,Scanner toRead){
+    public static void Protocol(String msg, Service s, Scanner toRead){
 
         if(msg.equals("Help")){
             System.out.println("List of commands : ");
@@ -150,7 +150,7 @@ public class StockCLI {
                     int day = toRead.nextInt();
                     System.out.println("Enter the minimum demand for this product.");
                     int demand = toRead.nextInt();
-                    System.out.println(s.insertNewProduct(SelectedBranchID, productName, productManufacturer, categoryID, new Date(year, month - 1, day), demand).ErrorMessage);
+                    System.out.println(s.insertNewProduct(SelectedBranchID, productName, productManufacturer, categoryID, demand).ErrorMessage);
                     break;
 
                 case "RemoveProduct":

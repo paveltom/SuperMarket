@@ -10,7 +10,10 @@ public class OrderController {
     private static OrderController oc = null;
     private StockController stc;
     private SupplierController supc;
-    private OrderController(){}
+    private OrderController(){
+        registerStock();
+        registerSuppliers();
+    }
 
     public static OrderController getInstance(){
         if(oc == null)
@@ -18,12 +21,12 @@ public class OrderController {
         return oc;
     }
 
-    public void registerStock(StockController stc){
-        this.stc = stc;
+    public void registerStock(){
+        this.stc = StockController.getInstance();
     }
 
-    public void registerSuppliers(SupplierController supc){
-        this.supc = supc;
+    public void registerSuppliers(){
+        this.supc = SupplierController.getInstance();
     }
 
     public Map<String, Integer> orderPeriodic(List<String> products, int daysToOrder){

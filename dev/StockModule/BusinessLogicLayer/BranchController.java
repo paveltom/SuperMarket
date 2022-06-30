@@ -39,7 +39,7 @@ public class BranchController{
         return branches.get(branchID).getPurchasesHistoryReport();
     }
 
-    public HashMap<String, Discount> getCurrentDiscounts(int branchID){
+    public HashMap<Integer, Discount> getCurrentDiscounts(int branchID){
         //Requirement 4
         return branches.get(branchID).getCurrentDiscounts();
     }
@@ -68,8 +68,8 @@ public class BranchController{
         return branches.get(branchID).getExpiredItemsReport();
     }
 
-    public void insertNewProduct(int branchID, String productName, String productManufacturer, int categoryID, Date supplyTime, int demand){
-        branches.get(branchID).insertNewProduct(productName,productManufacturer,categoryID,supplyTime,demand);
+    public void insertNewProduct(int branchID, String productName, String productManufacturer, int categoryID, int demand){
+        branches.get(branchID).insertNewProduct(productName, productManufacturer, categoryID, demand);
     }
 
     public void insertNewCategory(int branchID,String categoryName){

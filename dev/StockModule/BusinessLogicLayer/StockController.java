@@ -6,15 +6,16 @@ import SuppliersModule.DomainLayer.OrderController;
 import java.util.*;
 
 public class StockController {
+    private static StockController sc = null;
     private HashMap<Integer,Purchase> purchases;
     private int purchasesCounter;
     private HashMap<Integer,Category> categories;
     private int categoriesCounter;
-    private HashMap<String, Discount> discounts;
+    private HashMap<Integer, Discount> discounts;
     private int discountsCounter;
     private ProductDao pDao;
 
-    StockController(){
+    private StockController(){
         pDao = new ProductDao();
         purchases = new HashMap<>();
         purchasesCounter = 0;
@@ -22,7 +23,12 @@ public class StockController {
         categoriesCounter = 0;
         discounts = new HashMap<>();
         discountsCounter = 0;
-        OrderController.getInstance().registerStock(this);
+    }
+
+    public static StockController getInstance(){
+        if (sc == null)
+            sc = new StockController();
+        return sc;
     }
 
     public int getQuantityForOrder(String ID, int days){
@@ -45,7 +51,7 @@ public class StockController {
         return new HashMap<>(purchases);
     }
 
-    public HashMap<String, Discount> getCurrentDiscounts(){
+    public HashMap<Integer, Discount> getCurrentDiscounts(){
         //Requirement 4
         //return new ArrayList<>(discounts);
         return discounts;
@@ -99,8 +105,8 @@ public class StockController {
         return output;
     }
 
-    public void insertNewProduct(String productName, String productManufacturer, int categoryID, Date supplyTime, int demand){
-        new Product(productName, productManufacturer, categoryID, supplyTime, demand);
+    public void insertNewProduct(String productName, String productManufacturer, int categoryID, int demand){
+        new Product(productName, productManufacturer, categoryID, demand);
     }
 
     public void setSubCategory(int subCategoryID,int parentID){
@@ -126,7 +132,7 @@ public class StockController {
 
     public void insertNewDiscount(String productID, Date startDate, Date endDate, int amount, Type t){
         Discount d = new Discount(productID, discountsCounter, startDate, endDate, amount, t);
-        discounts.put(d.getProductID(),d);
+        discounts.put(discountsCounter, d);
         discountsCounter++;
     }
 

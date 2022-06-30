@@ -15,7 +15,7 @@ public class Branch {
     Branch(int _branchID,String _name){
         branchID = _branchID;
         name = _name;
-        stockController = new StockController();
+        stockController = StockController.getInstance();
     }
 
     public String toString(){
@@ -31,7 +31,7 @@ public class Branch {
         return stockController.getPurchasesHistoryReport();
     }
 
-    public HashMap<String, Discount> getCurrentDiscounts(){
+    public HashMap<Integer, Discount> getCurrentDiscounts(){
         //Requirement 4
         return stockController.getCurrentDiscounts();
     }
@@ -60,8 +60,8 @@ public class Branch {
         return stockController.getExpiredItemsReport();
     }
 
-    public void insertNewProduct(String productName, String productManufacturer, int categoryID, Date supplyTime, int demand){
-        stockController.insertNewProduct(productName,productManufacturer,categoryID,supplyTime,demand);
+    public void insertNewProduct(String productName, String productManufacturer, int categoryID, int demand){
+        stockController.insertNewProduct(productName, productManufacturer, categoryID, demand);
     }
 
     public void setSubCategory(int subCategoryID,int parentID){

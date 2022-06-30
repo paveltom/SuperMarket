@@ -69,8 +69,8 @@ public class Service
         return scs.getExpiredItemsReport(branchID);
     }
 
-    public Response insertNewProduct(int branchID, String productName, String productManufacturer, int categoryID, Date supplyTime, int demand){
-        return scs.insertNewProduct(branchID,productName,productManufacturer,categoryID,supplyTime,demand);
+    public Response insertNewProduct(int branchID, String productName, String productManufacturer, int categoryID, int demand){
+        return scs.insertNewProduct(branchID, productName, productManufacturer, categoryID, demand);
     }
 
     public Response insertNewItem(int branchID, String productID, String location, Date expireDate, boolean isUsable, int amount){
@@ -128,15 +128,15 @@ public class Service
         insertNewCategory(1, "Milk");
         insertNewCategory(1, "Drinks");
 
-        insertNewProduct(0, "Dark Chocolate 60%", "Strauss", 1, new Date(2020,2,2), 40);
-        insertNewProduct(0, "Milk Chocolate", "Strauss", 1, new Date(2001, 1, 25), 40);
-        insertNewProduct(0, "Batteries AA", "GP Ultra", 0, new Date(2004, 5, 14), 65);
-        insertNewProduct(0, "Orange juice", "Primor", 2, new Date(2014, 7, 30), 65);
+        insertNewProduct(0, "Dark Chocolate 60%", "Strauss", 1, 40);
+        insertNewProduct(0, "Milk Chocolate", "Strauss", 1, 40);
+        insertNewProduct(0, "Batteries AA", "GP Ultra", 0, 65);
+        insertNewProduct(0, "Orange juice", "Primor", 2, 65);
 
-        insertNewProduct(1, "0", "", 1, new Date(2020,2,2), 40);
-        insertNewProduct(1, "Milk Chocolate", "Strauss", 1, new Date(2001, 1, 25), 40);
-        insertNewProduct(1, "Batteries AA", "GP Ultra", 0, new Date(2004, 5, 14), 65);
-        insertNewProduct(1, "Orange juice", "Primor", 2, new Date(2014, 7, 30), 65);
+        insertNewProduct(1, "0", "", 1, 40);
+        insertNewProduct(1, "Milk Chocolate", "Strauss", 1, 40);
+        insertNewProduct(1, "Batteries AA", "GP Ultra", 0, 65);
+        insertNewProduct(1, "Orange juice", "Primor", 2, 65);
 
         insertNewItem(0, "0", "L5A4", new Date(2021, 4, 5), false, 30);
         insertNewItem(0, "0", "L2A17", new Date(2022, 4, 5), true, 42);
