@@ -67,7 +67,7 @@ public class SupplierCLI {
     private void addingSupplierWindow() {
         System.out.println("\ninsert:" +
                            "\nsupplier id, bank account, name, address, using cash?, using credit?, contact name, contact phone-number," +
-                           "\nsupply days, max supply days, supply cycle, delivery Service?, " +
+                           "\nsupply days, max supply days, supply cycle, " +
                            "\nproduct id, catalog number, price" +
                            "\ne.g 235 6456684 tara hagiborim-7-dimona n y yossi 0524679565 0100100 3 -1 y 13 1 10 ");
 
@@ -76,9 +76,9 @@ public class SupplierCLI {
             displayMainMenu();
         else{
             String[] splitted = input.split(" ");
-            if (splitted.length != 15 || (!splitted[4].equals("y") && !splitted[4].equals("n")) || (!splitted[5].equals("y") && !splitted[5].equals("n"))
-                        || splitted[8].length()!=7  ||(!isStringInt(splitted[9]) || Integer.parseInt(splitted[9]) < -1) || (!isStringInt(splitted[10]) || (Integer.parseInt(splitted[10]) < -1) || Integer.parseInt(splitted[10]) == 0) || (!splitted[11].equals("y") && !splitted[11].equals("n"))
-                        || (!isStringInt(splitted[12]) || Integer.parseInt(splitted[12]) < 0) || (!isStringFloat(splitted[13]) || Float.parseFloat(splitted[13]) <= 0)) {
+            if (splitted.length != 14 || (!splitted[4].equals("y") && !splitted[4].equals("n")) || (!splitted[5].equals("y") && !splitted[5].equals("n"))
+                        || splitted[8].length()!=7  ||(!isStringInt(splitted[9]) || Integer.parseInt(splitted[9]) < -1) || (!isStringInt(splitted[10]) || (Integer.parseInt(splitted[10]) < -1) || Integer.parseInt(splitted[10]) == 0)
+                        || (!isStringInt(splitted[11]) || Integer.parseInt(splitted[11]) < 0) || (!isStringFloat(splitted[12]) || Float.parseFloat(splitted[12]) <= 0)) {
                 System.out.println("incorrect input\n");
                 addingSupplierWindow();
             } else {
