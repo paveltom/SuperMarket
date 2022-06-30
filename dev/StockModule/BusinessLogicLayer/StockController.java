@@ -6,7 +6,6 @@ import SuppliersModule.DomainLayer.OrderController;
 import java.util.*;
 
 public class StockController {
-    private HashMap<String,Product> products;
     private HashMap<Integer,Purchase> purchases;
     private int purchasesCounter;
     private HashMap<Integer,Category> categories;
@@ -17,7 +16,6 @@ public class StockController {
 
     StockController(){
         pDao = new ProductDao();
-        products = new HashMap<>();
         purchases = new HashMap<>();
         purchasesCounter = 0;
         categories = new HashMap<>();
@@ -27,20 +25,24 @@ public class StockController {
         OrderController.getInstance().registerStock(this);
     }
 
-    public int getQuantityForOrder(String ID,int days){
-        Product p = products.get(ID);
+    public int getQuantityForOrder(String ID, int days){
+        Product p = getProduct(ID);
         int demand = p.getDemand();
-        return (demand/7)*days;
+        return (demand / 7) * days;
     }
 
-    public HashMap<String,Product> getProductsInStock(){
+    public HashMap<String, Product> getProductsInStock(){
         //Requirement 2
-        return new HashMap<>(products);
+        HashMap<String, Product> productMap = new HashMap<>();
+        for (Product p : pDao.getAllProducts()) {
+            productMap.put(p.getID(), p);
+        }
+        return productMap;
     }
 
-    public HashMap<Integer,Purchase> getPurchasesHistoryReport(){
+    public HashMap<Integer, Purchase> getPurchasesHistoryReport(){
         //Requirement 3
-        return new HashMap<Integer,Purchase>(purchases);
+        return new HashMap<>(purchases);
     }
 
     public HashMap<String, Discount> getCurrentDiscounts(){
@@ -49,7 +51,7 @@ public class StockController {
         return discounts;
     }
 
-    public HashMap<Integer,Category> getCategories(){
+    public HashMap<Integer, Category> getCategories(){
         //Requirement 5
         return new HashMap<>(categories);
     }
@@ -57,10 +59,9 @@ public class StockController {
     public List<Item> getStockReport(){
         //Requirement 6
         List<Item> output = new ArrayList<>();
-        for (String s : products.keySet())
+        for (Product product : pDao.getAllProducts())
         {
-            Product p = products.get(s);
-            output.addAll(p.getItems());
+            output.addAll(product.getItems());
         }
         return output;
     }
@@ -68,12 +69,11 @@ public class StockController {
     public List<Item> getStockReportByCategory(int CategoryID){
         //Requirement 7
         List<Item> output = new ArrayList<>();
-        for (String s : products.keySet())
+        for (Product product : pDao.getAllProducts())
         {
-            Product p = products.get(s);
-            if(isAncestorOf(p.getCategoryID(),CategoryID))
+            if(isAncestorOf(product.getCategoryID(),CategoryID))
             {
-                output.addAll(p.getItems());
+                output.addAll(product.getItems());
             }
         }
         return output;
@@ -82,10 +82,9 @@ public class StockController {
     public List<Item> getDefectedItemsReport(){
         //Requirement 8+9
         List<Item> output = new ArrayList<>();
-        for (String pID : products.keySet())
+        for (Product product : pDao.getAllProducts())
         {
-            Product p = getProduct(pID);
-            output.addAll(p.getDefectedItems());
+            output.addAll(product.getDefectedItems());
         }
         return output;
     }
@@ -93,10 +92,9 @@ public class StockController {
     public List<Item> getExpiredItemsReport() {
         List<Item> output = new ArrayList<>();
 
-        for (String pID : products.keySet())
+        for (Product product : pDao.getAllProducts())
         {
-            Product p = getProduct(pID);
-            output.addAll(p.getExpiredItems());
+            output.addAll(product.getExpiredItems());
         }
         return output;
     }
