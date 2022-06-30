@@ -70,8 +70,12 @@ public class Supplier {
     }
     public void addContact(String contactName, String phoneNum){
         contacts.put(contactName, phoneNum);
+        sDao.addContact(sId, contactName, phoneNum);
     }
-    public void removeContact(String name){contacts.remove(name);}
+    public void removeContact(String name){
+        contacts.remove(name);
+        sDao.removeContact(sId, name);
+    }
     public void changeDaysOfDelivery(int day, boolean state) {contract.changeDaysOfDelivery(day, state);}
 
     // constructor
@@ -121,6 +125,11 @@ public class Supplier {
         List<Order> os = sDao.getOrdersFromDB(sId);
         for ( Order o : sDao.getOrdersFromDB(sId)){
             orders.add(o);
+        }
+
+        Map<String,String > contactsFromDB = sDao.getContactsFromDB(sId);;
+        for ( String s : contactsFromDB.keySet()){
+            contacts.put(s, contactsFromDB.get(s));
         }
     }
 

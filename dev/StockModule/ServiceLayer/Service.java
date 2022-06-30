@@ -133,7 +133,7 @@ public class Service
         insertNewProduct(0, "Batteries AA", "GP Ultra", 0, new Date(2004, 5, 14), 65);
         insertNewProduct(0, "Orange juice", "Primor", 2, new Date(2014, 7, 30), 65);
 
-        insertNewProduct(1, "Dark Chocolate 60%", "Strauss", 1, new Date(2020,2,2), 40);
+        insertNewProduct(1, "0", "", 1, new Date(2020,2,2), 40);
         insertNewProduct(1, "Milk Chocolate", "Strauss", 1, new Date(2001, 1, 25), 40);
         insertNewProduct(1, "Batteries AA", "GP Ultra", 0, new Date(2004, 5, 14), 65);
         insertNewProduct(1, "Orange juice", "Primor", 2, new Date(2014, 7, 30), 65);
