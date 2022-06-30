@@ -1,5 +1,8 @@
 package StockModule.BusinessLogicLayer;
 
+import DAL.DAOS.StockObjects.ProductDao;
+import SuppliersModule.DomainLayer.OrderController;
+
 import java.util.*;
 
 public class StockController {
@@ -10,8 +13,10 @@ public class StockController {
     private int categoriesCounter;
     private HashMap<String, Discount> discounts;
     private int discountsCounter;
+    private ProductDao pDao;
 
     StockController(){
+        pDao = new ProductDao();
         products = new HashMap<>();
         purchases = new HashMap<>();
         purchasesCounter = 0;
@@ -19,6 +24,7 @@ public class StockController {
         categoriesCounter = 0;
         discounts = new HashMap<>();
         discountsCounter = 0;
+        OrderController.getInstance().registerStock(this);
     }
 
     public int getQuantityForOrder(String ID,int days){
@@ -167,5 +173,9 @@ public class StockController {
 
         return isAncestorOf(child.getParentCategory().getID(), parentCategoryID);
 
+    }
+
+    private Product getProduct(String pid){
+        return pDao.getProduct(pid);
     }
 }

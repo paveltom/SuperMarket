@@ -3,8 +3,12 @@ package DAL.DAOS.StockObjects;
 import DAL.DAOS.DAO;
 import StockModule.BusinessLogicLayer.Item;
 
+import java.util.Date;
+
 public class ItemDao extends DAO {
     public void insert(Item i){
+        Date exDate = i.getExpireDate();
+        String ex = exDate.getDate() + "/" + exDate.getMonth() + "/" + exDate.getYear();
         String[] params = {i.getProductID(), i.getLocation(), String.valueOf(i.getExpireDate()),
                 String.valueOf(i.isDefect()), String.valueOf(i.isExpired()), String.valueOf(i.getAmount())};
         insert("Items", params);

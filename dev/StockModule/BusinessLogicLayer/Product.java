@@ -24,7 +24,7 @@ public class Product {
     public Product(String name, String manufacturer, int categoryID, Date supplyTime, int demand)
     {
         dao = new ProductDao();
-        this.ID = name + manufacturer;
+        this.ID = name+manufacturer;
         this.name = name;
         this.manufacturer = manufacturer;
         this.amount = 0;
@@ -40,7 +40,7 @@ public class Product {
     //db
     public Product(String name, String manufacturer,int amountToNotify,  int categoryID, int demand, boolean isFromDB)
     {
-        this.ID = name + manufacturer;
+        this.ID = name+manufacturer;
         this.name = name;
         this.manufacturer = manufacturer;
         this.amount = 0;
@@ -68,6 +68,7 @@ public class Product {
         {
             throw new Exception("PLEASE NOTICE : Current amount is lower than product's demand. Please refill stock.");
         }
+
     }
 
     public Date getSupplyTime(){return supplyTime;}
