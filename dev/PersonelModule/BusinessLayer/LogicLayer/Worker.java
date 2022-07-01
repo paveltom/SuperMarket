@@ -49,6 +49,8 @@ public class Worker {
             throw new IllegalArgumentException("Name cannot be null");
         else {
             Name = name;
+            WorkerDTO dto = DALController.getInstance().getWorker(this.Id);
+            dto.setName(this.Name);
             //Updating DB
             UpdateDB();
         }
@@ -58,6 +60,8 @@ public class Worker {
     public void setJob(String job) {
         try{
             this.Job = JobEnum.valueOf(job);
+            WorkerDTO dto = DALController.getInstance().getWorker(this.Id);
+            dto.setJob(job);
             //Updating DB
             UpdateDB();
         }
@@ -72,6 +76,8 @@ public class Worker {
             throw new IllegalArgumentException("SMQualification cannot be null");
         else {
         this.SMQualification = SMQualification;
+        WorkerDTO dto = DALController.getInstance().getWorker(this.Id);
+        dto.setSMQual(this.getSMQualification());
         //Updating DB
             UpdateDB();
         }
@@ -82,6 +88,8 @@ public class Worker {
             throw new IllegalArgumentException("Bank Details cannot be null");
         else {
             BankDetails = bankDetails;
+            WorkerDTO dto = DALController.getInstance().getWorker(this.Id);
+            dto.setBankDetails(this.BankDetails);
             //Updating DB
             UpdateDB();
         }
@@ -92,6 +100,8 @@ public class Worker {
             throw new IllegalArgumentException("Pay cannot be below 29.12");
         else{
             Pay = pay;
+            WorkerDTO dto = DALController.getInstance().getWorker(this.Id);
+            dto.setPay(this.Pay.toString());
             //Updating DB
             UpdateDB();
         }
@@ -101,6 +111,8 @@ public class Worker {
         try{
             SimpleDateFormat format1 = new SimpleDateFormat("dd/MM/yyyy");
             this.StartDate = format1.parse(startDate);
+            WorkerDTO dto = DALController.getInstance().getWorker(this.Id);
+            dto.setStartDate(startDate);
             //Updating DB
             UpdateDB();
         }
@@ -115,6 +127,8 @@ public class Worker {
             throw new IllegalArgumentException("Social Conditions cannot be null");
         else {
             SocialConditions = socialConditions;
+            WorkerDTO dto = DALController.getInstance().getWorker(this.Id);
+            dto.setSocialConditions(this.SocialConditions);
             //Updating DB
             UpdateDB();
         }

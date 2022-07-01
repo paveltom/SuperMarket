@@ -30,7 +30,7 @@ public class Main {
                 if(currentUser == null)
                     System.out.println("Id was incorrect or invalid please try again");
             }
-            System.out.println("0. Exit \n1. Delivery module \n2. Personnel module\n3. Stock module\n4. Supplier module");
+            System.out.println("0. Exit \n1. Delivery module \n2. Personnel module\n3. Stock module\n4. Supplier module\n5. Logout");
             System.out.println("Choose option:");
             input = scanner.nextLine();
             switch (input){
@@ -48,7 +48,7 @@ public class Main {
                     }
                     break;
                 case "2":
-                    pmMain.main(pmService);
+                    pmMain.main(pmService,currentUser);
                     break;
                 case "3":
                     if(currentUser.getParamVal("Job").equals("PersonnelManager") || currentUser.getParamVal("Job").equals("StoreKeeper")) {
@@ -63,6 +63,9 @@ public class Main {
                     }else {
                         System.out.println("You are not permitted to go into this menu, you need to be a PersonnelManager inorder to access this menu");
                     }
+                    break;
+                case "5":
+                    currentUser = null;
                     break;
                 default:
                     System.out.println("Not a valid option...");
