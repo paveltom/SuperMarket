@@ -2,6 +2,7 @@ package DAL.DAOS.StockObjects;
 
 import DAL.DAOS.DAO;
 import DAL.IdentityMaps.ProductIdentityMap;
+import StockModule.BusinessLogicLayer.Category;
 import StockModule.BusinessLogicLayer.Item;
 import StockModule.BusinessLogicLayer.Product;
 import SuppliersModule.DomainLayer.Order;
@@ -11,15 +12,15 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class ProductDao extends DAO {
     private ProductIdentityMap identityMap;
+    private CategoryDao cDao;
 
     public ProductDao(){
         identityMap = ProductIdentityMap.getInstance();
+        cDao = new CategoryDao();
     }
 
     public Product getProduct(String pId){
@@ -106,4 +107,27 @@ public class ProductDao extends DAO {
             throw new RuntimeException(e);
         }
     }
+
+    public List<Category> loadCategories(){
+        List<Category> cats = new LinkedList();
+        List<String[]> sFromDB = load("Category", null, null);
+        Map<Integer, Category> catsMap  = new Hashtable<>();
+
+        for(String[] s : sFromDB){
+            Category c = new Category(Integer.valueOf(s[0]), s[1], true);
+            cats.add(c);
+            catsMap.put(c.getID(), c);
+        }
+
+        int[][] relations = cDao.loadRelations();
+        Map<Integer, List<Category>> relMap = new Hashtable<>(); //catId, SonLIST
+        for(int i = 0; i < relations.length; i++){
+            catsMap.get(relations[i][0]).setChildFromDB(catsMap.get(relations[i][1]));
+            catsMap.get(relations[i][1]).setParentFromDB(catsMap.get(relations[i][0]));
+        }
+
+
+        return cats;
+    }
+
 }

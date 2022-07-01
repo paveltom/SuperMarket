@@ -18,7 +18,8 @@ public class DataBaseConnection {
     private String[] orders = {"supplier_id", "id", "date", "contactPhone", "supName", "supAddress"};
     private String[] items = {"product_id", "location", "expireDate", "isDefect", "isExpired", "amount"};
     private String[] discount_product = {"discount_id", "quantity", "discount"};
-    private String[] category = {"category_id", "name", "parentCategory", "subCategories"};
+    private String[] category = {"category_id", "name"};
+    private String[] categoryRelation = {"ParentId", "ChildId"};
     private String[] product_category = {"product_id", "category_id"};
 
 
@@ -44,6 +45,7 @@ public class DataBaseConnection {
         put("Discount_Product", discount_product);
 
         put("Category", category);
+        put("CategoryRelations", categoryRelation);
 
         put("Product_Category", product_category);
     }};
