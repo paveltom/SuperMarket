@@ -1,5 +1,6 @@
 package DeliveryModule.PresentationLayer;
 
+import DAL.Delivery_Personnel.DataBaseConnection;
 import DeliveryModule.Facade.FacadeObjects.*;
 import DeliveryModule.Facade.IService;
 import DeliveryModule.Facade.Response;
@@ -21,6 +22,7 @@ public class PresentationController {
         service = new Service(pmService);
         menuPrinter = new MenuPrinter();
         menuStorage = new Stack<>();
+        initDB();
         setMenus();
     }
 
@@ -484,6 +486,11 @@ public class PresentationController {
     private int showLicenseCategories(){
         operateOutput("License categories: " + service.showLicenseCategories().getValue());
         return 0;
+    }
+
+    private void initDB(){
+        DataBaseConnection dbconn = new DataBaseConnection();
+        dbconn.initDB();
     }
 
 

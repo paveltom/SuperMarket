@@ -6,6 +6,8 @@ import java.util.*;
 import java.util.concurrent.Executor;
 
 public class DataBaseConnection {
+
+    private boolean exists = false;
     private String[] truckValues = {"VehicleLicenseNumber", "MaxLoadWeight", "NetWeight", "Model", "ShippingZone", "Diary", "AuthorizedLicense"};
     private String[] driverValues = {"Id", "Name", "Cellphone", "VehicleLicenseCategory", "ShippingZone", "Diary", "FutureShifts"};
     private String[] deliveryValues = {"OrderId", "SupplierZone", "SupplierAddress", "SupplierName", "SupplierCellphone",
@@ -38,7 +40,7 @@ public class DataBaseConnection {
             // create a connection to the database
             conn = DriverManager.getConnection(url);
 
-            boolean exists = createCrucialTables(conn); // create db with tables if not exists
+            exists = createCrucialTables(conn); // create db with tables if not exists
 
             //System.out.println("Connection to SQLite has been established.");
             return conn;
@@ -268,6 +270,106 @@ public class DataBaseConnection {
                 " Availability TEXT," +
                 " PRIMARY KEY(Id)" + ");";
 
+        String stockSupCategory = "CREATE TABLE Category (" +
+                "category_id TEXT," +
+                "name TEXT," +
+                "parentCategory TEXT," +
+                "subCategories TEXT," +
+                "PRIMARY KEY(category_id));";
+
+        String stockSupContacts = "CREATE TABLE Contacts (" +
+                "supplier_id TEXT," +
+                "contactName TEXT," +
+                "phoneNum TEXT," +
+                "PRIMARY KEY(supplier_id,contactName,phoneNum));";
+
+        String stockSupDiscount_Product = "CREATE TABLE Discount_Product (" +
+                "discount_id TEXT," +
+                "quantity BLOB," +
+                "discount TEXT," +
+                "PRIMARY KEY(discount_id, quantity));";
+
+        String stockSupDiscounts = "CREATE TABLE Discounts (" +
+                "discount_id TEXT, " +
+                "product_id TEXT, " +
+                "discountStartDate TEXT, " +
+                "discountEndDate TEXT, " +
+                "discountAmount TEXT, " +
+                "discountType TEXT, " +
+                "PRIMARY KEY(discount_id));";
+
+        String stockSupItems = "CREATE TABLE Items (" +
+                "product_id TEXT, " +
+                "location TEXT, " +
+                "expireDate TEXT, " +
+                "isDefect TEXT, " +
+                "isExpired TEXT, " +
+                "amount TEXT, " +
+                "PRIMARY KEY(product_id, location, expireDate, isDefect));";
+
+        String stockSupOrders = "CREATE TABLE Orders(" +
+                "supplier_id TEXT, " +
+                "id ,date TEXT, " +
+                "contactPhone TEXT, " +
+                "supName TEXT, " +
+                "supAddress TEXT, " +
+                "PRIMARY KEY(supplier_id, id));";
+
+        String stockSupProduct_Contract = "CREATE TABLE Product_Contract (" +
+                "supplier_id TEXT, " +
+                "product_id TEXT, " +
+                "price TEXT, " +
+                "is_periodic_order TEXT, " +
+                "catalogNum TEXT, " +
+                "PRIMARY KEY(supplier_id, product_id));";
+
+        String stockSupProduct_Order = "CREATE TABLE Product_Order (" +
+                "supplier_id TEXT, " +
+                "product_id TEXT, " +
+                "order_id TEXT, " +
+                "quantity TEXT, " +
+                "discount TEXT, " +
+                "finalPrice TEXT, " +
+                "catalogPrice TEXT, " +
+                "PRIMARY KEY(supplier_id, order_id, product_id));";
+
+        String stockSupProducts = "CREATE TABLE Products (" +
+                "product_id TEXT, " +
+                "name TEXT, " +
+                "manufacturer TEXT, " +
+                "amountToNotify TEXT, " +
+                "categoryID TEXT, " +
+                "demand TEXT, " +
+                "PRIMARY KEY(product_id));";
+
+        String stockSupQuantityAgreements = "CREATE TABLE QuantityAgreements (" +
+                "supplier_id TEXT, " +
+                "product_id TEXT, " +
+                "quantity TEXT, " +
+                "discount TEXT, " +
+                "PRIMARY KEY(supplier_id, product_id, quantity));";
+
+
+        String stockSupSuppliers = "CREATE TABLE Suppliers (" +
+                "supplier_id TEXT, " +
+                "name TEXT, " +
+                "address TEXT, " +
+                "bank TEXT, " +
+                "cash TEXT, " +
+                "credit TEXT, " +
+                "deliveryService TEXT, " +
+                "PRIMARY KEY(supplier_id));";
+
+        String stockSupSupplyTimes = "CREATE TABLE SupplyTimes (" +
+                "supplier_id TEXT, " +
+                "daysOfDelivery TEXT, " +
+                "maxDeliveryDuration TEXT, " +
+                "orderCycle TEXT, " +
+                "daysAcc TEXT);";
+
+
+
+
         try{
             DatabaseMetaData meta = conn.getMetaData();
             ResultSet resultSet = meta.getTables(null, null, "Drivers", new String[] {"TABLE"});
@@ -282,6 +384,20 @@ public class DataBaseConnection {
             stmt.execute(deliveriesTableCreation);
             stmt.execute(shiftsTableCreation);
             stmt.execute(workersTableCreataion);
+
+            stmt.execute(stockSupCategory);
+            stmt.execute(stockSupContacts);
+            stmt.execute(stockSupDiscount_Product);
+            stmt.execute(stockSupDiscounts);
+            stmt.execute(stockSupItems);
+            stmt.execute(stockSupOrders);
+            stmt.execute(stockSupProduct_Contract);
+            stmt.execute(stockSupProduct_Order);
+            stmt.execute(stockSupProducts);
+            stmt.execute(stockSupQuantityAgreements);
+            stmt.execute(stockSupSuppliers);
+            stmt.execute(stockSupSupplyTimes);
+
             System.out.println("DB and Tables created successfully...");
             stmt.close();
             resultSet.close();
@@ -317,8 +433,11 @@ public class DataBaseConnection {
 
 
     // for super user only
-    public void addTable() {
-
+    public void initDB() {
+        if(!exists) {
+            String[] params = {"123456789", "rami", "PersonnelManager", "yes", "bank", "31.0", "22/06/2022", "Social", ""};
+            insert("Workers", params);
+        }
     }
 
 

@@ -53,7 +53,8 @@ public class DataBaseConnection {
         try {
             // db parameters
             String dir = System.getProperty("user.dir");
-            String url = "jdbc:sqlite:" + dir + "\\dev\\DAL\\SuperLiDB.db";
+            //String url = "jdbc:sqlite:" + dir + "\\dev\\DAL\\SuperLiDB.db";
+            String url = "jdbc:sqlite:" + dir + "\\PerDel.db";
 
             // create a connection to the database
             conn = DriverManager.getConnection(url);
