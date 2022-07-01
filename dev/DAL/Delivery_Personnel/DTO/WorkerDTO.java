@@ -2,6 +2,39 @@ package DAL.Delivery_Personnel.DTO;
 
 public class WorkerDTO implements DTO {
     public String wId;
+
+    public void setName(String name) {
+        Name = name;
+    }
+
+    public void setBankDetails(String bankDetails) {
+        BankDetails = bankDetails;
+    }
+
+    public void setSocialConditions(String socialConditions) {
+        SocialConditions = socialConditions;
+    }
+
+    public void setJob(String job) {
+        Job = job;
+    }
+
+    public void setSMQual(String SMQual) {
+        this.SMQual = SMQual;
+    }
+
+    public void setPay(String pay) {
+        Pay = pay;
+    }
+
+    public void setStartDate(String startDate) {
+        StartDate = startDate;
+    }
+
+    public void setAvailability(String availability) {
+        Availability = availability;
+    }
+
     private String Name,BankDetails,SocialConditions,Job,SMQual,Pay,StartDate,Availability;
 
     public WorkerDTO(String _id,String _name,String _Job,String _SMQual,String _BankDetails,String _Pay,String _startDate,String _SocialCondition)
