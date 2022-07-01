@@ -60,8 +60,8 @@ public class Branch {
         return stockController.getExpiredItemsReport();
     }
 
-    public void insertNewProduct(String productName, String productManufacturer, int categoryID, int demand){
-        stockController.insertNewProduct(productName, productManufacturer, categoryID, demand);
+    public void insertNewProduct(String productName, String productManufacturer, int amountToNotify, int categoryID, int demand){
+        stockController.insertNewProduct(productName, productManufacturer, amountToNotify, categoryID, demand);
     }
 
     public void setSubCategory(int subCategoryID,int parentID){
