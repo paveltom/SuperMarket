@@ -26,8 +26,10 @@ public class OrderDao extends DAO {
         String[] paramsWV = {o.getSupId(), o.getId()};
         List<String[]> sFromDB = load("Product_Order", paramsW, paramsWV);
 
-        for(String[] s : sFromDB){
-            output.add(0, makeOrderProduct(s));
+        if(sFromDB != null) {
+            for (String[] s : sFromDB) {
+                output.add(0, makeOrderProduct(s));
+            }
         }
 
         return output;

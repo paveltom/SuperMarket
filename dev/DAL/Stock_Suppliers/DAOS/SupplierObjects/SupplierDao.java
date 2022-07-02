@@ -49,10 +49,12 @@ public class SupplierDao extends DAO {
             List<String[]> st = load("Suppliers", null, null);
             List<Supplier> output = new ArrayList<>();
 
-            for (String[] s : st) {
-                Supplier sup = new Supplier(s[0], s[2], s[3], s[1], Boolean.valueOf(s[4]), Boolean.valueOf(s[5]));
-                suppliersIdentityMap.cache(sup);
-                output.add(0, sup);
+            if(st != null) {
+                for (String[] s : st) {
+                    Supplier sup = new Supplier(s[0], s[2], s[3], s[1], Boolean.valueOf(s[4]), Boolean.valueOf(s[5]));
+                    suppliersIdentityMap.cache(sup);
+                    output.add(0, sup);
+                }
             }
             isAllLoaded = true;
             return output;

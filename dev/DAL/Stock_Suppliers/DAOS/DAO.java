@@ -1,10 +1,10 @@
 package DAL.Stock_Suppliers.DAOS;
 
-import DAL.DataBaseConnection;
+import DAL.Stock_Suppliers.DataBaseConn;
 import java.util.List;
 
 public class DAO<T> {
-    private final DataBaseConnection conn = new DataBaseConnection();
+    private final DataBaseConn conn = new DataBaseConn();
 
     protected void insert(String tableName,String[] params){
         conn.insert(tableName, params);

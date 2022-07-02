@@ -28,10 +28,12 @@ public class ProductDao extends DAO {
         List<Product> ans = new LinkedList<>();
         List<String[]> p = load("Products", null, null);
 
-        for(String[] s : p){
-            List<String[]> tmp = new LinkedList<>();
-            tmp.add(s);
-            ans.add(makeProduct(tmp));
+        if(p != null) {
+            for (String[] s : p) {
+                List<String[]> tmp = new LinkedList<>();
+                tmp.add(s);
+                ans.add(makeProduct(tmp));
+            }
         }
 
         return ans;
@@ -82,8 +84,10 @@ public class ProductDao extends DAO {
         String[] paramsWV = {pId};
         List<String[]> sFromDB = load("Items", paramsW, paramsWV);
 
-        for(String[] s : sFromDB){
-            output.add(0, makeItem(s));
+        if(sFromDB != null) {
+            for (String[] s : sFromDB) {
+                output.add(0, makeItem(s));
+            }
         }
 
         return output;
@@ -106,10 +110,12 @@ public class ProductDao extends DAO {
         List<String[]> sFromDB = load("Category", null, null);
         Map<Integer, Category> catsMap  = new Hashtable<>();
 
-        for(String[] s : sFromDB){
-            Category c = new Category(Integer.valueOf(s[0]), s[1], true);
-            cats.add(c);
-            catsMap.put(c.getID(), c);
+        if(sFromDB != null) {
+            for (String[] s : sFromDB) {
+                Category c = new Category(Integer.valueOf(s[0]), s[1], true);
+                cats.add(c);
+                catsMap.put(c.getID(), c);
+            }
         }
 
         int[][] relations = cDao.loadRelations();
@@ -128,22 +134,24 @@ public class ProductDao extends DAO {
         List<String[]> sFromDB = load("Discounts", null, null);
         List<Discount> output = new LinkedList<>();
 
-//        for(String[] s : sFromDB){
-//            int id = Integer.valueOf(s[0]);
-//            String pid = s[1];
-//            try {
-//                Date startd = new SimpleDateFormat("dd/MM/yyyy").parse(s[2]);
-//                Date endd = new SimpleDateFormat("dd/MM/yyyy").parse(s[3]);
-//                int amount = Integer.valueOf(s[4]);
-//                Type t = Type.PERCENT;
-//                if(s[4].equals("1"))
-//                    t = Type.FIXED;
-//
-//                output.add(new Discount(pid, id, startd, endd, amount, t, true));
-//            } catch (ParseException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
+        if(sFromDB != null) {
+            for (String[] s : sFromDB) {
+                int id = Integer.valueOf(s[0]);
+                String pid = s[1];
+                try {
+                    Date startd = new SimpleDateFormat("dd/MM/yyyy").parse(s[2]);
+                    Date endd = new SimpleDateFormat("dd/MM/yyyy").parse(s[3]);
+                    int amount = Integer.valueOf(s[4]);
+                    Type t = Type.PERCENT;
+                    if (s[4].equals("1"))
+                        t = Type.FIXED;
+
+                    output.add(new Discount(pid, id, startd, endd, amount, t, true));
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
 
         return output;
     }
