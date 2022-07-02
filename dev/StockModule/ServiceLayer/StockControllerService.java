@@ -131,7 +131,7 @@ public class StockControllerService
     }
 
     // todo
-    public Response insertNewItem(int productID, String location, Date expireDate, boolean isUsable, int amount)
+    public Response insertNewItem(String productID, String location, Date expireDate, boolean isUsable, int amount)
     {
         try
         {
@@ -144,7 +144,7 @@ public class StockControllerService
         }
     }
 
-    public Response reduceItemAmount(int productID,int itemID,int amountToReduce){
+    public Response reduceItemAmount(String productID,int itemID,int amountToReduce){
         try
         {
             sc.reduceItemAmount(productID,itemID,amountToReduce);
@@ -168,7 +168,7 @@ public class StockControllerService
         }
     }
 
-    public Response insertNewDiscount(int productID, Date startDate, Date endDate, int amount, Type t){
+    public Response insertNewDiscount(String productID, Date startDate, Date endDate, int amount, Type t){
         try
         {
             sc.insertNewDiscount(productID, startDate, endDate, amount, t);
@@ -181,6 +181,7 @@ public class StockControllerService
 
     }
 
+    /*
     public Response insertNewPurchase(Date purchaseDate, Map<Integer, Map<Integer, Integer>> products){
         try
         {
@@ -192,8 +193,9 @@ public class StockControllerService
             return new Response(e.getMessage());
         }
     }
+    */
 
-    public Response deleteProduct(int productID){
+    public Response deleteProduct(String productID){
         try
         {
             sc.deleteProduct(productID);
@@ -230,6 +232,7 @@ public class StockControllerService
         }
     }
 
+    /*
     public Response deletePurchase(int purchaseID){
         try{
             sc.deletePurchase(purchaseID);
@@ -240,7 +243,9 @@ public class StockControllerService
             return new Response(e.getMessage());
         }
     }
-    public Response deleteItem(int productID,int itemID){
+    */
+
+    public Response deleteItem(String productID,int itemID){
         try{
             sc.deleteItem(productID,itemID);
             return new Response();
