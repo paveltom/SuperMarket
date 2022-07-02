@@ -1,8 +1,8 @@
 package SuppliersModule.DomainLayer;
 
-import DAL.DAOS.SupplierObjects.CatalogProductDao;
-import DAL.DAOS.SupplierObjects.OrderDao;
+import DAL.DAOS.StockObjects.ProductDao;
 import DAL.DAOS.SupplierObjects.SupplierDao;
+import StockModule.BusinessLogicLayer.Product;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -14,12 +14,10 @@ public class Supplier {
     private final String bankAccount;
     private final boolean[] paymentMethods = new boolean[2];
     private final Map<String,String> contacts = new HashMap<>();
-    private boolean deliveryService;
     private final SuppliersModule.DomainLayer.Contract contract;
     private final SuppliersModule.DomainLayer.OrderController oc;
     private final List<SuppliersModule.DomainLayer.Order> orders = new LinkedList<>();
-    private final SupplierDao dao;
-    private final CatalogProductDao CPdao;
+    private final SupplierDao sDao;
 
     //  getters
     public String getsId(){
@@ -43,9 +41,6 @@ public class Supplier {
         return contract.getMaxDeliveryDuration();
     }
     public int getSupplyCycle(){return contract.getOrderCycle();}
-    public boolean hasDeliveryService() {
-        return deliveryService;
-    }
     public Contract getContract(){
         return contract;
     }
@@ -65,39 +60,37 @@ public class Supplier {
         contract.setMaxDeliveryDuration(maxSupplyDays);
     }
     public void setSupplyCycle(int supplyCycle){contract.setOrderCycle(supplyCycle);}
-    public void setDeliveryService(boolean deliveryService) {
-        this.deliveryService = deliveryService;
-        dao.setDeliveryService(this);
-    }
     public void addContact(String contactName, String phoneNum){
         contacts.put(contactName, phoneNum);
+        sDao.addContact(sId, contactName, phoneNum);
     }
-    public void removeContact(String name){contacts.remove(name);}
+    public void removeContact(String name){
+        contacts.remove(name);
+        sDao.removeContact(sId, name);
+    }
     public void changeDaysOfDelivery(int day, boolean state) {contract.changeDaysOfDelivery(day, state);}
 
     // constructor
-    public Supplier(String sId, String name, String address, String bankAccount, boolean cash, boolean credit, String contactName, String phoneNum,
-                    boolean[] supplyDays, int MaxSupplyDays, int supplCycle, boolean deliveryService,
+    public Supplier(String sId,String bankAccount, String name, String address, boolean cash, boolean credit, String contactName, String phoneNum,
+                    boolean[] supplyDays, int MaxSupplyDays, int supplCycle,
                     String pId, String catNumber, float price){
-        dao = new SupplierDao();
+        sDao = new SupplierDao();
         this.sId = sId;
         this.name = name;
         this.address = address;
         this.bankAccount = bankAccount;
         this.paymentMethods[0] = cash;
         this.paymentMethods[1] = credit;
-        this.deliveryService = deliveryService;
         addContact(contactName, phoneNum);
         contract = new Contract(sId, supplyDays, MaxSupplyDays, supplCycle, pId, catNumber, price);
         oc = OrderController.getInstance();
 
-        dao.insert(this);
-        CPdao = new CatalogProductDao();
+        sDao.insert(this);
     }
 
     //db
     public Supplier(String sId, String name, String address, String bankAccount, boolean cash, boolean credit){
-        dao = new SupplierDao();
+        sDao = new SupplierDao();
         this.sId = sId;
         this.name = name;
         this.address = address;
@@ -106,24 +99,27 @@ public class Supplier {
         this.paymentMethods[1] = credit;
         oc = OrderController.getInstance();
 
-        SupplyTime st = dao.getSupplyTimeFromDB(sId);
+        SupplyTime st = sDao.getSupplyTimeFromDB(sId);
 
-        List<CatalogProduct> catalogProducts = dao.getCatalogProductsFromDB(this);
-        QuantityAgreement qa = dao.getQuantityAgreementFromDB(sId);
+        List<CatalogProduct> catalogProducts = sDao.getCatalogProductsFromDB(this);
+        QuantityAgreement qa = sDao.getQuantityAgreementFromDB(sId);
 
         this.contract = new Contract(sId, st, catalogProducts, qa);
 
-        Map<String,String> c = dao.getContactsFromDB(sId);
+        Map<String,String> c = sDao.getContactsFromDB(sId);
         for(String key : c.keySet()){
             addContact(key, c.get(key));
         }
 
-        List<Order> os = dao.getOrdersFromDB(sId);
-        for ( Order o : dao.getOrdersFromDB(sId)){
+        List<Order> os = sDao.getOrdersFromDB(sId);
+        for ( Order o : sDao.getOrdersFromDB(sId)){
             orders.add(o);
         }
 
-        CPdao = new CatalogProductDao();
+        Map<String,String > contactsFromDB = sDao.getContactsFromDB(sId);;
+        for ( String s : contactsFromDB.keySet()){
+            contacts.put(s, contactsFromDB.get(s));
+        }
     }
 
 
@@ -156,13 +152,12 @@ public class Supplier {
     public int getDaysForShortageOrder(){return contract.getDaysForShortageOrder();}
 
     //products methods
-    public void addProduct(String pId, String catalogNum, float price) { //TODO 1.calculating and setting product in periodic order 2. checking that pid exist
+    public void addProduct(String pId, String catalogNum, float price) { //TODO 1.calculating and setting product in periodic order
         contract.addProduct(pId, catalogNum, price);
     }
-    public boolean removeProduct(String pId) {
-        CatalogProduct cp = searchProduct(pId);
-        CPdao.delete(cp);
-        return contract.removeProduct(pId);
+    public void removeProduct(String pId) { //Todo delete supplier if has no product
+        if(contract.removeProduct(pId))
+            sDao.delete(this);
     }
     public void updateCatalogNum(String pId, String newCatalogNum) {
         contract.updateCatalogNum(pId, newCatalogNum);
@@ -186,13 +181,12 @@ public class Supplier {
 
     public String toString() {
         return "Supplier " + sId + "\n" +
-                "name='" + name + '\'' +
-                ", address='" + address + '\'' +
-                ", bankAccount='" + bankAccount + '\'' +
-                ", paymentMethods=" + Arrays.toString(paymentMethods) +
-                "\n contacts=" + contacts +
-                "\n deliveryService=" + deliveryService +
-                "\n contract=" + contract ;
+                "name: " + name + '\t' +
+                "address: " + address + '\t' +
+                "bankAccount: " + bankAccount + '\t' +
+                "paymentMethods: " + Arrays.toString(paymentMethods)+
+                "\n contacts: " + contacts +  '\t' +
+                "\n contract: " + contract ;
     }
 
 

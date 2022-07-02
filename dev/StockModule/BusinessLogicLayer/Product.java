@@ -17,21 +17,19 @@ public class Product {
     private int amount;
     private int amountToNotify;
     private int categoryID;
-    private Date supplyTime;
     private int demand; // Demand means amount of units sold per week.
     private List<Item> items;
     private ProductDao dao;
 
-    public Product(String name, String manufacturer, int categoryID, Date supplyTime, int demand)
+    public Product(String name, String manufacturer, int amountToNotify, int categoryID, int demand)
     {
         dao = new ProductDao();
-        this.ID = name+manufacturer;
+        this.ID = (name+manufacturer).replaceAll(" ", "_");
         this.name = name;
         this.manufacturer = manufacturer;
         this.amount = 0;
-        this.amountToNotify = 0;
+        this.amountToNotify = amountToNotify;
         this.categoryID = categoryID;
-        this.supplyTime = supplyTime;
         this.demand = demand;
         this.items = new LinkedList<>();
 
@@ -39,41 +37,40 @@ public class Product {
     }
 
     //db
-    public Product(String name, String manufacturer,int amountToNotify,  int categoryID, Date supplyTime, int demand, boolean isFromDB)
+    public Product(String name, String manufacturer, int amountToNotify,  int categoryID, int demand, boolean isFromDB)
     {
+        this.dao = new ProductDao();
         this.ID = name+manufacturer;
         this.name = name;
         this.manufacturer = manufacturer;
         this.amount = 0;
         this.amountToNotify = amountToNotify;
         this.categoryID = categoryID;
-        this.supplyTime = supplyTime;
         this.demand = demand;
         this.items = new LinkedList<>();
-        
+
         this.items = dao.loadItems(getID());
     }
 
 
     public String toString(){
-        return "Product Name : " + name + " , Manufacturer : " + manufacturer + " , Amount : " + amount + " , Category ID : " + categoryID + " , Supply Time : " + supplyTime + " , Demand : " + demand+ "\n";
+        return "Product Name : " + name + " , Manufacturer : " + manufacturer + " , Amount : " + amount + " , Category ID : " + categoryID + " , Demand : " + demand+ "\n";
     }
 
-    public void updateAmount() throws Exception
+    /**
+     *
+     * @return true if need to order shortage, false otherwise
+     */
+    public boolean updateAmount()
     {
         amount = 0;
         for(Item i : items){
             amount += i.getAmount();
         }
         dao.updateAmount(this);
-        if(amount < demand)
-        {
-            throw new Exception("PLEASE NOTICE : Current amount is lower than product's demand. Please refill stock.");
-        }
-
+        return amount < amountToNotify;
     }
 
-    public Date getSupplyTime(){return supplyTime;}
     public int getAmount(){return amount;}
     public int getAmountToNotify(){return amountToNotify;}
     public String getManufacturer(){return manufacturer;}
@@ -122,11 +119,14 @@ public class Product {
         items.remove(itemID);
         updateAmount();
     }
-    public void reduceItemAmount(int itemID,int amountToReduce) throws Exception
+
+    // todo : add dao
+    public boolean reduceItemAmount(int itemID,int amountToReduce) throws Exception
     {
         items.get(itemID).reduce(amountToReduce);
-        updateAmount();
+        return updateAmount();
     }
+
 
     public void setID(String ID) {
         this.ID = ID;

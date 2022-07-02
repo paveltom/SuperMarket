@@ -1,5 +1,7 @@
 package StockModule.BusinessLogicLayer;
 
+import DAL.DAOS.StockObjects.DiscountDao;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,12 +9,27 @@ import java.util.Map;
 public class Discount
 {
     private int discountID;
-    private int productID;
+    private String productID;
     private Date discountStartDate;
     private Date discountEndDate;
     private Map<Integer, Type> discount;
+    private DiscountDao dao;
 
-    Discount(int _productID, int _discountID, Date _discountStartDate, Date _discountEndDate,int _amount,Type _t)
+    Discount(String _productID, int _discountID, Date _discountStartDate, Date _discountEndDate,int _amount,Type _t)
+    {
+        dao = new DiscountDao();
+        productID = _productID;
+        discountID = _discountID;
+        discountStartDate = _discountStartDate;
+        discountEndDate = _discountEndDate;
+        discount = new HashMap<>();
+        discount.put(_amount, _t);
+
+        dao.insert(this, _amount, _t);
+    }
+
+    //db
+    public Discount(String _productID, int _discountID, Date _discountStartDate, Date _discountEndDate,int _amount,Type _t, boolean db)
     {
         productID = _productID;
         discountID = _discountID;
@@ -34,7 +51,7 @@ public class Discount
         return discountID;
     }
 
-    public int getProductID() {
+    public String getProductID() {
         return productID;
     }
 

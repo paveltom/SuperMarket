@@ -24,6 +24,7 @@ public class Item {
         amount = _amount;
 
         dao.insert(this);
+
     }
 
     //db
@@ -93,6 +94,7 @@ public class Item {
         return expireDate;
     }
 
+    // todo: add dao
     public void setProductID(String productID) {
         this.productID = productID;
     }

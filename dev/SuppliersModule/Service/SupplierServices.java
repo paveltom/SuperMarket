@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class SupplierServices {
 
-    private final SupplierController sc = new SupplierController();
+    private final SupplierController sc = SupplierController.getInstance();
 
     public ResponseT<List<Supplier>> getSuppliers() {
         try {
@@ -73,14 +73,6 @@ public class SupplierServices {
         }
     }
 
-    public ResponseT<Boolean> hasDeliveryService(String sId) {
-        try {
-            return ResponseT.FromValue(sc.hasDeliveryService(sId));
-        } catch (Exception e) {
-            return ResponseT.FromError(e.getMessage());
-        }
-    }
-
     public ResponseT<Map<String, String>> getContacts(String sId) {
         try {
             return ResponseT.FromValue(sc.getContacts(sId));
@@ -117,15 +109,6 @@ public class SupplierServices {
     public Response setSupplyMaxDays(String sId, int supplyMaxDays) {
         try {
             sc.setMaxSupplyDays(sId, supplyMaxDays);
-            return new Response();
-        } catch (Exception e) {
-            return new Response(e.getMessage());
-        }
-    }
-
-    public Response setDeliveryService(String sId, boolean deliveryService) {
-        try {
-            sc.setDeliveryService(sId, deliveryService);
             return new Response();
         } catch (Exception e) {
             return new Response(e.getMessage());

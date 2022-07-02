@@ -1,51 +1,81 @@
 package StockModule.BusinessLogicLayer;
 
-import StockModule.ServiceLayer.Response;
+import DAL.DAOS.StockObjects.ProductDao;
+import SuppliersModule.DomainLayer.OrderController;
 
 import java.util.*;
 
 public class StockController {
-    private HashMap<String,Product> products;
+    private static StockController sc = null;
     private HashMap<Integer,Purchase> purchases;
     private int purchasesCounter;
     private HashMap<Integer,Category> categories;
     private int categoriesCounter;
-    private HashMap<Integer,Discount> discounts;
+    private HashMap<Integer, Discount> discounts;
     private int discountsCounter;
+    private ProductDao pDao;
 
-    public StockController(){
-        products = new HashMap<>();
+    private StockController(){
+        pDao = new ProductDao();
         purchases = new HashMap<>();
         purchasesCounter = 0;
         categories = new HashMap<>();
         categoriesCounter = 0;
         discounts = new HashMap<>();
         discountsCounter = 0;
+
+        OrderController.getInstance();
+
+        List<Category> categoriesList = pDao.loadCategories();
+        if (categoriesList != null) {
+            for (Category c : categoriesList) {
+                categories.put(c.getID(), c);
+                categoriesCounter++;
+            }
+        }
+
+        List<Discount> discountList = pDao.loadDiscounts();
+        if(discountList != null) {
+            for (Discount d : discountList) {
+                discounts.put(d.getDiscountID(), d);
+                discountsCounter++;
+            }
+        }
     }
 
-    public int getQuantityForOrder(String ID,int days){
-        Product p = products.get(ID);
+    public static StockController getInstance(){
+        if (sc == null)
+            sc = new StockController();
+        return sc;
+    }
+
+    public int getQuantityForOrder(String ID, int days){
+        Product p = getProduct(ID);
         int demand = p.getDemand();
-        return (demand/7)*days;
+        return (demand / 7) * days;
     }
 
-    public HashMap<String,Product> getProductsInStock(){
+    public HashMap<String, Product> getProductsInStock(){
         //Requirement 2
-        return new HashMap<>(products);
+        HashMap<String, Product> productMap = new HashMap<>();
+        for (Product p : pDao.getAllProducts()) {
+            productMap.put(p.getID(), p);
+        }
+        return productMap;
     }
 
-    public HashMap<Integer,Purchase> getPurchasesHistoryReport(){
+    public HashMap<Integer, Purchase> getPurchasesHistoryReport(){
         //Requirement 3
-        return new HashMap<Integer,Purchase>(purchases);
+        return new HashMap<>(purchases);
     }
 
-    public HashMap<Integer,Discount> getCurrentDiscounts(){
+    public HashMap<Integer, Discount> getCurrentDiscounts(){
         //Requirement 4
         //return new ArrayList<>(discounts);
         return discounts;
     }
 
-    public HashMap<Integer,Category> getCategories(){
+    public HashMap<Integer, Category> getCategories(){
         //Requirement 5
         return new HashMap<>(categories);
     }
@@ -53,10 +83,9 @@ public class StockController {
     public List<Item> getStockReport(){
         //Requirement 6
         List<Item> output = new ArrayList<>();
-        for (String s : products.keySet())
+        for (Product product : pDao.getAllProducts())
         {
-            Product p = products.get(s);
-            output.addAll(p.getItems());
+            output.addAll(product.getItems());
         }
         return output;
     }
@@ -64,12 +93,11 @@ public class StockController {
     public List<Item> getStockReportByCategory(int CategoryID){
         //Requirement 7
         List<Item> output = new ArrayList<>();
-        for (String s : products.keySet())
+        for (Product product : pDao.getAllProducts())
         {
-            Product p = products.get(s);
-            if(isAncestorOf(p.getCategoryID(),CategoryID))
+            if(isAncestorOf(product.getCategoryID(),CategoryID))
             {
-                output.addAll(p.getItems());
+                output.addAll(product.getItems());
             }
         }
         return output;
@@ -78,10 +106,9 @@ public class StockController {
     public List<Item> getDefectedItemsReport(){
         //Requirement 8+9
         List<Item> output = new ArrayList<>();
-        for (String s : products.keySet())
+        for (Product product : pDao.getAllProducts())
         {
-            Product p = products.get(s);
-            output.addAll(p.getDefectedItems());
+            output.addAll(product.getDefectedItems());
         }
         return output;
     }
@@ -89,17 +116,15 @@ public class StockController {
     public List<Item> getExpiredItemsReport() {
         List<Item> output = new ArrayList<>();
 
-        for (String s : products.keySet())
+        for (Product product : pDao.getAllProducts())
         {
-            Product p = products.get(s);
-            output.addAll(p.getExpiredItems());
+            output.addAll(product.getExpiredItems());
         }
         return output;
     }
 
-    public void insertNewProduct(String productName, String productManufacturer, int categoryID, Date supplyTime, int demand){
-        Product p = new Product(productName, productManufacturer, categoryID, supplyTime, demand);
-        products.put(p.getID(),p);
+    public void insertNewProduct(String productName, String productManufacturer, int amountToNotify, int categoryID, int demand){
+        new Product(productName, productManufacturer, amountToNotify, categoryID, demand);
     }
 
     public void setSubCategory(int subCategoryID,int parentID){
@@ -108,13 +133,15 @@ public class StockController {
         subCategory.setAsParent(parent);
     }
 
-    public void insertNewItem(int productID, String location, Date expireDate, boolean isDefect, int amount){
-        products.get(productID).addItem(location, expireDate, isDefect, amount);
+    public void insertNewItem(String productID, String location, Date expireDate, boolean isDefect, int amount){
+        getProduct(productID).addItem(location, expireDate, isDefect, amount);
     }
 
-    public void reduceItemAmount(int productID, int itemID, int amountToReduce) throws Exception
+    public void reduceItemAmount(String productID, int itemID, int amountToReduce) throws Exception
     {
-        products.get(productID).reduceItemAmount(itemID, amountToReduce);
+        if (getProduct(productID).reduceItemAmount(itemID, amountToReduce)){
+            OrderController.getInstance().orderShortage(productID);
+        }
     }
 
     public void insertNewCategory(String categoryName){
@@ -123,20 +150,20 @@ public class StockController {
         categoriesCounter++;
     }
 
-    public void insertNewDiscount(int productID, Date startDate, Date endDate, int amount, Type t){
-        Discount d = new Discount(discountsCounter, productID, startDate, endDate, amount, t);
-        discounts.put(d.getProductID(),d);
+    public void insertNewDiscount(String productID, Date startDate, Date endDate, int amount, Type t){
+        Discount d = new Discount(productID, discountsCounter, startDate, endDate, amount, t);
+        discounts.put(discountsCounter, d);
         discountsCounter++;
     }
 
-    public void insertNewPurchase(Date purchaseDate, Map<Integer, Map<Integer, Integer>> products){
+    public void insertNewPurchase(Date purchaseDate, Map<String, Map<Integer, Integer>> products){
         Purchase p = new Purchase(purchasesCounter, purchaseDate, products);
         purchases.put(p.getID(),p);
         purchasesCounter++;
     }
 
-    public void deleteProduct(int productID){
-        products.remove(productID);
+    public void deleteProduct(String productID){
+        pDao.delete(getProduct(productID));
     }
 
     public void deleteCategory(int categoryID){
@@ -151,24 +178,31 @@ public class StockController {
         purchases.remove(purchaseID);
     }
 
-    public void deleteItem(int productID,int itemID) throws Exception
+    public void deleteItem(String productID,int itemID) throws Exception
     {
-        products.get(productID).deleteItem(itemID);
+        getProduct(productID).deleteItem(itemID);
     }
 
-    public boolean isAncestorOf(int childCategoryID,int parentCategoryID) {
+    public boolean isAncestorOf(int childCategoryID,int parentCategoryID)
+    {
         Category child = categories.get(childCategoryID);
         Category parent = categories.get(parentCategoryID);
 
-        if (child == parent)
+        if(child == parent)
             return true;
 
-        if (child.getParentCategory() == null)
+        if(child.getParentCategory()==null)
             return false;
 
         return isAncestorOf(child.getParentCategory().getID(), parentCategoryID);
+
     }
 
+    private Product getProduct(String pid){
+        return pDao.getProduct(pid.replaceAll(" ", "_"));
+    }
+
+    //todo : add dao
     public boolean updateProductAttribute(String productID, int Attribute, Object Value) {
         return products.get(productID).updateAttributes(Attribute, Value);
     }
@@ -180,5 +214,4 @@ public class StockController {
     public boolean updateItemAttribute(String productID,int ItemID, int Attribute, Object Value) {
         return products.get(productID).updateItemAttribute(ItemID,Attribute, Value);
     }
-
 }
