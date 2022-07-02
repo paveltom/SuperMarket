@@ -270,12 +270,23 @@ public class DataBaseConnection {
                 " Availability TEXT," +
                 " PRIMARY KEY(Id)" + ");";
 
-        String stockSupCategory = "CREATE TABLE Category (" +
+
+
+
+
+
+
+
+
+        String stockSupCategory = "CREATE TABLE Category(" +
                 "category_id TEXT," +
                 "name TEXT," +
-                "parentCategory TEXT," +
-                "subCategories TEXT," +
-                "PRIMARY KEY(category_id));";
+                "PRIMARY KEY(category_id);";
+
+        String stocksupCategoryRelations = "CREATE TABLE CategoryRelations(" +
+                "ParentId TEXT," +
+                "ChildId TEXT," +
+                "PRIMARY KEY(ParentId,ChildId);";
 
         String stockSupContacts = "CREATE TABLE Contacts (" +
                 "supplier_id TEXT," +
@@ -309,7 +320,8 @@ public class DataBaseConnection {
 
         String stockSupOrders = "CREATE TABLE Orders(" +
                 "supplier_id TEXT, " +
-                "id ,date TEXT, " +
+                "id TEXT," +
+                "date TEXT, " +
                 "contactPhone TEXT, " +
                 "supName TEXT, " +
                 "supAddress TEXT, " +
@@ -386,6 +398,7 @@ public class DataBaseConnection {
             stmt.execute(workersTableCreataion);
 
             stmt.execute(stockSupCategory);
+            stmt.execute(stocksupCategoryRelations);
             stmt.execute(stockSupContacts);
             stmt.execute(stockSupDiscount_Product);
             stmt.execute(stockSupDiscounts);
