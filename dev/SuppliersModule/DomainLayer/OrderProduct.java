@@ -1,8 +1,6 @@
 package SuppliersModule.DomainLayer;
 
-//import DAL.DAO.OrderProductDAO;
-
-import DAL.DAOS.SupplierObjects.OrderProductDao;
+import DAL.Stock_Suppliers.DAOS.SupplierObjects.OrderProductDao;
 
 public class OrderProduct {
     private final String id;

@@ -1,8 +1,6 @@
-package DAL.DAOS;
+package DAL.Stock_Suppliers.DAOS;
 
 import DAL.DataBaseConnection;
-import DAL.IdentityMaps.IdentityMap;
-
 import java.util.List;
 
 public class DAO<T> {

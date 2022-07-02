@@ -1,6 +1,6 @@
-package DAL.DAOS.StockObjects;
+package DAL.Stock_Suppliers.DAOS.StockObjects;
 
-import DAL.DAOS.DAO;
+import DAL.Stock_Suppliers.DAOS.DAO;
 import StockModule.BusinessLogicLayer.Item;
 
 public class ItemDao extends DAO {

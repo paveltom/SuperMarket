@@ -3,7 +3,7 @@ package StockModule.ServiceLayer;
 public class Response
 {
     public String ErrorMessage = "";
-    public Boolean ErrorOccured;
+    public Boolean ErrorOccurred;
 
     Response(){
 

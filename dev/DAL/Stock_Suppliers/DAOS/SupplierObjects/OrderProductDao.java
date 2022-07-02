@@ -1,12 +1,12 @@
-package DAL.DAOS.SupplierObjects;
+package DAL.Stock_Suppliers.DAOS.SupplierObjects;
 
-import DAL.DAOS.DAO;
+import DAL.Stock_Suppliers.DAOS.DAO;
 import SuppliersModule.DomainLayer.OrderProduct;
 
 public class OrderProductDao extends DAO {
     public void insert(OrderProduct op){
         String[] params = {op.getsId(), op.getoId(), op.getId(), String.valueOf(op.getAmount()), String.valueOf(op.getDiscount()),
-                        String.valueOf(op.getFinalPrice()), String.valueOf(op.getCatalogPrice())};
+                String.valueOf(op.getFinalPrice()), String.valueOf(op.getCatalogPrice())};
         insert("Product_Order", params);
     }
 

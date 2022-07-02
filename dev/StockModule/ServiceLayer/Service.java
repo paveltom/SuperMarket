@@ -12,35 +12,13 @@ public class Service
         scs = new StockControllerService();
     }
 
-    /*
-    public Response addNewBranch(String name){
-        return scs.addNewBranch(name);
-    }
-
-    public Response deleteBranch(int ){
-        return scs.deleteBranch();
-    }
-    */
-
-
     public Response setSubCategory(int subCategoryID,int parentID){
         return scs.setSubCategory(subCategoryID,parentID);
     }
 
-    /*public  ResponseT<List<Branch>> getBranches(){
-        return scs.getBranches();
-    }
-    */
     public ResponseT<List<Product>> getProductsInStock(){
         //Requirement 2
         return scs.getProductsInStock();
-    }
-
-
-
-    public ResponseT<List<Purchase>> getPurchasesHistoryReport(){
-        //Requirement 3
-        return scs.getPurchasesHistoryReport();
     }
 
     public ResponseT<List<Discount>> getCurrentDiscounts(){

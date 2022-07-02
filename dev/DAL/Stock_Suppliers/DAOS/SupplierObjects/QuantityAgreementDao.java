@@ -1,6 +1,6 @@
-package DAL.DAOS.SupplierObjects;
+package DAL.Stock_Suppliers.DAOS.SupplierObjects;
 
-import DAL.DAOS.DAO;
+import DAL.Stock_Suppliers.DAOS.DAO;
 
 public class QuantityAgreementDao extends DAO {
 

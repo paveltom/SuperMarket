@@ -1,7 +1,6 @@
 package StockModule.BusinessLogicLayer;
 
-import DAL.DAOS.StockObjects.DiscountDao;
-
+import DAL.Stock_Suppliers.DAOS.StockObjects.DiscountDao;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;

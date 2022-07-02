@@ -1,13 +1,11 @@
 package StockModule.BusinessLogicLayer;
 
-import DAL.DAOS.StockObjects.ProductDao;
+import DAL.Stock_Suppliers.DAOS.StockObjects.ProductDao;
 import SuppliersModule.DomainLayer.OrderController;
-
 import java.util.*;
 
 public class StockController {
     private static StockController sc = null;
-    private HashMap<Integer,Purchase> purchases;
     private int purchasesCounter;
     private HashMap<Integer,Category> categories;
     private int categoriesCounter;
@@ -17,7 +15,6 @@ public class StockController {
 
     private StockController(){
         pDao = new ProductDao();
-        purchases = new HashMap<>();
         purchasesCounter = 0;
         categories = new HashMap<>();
         categoriesCounter = 0;
@@ -64,10 +61,6 @@ public class StockController {
         return productMap;
     }
 
-    public HashMap<Integer, Purchase> getPurchasesHistoryReport(){
-        //Requirement 3
-        return new HashMap<>(purchases);
-    }
 
     public HashMap<Integer, Discount> getCurrentDiscounts(){
         //Requirement 4
@@ -156,12 +149,6 @@ public class StockController {
         discountsCounter++;
     }
 
-    public void insertNewPurchase(Date purchaseDate, Map<String, Map<Integer, Integer>> products){
-        Purchase p = new Purchase(purchasesCounter, purchaseDate, products);
-        purchases.put(p.getID(),p);
-        purchasesCounter++;
-    }
-
     public void deleteProduct(String productID){
         pDao.delete(getProduct(productID));
     }
@@ -172,10 +159,6 @@ public class StockController {
 
     public void deleteDiscount(int discountID){
         discounts.remove(discountID);
-    }
-
-    public void deletePurchase(int purchaseID){
-        purchases.remove(purchaseID);
     }
 
     public void deleteItem(String productID,int itemID) throws Exception
@@ -204,7 +187,7 @@ public class StockController {
 
     //todo : add dao
     public boolean updateProductAttribute(String productID, int Attribute, Object Value) {
-        return products.get(productID).updateAttributes(Attribute, Value);
+        return getProduct(productID).updateAttributes(Attribute, Value);
     }
 
     public boolean updateCategoryName(String categoryID,String name) {
@@ -212,6 +195,6 @@ public class StockController {
     }
 
     public boolean updateItemAttribute(String productID,int ItemID, int Attribute, Object Value) {
-        return products.get(productID).updateItemAttribute(ItemID,Attribute, Value);
+        return getProduct(productID).updateItemAttribute(ItemID,Attribute, Value);
     }
 }

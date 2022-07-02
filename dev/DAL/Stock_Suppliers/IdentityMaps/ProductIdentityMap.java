@@ -1,4 +1,4 @@
-package DAL.IdentityMaps;
+package DAL.Stock_Suppliers.IdentityMaps;
 
 import StockModule.BusinessLogicLayer.Product;
 

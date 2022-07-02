@@ -1,7 +1,6 @@
-package DAL.IdentityMaps;
+package DAL.Stock_Suppliers.IdentityMaps;
 
 import StockModule.BusinessLogicLayer.Category;
-
 import java.util.ArrayList;
 
 public class CategoryIdentityMap extends IdentityMap<Category>{

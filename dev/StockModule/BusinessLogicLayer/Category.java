@@ -1,11 +1,11 @@
 package StockModule.BusinessLogicLayer;
 
-import DAL.DAOS.StockObjects.CategoryDao;
-
+import DAL.Stock_Suppliers.DAOS.StockObjects.CategoryDao;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Category {
+
     private final int ID;
     private String name;
     private Category parentCategory;
@@ -91,7 +91,6 @@ public class Category {
 
     public void setChildFromDB(Category c){
         this.subCategories.add(c);
-        dao.updateSubCategories(this);
     }
 
     //todo : add dao

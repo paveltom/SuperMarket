@@ -1,7 +1,6 @@
 package SuppliersModule.DomainLayer;
 
-import DAL.DAOS.SupplierObjects.QuantityAgreementDao;
-
+import DAL.Stock_Suppliers.DAOS.SupplierObjects.QuantityAgreementDao;
 import java.util.Hashtable;
 import java.util.Map;
 

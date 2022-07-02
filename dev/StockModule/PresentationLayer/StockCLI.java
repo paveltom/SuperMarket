@@ -124,7 +124,7 @@ public class StockCLI {
                 }
                 case "2": {
                     System.out.print("Enter product ID to remove : ");
-                    if (!s.deleteProduct(toRead.nextInt()).ErrorOccured())
+                    if (!s.deleteProduct(toRead.nextInt()).ErrorOccurred())
                         System.out.print("Product removed successfully.");
                     break;
                 }
@@ -192,7 +192,7 @@ public class StockCLI {
                     }
                     System.out.println("Enter amount of items : ");
                     int amountAddItem = toRead.nextInt();
-                    if (!s.insertNewItem(ProductIDAddItem, Location, expireDate, isUsable.equals("Yes"), amountAddItem).ErrorOccured())
+                    if (!s.insertNewItem(ProductIDAddItem, Location, expireDate, isUsable.equals("Yes"), amountAddItem).ErrorOccurred())
                         System.out.print("Added item successfully.");
                     break;
 
@@ -276,7 +276,7 @@ public class StockCLI {
                     break;
                 }
                 case "1": {
-                    System.out.println(s.getPurchasesHistoryReport().Value);
+                    System.out.println("s.getPurchasesHistoryReport().Value");
                     break;
                 }
                 case "2": {
@@ -294,13 +294,13 @@ public class StockCLI {
                     System.out.println("Enter actual price of product : ");
                     int actualPrice = toRead.nextInt();
                     Map<Integer, Map<Integer, Integer>> products = (Map<Integer, Map<Integer, Integer>>) new HashMap<>().put(productID, new HashMap<>().put(fixedPrice, actualPrice));
-                    if (!s.insertNewPurchase(new Date(yearAddPurchase, monthAddPurchase - 1, dayAddPurchase), products).ErrorOccured())
+                    if (!s.insertNewPurchase(new Date(yearAddPurchase, monthAddPurchase - 1, dayAddPurchase), products).ErrorOccurred())
                         System.out.print("Added purchase successfully.");
                     break;
                 }
                 case "3": {
                     System.out.println("Enter purchase ID to remove : ");
-                    if (!s.deletePurchase(toRead.nextInt()).ErrorOccured())
+                    if (!s.deletePurchase(toRead.nextInt()).ErrorOccurred())
                         System.out.print("Removed purchase successfully.");
                     break;
                 }
@@ -372,7 +372,7 @@ public class StockCLI {
                 }
                 case "3": {
                     System.out.println("Enter ID of discount to remove : ");
-                    if (!s.deleteDiscount(toRead.nextInt()).ErrorOccured())
+                    if (!s.deleteDiscount(toRead.nextInt()).ErrorOccurred())
                         System.out.print("Removed discount successfully.");
                     break;
                 }
@@ -406,13 +406,13 @@ public class StockCLI {
                 }
                 case "2": {
                     System.out.println("Enter new category name : ");
-                    if (!s.insertNewCategory(toRead.next()).ErrorOccured())
+                    if (!s.insertNewCategory(toRead.next()).ErrorOccurred())
                         System.out.println("Added category successfully.");
                     break;
                 }
                 case "3": {
                     System.out.println("Enter category ID to delete :");
-                    if (!s.deleteCategory(toRead.nextInt()).ErrorOccured())
+                    if (!s.deleteCategory(toRead.nextInt()).ErrorOccurred())
                         System.out.println("Removed category successfully.");
                     break;
                 }
@@ -421,7 +421,7 @@ public class StockCLI {
                     int subCategoryID = toRead.nextInt();
                     System.out.println("Enter categoryID you want to set as parent : ");
                     int parentID = toRead.nextInt();
-                    if (!s.setSubCategory(subCategoryID, parentID).ErrorOccured())
+                    if (!s.setSubCategory(subCategoryID, parentID).ErrorOccurred())
                         System.out.println("Subcategory set successfully.");
                     break;
                 }

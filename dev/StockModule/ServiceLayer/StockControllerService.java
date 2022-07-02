@@ -12,35 +12,9 @@ public class StockControllerService
 
     StockControllerService()
     {
-        sc = new StockController();
+        sc = StockController.getInstance();
     }
 
-    /*
-    public Response addNewBranch(String name)
-    {
-        try
-        {
-            sc.addNewBranch(name);
-            return new Response();
-        } catch (Exception e)
-        {
-            return new Response(e.getMessage());
-        }
-    }
-
-    public Response deleteBranch(int branchID)
-    {
-        try
-        {
-            sc.deleteBranch(branchID);
-            return new Response();
-        } catch (Exception e)
-        {
-            return new Response(e.getMessage());
-        }
-
-    }
-    */
 
     public Response setSubCategory(int subCategoryID,int parentID){
         try
@@ -59,19 +33,6 @@ public class StockControllerService
         try
         {
             return ResponseT.FromValue(sc.getProductsInStock());
-        }
-        catch (Exception e)
-        {
-            return ResponseT.FromError(e.getMessage());
-        }
-    }
-
-    public ResponseT<List<Purchase>> getPurchasesHistoryReport()
-    {
-        //Requirement 3
-        try
-        {
-            return ResponseT.FromValue(sc.getPurchasesHistoryReport());
         }
         catch (Exception e)
         {
@@ -155,11 +116,13 @@ public class StockControllerService
         }
     }
 
+    //todo : update arguments
     public Response insertNewProduct(String productName, String productManufacturer, int categoryID, Date supplyTime, int demand)
     {
         try
         {
-            sc.insertNewProduct(productName, productManufacturer, categoryID, supplyTime, demand);
+            //change 0
+            sc.insertNewProduct(productName, productManufacturer, categoryID, 0, demand);
             return new Response();
         } catch (Exception e)
         {
@@ -167,6 +130,7 @@ public class StockControllerService
         }
     }
 
+    // todo
     public Response insertNewItem(int productID, String location, Date expireDate, boolean isUsable, int amount)
     {
         try

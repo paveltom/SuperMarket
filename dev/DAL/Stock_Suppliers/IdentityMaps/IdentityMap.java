@@ -1,6 +1,4 @@
-package DAL.IdentityMaps;
-
-import StockModule.BusinessLogicLayer.Product;
+package DAL.Stock_Suppliers.IdentityMaps;
 
 import java.util.List;
 

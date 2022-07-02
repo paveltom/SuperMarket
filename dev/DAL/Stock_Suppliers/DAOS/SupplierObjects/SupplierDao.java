@@ -1,7 +1,7 @@
-package DAL.DAOS.SupplierObjects;
+package DAL.Stock_Suppliers.DAOS.SupplierObjects;
 
-import DAL.DAOS.DAO;
-import DAL.IdentityMaps.SuppliersIdentityMap;
+import DAL.Stock_Suppliers.DAOS.DAO;
+import DAL.Stock_Suppliers.IdentityMaps.SuppliersIdentityMap;
 import SuppliersModule.DomainLayer.*;
 
 import java.time.LocalDate;
@@ -25,7 +25,7 @@ public class SupplierDao extends DAO {
     public void insert(Supplier s){
         String[] params = {s.getsId(), s.getName(), s.getAddress(), s.getBankAccount(),
                 String.valueOf(s.hasCashPayment()), String.valueOf(s.hasCreditPayment()),
-                String.valueOf(s.hasDeliveryService())};
+                String.valueOf(true)}; //todo : delete this has delivery service field
         insert("Suppliers", params);
         suppliersIdentityMap.cache(s);
     }
@@ -40,7 +40,7 @@ public class SupplierDao extends DAO {
     public void setDeliveryService(Supplier s){
         String[] keys = {"supplier_id"};
         String[] keysVals = {s.getsId()};
-        update("Suppliers", keys, keysVals, "deliveryService", String.valueOf(s.hasDeliveryService()));
+        update("Suppliers", keys, keysVals, "deliveryService", String.valueOf(true)); // todo : delete this has delivery service field
     }
 
     public List<Supplier> getAll(){
@@ -165,6 +165,17 @@ public class SupplierDao extends DAO {
         }
 
         return contacts;
+    }
+
+    public void addContact(String sId, String name, String num){
+        String[] params = {sId, name, num};
+        insert("Contacts", params);
+    }
+
+    public void removeContact(String sid, String name){
+        String[] keys = {"supplier_id", "contactName"};
+        String[] keysVals = {sid, name};
+        delete("Contacts", keys, keysVals);
     }
 
 }

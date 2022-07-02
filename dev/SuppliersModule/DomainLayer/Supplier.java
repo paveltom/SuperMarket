@@ -1,9 +1,6 @@
 package SuppliersModule.DomainLayer;
 
-import DAL.DAOS.StockObjects.ProductDao;
-import DAL.DAOS.SupplierObjects.SupplierDao;
-import StockModule.BusinessLogicLayer.Product;
-
+import DAL.Stock_Suppliers.DAOS.SupplierObjects.SupplierDao;
 import java.time.LocalDate;
 import java.util.*;
 

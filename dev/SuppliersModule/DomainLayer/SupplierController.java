@@ -1,9 +1,7 @@
 package SuppliersModule.DomainLayer;
 
-import DAL.DAOS.StockObjects.ProductDao;
-import DAL.DAOS.SupplierObjects.SupplierDao;
-import StockModule.BusinessLogicLayer.StockController;
-
+import DAL.Stock_Suppliers.DAOS.StockObjects.ProductDao;
+import DAL.Stock_Suppliers.DAOS.SupplierObjects.SupplierDao;
 import java.util.*;
 import java.util.stream.Collectors;
 

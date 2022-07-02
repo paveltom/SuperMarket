@@ -1,6 +1,6 @@
 package SuppliersModule.DomainLayer;
 
-import DAL.DAOS.SupplierObjects.CatalogProductDao;
+import DAL.Stock_Suppliers.DAOS.SupplierObjects.CatalogProductDao;
 
 public class CatalogProduct {
 

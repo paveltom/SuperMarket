@@ -1,7 +1,6 @@
 package StockModule.BusinessLogicLayer;
 
-import DAL.DAOS.StockObjects.ItemDao;
-
+import DAL.Stock_Suppliers.DAOS.StockObjects.ItemDao;
 import java.util.Date;
 
 public class Item {

@@ -1,10 +1,6 @@
 package StockModule.BusinessLogicLayer;
 
-//import DAL.DAO.ProductDAO;
-
-import DAL.DAOS.StockObjects.ProductDao;
-import StockModule.ServiceLayer.Response;
-
+import DAL.Stock_Suppliers.DAOS.StockObjects.ProductDao;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
@@ -126,7 +122,6 @@ public class Product {
         items.get(itemID).reduce(amountToReduce);
         return updateAmount();
     }
-
 
     public void setID(String ID) {
         this.ID = ID;

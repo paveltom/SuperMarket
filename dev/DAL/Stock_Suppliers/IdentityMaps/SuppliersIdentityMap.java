@@ -1,10 +1,8 @@
-package DAL.IdentityMaps;
+package DAL.Stock_Suppliers.IdentityMaps;
 
-import StockModule.BusinessLogicLayer.Product;
+
 import SuppliersModule.DomainLayer.Supplier;
-
 import java.util.ArrayList;
-import java.util.List;
 
 public class SuppliersIdentityMap extends IdentityMap<Supplier> {
 

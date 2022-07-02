@@ -1,8 +1,6 @@
 package SuppliersModule.DomainLayer;
 
-
-import DAL.DAOS.SupplierObjects.OrderDao;
-
+import DAL.Stock_Suppliers.DAOS.SupplierObjects.OrderDao;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;

@@ -1,5 +1,6 @@
-package DAL.DAOS.SupplierObjects;
-import DAL.DAOS.DAO;
+package DAL.Stock_Suppliers.DAOS.SupplierObjects;
+
+import DAL.Stock_Suppliers.DAOS.DAO;
 import SuppliersModule.DomainLayer.SupplyTime;
 import java.util.Arrays;
 
