@@ -16,7 +16,7 @@ public class SupplierController {
     private SupplierController(){
         sDao = new SupplierDao();
         pDao = new ProductDao();
-        sDao.getAll();
+        //sDao.getAll();
         oc = OrderController.getInstance();
     }
 

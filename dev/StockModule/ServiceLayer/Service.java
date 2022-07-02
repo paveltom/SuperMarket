@@ -118,44 +118,44 @@ public class Service
     public void LoadDefaultData()
     {
         addNewBranch("Shop-Eilat");
-        addNewBranch("Shop-Netivot");
+//        addNewBranch("Shop-Netivot");
 
         insertNewCategory(0, "Electricity");
         insertNewCategory(0, "Milk");
         insertNewCategory(0, "Drinks");
 
-        insertNewCategory(1, "Electricity");
-        insertNewCategory(1, "Milk");
-        insertNewCategory(1, "Drinks");
+//        insertNewCategory(1, "Electricity");
+//        insertNewCategory(1, "Milk");
+//        insertNewCategory(1, "Drinks");
 
         insertNewProduct(0, "Dark Chocolate 60%", "Strauss", 10, 1, 40);
         insertNewProduct(0, "Milk Chocolate", "Strauss", 10, 1, 40);
         insertNewProduct(0, "Batteries AA", "GP Ultra", 10, 0, 65);
         insertNewProduct(0, "Orange juice", "Primor", 10, 2, 65);
 
-        insertNewProduct(1, "0", "", 10, 1, 40);
-        insertNewProduct(1, "Milk Chocolate", "Strauss", 10, 1, 40);
-        insertNewProduct(1, "Batteries AA", "GP Ultra", 10, 0, 65);
-        insertNewProduct(1, "Orange juice", "Primor", 10, 2, 65);
+//        insertNewProduct(1, "0", "", 10, 1, 40);
+//        insertNewProduct(1, "Milk Chocolate", "Strauss", 10, 1, 40);
+//        insertNewProduct(1, "Batteries AA", "GP Ultra", 10, 0, 65);
+//        insertNewProduct(1, "Orange juice", "Primor", 10, 2, 65);
 
-        insertNewItem(0, "0", "L5A4", new Date(2021, 4, 5), false, 30);
-        insertNewItem(0, "0", "L2A17", new Date(2022, 4, 5), true, 42);
-        insertNewItem(0, "1", "L6A8", new Date(2022, 4, 15), true, 50);
+        insertNewItem(0, "Dark_Chocolate_60%Strauss", "L5A4", new Date(2021, 4, 5), false, 30);
+        insertNewItem(0, "Milk_ChocolateStrauss", "L2A17", new Date(2022, 4, 5), true, 42);
+        insertNewItem(0, "Batteries_AA", "L6A8", new Date(2022, 4, 15), true, 50);
         insertNewItem(0, "2", "L1A2", new Date(2022, 2, 3), true, 130);
         insertNewItem(0, "3", "L9A4", new Date(2022, 1, 15), false, 280);
 
 
-        insertNewItem(1, "0", "L5A4", new Date(2021, 4, 5), false, 30);
-        insertNewItem(1, "0", "L2A17", new Date(2022, 4, 5), true, 42);
-        insertNewItem(1, "1", "L6A8", new Date(2022, 4, 15), true, 50);
-        insertNewItem(1, "2", "L1A2", new Date(2022, 2, 3), true, 130);
-        insertNewItem(1, "3", "L9A4", new Date(2022, 1, 15), false, 280);
+//        insertNewItem(1, "0", "L5A4", new Date(2021, 4, 5), false, 30);
+//        insertNewItem(1, "0", "L2A17", new Date(2022, 4, 5), true, 42);
+//        insertNewItem(1, "1", "L6A8", new Date(2022, 4, 15), true, 50);
+//        insertNewItem(1, "2", "L1A2", new Date(2022, 2, 3), true, 130);
+//        insertNewItem(1, "3", "L9A4", new Date(2022, 1, 15), false, 280);
 
         insertNewDiscount(0, "3", new Date(2022, 4, 3), new Date(2022, 5, 3), 30, Type.PERCENT);
-        insertNewDiscount(1, "3", new Date(2022, 4, 3), new Date(2022, 5, 3), 30, Type.PERCENT);
+//        insertNewDiscount(1, "3", new Date(2022, 4, 3), new Date(2022, 5, 3), 30, Type.PERCENT);
 
         Map<String, Map<Integer, Integer>> products = (Map<String, Map<Integer, Integer>>) new HashMap<>().put("2", new HashMap<>().put(30, 25));
         insertNewPurchase(0, new Date(2022, 4, 25), products);
-        insertNewPurchase(1, new Date(2022, 4, 25), products);
+//        insertNewPurchase(1, new Date(2022, 4, 25), products);
     }
 }

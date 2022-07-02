@@ -27,8 +27,19 @@ public class StockController {
         OrderController.getInstance();
 
         List<Category> categoriesList = pDao.loadCategories();
-        for(Category c : categoriesList){
-            categories.put(c.getID(), c);
+        if (categoriesList != null) {
+            for (Category c : categoriesList) {
+                categories.put(c.getID(), c);
+                categoriesCounter++;
+            }
+        }
+
+        List<Discount> discountList = pDao.loadDiscounts();
+        if(discountList != null) {
+            for (Discount d : discountList) {
+                discounts.put(d.getDiscountID(), d);
+                discountsCounter++;
+            }
         }
     }
 

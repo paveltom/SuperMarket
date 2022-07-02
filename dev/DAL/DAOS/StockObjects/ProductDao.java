@@ -2,16 +2,10 @@ package DAL.DAOS.StockObjects;
 
 import DAL.DAOS.DAO;
 import DAL.IdentityMaps.ProductIdentityMap;
-import StockModule.BusinessLogicLayer.Category;
-import StockModule.BusinessLogicLayer.Item;
-import StockModule.BusinessLogicLayer.Product;
-import SuppliersModule.DomainLayer.Order;
-import SuppliersModule.DomainLayer.OrderProduct;
+import StockModule.BusinessLogicLayer.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class ProductDao extends DAO {
@@ -63,6 +57,7 @@ public class ProductDao extends DAO {
 
     public void insert(Product p){
         String[] params = {p.getID(), p.getName(), p.getManufacturer(),
+                String.valueOf(p.getAmountToNotify()),
                 String.valueOf(p.getCategoryID()), String.valueOf(p.getDemand())};
         insert("Products", params);
         identityMap.cache(p);
@@ -80,8 +75,6 @@ public class ProductDao extends DAO {
         String[] keysVals = {p.getID()};
         update("Products", keys, keysVals, "amount", String.valueOf(p.getAmount()));
     }
-
-
 
 
     public List<Item> loadItems(String pId){
@@ -108,6 +101,7 @@ public class ProductDao extends DAO {
         }
     }
 
+
     public List<Category> loadCategories(){
         List<Category> cats = new LinkedList();
         List<String[]> sFromDB = load("Category", null, null);
@@ -128,6 +122,31 @@ public class ProductDao extends DAO {
 
 
         return cats;
+    }
+
+
+    public List<Discount> loadDiscounts(){
+        List<String[]> sFromDB = load("Discounts", null, null);
+        List<Discount> output = new LinkedList<>();
+
+//        for(String[] s : sFromDB){
+//            int id = Integer.valueOf(s[0]);
+//            String pid = s[1];
+//            try {
+//                Date startd = new SimpleDateFormat("dd/MM/yyyy").parse(s[2]);
+//                Date endd = new SimpleDateFormat("dd/MM/yyyy").parse(s[3]);
+//                int amount = Integer.valueOf(s[4]);
+//                Type t = Type.PERCENT;
+//                if(s[4].equals("1"))
+//                    t = Type.FIXED;
+//
+//                output.add(new Discount(pid, id, startd, endd, amount, t, true));
+//            } catch (ParseException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
+
+        return output;
     }
 
 }
