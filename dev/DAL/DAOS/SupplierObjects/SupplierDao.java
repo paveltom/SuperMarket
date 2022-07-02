@@ -167,4 +167,15 @@ public class SupplierDao extends DAO {
         return contacts;
     }
 
+    public void addContact(String sId, String name, String num){
+        String[] params = {sId, name, num};
+        insert("Contacts", params);
+    }
+
+    public void removeContact(String sid, String name){
+        String[] keys = {"supplier_id", "contactName"};
+        String[] keysVals = {sid, name};
+        delete("Contacts", keys, keysVals);
+    }
+
 }

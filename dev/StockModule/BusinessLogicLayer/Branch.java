@@ -15,7 +15,7 @@ public class Branch {
     Branch(int _branchID,String _name){
         branchID = _branchID;
         name = _name;
-        stockController = new StockController();
+        stockController = StockController.getInstance();
     }
 
     public String toString(){
@@ -31,7 +31,7 @@ public class Branch {
         return stockController.getPurchasesHistoryReport();
     }
 
-    public HashMap<Integer,Discount> getCurrentDiscounts(){
+    public HashMap<Integer, Discount> getCurrentDiscounts(){
         //Requirement 4
         return stockController.getCurrentDiscounts();
     }
@@ -60,19 +60,19 @@ public class Branch {
         return stockController.getExpiredItemsReport();
     }
 
-    public void insertNewProduct(String productName, String productManufacturer, int categoryID, Date supplyTime, int demand){
-        stockController.insertNewProduct(productName,productManufacturer,categoryID,supplyTime,demand);
+    public void insertNewProduct(String productName, String productManufacturer, int amountToNotify, int categoryID, int demand){
+        stockController.insertNewProduct(productName, productManufacturer, amountToNotify, categoryID, demand);
     }
 
     public void setSubCategory(int subCategoryID,int parentID){
         stockController.setSubCategory(subCategoryID,parentID);
     }
 
-    public void insertNewItem(int productID, String location, Date expireDate, boolean isDefect, int amount)
+    public void insertNewItem(String productID, String location, Date expireDate, boolean isDefect, int amount)
     {
         stockController.insertNewItem(productID, location, expireDate, isDefect, amount);
     }
-    public void reduceItemAmount(int productID, int itemID, int amountToReduce) throws Exception
+    public void reduceItemAmount(String productID, int itemID, int amountToReduce) throws Exception
     {
         stockController.reduceItemAmount(productID, itemID, amountToReduce);
     }
@@ -81,15 +81,15 @@ public class Branch {
         stockController.insertNewCategory(categoryName);
     }
 
-    public void insertNewDiscount(int productID, Date startDate, Date endDate, int amount, Type t){
+    public void insertNewDiscount(String productID, Date startDate, Date endDate, int amount, Type t){
         stockController.insertNewDiscount(productID, startDate, endDate, amount, t);
     }
 
-    public void insertNewPurchase(Date purchaseDate, Map<Integer, Map<Integer, Integer>> products){
+    public void insertNewPurchase(Date purchaseDate, Map<String, Map<Integer, Integer>> products){
         stockController.insertNewPurchase(purchaseDate, products);
     }
 
-    public void deleteProduct(int productID){
+    public void deleteProduct(String productID){
         stockController.deleteProduct(productID);
     }
 
@@ -105,7 +105,7 @@ public class Branch {
         stockController.deletePurchase(purchaseID);
     }
 
-    public void deleteItem(int productID,int itemID) throws Exception
+    public void deleteItem(String productID,int itemID) throws Exception
     {
         stockController.deleteItem(productID, itemID);
     }

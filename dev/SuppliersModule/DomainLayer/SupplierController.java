@@ -2,19 +2,28 @@ package SuppliersModule.DomainLayer;
 
 import DAL.DAOS.StockObjects.ProductDao;
 import DAL.DAOS.SupplierObjects.SupplierDao;
+import StockModule.BusinessLogicLayer.StockController;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class SupplierController {
+    private static SupplierController sc = null;
     private final SupplierDao sDao;
     private final ProductDao pDao;
-    private final OrderController oc = OrderController.getInstance();
+    private OrderController oc;
 
-    public SupplierController(){
+    private SupplierController(){
         sDao = new SupplierDao();
         pDao = new ProductDao();
-        oc.registerSuppliers(this);
-        sDao.getAll();
+        //sDao.getAll();
+        oc = OrderController.getInstance();
+    }
+
+    public static SupplierController getInstance(){
+        if (sc == null)
+            sc = new SupplierController();
+        return sc;
     }
 
     // getters

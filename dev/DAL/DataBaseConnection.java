@@ -11,15 +11,17 @@ public class DataBaseConnection {
     private String[] supplyTimes = {"supplier_id", "daysOfDelivery", "maxDeliveryDuration", "orderCycle", "daysAcc"};
     private String[] contacts = {"supplier_id", "contactName", "phoneNum"};
     private String[] product_order = {"supplier_id", "product_id", "order_id", "quantity", "discount", "finalPrice", "catalogPrice"};
-    private String[] products = {"product_id", "name", "manufacturer", "amountToNotify", "categoryID", "supplyTime", "demand"};
+    private String[] products = {"product_id", "name", "manufacturer", "amountToNotify", "categoryID", "demand"};
     private String[] product_contract = {"supplier_id", "product_id", "price", "is_periodic_order", "catalogNum"};
     private String[] quantityAgreements = {"supplier_id", "product_id", "quantity", "discount"};
     private String[] discounts = {"discount_id", "product_id", "discountStartDate", "discountEndDate", "discountAmount", "discountType"};
     private String[] orders = {"supplier_id", "id", "date", "contactPhone", "supName", "supAddress"};
     private String[] items = {"product_id", "location", "expireDate", "isDefect", "isExpired", "amount"};
     private String[] discount_product = {"discount_id", "quantity", "discount"};
-    private String[] category = {"category_id", "name", "parentCategory", "subCategories"};
+    private String[] category = {"category_id", "name"};
+    private String[] categoryRelation = {"ParentId", "ChildId"};
     private String[] product_category = {"product_id", "category_id"};
+
 
     // add other strings
     private final Map<String, String[]> tablesWithParams = new HashMap<String, String[]>() {{
@@ -43,6 +45,7 @@ public class DataBaseConnection {
         put("Discount_Product", discount_product);
 
         put("Category", category);
+        put("CategoryRelations", categoryRelation);
 
         put("Product_Category", product_category);
     }};

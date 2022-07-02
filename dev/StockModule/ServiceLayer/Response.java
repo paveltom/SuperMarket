@@ -14,7 +14,7 @@ public class Response
         this.ErrorMessage = msg;
     }
 
-    public Boolean ErrorOccured()
+    public Boolean ErrorOccurred()
     {
         return !ErrorMessage.equals("");
     }

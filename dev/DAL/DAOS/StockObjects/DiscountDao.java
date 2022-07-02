@@ -1,18 +1,25 @@
 package DAL.DAOS.StockObjects;
 
+import DAL.DAOS.DAO;
 import StockModule.BusinessLogicLayer.Discount;
 import StockModule.BusinessLogicLayer.Item;
+import StockModule.BusinessLogicLayer.Type;
 
-public class DiscountDao {
-//    public void insert(Discount d, int amount){
-//        String[] params = {d.getDiscountID(), d.getProductID(), String.valueOf(d.getDiscountStartDate()),
-//                            String.valueOf(d.getDiscountEndDate()), String.valueOf(amount), d.getType()};
-//        insert("Discounts", params);
-//    }
-//    public void delete(Item i){
-//        String[] keys = {"product_id", "location", "expireDate", "isDefect"};
-//        String[] keysVals = {i.getProductID(), i.getLocation(), String.valueOf(i.getExpireDate()),
-//                String.valueOf(i.isDefect())};
-//        delete("Items", keys, keysVals);
-//    }
+public class DiscountDao extends DAO<Discount> {
+    public void insert(Discount d, int amount, Type type){
+        String t = "";
+        if(type.equals(Type.FIXED))
+             t= "1";
+        else  {
+            t="2";
+        }
+        String[] params = {String.valueOf(d.getDiscountID()), d.getProductID(), String.valueOf(d.getDiscountStartDate()),
+                            String.valueOf(d.getDiscountEndDate()), String.valueOf(amount), t};
+        insert("Discounts", params);
+    }
+    public void delete(Discount d){
+        String[] keys = {"discount_id"};
+        String[] keysVals = {String.valueOf(d.getDiscountID())};
+        delete("Discounts", keys, keysVals);
+    }
 }
