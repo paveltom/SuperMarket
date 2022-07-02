@@ -78,7 +78,7 @@ public class Contract {
             throw new IllegalArgumentException("trying to add product with a used catalog number.");
         catalog.add(new CatalogProduct(sId, pId, catalogNum, price));
     }
-    public boolean removeProduct(String pId) {  //TODO change functionality to delete supplier when when reached 0 catalog product
+    public boolean removeProduct(String pId) {
         catalog.removeIf(catalogProduct -> catalogProduct.getId().equals(pId));
         qa.removeProduct(pId);
         return catalog.isEmpty();

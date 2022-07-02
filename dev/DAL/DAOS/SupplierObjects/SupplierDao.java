@@ -25,7 +25,7 @@ public class SupplierDao extends DAO {
     public void insert(Supplier s){
         String[] params = {s.getsId(), s.getName(), s.getAddress(), s.getBankAccount(),
                 String.valueOf(s.hasCashPayment()), String.valueOf(s.hasCreditPayment()),
-                String.valueOf(s.hasDeliveryService())};
+                String.valueOf(true)}; //todo : delete this has delivery service field
         insert("Suppliers", params);
         suppliersIdentityMap.cache(s);
     }
@@ -40,7 +40,7 @@ public class SupplierDao extends DAO {
     public void setDeliveryService(Supplier s){
         String[] keys = {"supplier_id"};
         String[] keysVals = {s.getsId()};
-        update("Suppliers", keys, keysVals, "deliveryService", String.valueOf(s.hasDeliveryService()));
+        update("Suppliers", keys, keysVals, "deliveryService", String.valueOf(true)); // todo : delete this has delivery service field
     }
 
     public List<Supplier> getAll(){

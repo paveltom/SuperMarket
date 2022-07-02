@@ -28,17 +28,18 @@ public class SupplierController {
 
     // getters
     public List<Supplier> getSuppliers() {return sDao.getAll();}
+    public Supplier getSupplier(String sId){
+        List<Supplier> matchedSupp = getSuppliers().stream().filter(supplier -> supplier.getsId().equals(sId)).collect(Collectors.toList());
+        if(matchedSupp.isEmpty())
+            throw new IllegalArgumentException("there is no supplier with that id");
+        return matchedSupp.get(0);
+    }
     public Contract getContract(String sId){return sDao.get(sId).getContract();}
     public List<CatalogProduct> getCatalog(String sId){return sDao.get(sId).getCatalog();}
     public QuantityAgreement getQa(String sId) {return sDao.get(sId).getQuantityAgreement();}
     public boolean[] getSupplyDays(String sId) {return sDao.get(sId).getSupplyDays();}
     public int getSupplyMaxDays(String sId) {return sDao.get(sId).getMaxSupplyDays();}
     public int getSupplyCycle(String sId){return sDao.get(sId).getSupplyCycle();}
-    public boolean hasDeliveryService(String sId) {
-//        checkSupplier(sId);
-//        return getSupplier(sId).hasDeliveryService();
-        return sDao.get(sId).hasDeliveryService();
-    }
 
     //  setters
     public void setMaxSupplyDays(String sId, int maxSupplyDays) {
@@ -49,9 +50,6 @@ public class SupplierController {
         for (String pId : products) {
             updateBestSeller(pId);
         }
-    }
-    public void setDeliveryService(String sId, boolean deliveryService) {
-        sDao.get(sId).setDeliveryService(deliveryService);
     }
 
     //  order methods
@@ -94,9 +92,9 @@ public class SupplierController {
             throw new IllegalArgumentException("supplier with id " + sId + " already exist!");
         // TODO if(pdm.getProduct())
         //    throw new IllegalArgumentException("no such product in stock system, first add product at stock");
-        getSuppliers().add(new Supplier(sId, name, address, bankAccount, cash, credit,
+        new Supplier(sId, name, address, bankAccount, cash, credit,
                 contactName, phoneNum, supplyDays, maxSupplyDays,
-                supplCycle, deliveryService, pId, catNumber, price));
+                supplCycle, pId, catNumber, price);
 
         updateBestSeller(pId);
     }
@@ -166,12 +164,6 @@ public class SupplierController {
                 return true;
         }
         return false;
-    }
-    private Supplier getSupplier(String sId){
-        List<Supplier> matchedSupp = getSuppliers().stream().filter(supplier -> supplier.getsId().equals(sId)).collect(Collectors.toList());
-        if(matchedSupp.isEmpty())
-            throw new IllegalArgumentException("there is no supplier with that id");
-        return matchedSupp.get(0);
     }
     private void checkSupplier(String sId){
         if(!hasSupp(sId))
