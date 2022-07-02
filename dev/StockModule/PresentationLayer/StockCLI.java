@@ -124,7 +124,7 @@ public class StockCLI {
                 }
                 case "2": {
                     System.out.print("Enter product ID to remove : ");
-                    if (!s.deleteProduct(toRead.nextInt()).ErrorOccurred())
+                    if (!s.deleteProduct(toRead.next()).ErrorOccurred())
                         System.out.print("Product removed successfully.");
                     break;
                 }
@@ -173,7 +173,7 @@ public class StockCLI {
                 }
                 case "1": {
                     System.out.println("Enter ID of product of item to add : ");
-                    int ProductIDAddItem = toRead.nextInt();
+                    String ProductIDAddItem = toRead.next();
                     System.out.println("Enter location of item : ");
                     String Location = toRead.next();
                     System.out.println("Enter expire date : ");
@@ -199,7 +199,7 @@ public class StockCLI {
                 }
                 case "2": {
                     System.out.println("Enter product ID : ");
-                    int ProductIDRemoveItem = toRead.nextInt();
+                    String ProductIDRemoveItem = toRead.next();
                     System.out.println("Enter item ID : ");
                     int ItemID = toRead.nextInt();
                     System.out.println(s.deleteItem(ProductIDRemoveItem, ItemID).ErrorMessage);
@@ -243,7 +243,7 @@ public class StockCLI {
                 }
                 case "8": {
                     System.out.println("Enter ProductID of the item : ");
-                    int ProductIDReduceItemAmount = toRead.nextInt();
+                    String ProductIDReduceItemAmount = toRead.next();
                     System.out.println("Enter ID of the item : ");
                     int itemID = toRead.nextInt();
                     System.out.println("Enter how much do you want to reduce : ");
@@ -262,6 +262,8 @@ public class StockCLI {
     }
 
     public static void runPurchasesMenu(Service s, Scanner toRead) {
+        System.out.println("Not available :(");
+        /*
         System.out.println(ANSI_WHITE_BACKGROUND+"Purchases Menu :"+ANSI_RESET);
         System.out.println("Choose your action : ");
         System.out.println("0 - Back to previous menu");
@@ -311,7 +313,11 @@ public class StockCLI {
             }
             System.out.println("Invalid input, try again");
         }
+
+         */
     }
+
+
 
     public static void runDiscountsMenu(Service s,Scanner toRead) {
         System.out.println(ANSI_WHITE_BACKGROUND+"Discounts Menu :"+ANSI_RESET);
@@ -333,7 +339,7 @@ public class StockCLI {
                 }
                 case "2": {
                     System.out.println("Enter ID of product to add discount to : ");
-                    int ProductID = toRead.nextInt();
+                    String ProductID = toRead.next();
                     System.out.println("Enter start date of discount : ");
                     System.out.println("Year :");
                     int yearAddDiscount = toRead.nextInt();
