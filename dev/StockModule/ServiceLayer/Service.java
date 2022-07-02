@@ -55,12 +55,12 @@ public class Service
         return scs.insertNewProduct(productName,productManufacturer,categoryID,supplyTime,demand);
     }
 
-    public Response insertNewItem( int productID, String location, Date expireDate, boolean isUsable, int amount){
+    public Response insertNewItem(String productID, String location, Date expireDate, boolean isUsable, int amount){
         return scs.insertNewItem(productID,location,expireDate,isUsable,amount);
 
     }
 
-    public Response reduceItemAmount(int productID,int itemID,int amountToReduce)
+    public Response reduceItemAmount(String productID,int itemID,int amountToReduce)
     {
         return scs.reduceItemAmount(productID, itemID, amountToReduce);
     }
@@ -69,15 +69,18 @@ public class Service
         return scs.insertNewCategory(categoryName);
     }
 
-    public Response insertNewDiscount( int productID, Date startDate, Date endDate, int amount, Type t){
+    public Response insertNewDiscount( String productID, Date startDate, Date endDate, int amount, Type t){
         return scs.insertNewDiscount(productID, startDate, endDate, amount, t);
     }
 
+    /*
     public Response insertNewPurchase( Date purchaseDate, Map<Integer, Map<Integer, Integer>> products){
         return scs.insertNewPurchase(purchaseDate, products);
     }
+    */
 
-    public Response deleteProduct( int productID){
+
+    public Response deleteProduct( String productID){
         return scs.deleteProduct(productID);
     }
 
@@ -89,11 +92,12 @@ public class Service
         return scs.deleteDiscount(discountID);
     }
 
+    /*
     public Response deletePurchase( int purchaseID){
         return scs.deletePurchase(purchaseID);
     }
-
-    public Response deleteItem( int productID,int itemID){
+    */
+    public Response deleteItem( String productID,int itemID){
         return scs.deleteItem(productID,itemID);
     }
 
@@ -120,39 +124,21 @@ public class Service
         insertNewCategory( "Milk");
         insertNewCategory( "Drinks");
 
-        insertNewCategory( "Electricity");
-        insertNewCategory( "Milk");
-        insertNewCategory( "Drinks");
-
         insertNewProduct( "Dark Chocolate 60%", "Strauss", 1, new Date(2020,2,2), 40);
         insertNewProduct( "Milk Chocolate", "Strauss", 1, new Date(2001, 1, 25), 40);
         insertNewProduct( "Batteries AA", "GP Ultra", 0, new Date(2004, 5, 14), 65);
         insertNewProduct( "Orange juice", "Primor", 2, new Date(2014, 7, 30), 65);
 
-        insertNewProduct( "Dark Chocolate 60%", "Strauss", 1, new Date(2020,2,2), 40);
-        insertNewProduct( "Milk Chocolate", "Strauss", 1, new Date(2001, 1, 25), 40);
-        insertNewProduct( "Batteries AA", "GP Ultra", 0, new Date(2004, 5, 14), 65);
-        insertNewProduct( "Orange juice", "Primor", 2, new Date(2014, 7, 30), 65);
+        insertNewItem( "Dark Chocolate 60%Strauss", "L5A4", new Date(2021, 4, 5), false, 30);
+        insertNewItem( "Dark Chocolate 60%Strauss", "L2A17", new Date(2022, 4, 5), true, 42);
+        insertNewItem( "Milk ChocolateStrauss", "L6A8", new Date(2022, 4, 15), true, 50);
+        insertNewItem( "Batteries AAGP Ultra", "L1A2", new Date(2022, 2, 3), true, 130);
+        insertNewItem( "Orange juicePrimor", "L9A4", new Date(2022, 1, 15), false, 280);
 
-        insertNewItem( 0, "L5A4", new Date(2021, 4, 5), false, 30);
-        insertNewItem( 0, "L2A17", new Date(2022, 4, 5), true, 42);
-        insertNewItem( 1, "L6A8", new Date(2022, 4, 15), true, 50);
-        insertNewItem( 2, "L1A2", new Date(2022, 2, 3), true, 130);
-        insertNewItem( 3, "L9A4", new Date(2022, 1, 15), false, 280);
-
-
-        insertNewItem( 0, "L5A4", new Date(2021, 4, 5), false, 30);
-        insertNewItem( 0, "L2A17", new Date(2022, 4, 5), true, 42);
-        insertNewItem( 1, "L6A8", new Date(2022, 4, 15), true, 50);
-        insertNewItem( 2, "L1A2", new Date(2022, 2, 3), true, 130);
-        insertNewItem( 3, "L9A4", new Date(2022, 1, 15), false, 280);
-
-        insertNewDiscount( 3, new Date(2022, 4, 3), new Date(2022, 5, 3), 30, Type.PERCENT);
-        insertNewDiscount( 3, new Date(2022, 4, 3), new Date(2022, 5, 3), 30, Type.PERCENT);
+        insertNewDiscount( "Orange juicePrimor", new Date(2022, 4, 3), new Date(2022, 5, 3), 30, Type.PERCENT);
+        insertNewDiscount( "Orange juicePrimor", new Date(2022, 4, 3), new Date(2022, 5, 3), 30, Type.PERCENT);
 
         Map<Integer, Map<Integer, Integer>> products = (Map<Integer, Map<Integer, Integer>>) new HashMap<>().put(2, new HashMap<>().put(30, 25));
-        insertNewPurchase( new Date(2022, 4, 25), products);
-        insertNewPurchase( new Date(2022, 4, 25), products);
-        insertNewPurchase( new Date(2022, 4, 26), products);
+
     }
 }
