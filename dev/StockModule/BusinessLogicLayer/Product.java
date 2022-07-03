@@ -30,7 +30,7 @@ public class Product {
         this.demand = demand;
         this.items = new LinkedList<>();
 
-        dao.insert(this); //todo add wight to dao
+        dao.insert(this);
     }
 
     //db
@@ -141,7 +141,7 @@ public class Product {
 
     public void setWeight(double weight) {
         this.weight = weight;
-        //dao.setWeight(this); //todo:dao
+        //dao.setWeight(this); //todo
     }
 
     public void setAmount(int amount) {
@@ -173,8 +173,8 @@ public class Product {
         this.dao = dao;
     }
 
-    public String getAttributesString(){
-        return ".0. ID "+"\n"+".1. Name"+"\n"+".2. Manufacturer"+"\n"+ ".3. Amount"+"\n"+".4. AmountToNotify"+"\n"+ ".5. CategoryID"+"\n"+ ".6. Demand";
+    public static String getAttributesString(){
+        return ".0. ID "+"\n"+".1. Name"+"\n"+".2. Manufacturer"+"\n"+ ".3. Amount"+"\n"+".4. AmountToNotify"+"\n"+ ".5. CategoryID"+"\n"+ ".6. Demand"+"\n"+".7. Weight";
     }
 
     public boolean updateAttributes(int Attribute, Object Value){

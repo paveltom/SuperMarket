@@ -135,6 +135,7 @@ public class StockCLI {
                     System.out.println("Enter product to edit : ");
                     String productID = toRead.next();
                     System.out.println("Choose Attribute to Edit : ");
+                    System.out.println(s.getProductAttributes());
                     int attribute = toRead.nextInt();
                     System.out.println("Enter new value : ");
                     Object value = toRead.next();
