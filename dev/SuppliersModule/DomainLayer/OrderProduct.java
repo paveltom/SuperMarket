@@ -61,6 +61,7 @@ public class OrderProduct {
         if(catalogPrice <= 0 )
             throw new IllegalArgumentException("price of product must be positive");
 
+
         dao = new OrderProductDao();
         this.oId = oId;
         this.sId = sId;
@@ -80,6 +81,8 @@ public class OrderProduct {
             throw new IllegalArgumentException("price of product must be positive");
 
         dao = new OrderProductDao();
+        this.sId = sId;
+        this.oId = oId;
         this.id = id;
         this.catalogPrice = catalogPrice;
         this.amount = amount;
