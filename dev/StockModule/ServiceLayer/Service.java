@@ -51,8 +51,8 @@ public class Service
         return scs.getExpiredItemsReport();
     }
 
-    public Response insertNewProduct( String productName, String productManufacturer,int amountToNotify,int categoryID, int demand){
-        return scs.insertNewProduct(productName,productManufacturer,amountToNotify,categoryID,demand);
+    public Response insertNewProduct( String productName, String productManufacturer,double weight,int amountToNotify,int categoryID, int demand){
+        return scs.insertNewProduct(productName,productManufacturer,weight,amountToNotify,categoryID,demand);
     }
 
     public Response insertNewItem(String productID, String location, Date expireDate, boolean isUsable, int amount){
@@ -124,10 +124,10 @@ public class Service
         insertNewCategory( "Milk");
         insertNewCategory( "Drinks");
 
-        insertNewProduct( "Dark Chocolate 60%", "Strauss",25,1, 40);
-        insertNewProduct( "Milk Chocolate", "Strauss", 25,1,  40);
-        insertNewProduct( "Batteries AA", "GP Ultra", 40,0,  65);
-        insertNewProduct( "Orange juice", "Primor", 40,2,  65);
+        insertNewProduct( "Dark Chocolate 60%", "Strauss",0.1,25,1, 40);
+        insertNewProduct( "Milk Chocolate", "Strauss", 0.1,25,1,  40);
+        insertNewProduct( "Batteries AA", "GP Ultra", 0.05,40,0,  65);
+        insertNewProduct( "Orange juice", "Primor", 0.25,40,2,  65);
 
         insertNewItem( "Dark Chocolate 60%Strauss", "L5A4", new Date(2021, 4, 5), false, 30);
         insertNewItem( "Dark Chocolate 60%Strauss", "L2A17", new Date(2022, 4, 5), true, 42);

@@ -6,10 +6,7 @@ import SuppliersModule.DomainLayer.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SupplierDao extends DAO {
 
@@ -24,8 +21,7 @@ public class SupplierDao extends DAO {
 
     public void insert(Supplier s){
         String[] params = {s.getsId(), s.getName(), s.getAddress(), s.getBankAccount(),
-                String.valueOf(s.hasCashPayment()), String.valueOf(s.hasCreditPayment()),
-                String.valueOf(true)}; //todo : delete this has delivery service field
+                String.valueOf(s.hasCashPayment()), String.valueOf(s.hasCreditPayment()), Arrays.toString(s.getWorkingDays())};
         insert("Suppliers", params);
         suppliersIdentityMap.cache(s);
     }
@@ -37,12 +33,6 @@ public class SupplierDao extends DAO {
         suppliersIdentityMap.remove(s);
     }
 
-    public void setDeliveryService(Supplier s){
-        String[] keys = {"supplier_id"};
-        String[] keysVals = {s.getsId()};
-        update("Suppliers", keys, keysVals, "deliveryService", String.valueOf(true)); // todo : delete this has delivery service field
-    }
-
     public List<Supplier> getAll(){
         if(!isAllLoaded) {
 
@@ -51,6 +41,8 @@ public class SupplierDao extends DAO {
 
             if(st != null) {
                 for (String[] s : st) { //todo add working days
+                    boolean[] workDs = new boolean[7];
+
                     Supplier sup = new Supplier(s[0], s[2], s[3], s[1], null, Boolean.valueOf(s[4]), Boolean.valueOf(s[5]));
                     suppliersIdentityMap.cache(sup);
                     output.add(0, sup);
@@ -90,14 +82,13 @@ public class SupplierDao extends DAO {
         return makeSupplyTimeFromDB(st.get(0));
     }
     private SupplyTime makeSupplyTimeFromDB(String[] s){
-        String[] splitDaysOfDelivery = s[1].substring(1, s[1].length()-1).split(", ");
-        boolean[] daysOfDelivery = new boolean[7];
+        String[] splitOrderDyas = s[1].substring(1, s[1].length()-1).split(", ");
+        boolean[] orderDays = new boolean[7];
         for(int i = 0; i < 7; i++){
-            daysOfDelivery[i] = Boolean.valueOf(splitDaysOfDelivery[i]);
+            orderDays[i] = Boolean.valueOf(splitOrderDyas[i]);
         }
 
-        // todo: exclude maxDeliveryDay from dal
-        return new SupplyTime(s[0], daysOfDelivery, Integer.valueOf(s[3]), Integer.valueOf(s[4]));
+        return new SupplyTime(s[0], orderDays, Integer.valueOf(s[2]), Integer.valueOf(s[3]));
     }
 
     public List<CatalogProduct> getCatalogProductsFromDB(Supplier s){

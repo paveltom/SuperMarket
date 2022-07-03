@@ -61,7 +61,9 @@ public class Supplier {
         contacts.remove(name);
         sDao.removeContact(sId, name);
     }
-    public void changeWeeklyOrdering(boolean[] days) {contract.changeWeeklyOrdering(days);}
+    public void changeWeeklyOrdering(boolean[] days) {
+        contract.changeWeeklyOrdering(days);
+    }
 
     // constructor
     public Supplier(String sId, String name, String address, String bankAccount, boolean cash, boolean credit, boolean[] workingDays,

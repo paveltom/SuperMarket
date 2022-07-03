@@ -10,6 +10,7 @@ public class Product {
     private String ID;
     private String name;
     private String manufacturer;
+    private double weight;
     private int amount;
     private int amountToNotify;
     private int categoryID;
@@ -17,12 +18,12 @@ public class Product {
     private List<Item> items;
     private ProductDao dao;
 
-    public Product(String name, String manufacturer, int amountToNotify, int categoryID, int demand)
-    {
+    public Product(String name, String manufacturer,double weight, int amountToNotify, int categoryID, int demand) {
         dao = new ProductDao();
-        this.ID = (name+manufacturer);
+        this.ID = (name + manufacturer);
         this.name = name;
         this.manufacturer = manufacturer;
+        this.weight = weight;
         this.amount = 0;
         this.amountToNotify = amountToNotify;
         this.categoryID = categoryID;
@@ -33,12 +34,12 @@ public class Product {
     }
 
     //db
-    public Product(String name, String manufacturer, int amountToNotify,  int categoryID, int demand, boolean isFromDB)
-    {
+    public Product(String name, String manufacturer,double weight, int amountToNotify,  int categoryID, int demand, boolean isFromDB) {
         this.dao = new ProductDao();
-        this.ID = name+manufacturer;
+        this.ID = name + manufacturer;
         this.name = name;
         this.manufacturer = manufacturer;
+        this.weight = weight;
         this.amount = 0;
         this.amountToNotify = amountToNotify;
         this.categoryID = categoryID;
@@ -49,8 +50,8 @@ public class Product {
     }
 
 
-    public String toString(){
-        return "Product Name : " + name + " , Manufacturer : " + manufacturer + " , Amount : " + amount + " , Category ID : " + categoryID + " , Demand : " + demand+ "\n";
+    public String toString() {
+        return "Product ID : " + ID + " , Product Name : " + name + " , Manufacturer : " + manufacturer + " , Weight : " + weight + " , Amount : " + amount + " , Category ID : " + categoryID + " , Demand : " + demand + "\n";
     }
 
     /**
@@ -70,6 +71,7 @@ public class Product {
     public int getAmount(){return amount;}
     public int getAmountToNotify(){return amountToNotify;}
     public String getManufacturer(){return manufacturer;}
+    public double getWeight(){return weight;};
     public String getName(){return name;}
     public List<Item> getItems(){
         return items;
@@ -135,6 +137,12 @@ public class Product {
     public void setManufacturer(String manufacturer) {
         this.manufacturer = manufacturer;
         dao.setManufacturer(this);
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
+        //todo
+        //dao.setWeight(this);
     }
 
     public void setAmount(int amount) {
@@ -221,6 +229,13 @@ public class Product {
                     return false;
                 }
 
+            }
+            case 7: {
+                try {
+                    setWeight((double) Value);
+                } catch (Exception e) {
+                    return false;
+                }
             }
         }
         return true;

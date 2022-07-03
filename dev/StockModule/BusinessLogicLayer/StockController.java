@@ -116,8 +116,8 @@ public class StockController {
         return output;
     }
 
-    public void insertNewProduct(String productName, String productManufacturer, int amountToNotify, int categoryID, int demand){
-        new Product(productName, productManufacturer, amountToNotify, categoryID, demand);
+    public void insertNewProduct(String productName, String productManufacturer,double weight, int amountToNotify, int categoryID, int demand){
+        new Product(productName, productManufacturer,weight, amountToNotify, categoryID, demand);
     }
 
     public void setSubCategory(int subCategoryID,int parentID){

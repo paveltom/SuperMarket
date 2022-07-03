@@ -115,6 +115,8 @@ public class Contract {
         return qa.getDiscounts(pId);
     }
     public float getDiscount(String pId, int amount) {
+        if(getQa() == null)
+            return 0;
         return qa.getDiscount(pId, amount);
     }
     public Map<String, Map<Integer, Float>> getDiscount() {
