@@ -131,12 +131,12 @@ public class SupplierController {
     }
     public void updateProductPrice(String sId, String pId, float price) {
         sDao.get(sId).updateProductPrice(pId, price);
+        updateBestSeller(pId);
     }
     
     // Quantity Agreement methods
     public void updateDiscount(String sId, String pId, int quantity, float discount){
         sDao.get(sId).updateDiscount(pId, quantity, discount);
-        updateBestSeller(pId);
     }
     public Map<Integer, Float> getDiscounts(String sId, String pId){
         return sDao.get(sId).getDiscounts(pId);
@@ -178,20 +178,24 @@ public class SupplierController {
 
     private void updateBestSeller(String pId) {
         List<Supplier> providers = getSuppliers(pId);
-        Map<Supplier, Integer> suppQuantities = new HashMap<>();
+        Map<Supplier, Float> suppPrices = new HashMap<>();
         for(Supplier s : providers){
-            suppQuantities.put(s, oc.getQuantity(pId, s.getPeriodicOrderInterval()));
+            suppPrices.put(s, s.getContract().getCatalogPrice(pId));
         }
 
-        Supplier bestSupp = null;
-        float bestDiscount = -1;
-        for (Map.Entry<Supplier, Integer> entry : suppQuantities.entrySet()){
-            float currentDiscount = entry.getKey().getContract().getDiscount(pId, entry.getValue());
-            if(currentDiscount > bestDiscount){
+        if(suppPrices.isEmpty())
+            return;
+
+        Map.Entry<Supplier, Float> random = suppPrices.entrySet().stream().findAny().get();
+        Supplier bestSupp = random.getKey();
+        float bestPrice = random.getValue();
+        for (Map.Entry<Supplier, Float> entry : suppPrices.entrySet()){
+            if(entry.getValue() < bestPrice){
                 bestSupp = entry.getKey();
-                bestDiscount = currentDiscount;
+                bestPrice = entry.getValue();
             }
         }
+
         if(bestSupp != null){
             for(Supplier s : providers){
                 s.getContract().updatePeriodicOrderProduct(pId, false);
