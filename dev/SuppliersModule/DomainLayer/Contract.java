@@ -165,7 +165,8 @@ public class Contract {
             removeProduct(cp.getId());
         }
         supplyTime.delete();
-        qa.delete();
+        if(qa != null)
+            qa.delete();
     }
 }
 

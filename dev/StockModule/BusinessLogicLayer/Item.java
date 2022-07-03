@@ -172,4 +172,7 @@ public class Item {
         return true;
     }
 
+    public void delete(){
+        dao.delete(this);
+    }
 }
