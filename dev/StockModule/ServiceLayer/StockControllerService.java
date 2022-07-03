@@ -116,13 +116,11 @@ public class StockControllerService
         }
     }
 
-    //todo : update arguments
-    public Response insertNewProduct(String productName, String productManufacturer, int categoryID, Date supplyTime, int demand)
+    public Response insertNewProduct(String productName, String productManufacturer,int amountToNotify, int categoryID, int demand)
     {
         try
         {
-            //change 0
-            sc.insertNewProduct(productName, productManufacturer, categoryID, 0, demand);
+            sc.insertNewProduct(productName, productManufacturer, amountToNotify, categoryID, demand);
             return new Response();
         } catch (Exception e)
         {
