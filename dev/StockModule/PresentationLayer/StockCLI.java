@@ -29,9 +29,8 @@ public class StockCLI {
             System.out.println("1 - Load data");
             System.out.println("2 - Products");
             System.out.println("3 - Items");
-            System.out.println("4 - Purchases");
-            System.out.println("5 - Discounts");
-            System.out.println("6 - Categories");
+            System.out.println("4 - Discounts");
+            System.out.println("5 - Categories");
             System.out.println("9 - Exit stock module");
             message = toRead.next();
             Protocol(message, s, toRead);
@@ -58,14 +57,10 @@ public class StockCLI {
             }
 
             case "4": {
-                runPurchasesMenu(s, toRead);
-            }
-
-            case "5": {
                 runDiscountsMenu(s, toRead);
             }
 
-            case "6": {
+            case "5": {
                 runCategoriesMenu(s, toRead);
             }
 
@@ -269,63 +264,6 @@ public class StockCLI {
         }
 
     }
-
-    public static void runPurchasesMenu(Service s, Scanner toRead) {
-        System.out.println("Not available :(");
-        /*
-        System.out.println(ANSI_WHITE_BACKGROUND+"Purchases Menu :"+ANSI_RESET);
-        System.out.println("Choose your action : ");
-        System.out.println("0 - Back to previous menu");
-        System.out.println("1 - Show purchases history report");
-        System.out.println("2 - Insert new purchase");
-        System.out.println("3 - Delete purchase");
-        System.out.println("9 - Exit stock module");
-        String msg = toRead.next();
-        while (true) {
-            switch (msg) {
-                case "0": {
-                    break;
-                }
-                case "1": {
-                    System.out.println("s.getPurchasesHistoryReport().Value");
-                    break;
-                }
-                case "2": {
-                    System.out.println("Enter date of purchase : ");
-                    System.out.println("Year :");
-                    int yearAddPurchase = toRead.nextInt();
-                    System.out.println("Month :");
-                    int monthAddPurchase = toRead.nextInt();
-                    System.out.println("Day :");
-                    int dayAddPurchase = toRead.nextInt();
-                    System.out.println("Enter product ID : ");
-                    int productID = toRead.nextInt();
-                    System.out.println("Enter fixed price of product : ");
-                    int fixedPrice = toRead.nextInt();
-                    System.out.println("Enter actual price of product : ");
-                    int actualPrice = toRead.nextInt();
-                    Map<Integer, Map<Integer, Integer>> products = (Map<Integer, Map<Integer, Integer>>) new HashMap<>().put(productID, new HashMap<>().put(fixedPrice, actualPrice));
-                    if (!s.insertNewPurchase(new Date(yearAddPurchase, monthAddPurchase - 1, dayAddPurchase), products).ErrorOccurred())
-                        System.out.print("Added purchase successfully.");
-                    break;
-                }
-                case "3": {
-                    System.out.println("Enter purchase ID to remove : ");
-                    if (!s.deletePurchase(toRead.nextInt()).ErrorOccurred())
-                        System.out.print("Removed purchase successfully.");
-                    break;
-                }
-                case "9": {
-                    ExitStockModule();
-                    break;
-                }
-            }
-            System.out.println("Invalid input, try again");
-        }
-
-         */
-    }
-
 
     public static void runDiscountsMenu(Service s, Scanner toRead) {
         System.out.println(ANSI_WHITE_BACKGROUND + "Discounts Menu :" + ANSI_RESET);
