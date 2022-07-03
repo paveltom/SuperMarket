@@ -26,6 +26,7 @@ public class CatalogProductDao extends DAO {
     }
 
     public void setInPeriodicOrder(CatalogProduct cp){
+        //todo fixing bag, data isn't saved
         setAttribute(cp, "is_periodic_order", String.valueOf(cp.isInPeriodicOrder()));
     }
 
