@@ -27,13 +27,13 @@ public class Service implements IService{
     }
 
 
-    public ResponseT<String> deliver(FacadeSite origin, FacadeSite destination, String orderId, List<FacadeProduct> facProducts, FacadeDate facSubDate){
-        return deliveryService.deliver(origin, destination, orderId, facProducts, facSubDate);
-    }
-
-    public ResponseT<Receipt> deliver(FacadeSite origin, FacadeSite destination, String orderId, List<FacadeProduct> facProducts, FacadeDate facSubDate, boolean[] supplierWorkingDays){
+    public ResponseT<String> deliver(FacadeSite origin, FacadeSite destination, String orderId, List<FacadeProduct> facProducts, FacadeDate facSubDate, boolean[] supplierWorkingDays){
         return deliveryService.deliver(origin, destination, orderId, facProducts, facSubDate, supplierWorkingDays);
     }
+
+//    public ResponseT<Receipt> deliver(FacadeSite origin, FacadeSite destination, String orderId, List<FacadeProduct> facProducts, FacadeDate facSubDate, boolean[] supplierWorkingDays){
+//        return deliveryService.deliver(origin, destination, orderId, facProducts, facSubDate, supplierWorkingDays);
+//    }
 
     public ResponseT<String> getDeliveryHistory(){
         return deliveryService.getDeliveryHistory();

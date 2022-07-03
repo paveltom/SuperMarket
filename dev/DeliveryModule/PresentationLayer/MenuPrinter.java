@@ -19,7 +19,7 @@ public class MenuPrinter {
 
     public String takeInput(String outputMsg){
 
-        System.out.println(outputMsg);
+        if(outputMsg.length() > 0) System.out.println(outputMsg);
         String input = null;
         if(scanner.hasNextLine())
             input = scanner.nextLine();

@@ -117,8 +117,7 @@ public class DeliveryController
                 res = pq.poll();
                 if(res.MaxLoadWeight >= cargoWeight)
                     found = true;
-                else
-                    backup.add(res);
+                backup.add(res);
             }
             pq.addAll(backup);
             backup.clear();
@@ -164,64 +163,53 @@ public class DeliveryController
         return null;
     }
 
-    private boolean ExistsTruck(int shippingZoneOrdinal)
+    private Receipt GenerateErrorRecipe(RetCode status, String orderId)
     {
-        for(VehicleLicenseCategory licenseCategory : VehicleLicenseCategory.values())
-        {
-            if(!Trucks[shippingZoneOrdinal][licenseCategory.ordinal()].isEmpty())
-                return true;
-        }
-        return false;
+        Receipt res = new Receipt(status, orderId);
+        Persist(res);
+        return res;
     }
 
-    public Receipt Deliver(DeliveryOrder deliveryOrder)
-    {
+    public Receipt Deliver(DeliveryOrder deliveryOrder) {
         Receipt res;
         String orderId = deliveryOrder.OrderId;
 
-        if(Receipts.containsKey(orderId))
-        {
-            res = new Receipt(RetCode.FailedDelivery_OrderIdExists, orderId);
-            Persist(res);
-            return res;
-        }
+        if (Receipts.containsKey(orderId))
+            return GenerateErrorRecipe(RetCode.FailedDelivery_OrderIdExists, orderId);
 
         double CargoWeight = CalculateDeliveryWeight(deliveryOrder.RequestedProducts);
-        if(CargoWeight > VehicleLicenseCategory.GetMaxLoadWeight())
-        {
-            res = new Receipt(RetCode.FailedDelivery_CargoExceedMaxLoadWeight, orderId);
-            Persist(res);
-            return res;
-        }
+        if (CargoWeight > VehicleLicenseCategory.GetMaxLoadWeight())
+            return GenerateErrorRecipe(RetCode.FailedDelivery_CargoExceedMaxLoadWeight, orderId);
 
         // license category with permission to deliver CargoWeight
         int matchingLicenseOrdinal = VehicleLicenseCategory.FindLicense(CargoWeight).ordinal();
         int shippingZoneOrdinal = deliveryOrder.Supplier.Zone.ordinal();
 
-        Driver selectedDriver = GetAvailableDriver(shippingZoneOrdinal, matchingLicenseOrdinal);
+        Driver selectedDriver = null;
+        Truck selectedTruck = null, tmpTruck = null;
+        for (; matchingLicenseOrdinal < NLICENSES; matchingLicenseOrdinal++)
+        {
+            if(!Drivers[shippingZoneOrdinal][matchingLicenseOrdinal].isEmpty()) // exists driver
+                selectedDriver = Drivers[shippingZoneOrdinal][matchingLicenseOrdinal].peek();
+            tmpTruck = GetAvailableTruck(shippingZoneOrdinal, matchingLicenseOrdinal, CargoWeight);
+            if(tmpTruck != null) // exists truck
+                selectedTruck = tmpTruck;
+            if(selectedDriver != null && selectedTruck != null && selectedDriver.License.ordinal() >= selectedTruck.AuthorizedLicense.ordinal())
+                break;
+        }
+
         if(selectedDriver == null)
-        {
-            res = new Receipt(RetCode.FailedDelivery_NoAvailableDriver, orderId);
-            Persist(res);
-            return res;
-        }
+            return GenerateErrorRecipe(RetCode.FailedDelivery_NoAvailableDriver, orderId);
 
-        Truck selectedTruck = GetAvailableTruck(shippingZoneOrdinal, selectedDriver.License.ordinal(), CargoWeight);
-        if(selectedTruck == null) // no available truck at the specified shipping zone
-        {
-            res = new Receipt(RetCode.FailedDelivery_NoAvailableTruck, orderId);
-            Drivers[shippingZoneOrdinal][selectedDriver.License.ordinal()].add(selectedDriver);
-            Persist(res);
-            return res;
-        }
+        if(selectedTruck == null)
+            return GenerateErrorRecipe(RetCode.FailedDelivery_NoAvailableTruck, orderId);
 
-        if(selectedTruck.MaxLoadWeight < CargoWeight) // cargo exceeds max load weight of all truck at the specified shipping zone
-        {
-            res = new Receipt(RetCode.FailedDelivery_CargoExceedMaxLoadWeight, orderId);
-            Drivers[shippingZoneOrdinal][selectedDriver.License.ordinal()].add(selectedDriver);
-            Persist(res);
-            return res;
-        }
+        if(selectedDriver.License.ordinal() < selectedTruck.AuthorizedLicense.ordinal())
+            return GenerateErrorRecipe(RetCode.FailedDelivery_NoCertifiedDriver, orderId);
+
+        if(selectedTruck.MaxLoadWeight < CargoWeight) // cargo exceeds max load weight of ALL truck at the specified shipping zone
+            return GenerateErrorRecipe(RetCode.FailedDelivery_CargoExceedMaxLoadWeight, orderId);
+
 
         Date driverDueDate = selectedDriver.Next(deliveryOrder.SubmissionDate, deliveryOrder.SupplierWorkingDays);
         Date truckDueDate = selectedTruck.Next(deliveryOrder.SubmissionDate, deliveryOrder.SupplierWorkingDays);
@@ -231,17 +219,15 @@ public class DeliveryController
         Date submissionDate = deliveryOrder.SubmissionDate;
 
         if(submissionDate.DifferenceBetweenTwoDates(selectedDueDate) > 7)
-        {
-            res = new Receipt(RetCode.FailedDelivery_CannotDeliverWithinAWeek, orderId);
-            Persist(res);
-            return res;
-        }
+            return GenerateErrorRecipe(RetCode.FailedDelivery_CannotDeliverWithinAWeek, orderId);
 
         selectedDriver.SetOccupied(selectedDueDate);
         selectedTruck.SetOccupied(selectedDueDate);
 
         // reinsert selected truck & driver to maintain min heap property
+        Drivers[shippingZoneOrdinal][matchingLicenseOrdinal].poll();
         Drivers[shippingZoneOrdinal][selectedDriver.License.ordinal()].add(selectedDriver);
+        Trucks[shippingZoneOrdinal][selectedTruck.AuthorizedLicense.ordinal()].remove(selectedTruck);
         Trucks[shippingZoneOrdinal][selectedTruck.AuthorizedLicense.ordinal()].add(selectedTruck);
 
         res =  new Receipt(RetCode.SuccessfulDelivery,
