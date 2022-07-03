@@ -6,6 +6,9 @@ import DeliveryModule.Facade.IService;
 import DeliveryModule.Facade.Response;
 import DeliveryModule.Facade.ResponseT;
 import DeliveryModule.Facade.Service;
+import StockModule.BusinessLogicLayer.Product;
+import StockModule.BusinessLogicLayer.StockController;
+
 import java.time.LocalDate;
 import java.util.*;
 
@@ -140,26 +143,31 @@ public class PresentationController {
         operateOutput("-----------Enter product ID and its amount.-----------");
         operateOutput("-----------Enter 0 at any Product Id to FINISH----------");
         operateOutput("-----------Enter 0 at any Amount to CANCEL the delivery order----------");
-        Map<Integer, Integer> products = new HashMap<Integer, Integer>() {{
-            put(123, 1000);
-            put(456, 500);
-            put(789, 100);
-        }};
+//        Map<Integer, Integer> products = new HashMap<Integer, Integer>() {{
+//            put(123, 1000);
+//            put(456, 500);
+//            put(789, 100);
+//        }};
+
+        HashMap<String, Product> productMap = StockController.getInstance().getProductsInStock();
+        String allProducts = "Products: (<ID>: <Product name>) \n";
+        for(Product temp : productMap.values()){
+            allProducts += temp.getID() + ": " + temp.getName() + "; ";
+        }
+        operateOutput(allProducts);
+
         List<FacadeProduct> productList = new ArrayList<>();
-        int productId = -1;
+        String productId = "-1";
         int productAmount = -1;
-        productId = Integer.parseInt(operateInput("Product ID (Milk - 123, Bread - 456, Cheese - 789): "));
+        productId = operateInput("Product ID: ");
 
         // Receiving products parameters
-        while(productId != 0){
-            //double randProductWeight = rand.nextDouble(20000000); //randomized weight of a single product (double-time of a truck's maxLoadWeight)
-            //randProductWeight += 1;
-            //operateOutput("Product weight: " + randProductWeight);
+        while(!productId.equals("0")){
             try {
-                //productId = Integer.parseInt(operateInput("Product ID (Milk - 123, Bread - 456, Cheese - 789): "));
-                while (!products.containsKey(productId)) {
+                while (!productMap.containsKey(productId)) {
                     operateOutput("No such product...");
-                    productId = Integer.parseInt(operateInput("Product ID (Milk - 123, Bread - 456, Cheese - 789): "));
+                    productId = operateInput("Product ID: ");
+                    if(productId.equals("0")) return 0;
                 }
                 productAmount = Integer.parseInt(operateInput("Amount: "));
                 if (productAmount == 0) return 0;
@@ -169,11 +177,11 @@ public class PresentationController {
                     continue;
                 }
 
-                operateOutput("Product weight: " + products.get(productId) + ". Total: " + (products.get(productId)*productAmount));
-                FacadeProduct currProduct = new FacadeProduct(productId, productAmount, products.get(productId));
+                operateOutput("Product weight: " + productMap.get(productId).getWeight() + ". Total: " + (productMap.get(productId).getWeight()*productAmount));
+                FacadeProduct currProduct = new FacadeProduct(productId, productAmount, productMap.get(productId).getWeight());
                 productList.add(currProduct);
                 operateOutput("");
-                productId = Integer.parseInt(operateInput("Product ID (Milk - 123, Bread - 456, Cheese - 789): "));
+                productId = operateInput("Product ID: ");
                 // next loop data
                 //if(productId == 0) break;
             }catch (Exception e){
@@ -466,6 +474,13 @@ public class PresentationController {
         return  res;
     }
 
+    private int getFailedDeliveriesHistory(){
+        ResponseT<String> res = service.getFailedDeliveriesHistory();
+        if(res.getErrorOccurred()) return 1;
+        operateOutput(res.getValue());
+        return 0;
+    }
+
 
     private void setMenus(){
         String[] resourcesMenuStrings = {"Exit", "Back", "Add truck", "Remove truck", "Show all drivers", "Show all trucks", "Get driver by ID", "Get truck by license plate"};
@@ -482,12 +497,13 @@ public class PresentationController {
         resourceMenu = new CallableMenu(resourceOpts, resourcesMenuStrings);
 
 
-        String[] deliveryMenuStrings = {"Exit", "Back", "New delivery", "Show deliveries history", "Cancel delivery", "Show shipping zones"};
+        String[] deliveryMenuStrings = {"Exit", "Back", "New delivery", "Show deliveries history", "Cancel delivery", "Show shipping zones", "Show failed deliveries"};
         Map<Integer, CallableMenu> deliveryOpts = new HashMap<Integer, CallableMenu>(){{
             put(2, new CallableMenu(() -> addDelivery()));
             put(3, new CallableMenu(() -> getDeliveriesHistory()));
             put(4, new CallableMenu(() -> cancelDelivery()));
             put(5, new CallableMenu(() -> showShippingZones()));
+            put(6, new CallableMenu(() -> getFailedDeliveriesHistory()));
         }};
         deliveryMenu = new CallableMenu(deliveryOpts, deliveryMenuStrings);
 

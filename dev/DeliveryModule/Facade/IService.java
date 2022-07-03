@@ -11,6 +11,8 @@ public interface IService {
 
     public ResponseT<String> getDeliveryHistory();
 
+    public ResponseT<String> getFailedDeliveriesHistory();
+
     public Response addDriver(FacadeDriver facadeDriver);
 
     public Response addTruck(FacadeTruck facadeTruck);

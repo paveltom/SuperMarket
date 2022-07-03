@@ -343,7 +343,6 @@ public class DataBaseConnection {
                 "name TEXT, " +
                 "manufacturer TEXT, " +
                 "amountToNotify TEXT, " +
-                "weight TEXT, " +
                 "categoryID TEXT, " +
                 "demand TEXT, " +
                 "weight TEXT, " +
@@ -379,6 +378,13 @@ public class DataBaseConnection {
                 "msg, " +
                 "PRIMARY KEY(order_id));";
 
+        String stockSupSupplyStoreInfo = "CREATE TABLE StoreInfo (" +
+                "ShippingZone, " +
+                "Adress, " +
+                "Phone, " +
+                "Name, " +
+                "PRIMARY KEY(ShippingZone, Adress, Phone));";
+
 
 
 
@@ -411,6 +417,7 @@ public class DataBaseConnection {
             stmt.execute(stockSupSuppliers);
             stmt.execute(stockSupSupplyTimes);
             stmt.execute(stockSupSupplyDeliveryErrors);
+            stmt.execute(stockSupSupplyStoreInfo);
 
             System.out.println("DB and Tables created successfully...");
             stmt.close();

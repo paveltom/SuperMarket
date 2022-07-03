@@ -91,6 +91,15 @@ public class DeliveryService {
         }
     }
 
+    public ResponseT<String> getFailedDeliveriesHistory(){
+        try {
+            return new ResponseT<>(delController.GetFailedDeliveriesHistory(), true);
+        }
+        catch (Exception e){
+            return new ResponseT<>(e.getMessage());
+        }
+    }
+
     public ResponseT<String> cancelDelivery(String deliveryId){
         try {
             delController.CancelDelivery(deliveryId);
