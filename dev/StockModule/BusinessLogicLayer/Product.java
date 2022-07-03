@@ -30,7 +30,7 @@ public class Product {
         this.demand = demand;
         this.items = new LinkedList<>();
 
-        dao.insert(this);
+        dao.insert(this); //todo add wight to dao
     }
 
     //db
@@ -141,8 +141,7 @@ public class Product {
 
     public void setWeight(double weight) {
         this.weight = weight;
-        //todo
-        //dao.setWeight(this);
+        //dao.setWeight(this); //todo:dao
     }
 
     public void setAmount(int amount) {

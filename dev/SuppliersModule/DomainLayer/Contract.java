@@ -45,6 +45,7 @@ public class Contract {
             for (CatalogProduct p : c)
                 catalog.add(p);
         }
+
         this.qa = qa;
     }
 

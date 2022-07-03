@@ -22,7 +22,7 @@ public class SupplyTimeDao extends DAO {
     public void changeOrderDays(SupplyTime st) {
         String[] keys = {"supplier_id"};
         String[] keysVals = {st.getsId()};
-        update("SupplyTimes", keys, keysVals, "orderingDays", String.valueOf(st.getOrderingDays()));
+        update("SupplyTimes", keys, keysVals, "orderingDays", Arrays.toString(st.getOrderingDays()));
     }
 
 
