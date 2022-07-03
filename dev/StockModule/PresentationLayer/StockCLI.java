@@ -108,18 +108,13 @@ public class StockCLI {
                     String productName = toRead.next();
                     System.out.println("Enter new product manufacturer :");
                     String productManufacturer = toRead.next();
+                    System.out.println("Enter minimum amount of product :");
+                    int amountToNotify = toRead.nextInt();
                     System.out.println("Enter the ID of the category which the product will belong :");
                     int categoryID = toRead.nextInt();
-                    System.out.println("Enter on which date the product will be supplied :");
-                    System.out.println("Year :");
-                    int year = toRead.nextInt();
-                    System.out.println("Month :");
-                    int month = toRead.nextInt();
-                    System.out.println("Day :");
-                    int day = toRead.nextInt();
-                    System.out.println("Enter the minimum demand for this product.");
+                    System.out.println("Enter the demand for this product.");
                     int demand = toRead.nextInt();
-                    System.out.println(s.insertNewProduct(productName, productManufacturer, categoryID, new Date(year, month - 1, day), demand).ErrorMessage);
+                    System.out.println(s.insertNewProduct(productName, productManufacturer, amountToNotify,categoryID, demand).ErrorMessage);
                     break;
                 }
                 case "2": {
