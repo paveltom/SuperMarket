@@ -21,6 +21,7 @@ public class DataBaseConn {
     private String[] category = {"category_id", "name"};
     private String[] categoryRelation = {"ParentId", "ChildId"};
     private String[] product_category = {"product_id", "category_id"};
+    private String[] deliveryErrors = {"order_id", "msg"};
 
 
     // add other strings
@@ -48,6 +49,7 @@ public class DataBaseConn {
         put("CategoryRelations", categoryRelation);
 
         put("Product_Category", product_category);
+        put("DeliveryErrors", deliveryErrors);
     }};
 
     // Connect to a database
