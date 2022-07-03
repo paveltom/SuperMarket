@@ -83,10 +83,11 @@ public class DataBaseConn {
             if(sql.endsWith(","))
                 sql=sql.substring(0, sql.length()-1);
             sql += ");";
-            ResultSet rs = stmt.executeQuery(sql);
-            conn.commit();
-            if (!rs.next()) return false;
-            rs.close();
+//            ResultSet rs = stmt.executeQuery(sql);
+//            conn.commit();
+//            if (!rs.next()) return false;
+//            rs.close();
+            boolean res = stmt.execute(sql);
             stmt.close();
             conn.close();
             return true;
