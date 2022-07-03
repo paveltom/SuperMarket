@@ -230,9 +230,11 @@ public class SupplierController {
     }
 
     public String getFailedOrders(){
-        return "not implemented yet";
-        /*List<String[]> s = deliveryErrorDao.getErrors("24"); //todo
-        return "Order id: " + s[0] + "\n" +
-                "Error: " + s[1] ;*/
+        List<String[]> s = deliveryErrorDao.getErrors();
+        StringBuilder output = new StringBuilder();
+        for(String[] er : s){
+            output.append("Order id: ").append(er[0]).append("\n").append("Error: ").append(er[1]).append("\n\n");
+        }
+        return output.toString();
     }
 }

@@ -36,7 +36,9 @@ public class OrderController {
     public Map<String, Integer> orderPeriodic(List<String> products, int daysToOrder){
         Map<String, Integer> suppQuantities = new HashMap<>();
         for (String pId: products) {
-            suppQuantities.put(pId, stc.getQuantityForOrder(pId, daysToOrder));
+            int quantity = stc.getQuantityForOrder(pId, daysToOrder);
+            if(quantity > 0)
+                suppQuantities.put(pId, quantity);
         }
         return suppQuantities;
     }
