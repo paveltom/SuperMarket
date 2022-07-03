@@ -6,6 +6,9 @@ import DeliveryModule.Facade.IService;
 import DeliveryModule.Facade.Response;
 import DeliveryModule.Facade.ResponseT;
 import DeliveryModule.Facade.Service;
+import StockModule.BusinessLogicLayer.Product;
+import StockModule.BusinessLogicLayer.StockController;
+
 import java.time.LocalDate;
 import java.util.*;
 
@@ -140,26 +143,30 @@ public class PresentationController {
         operateOutput("-----------Enter product ID and its amount.-----------");
         operateOutput("-----------Enter 0 at any Product Id to FINISH----------");
         operateOutput("-----------Enter 0 at any Amount to CANCEL the delivery order----------");
-        Map<Integer, Integer> products = new HashMap<Integer, Integer>() {{
-            put(123, 1000);
-            put(456, 500);
-            put(789, 100);
-        }};
+//        Map<Integer, Integer> products = new HashMap<Integer, Integer>() {{
+//            put(123, 1000);
+//            put(456, 500);
+//            put(789, 100);
+//        }};
+
+        HashMap<String, Product> productMap = StockController.getInstance().getProductsInStock();
+        String allProducts = "Products: (<ID>: <Product name>) \n";
+        for(Product temp : productMap.values()){
+            allProducts += temp.getID() + ": " + temp.getName() + "; ";
+        }
+        operateOutput(allProducts);
+
         List<FacadeProduct> productList = new ArrayList<>();
-        int productId = -1;
+        String productId = "-1";
         int productAmount = -1;
-        productId = Integer.parseInt(operateInput("Product ID (Milk - 123, Bread - 456, Cheese - 789): "));
+        productId = operateInput("Product ID: ");
 
         // Receiving products parameters
-        while(productId != 0){
-            //double randProductWeight = rand.nextDouble(20000000); //randomized weight of a single product (double-time of a truck's maxLoadWeight)
-            //randProductWeight += 1;
-            //operateOutput("Product weight: " + randProductWeight);
+        while(!productId.equals("0")){
             try {
-                //productId = Integer.parseInt(operateInput("Product ID (Milk - 123, Bread - 456, Cheese - 789): "));
-                while (!products.containsKey(productId)) {
+                while (!productMap.containsKey(productId)) {
                     operateOutput("No such product...");
-                    productId = Integer.parseInt(operateInput("Product ID (Milk - 123, Bread - 456, Cheese - 789): "));
+                    productId = operateInput("Product ID: ");
                 }
                 productAmount = Integer.parseInt(operateInput("Amount: "));
                 if (productAmount == 0) return 0;
@@ -169,11 +176,11 @@ public class PresentationController {
                     continue;
                 }
 
-                operateOutput("Product weight: " + products.get(productId) + ". Total: " + (products.get(productId)*productAmount));
-                FacadeProduct currProduct = new FacadeProduct(productId, productAmount, products.get(productId));
+                operateOutput("Product weight: " + productMap.get(productId).getWeight() + ". Total: " + (productMap.get(productId).getWeight()*productAmount));
+                FacadeProduct currProduct = new FacadeProduct(Integer.parseInt(productId), productAmount, productMap.get(productId).getWeight());
                 productList.add(currProduct);
                 operateOutput("");
-                productId = Integer.parseInt(operateInput("Product ID (Milk - 123, Bread - 456, Cheese - 789): "));
+                productId = operateInput("Product ID: ");
                 // next loop data
                 //if(productId == 0) break;
             }catch (Exception e){
