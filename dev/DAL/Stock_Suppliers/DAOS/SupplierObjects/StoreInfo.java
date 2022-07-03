@@ -1,15 +1,12 @@
 package DAL.Stock_Suppliers.DAOS.SupplierObjects;
 
 import DAL.Stock_Suppliers.DAOS.DAO;
-import SuppliersModule.DomainLayer.Order;
-import SuppliersModule.DomainLayer.OrderProduct;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class LocationDao extends DAO<String> {
-    public void insert(String ShippingZone, String Adress){
-        String[] params = {ShippingZone, Adress};
+public class StoreInfo extends DAO<String> {
+    public void insert(String ShippingZone, String Adress, String Phone, String Name){
+        String[] params = {ShippingZone, Adress, Phone, Name};
         insert("Location", params);
     }
     public String[] get(){
@@ -23,4 +20,5 @@ public class LocationDao extends DAO<String> {
 
         return null;
     }
+
 }

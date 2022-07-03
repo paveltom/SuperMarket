@@ -1,5 +1,7 @@
 package DAL.Stock_Suppliers;
 
+import DAL.Stock_Suppliers.DAOS.SupplierObjects.StoreInfo;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +24,7 @@ public class DataBaseConn {
     private String[] categoryRelation = {"ParentId", "ChildId"};
     private String[] product_category = {"product_id", "category_id"};
     private String[] deliveryErrors = {"order_id", "msg"};
-    private String[] location = {"ShippingZone", "Adress"};
+    private String[] storeInfo = {"ShippingZone", "Adress", "Phone", "Name"};
 
 
     // add other strings
@@ -51,7 +53,7 @@ public class DataBaseConn {
 
         put("Product_Category", product_category);
         put("DeliveryErrors", deliveryErrors);
-        put("Location", location);
+        put("StoreInfo", storeInfo);
     }};
 
     // Connect to a database
