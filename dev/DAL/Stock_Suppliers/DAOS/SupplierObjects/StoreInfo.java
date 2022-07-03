@@ -10,7 +10,7 @@ public class StoreInfo extends DAO<String> {
         insert("StoreInfo", params);
     }
     public String[] get(){
-        List<String[]> sFromDB = load("Location", null, null);
+        List<String[]> sFromDB = load("StoreInfo", null, null);
 
         if(sFromDB != null) {
             for (String[] s : sFromDB) {

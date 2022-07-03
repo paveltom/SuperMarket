@@ -31,7 +31,7 @@ public class SupplyTime {
     }
 
     public void setOrderCycle(int cycle){
-        if(orderCycle == 0 | orderCycle < -1)
+        if(cycle == 0 | cycle < -1)
             throw new IllegalArgumentException("order cycle must be positive or -1");
         this.orderCycle = cycle;
     }
