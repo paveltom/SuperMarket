@@ -93,7 +93,6 @@ public class Category {
         this.subCategories.add(c);
     }
 
-    //todo : add dao
     public boolean setName(String name) {
         this.name = name;
         dao.setName(this);

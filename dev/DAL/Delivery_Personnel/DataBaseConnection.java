@@ -369,13 +369,12 @@ public class DataBaseConnection {
                 "bank TEXT, " +
                 "cash TEXT, " +
                 "credit TEXT, " +
-                "deliveryService TEXT, " +
+                "workingDays TEXT, " +
                 "PRIMARY KEY(supplier_id));";
 
         String stockSupSupplyTimes = "CREATE TABLE SupplyTimes (" +
                 "supplier_id TEXT, " +
-                "daysOfDelivery TEXT, " +
-                "maxDeliveryDuration TEXT, " +
+                "orderingDays TEXT, " +
                 "orderCycle TEXT, " +
                 "daysAcc TEXT," +
                 "PRIMARY KEY(supplier_id));";
