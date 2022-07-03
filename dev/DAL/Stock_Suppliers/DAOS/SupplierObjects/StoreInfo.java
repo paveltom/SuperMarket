@@ -7,7 +7,7 @@ import java.util.List;
 public class StoreInfo extends DAO<String> {
     public void insert(String ShippingZone, String Adress, String Phone, String Name){
         String[] params = {ShippingZone, Adress, Phone, Name};
-        insert("Location", params);
+        insert("StoreInfo", params);
     }
     public String[] get(){
         List<String[]> sFromDB = load("Location", null, null);

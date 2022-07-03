@@ -1,15 +1,21 @@
 package SuppliersModule.DomainLayer;
 
 import DAL.Stock_Suppliers.DAOS.StockObjects.ProductDao;
+import DAL.Stock_Suppliers.DAOS.SupplierObjects.DeliveryErrorDao;
+import DAL.Stock_Suppliers.DAOS.SupplierObjects.StoreInfo;
 import DAL.Stock_Suppliers.DAOS.SupplierObjects.SupplierDao;
+import DeliveryModule.BusinessLayer.Type.ShippingZone;
 import java.util.*;
 import java.util.stream.Collectors;
+import static DeliveryModule.BusinessLayer.Type.ShippingZone.CreateShippingZoneByName;
 
 public class SupplierController {
     private static SupplierController sc = null;
     private final SupplierDao sDao;
     private final ProductDao pDao;
-    private OrderController oc;
+    private final OrderController oc;
+    private final StoreInfo storeInfo = new StoreInfo();
+    private final DeliveryErrorDao deliveryErrorDao = new DeliveryErrorDao();
 
     private SupplierController(){
         sDao = new SupplierDao();
@@ -77,6 +83,16 @@ public class SupplierController {
         }
         if(bestSupp != null)
             bestSupp.makeShortageOrder(pId, bestQuantity, bestDiscount);
+    }
+
+    public void setStoreParameter(String zone, String address, String phone, String name){
+        if(CreateShippingZoneByName(zone) == null)
+            throw new IllegalArgumentException("shipping zone doesn't match any of these: " + Arrays.toString(ShippingZone.values()));
+        storeInfo.insert(zone, address, phone, name);
+    }
+
+    public boolean missingStoreInfo(){
+        return storeInfo.get() == null;
     }
 
     //  other methods
@@ -211,5 +227,12 @@ public class SupplierController {
 
     public List<Order> getOrders(String sId) {
         return sDao.get(sId).getOrders();
+    }
+
+    public String getFailedOrders(){
+        return "not implemented yet";
+        /*List<String[]> s = deliveryErrorDao.getErrors("24"); //todo
+        return "Order id: " + s[0] + "\n" +
+                "Error: " + s[1] ;*/
     }
 }

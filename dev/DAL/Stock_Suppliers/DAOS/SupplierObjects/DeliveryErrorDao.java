@@ -2,9 +2,6 @@ package DAL.Stock_Suppliers.DAOS.SupplierObjects;
 
 import DAL.Stock_Suppliers.DAOS.DAO;
 import SuppliersModule.DomainLayer.Order;
-import SuppliersModule.DomainLayer.OrderProduct;
-
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 

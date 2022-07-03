@@ -24,6 +24,18 @@ public class SupplyTime {
     }
 
     //  setters
+    public void setWeeklyOrdering(boolean[] orderingDays){
+        if (orderingDays == null || orderingDays.length != 7 )
+            throw new IllegalArgumentException("incorrect format at days of delivery");
+        this.orderingDays = orderingDays;
+    }
+
+    public void setOrderCycle(int cycle){
+        if(orderCycle == 0 | orderCycle < -1)
+            throw new IllegalArgumentException("order cycle must be positive or -1");
+        this.orderCycle = cycle;
+    }
+
     public void changeWeeklyOrdering(boolean[] orderingDays) {
         if (orderingDays == null || orderingDays.length != 7 )
             throw new IllegalArgumentException("incorrect format at days of delivery");
@@ -46,7 +58,7 @@ public class SupplyTime {
         dao.setDaysAcc(this);
     }
 
-    public void setOrderCycle(int orderCycle){
+    public void changeOrderCycle(int orderCycle){
         if(orderCycle == 0 | orderCycle < -1)
             throw new IllegalArgumentException("order cycle must be positive or -1");
         if(orderCycle == -1 & !hasWeeklyOrdering())
@@ -67,18 +79,17 @@ public class SupplyTime {
     //  constructor
     public SupplyTime(String sId, boolean[] orderingDAys, int orderCycle){
         dao = new SupplyTimeDao();
-        changeWeeklyOrdering(orderingDAys);
+        setWeeklyOrdering(orderingDAys);
         setOrderCycle(orderCycle);
+        validateCycles();
         daysAcc = orderCycle - 1; //if cycle delivery then an order would be placed at the end of the day
         this.sId = sId;
-
         dao.insert(this);
     }
     //constructor from db
     public SupplyTime(String sId, boolean[] orderingDays, int orderCycle, int daysAcc){
         this.orderingDays = orderingDays;
         this.orderCycle = orderCycle;
-        daysAcc = orderCycle - 1;
         this.sId = sId;
         this.daysAcc = daysAcc;
         dao = new SupplyTimeDao();
@@ -135,5 +146,10 @@ public class SupplyTime {
 
     public void delete(){
         dao.delete(this);
+    }
+
+    private void validateCycles(){
+        if(hasWeeklyOrdering() & orderCycle > 0)
+            throw new IllegalArgumentException("suppliers can't have both, a weekly cycle and a fix number of days cycle");
     }
 }

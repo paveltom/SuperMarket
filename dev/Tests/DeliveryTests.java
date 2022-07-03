@@ -305,9 +305,9 @@ public class DeliveryTests {
     }
 
     private List<FacadeProduct> listOfFacProducts(){
-        FacadeProduct p1 = new FacadeProduct(123, 2, 1000);
-        FacadeProduct p2 = new FacadeProduct(456, 5, 500);
-        FacadeProduct p3 = new FacadeProduct(789, 10, 100);
+        FacadeProduct p1 = new FacadeProduct("123", 2, 1000);
+        FacadeProduct p2 = new FacadeProduct("456", 5, 500);
+        FacadeProduct p3 = new FacadeProduct("789", 10, 100);
         List<FacadeProduct> list = new ArrayList<>();
         list.add(p1);
         list.add(p2);

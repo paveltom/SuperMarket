@@ -1,7 +1,5 @@
 package SuppliersModule.DomainLayer;
 
-import DAL.Stock_Suppliers.DAOS.SupplierObjects.QuantityAgreementDao;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -28,7 +26,7 @@ public class Contract {
 
     //setters
     public void changeWeeklyOrdering(boolean[] days) {supplyTime.changeWeeklyOrdering(days);}
-    public void setOrderCycle(int orderCycle) { supplyTime.setOrderCycle(orderCycle);}
+    public void setOrderCycle(int orderCycle) { supplyTime.changeOrderCycle(orderCycle);}
 
     //  constructor
     public Contract( String sId, boolean[] orderingDays, int orderCycle,

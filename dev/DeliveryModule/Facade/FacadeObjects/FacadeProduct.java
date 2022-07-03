@@ -3,7 +3,7 @@ package DeliveryModule.Facade.FacadeObjects;
 import DeliveryModule.BusinessLayer.Element.Product;
 
 public class FacadeProduct {
-    private int id;
+    private String id;
     private double weight;
     private int amount;
 
@@ -15,13 +15,13 @@ public class FacadeProduct {
         this.weight = productBL.WeightPerUnit;
     }
 
-    public FacadeProduct(int id, int amount, double weight){
+    public FacadeProduct(String id, int amount, double weight){
         this.id = id;
         this.weight = weight;
         this.amount = amount;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 

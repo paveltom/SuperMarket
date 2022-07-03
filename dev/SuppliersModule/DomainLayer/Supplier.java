@@ -1,8 +1,21 @@
 package SuppliersModule.DomainLayer;
 
+import DAL.Stock_Suppliers.DAOS.StockObjects.ProductDao;
+import DAL.Stock_Suppliers.DAOS.SupplierObjects.DeliveryErrorDao;
+import DAL.Stock_Suppliers.DAOS.SupplierObjects.StoreInfo;
 import DAL.Stock_Suppliers.DAOS.SupplierObjects.SupplierDao;
+import DeliveryModule.BusinessLayer.Controller.DeliveryController;
+import DeliveryModule.BusinessLayer.Element.Date;
+import DeliveryModule.BusinessLayer.Element.DeliveryOrder;
+import DeliveryModule.BusinessLayer.Element.Product;
+import DeliveryModule.BusinessLayer.Element.Receipt;
+import DeliveryModule.BusinessLayer.Element.Site;
+import DeliveryModule.BusinessLayer.Type.RetCode;
+import DeliveryModule.BusinessLayer.Type.ShippingZone;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Supplier {
     private final String sId;
@@ -16,6 +29,10 @@ public class Supplier {
     private final SuppliersModule.DomainLayer.OrderController oc;
     private final List<SuppliersModule.DomainLayer.Order> orders = new LinkedList<>();
     private final SupplierDao sDao;
+    private final ProductDao pDao = new ProductDao();
+    private final DeliveryController delC = DeliveryController.GetInstance();
+    private final DeliveryErrorDao delErrDao = new DeliveryErrorDao();
+    private final StoreInfo storeInfo = new StoreInfo();
 
     //  getters
     public String getsId(){
@@ -97,12 +114,9 @@ public class Supplier {
         this.paymentMethods[1] = credit;
         this.workingDays = workingDays;
         oc = OrderController.getInstance();
-
         SupplyTime st = sDao.getSupplyTimeFromDB(sId);
-
         List<CatalogProduct> catalogProducts = sDao.getCatalogProductsFromDB(this);
         QuantityAgreement qa = sDao.getQuantityAgreementFromDB(sId);
-
         this.contract = new Contract(sId, st, catalogProducts, qa);
 
         Map<String,String> c = sDao.getContactsFromDB(sId);
@@ -111,9 +125,7 @@ public class Supplier {
         }
 
         List<Order> os = sDao.getOrdersFromDB(sId);
-        for ( Order o : sDao.getOrdersFromDB(sId)){
-            orders.add(o);
-        }
+        orders.addAll(os);
 
         Map<String,String > contactsFromDB = sDao.getContactsFromDB(sId);;
         for ( String s : contactsFromDB.keySet()){
@@ -145,13 +157,37 @@ public class Supplier {
         addOrder(order);
     }
     private void addOrder(Order order){
-        orders.add(order);
+        if(orders.stream().noneMatch(order1 -> order1.getId().equals(order.getId()))) {
+            orders.add(order);
+            sendOrderToDelivery(order);
+        }
     }
-    public int getPeriodicOrderInterval(){return contract.getPeriodicOrderInterval();}
+
+    private void sendOrderToDelivery(Order order){
+        String[] info = storeInfo.get();
+        Site store = new Site(ShippingZone.CreateShippingZoneByName(info[0]), info[1], info[3], info[2]);
+        Site supplier = new Site(ShippingZone.CreateShippingZoneByName(info[0]), getAddress(), getName(), order.getContactPhone());
+        List<Product> products = new ArrayList<>();
+        for (OrderProduct op : order.getProducts()){
+            double weight = pDao.getProduct(op.getId()).getWeight();
+            Product p = new Product(op.getId(), weight, op.getAmount());
+            products.add(p);
+        }
+        int days = order.getDate().getDayOfMonth();
+        int month = order.getDate().getMonthValue();
+        int year = order.getDate().getYear();
+        Date date =  new Date(days, month, year);
+        DeliveryOrder delOrder = new DeliveryOrder(store, supplier, order.getId(), products, date, getWorkingDays());
+        Receipt receipt = delC.Deliver(delOrder);
+        if(!receipt.Status.equals(RetCode.SuccessfulDelivery)){
+            delErrDao.insert(order.getId(), receipt.Status.toString());
+        }
+    }
+
     public int getDaysForShortageOrder(){return contract.getDaysForShortageOrder();}
 
     //products methods
-    public void addProduct(String pId, String catalogNum, float price) { //TODO 1.calculating and setting product in periodic order
+    public void addProduct(String pId, String catalogNum, float price) {
         contract.addProduct(pId, catalogNum, price);
     }
     public void removeProduct(String pId) {
