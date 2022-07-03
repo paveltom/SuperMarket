@@ -11,7 +11,7 @@ public class DAO<T> {
     }
 
     protected void update(String tableName,String[] keys, String[] keysVals, String attribute, String value){
-        conn.update(tableName, keys, keysVals, attribute, value);
+        conn.update(tableName, keysVals, keys, attribute, value);
     }
 
     protected void delete(String tableName, String[] keys, String[] keysVals){

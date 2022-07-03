@@ -147,7 +147,7 @@ public class SupplierDao extends DAO {
     }
     private Order makeOrder(String[] o){
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-dd-MM");
         String date = o[2];
 
         LocalDate localDate = LocalDate.parse(date, formatter);

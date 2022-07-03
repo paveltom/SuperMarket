@@ -110,9 +110,9 @@ public class SupplierServices {
         }
     }
 
-    public Response updateProductCatalogNum(String sId, String oldCatalogNum, String newCatalogNum) {
+    public Response updateProductCatalogNum(String sId, String pid, String newCatalogNum) {
         try {
-            sc.updateCatalogNum(sId, oldCatalogNum, newCatalogNum);
+            sc.updateCatalogNum(sId, pid, newCatalogNum);
             return new Response();
         } catch (Exception e) {
             return new Response(e.getMessage());

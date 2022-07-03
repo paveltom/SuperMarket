@@ -132,14 +132,14 @@ public class Service
         insertNewProduct( "Batteries AA", "GP Ultra", 0.05,40,0,  65);
         insertNewProduct( "Orange juice", "Primor", 0.25,40,2,  65);
 
-        insertNewItem( "Dark Chocolate 60%Strauss", "L5A4", new Date(2021, 4, 5), false, 30);
-        insertNewItem( "Dark Chocolate 60%Strauss", "L2A17", new Date(2022, 4, 5), true, 42);
-        insertNewItem( "Milk ChocolateStrauss", "L6A8", new Date(2022, 4, 15), true, 50);
-        insertNewItem( "Batteries AAGP Ultra", "L1A2", new Date(2022, 2, 3), true, 130);
-        insertNewItem( "Orange juicePrimor", "L9A4", new Date(2022, 1, 15), false, 280);
+        insertNewItem( "Dark Chocolate 60%Strauss", "L5A4", new Date(121, 4, 5), false, 30);
+        insertNewItem( "Dark Chocolate 60%Strauss", "L2A17", new Date(122, 4, 5), true, 42);
+        insertNewItem( "Milk ChocolateStrauss", "L6A8", new Date(122, 4, 15), true, 50);
+        insertNewItem( "Batteries AAGP Ultra", "L1A2", new Date(122, 2, 3), true, 130);
+        insertNewItem( "Orange juicePrimor", "L9A4", new Date(122, 1, 15), false, 280);
 
-        insertNewDiscount( "Orange juicePrimor", new Date(2022, 4, 3), new Date(2022, 5, 3), 30, Type.PERCENT);
-        insertNewDiscount( "Orange juicePrimor", new Date(2022, 4, 3), new Date(2022, 5, 3), 30, Type.PERCENT);
+        insertNewDiscount( "Orange juicePrimor", new Date(122, 4, 3), new Date(122, 5, 3), 30, Type.PERCENT);
+        insertNewDiscount( "Orange juicePrimor", new Date(122, 4, 3), new Date(122, 5, 3), 30, Type.PERCENT);
 
         Map<Integer, Map<Integer, Integer>> products = (Map<Integer, Map<Integer, Integer>>) new HashMap<>().put(2, new HashMap<>().put(30, 25));
 

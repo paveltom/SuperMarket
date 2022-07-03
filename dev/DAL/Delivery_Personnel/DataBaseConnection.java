@@ -346,6 +346,7 @@ public class DataBaseConnection {
                 "weight TEXT, " +
                 "categoryID TEXT, " +
                 "demand TEXT, " +
+                "weight TEXT, " +
                 "PRIMARY KEY(product_id));";
 
         String stockSupQuantityAgreements = "CREATE TABLE QuantityAgreements (" +

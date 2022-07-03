@@ -21,6 +21,7 @@ public class DataBaseConn {
     private String[] category = {"category_id", "name"};
     private String[] categoryRelation = {"ParentId", "ChildId"};
     private String[] product_category = {"product_id", "category_id"};
+    private String[] deliveryErrors = {"order_id", "msg"};
 
 
     // add other strings
@@ -48,6 +49,7 @@ public class DataBaseConn {
         put("CategoryRelations", categoryRelation);
 
         put("Product_Category", product_category);
+        put("DeliveryErrors", deliveryErrors);
     }};
 
     // Connect to a database
@@ -108,9 +110,9 @@ public class DataBaseConn {
             conn.setAutoCommit(false);
             stmt = conn.createStatement();
 
-            StringBuilder sql = new StringBuilder("UPDATE " + tableNAME + " set " + paramNAME + " = '" + paramVALUE + "' where " + keysNAMES[0] + "=" + key[0]);
+            StringBuilder sql = new StringBuilder("UPDATE " + tableNAME + " set " + paramNAME + " = '" + paramVALUE + "' where " + keysNAMES[0] + "='" + key[0]+"'");
             for (int i = 1; i < keysNAMES.length; i++)
-                sql.append(" AND ").append(keysNAMES[i]).append("=").append(key[i]);
+                sql.append(" AND ").append(keysNAMES[i]).append("='").append(key[i]+"'");
             sql.append(";");
 
             //System.out.println("sql: " + sql);

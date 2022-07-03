@@ -21,9 +21,9 @@ public class StockCLI {
         Scanner toRead = new Scanner(System.in);
 
         String message = "";
-
+        terminate = false;
         while (!terminate) {
-            System.out.println(ANSI_WHITE_BACKGROUND + "Main Menu :" + ANSI_RESET);
+            System.out.println(ANSI_WHITE_BACKGROUND + "Stock module - Main Menu :" + ANSI_RESET);
             System.out.println("Hello user welcome to our shop.");
             System.out.println("Select the section you want to go :");
             System.out.println("1 - Load data");
@@ -32,7 +32,7 @@ public class StockCLI {
             System.out.println("4 - Discounts");
             System.out.println("5 - Categories");
             System.out.println("9 - Exit stock module");
-            message = toRead.next();
+            message = toRead.nextLine();
             Protocol(message, s, toRead);
         }
         System.out.println("Ok, bye.");
@@ -45,6 +45,7 @@ public class StockCLI {
             case "1": {
                 s.LoadDefaultData();
                 System.out.println("Data loaded successfully.");
+                break;
             }
 
             case "2": {
@@ -54,14 +55,17 @@ public class StockCLI {
 
             case "3": {
                 runItemsMenu(s, toRead);
+                break;
             }
 
             case "4": {
                 runDiscountsMenu(s, toRead);
+                break;
             }
 
             case "5": {
                 runCategoriesMenu(s, toRead);
+                break;
             }
 
             case "9": {
@@ -71,6 +75,7 @@ public class StockCLI {
 
             default: {
                 System.out.println("Invalid input, try again");
+                break;
             }
 
         }
@@ -82,7 +87,7 @@ public class StockCLI {
     }
 
     public static void runProductsMenu(Service s, Scanner toRead) {
-        System.out.println(ANSI_WHITE_BACKGROUND + "Products Menu :" + ANSI_RESET);
+        System.out.println(ANSI_WHITE_BACKGROUND + "Stock Module - Products Menu :" + ANSI_RESET);
         boolean terminateCurrentMenu = false;
         while (!terminateCurrentMenu) {
             System.out.println("Choose your action : ");
@@ -93,7 +98,7 @@ public class StockCLI {
             System.out.println("4 - Edit product's attributes");
             System.out.println("9 - Exit stock module");
 
-            String msg = toRead.next();
+            String msg = toRead.nextLine();
 
             switch (msg) {
                 case "0": {
@@ -102,23 +107,23 @@ public class StockCLI {
                 }
                 case "1": {
                     System.out.println("Enter new product's name :");
-                    String productName = toRead.next();
+                    String productName = toRead.nextLine();
                     System.out.println("Enter new product's manufacturer :");
-                    String productManufacturer = toRead.next();
+                    String productManufacturer = toRead.nextLine();
                     System.out.println("Enter new product's weight :");
-                    double productWeight = toRead.nextDouble();
+                    double productWeight = Double.parseDouble(toRead.nextLine());
                     System.out.println("Enter minimum amount of product :");
-                    int amountToNotify = toRead.nextInt();
+                    int amountToNotify = Integer.parseInt(toRead.nextLine());
                     System.out.println("Enter the ID of the category which the product will belong :");
-                    int categoryID = toRead.nextInt();
+                    int categoryID = Integer.parseInt(toRead.nextLine());
                     System.out.println("Enter the demand for this product.");
-                    int demand = toRead.nextInt();
+                    int demand = Integer.parseInt(toRead.nextLine());
                     System.out.println(s.insertNewProduct(productName, productManufacturer,productWeight, amountToNotify, categoryID, demand).ErrorMessage);
                     break;
                 }
                 case "2": {
                     System.out.print("Enter product ID to remove : ");
-                    if (!s.deleteProduct(toRead.next()).ErrorOccurred())
+                    if (!s.deleteProduct(toRead.nextLine()).ErrorOccurred())
                         System.out.print("Product removed successfully.");
                     break;
                 }
@@ -128,21 +133,23 @@ public class StockCLI {
                 }
                 case "4": {
                     System.out.println("Enter product to edit : ");
-                    String productID = toRead.next();
+                    String productID = toRead.nextLine();
                     System.out.println("Choose Attribute to Edit : ");
-                    System.out.println(s.getProductAttributes());
-                    int attribute = toRead.nextInt();
+                    System.out.println(s.getProductAttributes().Value);
+                    int attribute = Integer.parseInt(toRead.nextLine());
                     System.out.println("Enter new value : ");
-                    Object value = toRead.next();
+                    Object value = toRead.nextLine();
                     s.updateProductAttribute(productID, attribute, value);
                     break;
                 }
                 case "9": {
                     ExitStockModule();
+                    terminateCurrentMenu = true;
                     break;
                 }
                 default: {
                     System.out.println("Invalid input, try again");
+                    break;
                 }
             }
 
@@ -151,7 +158,7 @@ public class StockCLI {
     }
 
     public static void runItemsMenu(Service s, Scanner toRead) {
-        System.out.println(ANSI_WHITE_BACKGROUND + "Items Menu :" + ANSI_RESET);
+        System.out.println(ANSI_WHITE_BACKGROUND + "Stock Module - Items Menu :" + ANSI_RESET);
         boolean terminateCurrentMenu = false;
         while (!terminateCurrentMenu) {
             System.out.println("Choose your action : ");
@@ -165,7 +172,7 @@ public class StockCLI {
             System.out.println("7 - Edit item's attribute");
             System.out.println("8 - Reduce item's amount");
             System.out.println("9 - Exit stock module");
-            String msg = toRead.next();
+            String msg = toRead.nextLine();
 
             switch (msg) {
                 case "0": {
@@ -174,25 +181,25 @@ public class StockCLI {
                 }
                 case "1": {
                     System.out.println("Enter ID of product of item to add : ");
-                    String ProductIDAddItem = toRead.next();
+                    String ProductIDAddItem = toRead.nextLine();
                     System.out.println("Enter location of item : ");
-                    String Location = toRead.next();
+                    String Location = toRead.nextLine();
                     System.out.println("Enter expire date : ");
                     System.out.println("Year :");
-                    int yearAddItem = toRead.nextInt();
+                    int yearAddItem = Integer.parseInt(toRead.nextLine());
                     System.out.println("Month :");
-                    int monthAddItem = toRead.nextInt();
+                    int monthAddItem = Integer.parseInt(toRead.nextLine());
                     System.out.println("Day :");
-                    int dayAddItem = toRead.nextInt();
+                    int dayAddItem = Integer.parseInt(toRead.nextLine());
                     Date expireDate = new Date(yearAddItem, monthAddItem - 1, dayAddItem);
                     System.out.println("Is the item usable ? enter 'Yes' or 'No' ");
-                    String isUsable = toRead.next();
+                    String isUsable = toRead.nextLine();
                     while (!isUsable.equals("Yes") && !isUsable.equals("No")) {
                         System.out.println("Please enter 'Yes' or 'No'.");
-                        isUsable = toRead.next();
+                        isUsable = toRead.nextLine();
                     }
                     System.out.println("Enter amount of items : ");
-                    int amountAddItem = toRead.nextInt();
+                    int amountAddItem = Integer.parseInt(toRead.nextLine());
                     if (!s.insertNewItem(ProductIDAddItem, Location, expireDate, isUsable.equals("Yes"), amountAddItem).ErrorOccurred())
                         System.out.print("Added item successfully.");
                     break;
@@ -200,9 +207,9 @@ public class StockCLI {
                 }
                 case "2": {
                     System.out.println("Enter product ID : ");
-                    String ProductIDRemoveItem = toRead.next();
+                    String ProductIDRemoveItem = toRead.nextLine();
                     System.out.println("Enter item ID : ");
-                    int ItemID = toRead.nextInt();
+                    int ItemID = Integer.parseInt(toRead.nextLine());
                     System.out.println(s.deleteItem(ProductIDRemoveItem, ItemID).ErrorMessage);
                     break;
                 }
@@ -212,7 +219,7 @@ public class StockCLI {
                 }
                 case "4": {
                     System.out.println("Enter product ID to filter : ");
-                    System.out.println(s.getStockReportByCategory(toRead.nextInt()).Value);
+                    System.out.println(s.getStockReportByCategory(Integer.parseInt(toRead.nextLine())).Value);
                     break;
                 }
                 case "5": {
@@ -225,9 +232,9 @@ public class StockCLI {
                 }
                 case "7": {
                     System.out.println("Enter product's ID :");
-                    String productID = toRead.next();
+                    String productID = toRead.nextLine();
                     System.out.println("Enter item's ID :");
-                    int itemID = toRead.nextInt();
+                    int itemID = Integer.parseInt(toRead.nextLine());
                     System.out.println("Choose attribute to change :");
                     System.out.print("0 - ProductID");
                     System.out.print("1 - Location");
@@ -235,29 +242,31 @@ public class StockCLI {
                     System.out.print("3 - is defected? (Enter true/false"); // @TODO - VALIDATE BOOLEAN INPUT
                     System.out.print("4 - is expired? (Enter true/false"); // @TODO - VALIDATE BOOLEAN INPUT
                     System.out.print("5 - Amount");
-                    int attribute = toRead.nextInt();
+                    int attribute = Integer.parseInt(toRead.nextLine());
                     System.out.println("Enter the new value :");
-                    Object value = toRead.next();
+                    Object value = toRead.nextLine();
 
                     System.out.println(s.updateItemAttribute(productID, itemID, attribute, value).ErrorMessage);
                     break;
                 }
                 case "8": {
                     System.out.println("Enter ProductID of the item : ");
-                    String ProductIDReduceItemAmount = toRead.next();
+                    String ProductIDReduceItemAmount = toRead.nextLine();
                     System.out.println("Enter ID of the item : ");
-                    int itemID = toRead.nextInt();
+                    int itemID = Integer.parseInt(toRead.nextLine());
                     System.out.println("Enter how much do you want to reduce : ");
-                    int amountToReduce = toRead.nextInt();
+                    int amountToReduce = Integer.parseInt(toRead.nextLine());
                     System.out.println(s.reduceItemAmount(ProductIDReduceItemAmount, itemID, amountToReduce).ErrorMessage);
                     break;
                 }
                 case "9": {
                     ExitStockModule();
+                    terminateCurrentMenu = true;
                     break;
                 }
                 default: {
                     System.out.println("Invalid input, try again");
+                    break;
                 }
             }
 
@@ -266,7 +275,7 @@ public class StockCLI {
     }
 
     public static void runDiscountsMenu(Service s, Scanner toRead) {
-        System.out.println(ANSI_WHITE_BACKGROUND + "Discounts Menu :" + ANSI_RESET);
+        System.out.println(ANSI_WHITE_BACKGROUND + "Stock Module - Discounts Menu :" + ANSI_RESET);
         boolean terminateCurrentMenu = false;
         while (!terminateCurrentMenu) {
             System.out.println("Choose your action : ");
@@ -275,7 +284,7 @@ public class StockCLI {
             System.out.println("2 - Insert new discount");
             System.out.println("3 - Delete discount");
             System.out.println("9 - Exit stock module");
-            String msg = toRead.next();
+            String msg = toRead.nextLine();
 
             switch (msg) {
                 case "0": {
@@ -288,30 +297,30 @@ public class StockCLI {
                 }
                 case "2": {
                     System.out.println("Enter ID of product to add discount to : ");
-                    String ProductID = toRead.next();
+                    String ProductID = toRead.nextLine();
                     System.out.println("Enter start date of discount : ");
                     System.out.println("Year :");
-                    int yearAddDiscount = toRead.nextInt();
+                    int yearAddDiscount = Integer.parseInt(toRead.nextLine());
                     System.out.println("Month :");
-                    int monthAddDiscount = toRead.nextInt();
+                    int monthAddDiscount = Integer.parseInt(toRead.nextLine());
                     System.out.println("Day :");
-                    int dayAddDiscount = toRead.nextInt();
+                    int dayAddDiscount = Integer.parseInt(toRead.nextLine());
                     Date startDate = new Date(yearAddDiscount, monthAddDiscount - 1, dayAddDiscount);
 
                     System.out.println("Enter end date of discount : ");
                     System.out.println("Year :");
-                    int year2 = toRead.nextInt();
+                    int year2 = Integer.parseInt(toRead.nextLine());
                     System.out.println("Month :");
-                    int month2 = toRead.nextInt();
+                    int month2 = Integer.parseInt(toRead.nextLine());
                     System.out.println("Day :");
-                    int day2 = toRead.nextInt();
+                    int day2 = Integer.parseInt(toRead.nextLine());
                     Date endDate = new Date(year2, month2 - 1, day2);
                     System.out.println("Enter amount of discount : ");
-                    int amount = toRead.nextInt();
+                    int amount = Integer.parseInt(toRead.nextLine());
                     System.out.print("Enter type of discount : 'PERCENT' or 'FIXED'");
                     Type t;
                     while (true) {
-                        String type = toRead.next();
+                        String type = toRead.nextLine();
                         if (type.equals("PERCENT")) {
                             t = Type.PERCENT;
                             break;
@@ -327,23 +336,25 @@ public class StockCLI {
                 }
                 case "3": {
                     System.out.println("Enter ID of discount to remove : ");
-                    if (!s.deleteDiscount(toRead.nextInt()).ErrorOccurred())
+                    if (!s.deleteDiscount(Integer.parseInt(toRead.nextLine())).ErrorOccurred())
                         System.out.print("Removed discount successfully.");
                     break;
                 }
                 case "9": {
                     ExitStockModule();
+                    terminateCurrentMenu = true;
                     break;
                 }
                 default: {
                     System.out.println("Invalid input, try again");
+                    break;
                 }
             }
         }
     }
 
     public static void runCategoriesMenu(Service s, Scanner toRead) {
-        System.out.println(ANSI_WHITE_BACKGROUND + "Categories Menu :" + ANSI_RESET);
+        System.out.println(ANSI_WHITE_BACKGROUND + "Stock Module - Categories Menu :" + ANSI_RESET);
         boolean terminateCurrentMenu = false;
         while (!terminateCurrentMenu) {
             System.out.println("Choose your action : ");
@@ -353,7 +364,7 @@ public class StockCLI {
             System.out.println("3 - Remove category");
             System.out.println("4 - Set subcategory");
             System.out.println("9 - Exit stock module");
-            String msg = toRead.next();
+            String msg = toRead.nextLine();
 
             switch (msg) {
                 case "0": {
@@ -366,31 +377,33 @@ public class StockCLI {
                 }
                 case "2": {
                     System.out.println("Enter new category name : ");
-                    if (!s.insertNewCategory(toRead.next()).ErrorOccurred())
+                    if (!s.insertNewCategory(toRead.nextLine()).ErrorOccurred())
                         System.out.println("Added category successfully.");
                     break;
                 }
                 case "3": {
                     System.out.println("Enter category ID to delete :");
-                    if (!s.deleteCategory(toRead.nextInt()).ErrorOccurred())
+                    if (!s.deleteCategory(Integer.parseInt(toRead.nextLine())).ErrorOccurred())
                         System.out.println("Removed category successfully.");
                     break;
                 }
                 case "4": {
                     System.out.println("Enter categoryID you want to set as subcategory : ");
-                    int subCategoryID = toRead.nextInt();
+                    int subCategoryID = Integer.parseInt(toRead.nextLine());
                     System.out.println("Enter categoryID you want to set as parent : ");
-                    int parentID = toRead.nextInt();
+                    int parentID = Integer.parseInt(toRead.nextLine());
                     if (!s.setSubCategory(subCategoryID, parentID).ErrorOccurred())
                         System.out.println("Subcategory set successfully.");
                     break;
                 }
                 case "9": {
                     ExitStockModule();
+                    terminateCurrentMenu = true;
                     break;
                 }
                 default: {
                     System.out.println("Invalid input, try again");
+                    break;
                 }
             }
 

@@ -182,8 +182,8 @@ public class StockController {
 
     }
 
-    private Product getProduct(String pid){
-        return pDao.getProduct(pid.replaceAll(" ", "_"));
+    private Product getProduct(String pid) {
+        return pDao.getProduct(pid);
     }
 
 
