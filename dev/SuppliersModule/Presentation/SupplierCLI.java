@@ -5,8 +5,6 @@ import SuppliersModule.DomainLayer.Supplier;
 import SuppliersModule.Service.Response;
 import SuppliersModule.Service.ResponseT;
 import SuppliersModule.Service.SupplierServices;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.util.*;
 
 public class SupplierCLI {
@@ -20,6 +18,32 @@ public class SupplierCLI {
     }
 
     public void run(){
+        initializeStoreInfo();
+    }
+
+    private void initializeStoreInfo(){
+        ResponseT<Boolean> r = ss.missingStoreInfo();
+        if(r.ErrorOccurred())
+            System.out.println("Initialization failed: " + r.getErrorMessage());
+        else if(r.getValue()){
+            while(true) {
+                System.out.println("Insert store's shippment zone");
+                String zone = in.nextLine();
+                System.out.println("Insert store's address");
+                String address = in.nextLine();
+                System.out.println("Insert store's phone");
+                String phone = in.nextLine();
+                System.out.println("Insert store's name");
+                String name = in.nextLine();
+                Response r2 = ss.setStoreParameter(zone, address, phone, name);
+                if(r2.ErrorOccurred())
+                    System.out.println("Action Failed: " + r2.getErrorMessage() + "\n");
+                else{
+                    System.out.println("Initialization succeeded!");
+                    break;
+                }
+            }
+        }
         supplierManagement();
     }
 
@@ -206,7 +230,11 @@ public class SupplierCLI {
     }
 
     private void getFailedOrders(){
-        throw new NotImplementedException();
+        ResponseT<String> r = ss.getFailedOrders();
+        if(r.ErrorOccurred())
+            System.out.println("Action failed: " + r.getErrorMessage());
+        else
+            System.out.println(r.getValue());
     }
 
     private void addSuppliers() {

@@ -1,16 +1,19 @@
 package SuppliersModule.DomainLayer;
 
 import DAL.Stock_Suppliers.DAOS.StockObjects.ProductDao;
+import DAL.Stock_Suppliers.DAOS.SupplierObjects.DeliveryErrorDao;
+import DAL.Stock_Suppliers.DAOS.SupplierObjects.StoreInfo;
 import DAL.Stock_Suppliers.DAOS.SupplierObjects.SupplierDao;
 import DeliveryModule.BusinessLayer.Controller.DeliveryController;
+import DeliveryModule.BusinessLayer.Element.Date;
 import DeliveryModule.BusinessLayer.Element.DeliveryOrder;
 import DeliveryModule.BusinessLayer.Element.Product;
 import DeliveryModule.BusinessLayer.Element.Receipt;
 import DeliveryModule.BusinessLayer.Element.Site;
 import DeliveryModule.BusinessLayer.Type.RetCode;
 import DeliveryModule.BusinessLayer.Type.ShippingZone;
-
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -28,6 +31,8 @@ public class Supplier {
     private final SupplierDao sDao;
     private final ProductDao pDao = new ProductDao();
     private final DeliveryController delC = DeliveryController.GetInstance();
+    private final DeliveryErrorDao delErrDao = new DeliveryErrorDao();
+    private final StoreInfo storeInfo = new StoreInfo();
 
     //  getters
     public String getsId(){
@@ -159,21 +164,25 @@ public class Supplier {
     }
 
     private void sendOrderToDelivery(Order order){
-        /*Site store = new Site(ShippingZone.Golan, "storeAddress", "storeName", "storePhone"); //getFromDB
-        Site supplier = new Site(ShippingZone.Golan, getAddress(), getName(), order.getContactPhone()); //getFromDb
+        String[] info = storeInfo.get();
+        Site store = new Site(ShippingZone.CreateShippingZoneByName(info[0]), info[1], info[3], info[2]);
+        Site supplier = new Site(ShippingZone.CreateShippingZoneByName(info[0]), getAddress(), getName(), order.getContactPhone());
         List<Product> products = new ArrayList<>();
         for (OrderProduct op : order.getProducts()){
             double weight = pDao.getProduct(op.getId()).getWeight();
-            Product p = new Product(op.getId(), weight, op.getAmount());//change to string
+            Product p = new Product(op.getId(), weight, op.getAmount());
             products.add(p);
         }
-        DeliveryOrder delOrder = new DeliveryOrder(store, supplier, order.getId(), products, order.getDate(), getWorkingDays());//change to Date
+        int days = order.getDate().getDayOfMonth();
+        int month = order.getDate().getMonthValue();
+        int year = order.getDate().getYear();
+        Date date =  new Date(days, month, year);
+        DeliveryOrder delOrder = new DeliveryOrder(store, supplier, order.getId(), products, date, getWorkingDays());
         Receipt receipt = delC.Deliver(delOrder);
         if(!receipt.Status.equals(RetCode.SuccessfulDelivery)){
-            //saveInDB(order.getId(), receipt.Status.toString());
-        }*/
+            delErrDao.insert(order.getId(), receipt.Status.toString());
+        }
     }
-
 
     public int getDaysForShortageOrder(){return contract.getDaysForShortageOrder();}
 

@@ -1,9 +1,9 @@
 package SuppliersModule.Service;
 
-
 import SuppliersModule.DomainLayer.*;
 import java.util.List;
 import java.util.Map;
+
 
 public class SupplierServices {
 
@@ -186,6 +186,31 @@ public class SupplierServices {
             return new Response();
         } catch (Exception e) {
             return new Response(e.getMessage());
+        }
+    }
+
+    public Response setStoreParameter(String zone, String address, String phone, String name){
+        try {
+            sc.setStoreParameter(zone, address, phone, name);
+            return new Response();
+        } catch (Exception e) {
+            return new Response(e.getMessage());
+        }
+    }
+
+    public ResponseT<Boolean> missingStoreInfo(){
+        try {
+            return ResponseT.FromValue(sc.missingStoreInfo());
+        } catch (Exception e) {
+            return ResponseT.FromError(e.getMessage());
+        }
+    }
+
+    public ResponseT<String> getFailedOrders(){
+        try {
+            return ResponseT.FromValue(sc.getFailedOrders());
+        } catch (Exception e) {
+            return ResponseT.FromError(e.getMessage());
         }
     }
 }
