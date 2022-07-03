@@ -29,7 +29,7 @@ public class StockCLI {
             System.out.println("1 - Load data");
             System.out.println("2 - Products");
             System.out.println("3 - Items");
-            System.out.println("4- Purchases");
+            System.out.println("4 - Purchases");
             System.out.println("5 - Discounts");
             System.out.println("6 - Categories");
             System.out.println("9 - Exit stock module");
@@ -106,17 +106,19 @@ public class StockCLI {
                     break;
                 }
                 case "1": {
-                    System.out.println("Enter new product name :");
+                    System.out.println("Enter new product's name :");
                     String productName = toRead.next();
-                    System.out.println("Enter new product manufacturer :");
+                    System.out.println("Enter new product's manufacturer :");
                     String productManufacturer = toRead.next();
+                    System.out.println("Enter new product's weight :");
+                    double productWeight = toRead.nextDouble();
                     System.out.println("Enter minimum amount of product :");
                     int amountToNotify = toRead.nextInt();
                     System.out.println("Enter the ID of the category which the product will belong :");
                     int categoryID = toRead.nextInt();
                     System.out.println("Enter the demand for this product.");
                     int demand = toRead.nextInt();
-                    System.out.println(s.insertNewProduct(productName, productManufacturer, amountToNotify, categoryID, demand).ErrorMessage);
+                    System.out.println(s.insertNewProduct(productName, productManufacturer,productWeight, amountToNotify, categoryID, demand).ErrorMessage);
                     break;
                 }
                 case "2": {
