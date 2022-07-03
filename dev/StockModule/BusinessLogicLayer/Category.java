@@ -96,6 +96,7 @@ public class Category {
     //todo : add dao
     public boolean setName(String name) {
         this.name = name;
+        dao.setName(this);
         return true;
     }
 }

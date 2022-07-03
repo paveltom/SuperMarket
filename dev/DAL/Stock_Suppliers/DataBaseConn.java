@@ -83,10 +83,11 @@ public class DataBaseConn {
             if(sql.endsWith(","))
                 sql=sql.substring(0, sql.length()-1);
             sql += ");";
-            ResultSet rs = stmt.executeQuery(sql);
-            conn.commit();
-            if (!rs.next()) return false;
-            rs.close();
+//            ResultSet rs = stmt.executeQuery(sql);
+//            conn.commit();
+//            if (!rs.next()) return false;
+//            rs.close();
+            boolean res = stmt.execute(sql);
             stmt.close();
             conn.close();
             return true;
@@ -136,9 +137,9 @@ public class DataBaseConn {
             conn.setAutoCommit(false);
             stmt = conn.createStatement();
 
-            StringBuilder sql = new StringBuilder("Delete from " + tableNAME + " where " + keysNAMES[0] + "=" + key[0]);
+            StringBuilder sql = new StringBuilder("Delete from " + tableNAME + " where " + keysNAMES[0] + "='" + key[0] + "'");
             for (int i = 1; i < keysNAMES.length; i++)
-                sql.append(" AND ").append(keysNAMES[i]).append("=").append(key[i]);
+                sql.append(" AND ").append(keysNAMES[i]).append("='").append(key[i] + "'");
             sql.append(";");
 
             //System.out.println("delete sql: " + sql);

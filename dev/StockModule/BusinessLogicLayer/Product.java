@@ -20,7 +20,7 @@ public class Product {
     public Product(String name, String manufacturer, int amountToNotify, int categoryID, int demand)
     {
         dao = new ProductDao();
-        this.ID = (name+manufacturer).replaceAll(" ", "_");
+        this.ID = (name+manufacturer);
         this.name = name;
         this.manufacturer = manufacturer;
         this.amount = 0;
@@ -116,7 +116,6 @@ public class Product {
         updateAmount();
     }
 
-    // todo : add dao
     public boolean reduceItemAmount(int itemID,int amountToReduce) throws Exception
     {
         items.get(itemID).reduce(amountToReduce);
@@ -125,31 +124,38 @@ public class Product {
 
     public void setID(String ID) {
         this.ID = ID;
+        dao.setID(this);
     }
 
     public void setName(String name) {
         this.name = name;
+        dao.setName(this);
     }
 
     public void setManufacturer(String manufacturer) {
         this.manufacturer = manufacturer;
+        dao.setManufacturer(this);
     }
 
     public void setAmount(int amount) {
         this.amount = amount;
+        dao.updateAmount(this);
     }
 
     public void setAmountToNotify(int amountToNotify) {
         this.amountToNotify = amountToNotify;
+        dao.setAmountToNotify(this);
     }
 
     public void setCategoryID(int categoryID) {
         this.categoryID = categoryID;
+        dao.setCategoryID(this);
     }
 
 
     public void setDemand(int demand) {
         this.demand = demand;
+        dao.setDemand(this);
     }
 
     public void setItems(List<Item> items) {

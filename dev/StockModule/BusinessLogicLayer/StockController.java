@@ -23,13 +23,13 @@ public class StockController {
 
         OrderController.getInstance();
 
-//        List<Category> categoriesList = pDao.loadCategories();
-//        if (categoriesList != null) {
-//            for (Category c : categoriesList) {
-//                categories.put(c.getID(), c);
-//                categoriesCounter++;
-//            }
-//        }
+        List<Category> categoriesList = pDao.loadCategories();
+        if (categoriesList != null) {
+            for (Category c : categoriesList) {
+                categories.put(c.getID(), c);
+                categoriesCounter++;
+            }
+        }
 
         List<Discount> discountList = pDao.loadDiscounts();
         if(discountList != null) {
@@ -185,7 +185,7 @@ public class StockController {
         return pDao.getProduct(pid.replaceAll(" ", "_"));
     }
 
-    //todo : add dao
+
     public boolean updateProductAttribute(String productID, int Attribute, Object Value) {
         return getProduct(productID).updateAttributes(Attribute, Value);
     }

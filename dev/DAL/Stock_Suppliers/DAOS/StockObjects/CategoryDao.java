@@ -21,6 +21,9 @@ public class CategoryDao extends DAO {
         delete("Category", keys, keysVals);
     }
 
+    public void setName(Category c){
+        setAttribute(c, "name", c.getName());
+    }
 
     public void setParent(Category c){
         //setAttribute(c, "parentCategory", String.valueOf(c.getParentCategory().getID()));
