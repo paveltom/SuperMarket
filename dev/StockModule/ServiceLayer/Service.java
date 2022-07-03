@@ -113,6 +113,9 @@ public class Service
         return scs.updateItemAttribute(productID,ItemID,Attribute, Value);
     }
 
+    public ResponseT<String> getProductAttributes(){
+        return scs.getProductAttributes();
+    }
 
     public void LoadDefaultData()
     {
