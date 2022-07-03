@@ -23,13 +23,13 @@ public class StockCLI {
         String message = "";
 
         while (!terminate) {
-            System.out.println(ANSI_WHITE_BACKGROUND+"Main Menu :"+ANSI_RESET);
+            System.out.println(ANSI_WHITE_BACKGROUND + "Main Menu :" + ANSI_RESET);
             System.out.println("Hello user welcome to our shop.");
             System.out.println("Select the section you want to go :");
             System.out.println("1 - Load data");
             System.out.println("2 - Products");
             System.out.println("3 - Items");
-            System.out.println("4- Purchases");
+            System.out.println("4 - Purchases");
             System.out.println("5 - Discounts");
             System.out.println("6 - Categories");
             System.out.println("9 - Exit stock module");
@@ -66,7 +66,7 @@ public class StockCLI {
             }
 
             case "6": {
-                runCategoriesMenu(s,toRead);
+                runCategoriesMenu(s, toRead);
             }
 
             case "9": {
@@ -87,8 +87,9 @@ public class StockCLI {
     }
 
     public static void runProductsMenu(Service s, Scanner toRead) {
-        System.out.println(ANSI_WHITE_BACKGROUND+"Products Menu :"+ANSI_RESET);
-        while (true) {
+        System.out.println(ANSI_WHITE_BACKGROUND + "Products Menu :" + ANSI_RESET);
+        boolean terminateCurrentMenu = false;
+        while (!terminateCurrentMenu) {
             System.out.println("Choose your action : ");
             System.out.println("0 - Back to previous menu");
             System.out.println("1 - Add new product");
@@ -101,20 +102,23 @@ public class StockCLI {
 
             switch (msg) {
                 case "0": {
+                    terminateCurrentMenu = true;
                     break;
                 }
                 case "1": {
-                    System.out.println("Enter new product name :");
+                    System.out.println("Enter new product's name :");
                     String productName = toRead.next();
-                    System.out.println("Enter new product manufacturer :");
+                    System.out.println("Enter new product's manufacturer :");
                     String productManufacturer = toRead.next();
+                    System.out.println("Enter new product's weight :");
+                    double productWeight = toRead.nextDouble();
                     System.out.println("Enter minimum amount of product :");
                     int amountToNotify = toRead.nextInt();
                     System.out.println("Enter the ID of the category which the product will belong :");
                     int categoryID = toRead.nextInt();
                     System.out.println("Enter the demand for this product.");
                     int demand = toRead.nextInt();
-                    System.out.println(s.insertNewProduct(productName, productManufacturer, amountToNotify,categoryID, demand).ErrorMessage);
+                    System.out.println(s.insertNewProduct(productName, productManufacturer,productWeight, amountToNotify, categoryID, demand).ErrorMessage);
                     break;
                 }
                 case "2": {
@@ -141,29 +145,35 @@ public class StockCLI {
                     ExitStockModule();
                     break;
                 }
+                default: {
+                    System.out.println("Invalid input, try again");
+                }
             }
-            System.out.println("Invalid input, try again");
+
         }
 
     }
 
     public static void runItemsMenu(Service s, Scanner toRead) {
-        System.out.println(ANSI_WHITE_BACKGROUND+"Items Menu :"+ANSI_RESET);
-        System.out.println("Choose your action : ");
-        System.out.println("0 - Back to previous menu");
-        System.out.println("1 - Add new item");
-        System.out.println("2 - Remove item");
-        System.out.println("3 - Show items in stock");
-        System.out.println("4 - Show items by category");
-        System.out.println("5 - Show defective items report");
-        System.out.println("6 - Show expired items report");
-        System.out.println("7 - Edit item's attribute");
-        System.out.println("8 - Reduce item's amount");
-        System.out.println("9 - Exit stock module");
-        String msg = toRead.next();
-        while (true) {
+        System.out.println(ANSI_WHITE_BACKGROUND + "Items Menu :" + ANSI_RESET);
+        boolean terminateCurrentMenu = false;
+        while (!terminateCurrentMenu) {
+            System.out.println("Choose your action : ");
+            System.out.println("0 - Back to previous menu");
+            System.out.println("1 - Add new item");
+            System.out.println("2 - Remove item");
+            System.out.println("3 - Show items in stock");
+            System.out.println("4 - Show items by category");
+            System.out.println("5 - Show defective items report");
+            System.out.println("6 - Show expired items report");
+            System.out.println("7 - Edit item's attribute");
+            System.out.println("8 - Reduce item's amount");
+            System.out.println("9 - Exit stock module");
+            String msg = toRead.next();
+
             switch (msg) {
                 case "0": {
+                    terminateCurrentMenu = true;
                     break;
                 }
                 case "1": {
@@ -250,8 +260,11 @@ public class StockCLI {
                     ExitStockModule();
                     break;
                 }
+                default: {
+                    System.out.println("Invalid input, try again");
+                }
             }
-            System.out.println("Invalid input, try again");
+
         }
 
     }
@@ -313,19 +326,21 @@ public class StockCLI {
     }
 
 
+    public static void runDiscountsMenu(Service s, Scanner toRead) {
+        System.out.println(ANSI_WHITE_BACKGROUND + "Discounts Menu :" + ANSI_RESET);
+        boolean terminateCurrentMenu = false;
+        while (!terminateCurrentMenu) {
+            System.out.println("Choose your action : ");
+            System.out.println("0 - Back to previous menu");
+            System.out.println("1 - Show current discounts report");
+            System.out.println("2 - Insert new discount");
+            System.out.println("3 - Delete discount");
+            System.out.println("9 - Exit stock module");
+            String msg = toRead.next();
 
-    public static void runDiscountsMenu(Service s,Scanner toRead) {
-        System.out.println(ANSI_WHITE_BACKGROUND+"Discounts Menu :"+ANSI_RESET);
-        System.out.println("Choose your action : ");
-        System.out.println("0 - Back to previous menu");
-        System.out.println("1 - Show current discounts report");
-        System.out.println("2 - Insert new discount");
-        System.out.println("3 - Delete discount");
-        System.out.println("9 - Exit stock module");
-        String msg = toRead.next();
-        while (true) {
             switch (msg) {
                 case "0": {
+                    terminateCurrentMenu = true;
                     break;
                 }
                 case "1": {
@@ -381,24 +396,29 @@ public class StockCLI {
                     ExitStockModule();
                     break;
                 }
+                default: {
+                    System.out.println("Invalid input, try again");
+                }
             }
-            System.out.println("Invalid input, try again");
         }
     }
 
-    public static void runCategoriesMenu(Service s,Scanner toRead){
-        System.out.println(ANSI_WHITE_BACKGROUND+"Categories Menu :"+ANSI_RESET);
-        System.out.println("Choose your action : ");
-        System.out.println("0 - Back to previous menu");
-        System.out.println("1 - Show categories");
-        System.out.println("2 - Insert new category");
-        System.out.println("3 - Remove category");
-        System.out.println("4 - Set subcategory");
-        System.out.println("9 - Exit stock module");
-        String msg = toRead.next();
-        while (true) {
+    public static void runCategoriesMenu(Service s, Scanner toRead) {
+        System.out.println(ANSI_WHITE_BACKGROUND + "Categories Menu :" + ANSI_RESET);
+        boolean terminateCurrentMenu = false;
+        while (!terminateCurrentMenu) {
+            System.out.println("Choose your action : ");
+            System.out.println("0 - Back to previous menu");
+            System.out.println("1 - Show categories");
+            System.out.println("2 - Insert new category");
+            System.out.println("3 - Remove category");
+            System.out.println("4 - Set subcategory");
+            System.out.println("9 - Exit stock module");
+            String msg = toRead.next();
+
             switch (msg) {
                 case "0": {
+                    terminateCurrentMenu = true;
                     break;
                 }
                 case "1": {

@@ -116,11 +116,11 @@ public class StockControllerService
         }
     }
 
-    public Response insertNewProduct(String productName, String productManufacturer,int amountToNotify, int categoryID, int demand)
+    public Response insertNewProduct(String productName, String productManufacturer,double weight,int amountToNotify, int categoryID, int demand)
     {
         try
         {
-            sc.insertNewProduct(productName, productManufacturer, amountToNotify, categoryID, demand);
+            sc.insertNewProduct(productName, productManufacturer,weight, amountToNotify, categoryID, demand);
             return new Response();
         } catch (Exception e)
         {
