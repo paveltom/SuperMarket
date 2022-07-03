@@ -278,5 +278,8 @@ public class StockControllerService
     public Response updateItemAttribute(String productID,int ItemID, int Attribute, Object Value) {
         return ResponseT.FromValue(sc.updateItemAttribute(productID,ItemID,Attribute, Value));
     }
+    public ResponseT<String> getProductAttributes(){
+        return ResponseT.FromValue(sc.getProductAttributes());
+    }
 
 }
