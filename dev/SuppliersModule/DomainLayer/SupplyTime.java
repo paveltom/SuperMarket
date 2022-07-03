@@ -24,17 +24,13 @@ public class SupplyTime {
     }
 
     //  setters
-    private void setOrderingDays(boolean[] orderingDays) {
+    public void changeWeeklyOrdering(boolean[] orderingDays) {
         if (orderingDays == null || orderingDays.length != 7 )
             throw new IllegalArgumentException("incorrect format at days of delivery");
         this.orderingDays = orderingDays;
 
 
-        dao.changeDaysOfDelivery(this);
-    }
-    public void changeWeeklyOrdering(boolean[] days) {
-        setOrderingDays(days);
-        dao.changeDaysOfDelivery(this);
+        dao.changeOrderDays(this);
     }
 
     public void setOrderCycle(int orderCycle){
@@ -52,7 +48,7 @@ public class SupplyTime {
     //  constructor
     public SupplyTime(String sId, boolean[] daysOfDelivery, int orderCycle){
         dao = new SupplyTimeDao();
-        setOrderingDays(daysOfDelivery);
+        changeWeeklyOrdering(daysOfDelivery);
         setOrderCycle(orderCycle);
         daysAcc = orderCycle - 1; //if cycle delivery then an order would be placed at the end of the day
         this.sId = sId;
@@ -60,8 +56,8 @@ public class SupplyTime {
         dao.insert(this);
     }
     //constructor from db
-    public SupplyTime(String sId, boolean[] daysOfDelivery, int orderCycle, int daysAcc){
-        this.orderingDays = daysOfDelivery;
+    public SupplyTime(String sId, boolean[] orderingDays, int orderCycle, int daysAcc){
+        this.orderingDays = orderingDays;
         this.orderCycle = orderCycle;
         daysAcc = orderCycle - 1;
         this.sId = sId;
@@ -79,6 +75,7 @@ public class SupplyTime {
         }
         else {
             daysAcc = (daysAcc + 1) % orderCycle;
+            dao.setDaysAcc(this);
             return daysAcc == 0;
         }
     }
