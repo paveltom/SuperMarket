@@ -380,6 +380,11 @@ public class DataBaseConnection {
                 "daysAcc TEXT," +
                 "PRIMARY KEY(supplier_id));";
 
+        String stockSupSupplyDeliveryErrors = "CREATE TABLE DeliveryErrors (" +
+                "order_id, " +
+                "msg, " +
+                "PRIMARY KEY(order_id));";
+
 
 
 
@@ -411,6 +416,7 @@ public class DataBaseConnection {
             stmt.execute(stockSupQuantityAgreements);
             stmt.execute(stockSupSuppliers);
             stmt.execute(stockSupSupplyTimes);
+            stmt.execute(stockSupSupplyDeliveryErrors);
 
             System.out.println("DB and Tables created successfully...");
             stmt.close();

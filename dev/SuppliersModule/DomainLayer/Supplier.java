@@ -125,7 +125,7 @@ public class Supplier {
     // order methods
     public void endDay(){
         List<String> cp = contract.endDay();
-        if(cp != null && !cp.isEmpty()) {
+        if(cp != null) {
             Map<String, Integer> prodQuantities = oc.orderPeriodic(cp, contract.getPeriodicOrderInterval());
             String phone = contacts.entrySet().stream().findFirst().get().getValue();
             Order order = new Order(sId+LocalDate.now(), sId, name, address, LocalDate.now(), phone);
@@ -151,7 +151,7 @@ public class Supplier {
     public int getDaysForShortageOrder(){return contract.getDaysForShortageOrder();}
 
     //products methods
-    public void addProduct(String pId, String catalogNum, float price) {
+    public void addProduct(String pId, String catalogNum, float price) { //TODO 1.calculating and setting product in periodic order
         contract.addProduct(pId, catalogNum, price);
     }
     public void removeProduct(String pId) {
