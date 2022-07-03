@@ -52,6 +52,7 @@ public class SupplierController {
         for (Supplier s: getSuppliers() ){
             s.endDay();}
     }
+
     public Map<Supplier, Integer> getSuppliersDays(String pId){
         List<Supplier> supplierList = getSuppliers().stream().filter(supplier -> supplier.hasProduct(pId)).collect(Collectors.toList());
         Map<Supplier, Integer> suppDays = new HashMap<>();
