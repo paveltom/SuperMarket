@@ -49,8 +49,8 @@ public class ProductDao extends DAO {
     private Product makeProduct(List<String[]> p){
         //assuming uniqe pid's
         try {
-            return new Product(p.get(0)[1], p.get(0)[2], Integer.parseInt(p.get(0)[3]),
-                    Integer.parseInt(p.get(0)[4]), Integer.parseInt(p.get(0)[5]), true);
+            return new Product(p.get(0)[1], p.get(0)[2], Integer.parseInt(p.get(0)[3]), //todo:
+                    Integer.parseInt(p.get(0)[4]), Integer.parseInt(p.get(0)[5]), Double.valueOf(p.get(0)[6]), true);
         } catch (NumberFormatException e) {
             throw new NumberFormatException();
         }
@@ -59,7 +59,7 @@ public class ProductDao extends DAO {
     public void insert(Product p){
         String[] params = {p.getID(), p.getName(), p.getManufacturer(),
                 String.valueOf(p.getAmountToNotify()),
-                String.valueOf(p.getCategoryID()), String.valueOf(p.getDemand())};
+                String.valueOf(p.getCategoryID()), String.valueOf(p.getDemand()), String.valueOf(p.getWeight())};
         insert("Products", params);
         identityMap.cache(p);
     }
@@ -106,6 +106,9 @@ public class ProductDao extends DAO {
         setAttribute(p, "demand", String.valueOf(p.getDemand()));
     }
 
+    public void setWeight(Product p){
+        setAttribute(p, "weight", String.valueOf(p.getWeight()));
+    }
 
     public List<Item> loadItems(String pId){
         List<Item> output = new ArrayList<>();

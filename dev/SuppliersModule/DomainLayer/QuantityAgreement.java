@@ -87,4 +87,8 @@ public class QuantityAgreement {
     public String toString() {
         return Discounts.toString();
     }
+
+    public void delete(){
+        dao.delete(sId);
+    }
 }

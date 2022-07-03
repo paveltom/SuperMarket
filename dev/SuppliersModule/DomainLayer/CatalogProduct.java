@@ -70,4 +70,8 @@ public class CatalogProduct {
                 ", price=" + price +
                 ", inPeriodicOrder=" + inPeriodicOrder;
     }
+
+    public void delete(){
+        dao.delete(this);
+    }
 }

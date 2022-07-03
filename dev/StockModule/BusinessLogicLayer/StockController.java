@@ -1,6 +1,7 @@
 package StockModule.BusinessLogicLayer;
 
 import DAL.Stock_Suppliers.DAOS.StockObjects.ProductDao;
+import StockModule.ServiceLayer.ResponseT;
 import SuppliersModule.DomainLayer.OrderController;
 import java.util.*;
 
@@ -197,4 +198,9 @@ public class StockController {
     public boolean updateItemAttribute(String productID,int ItemID, int Attribute, Object Value) {
         return getProduct(productID).updateItemAttribute(ItemID,Attribute, Value);
     }
+
+    public String getProductAttributes(){
+        return Product.getAttributesString();
+    }
+
 }

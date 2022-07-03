@@ -1,5 +1,7 @@
 package SuppliersModule.DomainLayer;
 
+import DAL.Stock_Suppliers.DAOS.SupplierObjects.QuantityAgreementDao;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -40,11 +42,11 @@ public class Contract {
     public Contract(String sId, SupplyTime st, List<CatalogProduct> c, QuantityAgreement qa){
         this.sId = sId;
         supplyTime = st;
-
         if(c != null) {
             for (CatalogProduct p : c)
                 catalog.add(p);
         }
+
         this.qa = qa;
     }
 
@@ -73,8 +75,14 @@ public class Contract {
         catalog.add(new CatalogProduct(sId, pId, catalogNum, price));
     }
     public boolean removeProduct(String pId) {
-        catalog.removeIf(catalogProduct -> catalogProduct.getId().equals(pId));
-        qa.removeProduct(pId);
+        Optional<CatalogProduct> optional = catalog.stream().filter(catalogProduct -> catalogProduct.getId().equals(pId)).findFirst();
+        if(!optional.isPresent())
+            throw new IllegalArgumentException("this supplier doesn't provide the product");
+
+        optional.get().delete();
+        catalog.remove(optional.get());
+        if(getQa() != null)
+            qa.removeProduct(pId);
         return catalog.isEmpty();
     }
     public void updateCatalogNum(String pId, String newCatalogNum) {
@@ -108,6 +116,7 @@ public class Contract {
         if(getQa()==null)
             addQuantityAgreement(new QuantityAgreement(sId));
         qa.updateDiscount(pId, quantity, discount);
+
     }
     public Map<Integer, Float> getDiscount(String pId){
         if(!hasProduct(pId) || getQa() == null)
@@ -140,15 +149,23 @@ public class Contract {
 
     @Override
     public String toString() {
-        return  "supplyTime=" + supplyTime +
-                "\n catalog=" + catalog +
-                "\nqa=" + qa;
+        return  supplyTime + "\n" +
+                "catalog: " + catalog + "\n" +
+                "qa: " + qa;
     }
 
     public void updatePeriodicOrderProduct(String pId, boolean state) {
         CatalogProduct cp = searchProduct(pId);
         if(cp!=null)
             cp.setInPeriodicOrder(state);
+    }
+
+    public void delete(){
+        for(CatalogProduct cp : catalog){
+            removeProduct(cp.getId());
+        }
+        supplyTime.delete();
+        qa.delete();
     }
 }
 

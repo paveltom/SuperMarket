@@ -74,8 +74,8 @@ public class SupplierController {
                 bestDiscount = currentDiscount;
             }
         }
-//        if(bestSupp != null)
-//            bestSupp.makeShortageOrder(pId, bestQuantity, bestDiscount);
+        if(bestSupp != null)
+            bestSupp.makeShortageOrder(pId, bestQuantity, bestDiscount);
     }
 
     //  other methods
@@ -86,8 +86,9 @@ public class SupplierController {
                             String pId, String catNumber, float price){
         if(hasSupp(sId))
             throw new IllegalArgumentException("supplier with id " + sId + " already exist!");
-        // TODO if(pdm.getProduct())
-        //    throw new IllegalArgumentException("no such product in stock system, first add product at stock");
+        try{ pDao.getProduct(pId);
+        }catch (Exception e) {throw new IllegalArgumentException("no such product in stock system, first add product at stock");}
+
         new Supplier(sId, name, address, bankAccount, cash, credit,  workingDays,
                 contactName, phoneNum, orderingDays, supplCycle,
                 pId, catNumber, price);
@@ -98,6 +99,7 @@ public class SupplierController {
     public void removeSupplier(String sId){
         Supplier s = sDao.get(sId);
         List<String> products = s.getContract().getOrderProducts();
+        s.delete();
         sDao.delete(s);
         for(String pId : products){
             updateBestSeller(pId);

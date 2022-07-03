@@ -154,7 +154,7 @@ public class Supplier {
     public void addProduct(String pId, String catalogNum, float price) { //TODO 1.calculating and setting product in periodic order
         contract.addProduct(pId, catalogNum, price);
     }
-    public void removeProduct(String pId) { //Todo delete supplier if has no product
+    public void removeProduct(String pId) {
         if(contract.removeProduct(pId))
             sDao.delete(this);
     }
@@ -180,13 +180,15 @@ public class Supplier {
 
     public String toString() {
         return "Supplier " + sId + "\n" +
-                "name: " + name + '\t' +
-                "address: " + address + '\t' +
-                "bankAccount: " + bankAccount + '\t' +
-                "paymentMethods: " + Arrays.toString(paymentMethods) + "\n" +
+                "name: " + name + ",\t\t" +
+                "address: " + address + ",\t\t" +
+                "bankAccount: " + bankAccount + ",\t\t" +
+                "using cash: " + paymentMethods[0] + ",\t\tusing credit: " + paymentMethods[0] + "\n" +
                 "contacts: " + contacts + "\n" +
-                "contract: " + contract ;
+                contract ;
     }
 
-
+    public void delete(){
+        contract.delete();
+    }
 }

@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.Map;
 
 public class DataBaseConn {
-    private String[] suppliers = {"supplier_id", "name", "address", "bank", "cash", "credit"};
+    private String[] suppliers = {"supplier_id", "name", "address", "bank", "cash", "credit", "workingDays"};
     private String[] supplyTimes = {"supplier_id", "orderingDays", "orderCycle", "daysAcc"};
     private String[] contacts = {"supplier_id", "contactName", "phoneNum"};
     private String[] product_order = {"supplier_id", "product_id", "order_id", "quantity", "discount", "finalPrice", "catalogPrice"};
-    private String[] products = {"product_id", "name", "manufacturer", "amountToNotify", "categoryID", "demand"};
+    private String[] products = {"product_id", "name", "manufacturer", "amountToNotify", "categoryID", "demand", "weight"};
     private String[] product_contract = {"supplier_id", "product_id", "price", "is_periodic_order", "catalogNum"};
     private String[] quantityAgreements = {"supplier_id", "product_id", "quantity", "discount"};
     private String[] discounts = {"discount_id", "product_id", "discountStartDate", "discountEndDate", "discountAmount", "discountType"};
@@ -65,7 +65,7 @@ public class DataBaseConn {
             return conn;
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            //System.out.println(e.getMessage());
             return null;
 
         }
@@ -93,7 +93,7 @@ public class DataBaseConn {
             return true;
 
         } catch (Exception e) {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            //System.err.println(e.getClass().getName() + ": " + e.getMessage());
             return false;
         }
     }
@@ -122,7 +122,7 @@ public class DataBaseConn {
             return res;
 
         } catch ( Exception e ) {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage() + ". Update method. On table: " + tableNAME);
+            //System.err.println(e.getClass().getName() + ": " + e.getMessage() + ". Update method. On table: " + tableNAME);
             return false;
         }
     }
@@ -151,7 +151,7 @@ public class DataBaseConn {
             return res;
 
         } catch ( Exception e ) {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage() + ". Delete method. On table: " + tableNAME);
+            ///System.err.println(e.getClass().getName() + ": " + e.getMessage() + ". Delete method. On table: " + tableNAME);
             return false;
         }
 
@@ -191,7 +191,7 @@ public class DataBaseConn {
             conn.close();
             return output;
         } catch ( Exception e ) {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage() + ". Select method. On table: " + tableNAME);
+            //System.err.println(e.getClass().getName() + ": " + e.getMessage() + ". Select method. On table: " + tableNAME);
             return null;
         }
     }

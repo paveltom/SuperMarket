@@ -34,7 +34,7 @@ public class Product {
     }
 
     //db
-    public Product(String name, String manufacturer,double weight, int amountToNotify,  int categoryID, int demand, boolean isFromDB) {
+    public Product(String name, String manufacturer, int amountToNotify,  int categoryID, int demand,double weight, boolean isFromDB) {
         this.dao = new ProductDao();
         this.ID = name + manufacturer;
         this.name = name;
@@ -141,8 +141,7 @@ public class Product {
 
     public void setWeight(double weight) {
         this.weight = weight;
-        //todo
-        //dao.setWeight(this);
+        //dao.setWeight(this); //todo
     }
 
     public void setAmount(int amount) {
@@ -174,8 +173,8 @@ public class Product {
         this.dao = dao;
     }
 
-    public String getAttributesString(){
-        return ".0. ID "+"\n"+".1. Name"+"\n"+".2. Manufacturer"+"\n"+ ".3. Amount"+"\n"+".4. AmountToNotify"+"\n"+ ".5. CategoryID"+"\n"+ ".6. Demand";
+    public static String getAttributesString(){
+        return ".0. ID "+"\n"+".1. Name"+"\n"+".2. Manufacturer"+"\n"+ ".3. Amount"+"\n"+".4. AmountToNotify"+"\n"+ ".5. CategoryID"+"\n"+ ".6. Demand"+"\n"+".7. Weight";
     }
 
     public boolean updateAttributes(int Attribute, Object Value){

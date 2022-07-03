@@ -27,22 +27,41 @@ public class SupplyTime {
     public void changeWeeklyOrdering(boolean[] orderingDays) {
         if (orderingDays == null || orderingDays.length != 7 )
             throw new IllegalArgumentException("incorrect format at days of delivery");
+
+        boolean hasWeeklyOrdering = false;
+        for(int i=0; i<7; i++){
+            if (orderingDays[i]) {
+                hasWeeklyOrdering = true;
+                break;
+            }
+        }
+        if(!hasWeeklyOrdering && orderCycle <=0)
+            throw new IllegalArgumentException("weekly ordering is a must when there isn't a fix days ordering");
+
         this.orderingDays = orderingDays;
-
-
+        this.orderCycle = -1;
+        this.daysAcc = -1;
         dao.changeOrderDays(this);
+        dao.setOrderCycle(this);
+        dao.setDaysAcc(this);
     }
 
     public void setOrderCycle(int orderCycle){
         if(orderCycle == 0 | orderCycle < -1)
             throw new IllegalArgumentException("order cycle must be positive or -1");
-        if(orderCycle > 0 & hasWeeklyOrdering())
-            throw new IllegalArgumentException("order cycle is not an option when there is a weekly delivery");
         if(orderCycle == -1 & !hasWeeklyOrdering())
             throw new IllegalArgumentException("order cycle is a must when there isn't a weekly delivery");
-        this.orderCycle = orderCycle;
 
+        if(orderCycle > 0 & hasWeeklyOrdering()){
+            for(int i=0; i<7; i++){
+                this.orderingDays[i] = false;
+            }
+            dao.changeOrderDays(this);
+        }
+        this.orderCycle = orderCycle;
+        this.daysAcc = orderCycle - 1;
         dao.setOrderCycle(this);
+        dao.setDaysAcc(this);
     }
 
     //  constructor
@@ -109,8 +128,12 @@ public class SupplyTime {
     }
 
     public String toString() {
-        return  "daysOfDelivery=" + Arrays.toString(orderingDays) +
-                ", orderCycle=" + orderCycle +
-                ", daysAcc=" + daysAcc ;
+        return  "ordering days: " + Arrays.toString(orderingDays) + ",\t\t" +
+                "orderCycle: " + orderCycle + ",\t\t" +
+                "daysAcc: " + daysAcc ;
+    }
+
+    public void delete(){
+        dao.delete(this);
     }
 }
