@@ -75,9 +75,14 @@ public class Contract {
         catalog.add(new CatalogProduct(sId, pId, catalogNum, price));
     }
     public boolean removeProduct(String pId) {
-        catalog.stream().filter(catalogProduct -> catalogProduct.getId().equals(pId)).findFirst().get().delete();
-        catalog.removeIf(catalogProduct -> catalogProduct.getId().equals(pId));
-        qa.removeProduct(pId);
+        Optional<CatalogProduct> optional = catalog.stream().filter(catalogProduct -> catalogProduct.getId().equals(pId)).findFirst();
+        if(!optional.isPresent())
+            throw new IllegalArgumentException("this supplier doesn't provide the product");
+
+        optional.get().delete();
+        catalog.remove(optional.get());
+        if(getQa() != null)
+            qa.removeProduct(pId);
         return catalog.isEmpty();
     }
     public void updateCatalogNum(String pId, String newCatalogNum) {

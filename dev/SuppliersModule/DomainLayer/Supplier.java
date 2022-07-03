@@ -154,7 +154,7 @@ public class Supplier {
     public void addProduct(String pId, String catalogNum, float price) { //TODO 1.calculating and setting product in periodic order
         contract.addProduct(pId, catalogNum, price);
     }
-    public void removeProduct(String pId) { //Todo delete supplier if has no product
+    public void removeProduct(String pId) {
         if(contract.removeProduct(pId))
             sDao.delete(this);
     }

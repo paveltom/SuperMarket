@@ -40,8 +40,10 @@ public class SupplyTime {
 
         this.orderingDays = orderingDays;
         this.orderCycle = -1;
+        this.daysAcc = -1;
         dao.changeOrderDays(this);
         dao.setOrderCycle(this);
+        dao.setDaysAcc(this);
     }
 
     public void setOrderCycle(int orderCycle){
@@ -57,7 +59,9 @@ public class SupplyTime {
             dao.changeOrderDays(this);
         }
         this.orderCycle = orderCycle;
+        this.daysAcc = orderCycle - 1;
         dao.setOrderCycle(this);
+        dao.setDaysAcc(this);
     }
 
     //  constructor
