@@ -271,13 +271,6 @@ public class DataBaseConnection {
                 " PRIMARY KEY(Id)" + ");";
 
 
-
-
-
-
-
-
-
         String stockSupCategory = "CREATE TABLE Category(" +
                 "category_id TEXT," +
                 "name TEXT," +
@@ -350,6 +343,7 @@ public class DataBaseConnection {
                 "name TEXT, " +
                 "manufacturer TEXT, " +
                 "amountToNotify TEXT, " +
+                "weight TEXT, " +
                 "categoryID TEXT, " +
                 "demand TEXT, " +
                 "weight TEXT, " +
