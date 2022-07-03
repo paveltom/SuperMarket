@@ -5,7 +5,7 @@ import SuppliersModule.DomainLayer.OrderProduct;
 
 public class OrderProductDao extends DAO {
     public void insert(OrderProduct op){
-        String[] params = {op.getsId(), op.getoId(), op.getId(), String.valueOf(op.getAmount()), String.valueOf(op.getDiscount()),
+        String[] params = {op.getsId(), op.getId(), op.getoId(), String.valueOf(op.getAmount()), String.valueOf(op.getDiscount()),
                 String.valueOf(op.getFinalPrice()), String.valueOf(op.getCatalogPrice())};
         insert("Product_Order", params);
     }

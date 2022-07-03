@@ -128,7 +128,7 @@ public class Supplier {
         if(cp != null) {
             Map<String, Integer> prodQuantities = oc.orderPeriodic(cp, contract.getPeriodicOrderInterval());
             String phone = contacts.entrySet().stream().findFirst().get().getValue();
-            Order order = new Order(sId+LocalDate.now(), sId, name, address, LocalDate.now(), phone);
+            Order order = new Order(sId+LocalDate.now(), sId, name, address, LocalDate.now(), phone); //todo: change date format here or in db
             for (Map.Entry<String, Integer> entry : prodQuantities.entrySet()) {
                 String pId = entry.getKey();
                 int amount = entry.getValue();
