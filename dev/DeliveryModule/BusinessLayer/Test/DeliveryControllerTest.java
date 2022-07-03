@@ -37,7 +37,7 @@ public class DeliveryControllerTest {
     final String TRUCK_MODEL = "Volvo V9";
     final VehicleLicenseCategory driverLicenseCategory = VehicleLicenseCategory.C1;
 
-    final int DAY = 1, MONTH = 7, YEAR = 2022;
+    final int DAY = cal.get(Calendar.DAY_OF_MONTH), MONTH = cal.get(Calendar.MONTH) + 1, YEAR = cal.get(Calendar.YEAR);
 
     static final boolean[] supplier_constraint = new boolean[7];
     static {
@@ -130,6 +130,37 @@ public class DeliveryControllerTest {
 
         Receipt r = testObj.Deliver(deliveryOrder_1);
         assertEquals(r.Status, RetCode.FailedDelivery_CannotDeliverWithinAWeek);
+    }
+
+    @Test
+    public void deliver_failed_no_certified_driver() {
+        int norder = 3123;
+        List<Product> products = Arrays.asList(new Product(P2_ID, P2_WEIGHT, P2_AMOUNT));
+        Date submissionDate = new Date(DAY, MONTH, YEAR);
+        DeliveryOrder deliveryOrder_1 = new DeliveryOrder(supplier, client, String.valueOf(norder), products, submissionDate);
+
+        testObj.AddDriver(driverId, driverName, driverCell, driverLicenseCategory, srcZone);
+        testObj.AddTruck(18005900.00, TRUCK_NET_WEIGHT, TRUCK_LICENSE_NUMBER, TRUCK_MODEL, srcZone);
+
+        Receipt r = testObj.Deliver(deliveryOrder_1);
+        assertEquals(r.Status, RetCode.FailedDelivery_NoCertifiedDriver);
+    }
+
+    @Test
+    public void deliver_multiple_drivers() {
+        int norder = 78966321;
+        List<Product> products = Arrays.asList(new Product(P2_ID, P2_WEIGHT, P2_AMOUNT));
+        Date submissionDate = new Date(DAY, MONTH, YEAR);
+        DeliveryOrder deliveryOrder_1 = new DeliveryOrder(supplier, client, String.valueOf(norder), products, submissionDate);
+
+        testObj.AddDriver(driverId, driverName, driverCell, VehicleLicenseCategory.E, srcZone);
+        testObj.AddDriver("7777777", driverName, driverCell, VehicleLicenseCategory.C, srcZone);
+        testObj.AddTruck(11005900.00, TRUCK_NET_WEIGHT, TRUCK_LICENSE_NUMBER, TRUCK_MODEL, srcZone);
+
+        Receipt r = testObj.Deliver(deliveryOrder_1);
+        System.out.println(r);
+        assertEquals(r.Status, RetCode.SuccessfulDelivery);
+        assertEquals(r.Driver, testObj.GetDriver("7777777"));
     }
 
     @Test
@@ -388,7 +419,7 @@ public class DeliveryControllerTest {
             DeliveryOrder deliveryOrder = new DeliveryOrder(supplier, client, String.valueOf(norders), products, submissionDate);
             Receipt r = testObj.Deliver(deliveryOrder);
             System.out.println(r);
-            if(prev_date != null)
+            if(prev_date != null && r.DueDate != null)
             {
                 int diff = r.DueDate.compareTo(prev_date);
                 assertEquals(diff, 1);
