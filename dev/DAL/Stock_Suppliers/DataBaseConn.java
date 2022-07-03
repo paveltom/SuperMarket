@@ -136,9 +136,9 @@ public class DataBaseConn {
             conn.setAutoCommit(false);
             stmt = conn.createStatement();
 
-            StringBuilder sql = new StringBuilder("Delete from " + tableNAME + " where " + keysNAMES[0] + "=" + key[0]);
+            StringBuilder sql = new StringBuilder("Delete from " + tableNAME + " where " + keysNAMES[0] + "='" + key[0] + "'");
             for (int i = 1; i < keysNAMES.length; i++)
-                sql.append(" AND ").append(keysNAMES[i]).append("=").append(key[i]);
+                sql.append(" AND ").append(keysNAMES[i]).append("='").append(key[i] + "'");
             sql.append(";");
 
             //System.out.println("delete sql: " + sql);

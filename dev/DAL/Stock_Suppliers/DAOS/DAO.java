@@ -15,7 +15,7 @@ public class DAO<T> {
     }
 
     protected void delete(String tableName, String[] keys, String[] keysVals){
-        conn.delete(tableName, keys, keysVals);
+        conn.delete(tableName, keysVals, keys);
     }
 
     protected List<String[]> load(String tableName, String[] params, String[] ParamsVals){
