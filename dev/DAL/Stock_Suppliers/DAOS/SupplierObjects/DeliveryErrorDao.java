@@ -10,7 +10,7 @@ public class DeliveryErrorDao extends DAO<Order> {
         String[] params = {oId, msg};
         insert("DeliveryErrors", params);
     }
-    public List<String[]> getErrors(String oId){
+    public List<String[]> getErrors(){
         List<String[]> sFromDB = load("DeliveryErrors", null, null);
         List<String[]> errors = new LinkedList<>();
 

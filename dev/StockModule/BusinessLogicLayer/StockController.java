@@ -151,6 +151,9 @@ public class StockController {
     }
 
     public void deleteProduct(String productID){
+        for(Item i : getProduct(productID).getItems()){
+            i.delete();
+        }
         pDao.delete(getProduct(productID));
     }
 
