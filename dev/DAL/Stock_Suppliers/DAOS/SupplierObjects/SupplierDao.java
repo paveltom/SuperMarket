@@ -42,8 +42,11 @@ public class SupplierDao extends DAO {
             if(st != null) {
                 for (String[] s : st) { //todo add working days
                     boolean[] workDs = new boolean[7];
-
-                    Supplier sup = new Supplier(s[0], s[2], s[3], s[1], null, Boolean.valueOf(s[4]), Boolean.valueOf(s[5]));
+                    String[] splitWordDyas = s[6].substring(1, s[6].length()-1).split(", ");
+                    for(int i = 0; i < 7; i++){
+                        workDs[i] = Boolean.valueOf(splitWordDyas[i]);
+                    }
+                    Supplier sup = new Supplier(s[0], s[2], s[3], s[1], workDs, Boolean.valueOf(s[4]), Boolean.valueOf(s[5]));
                     suppliersIdentityMap.cache(sup);
                     output.add(0, sup);
                 }
@@ -112,14 +115,14 @@ public class SupplierDao extends DAO {
         String[] paramsWV = {sId};
         List<String[]> discounts =load("QuantityAgreements", paramsW, paramsWV);
 
-        if(discounts.isEmpty())
-            return null;
 
         Map<String, Map<Integer, Float>> Discounts = new Hashtable<>();
         QuantityAgreement qa = new QuantityAgreement(sId);
-        for(String[] s : discounts){
-            qa.loadDiscountFromDB(s[1],Integer.valueOf(s[2]), Float.valueOf(s[3]));
+        if(discounts != null) {
+            for (String[] s : discounts) {
+                qa.loadDiscountFromDB(s[1], Integer.valueOf(s[2]), Float.valueOf(s[3]));
 
+            }
         }
         return qa;
     }

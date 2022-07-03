@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public class DataBaseConn {
-    private String[] suppliers = {"supplier_id", "name", "address", "bank", "cash", "credit"};
+    private String[] suppliers = {"supplier_id", "name", "address", "bank", "cash", "credit", "workingDays"};
     private String[] supplyTimes = {"supplier_id", "orderingDays", "orderCycle", "daysAcc"};
     private String[] contacts = {"supplier_id", "contactName", "phoneNum"};
     private String[] product_order = {"supplier_id", "product_id", "order_id", "quantity", "discount", "finalPrice", "catalogPrice"};
