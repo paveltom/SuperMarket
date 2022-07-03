@@ -40,9 +40,9 @@ public class SupplierDao extends DAO {
             List<Supplier> output = new ArrayList<>();
 
             if(st != null) {
-                for (String[] s : st) { //todo add working days
+                for (String[] s : st) {
                     boolean[] workDs = new boolean[7];
-
+                                                                    //todo add working days
                     Supplier sup = new Supplier(s[0], s[2], s[3], s[1], null, Boolean.valueOf(s[4]), Boolean.valueOf(s[5]));
                     suppliersIdentityMap.cache(sup);
                     output.add(0, sup);
@@ -63,7 +63,7 @@ public class SupplierDao extends DAO {
             List<String[]> dbs = super.load("Suppliers", params, paramsWV); //assuming unique id
 
             if(dbs.isEmpty())
-                throw new IllegalArgumentException("no suchSupplier with id " + sId);
+                throw new IllegalArgumentException("no such supplier with id " + sId);
             else{
                 String[] str = dbs.get(0); //todo add working days
                 s = new Supplier(str[0], str[1], str[2], str[3], null, Boolean.valueOf(str[4]), Boolean.valueOf(str[5]));
@@ -139,7 +139,7 @@ public class SupplierDao extends DAO {
     }
     private Order makeOrder(String[] o){
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String date = o[2];
 
         LocalDate localDate = LocalDate.parse(date, formatter);

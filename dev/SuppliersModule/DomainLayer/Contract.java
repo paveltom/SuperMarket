@@ -140,9 +140,9 @@ public class Contract {
 
     @Override
     public String toString() {
-        return  "supplyTime=" + supplyTime +
-                "\n catalog=" + catalog +
-                "\nqa=" + qa;
+        return  supplyTime + "\n" +
+                "catalog: " + catalog + "\n" +
+                "qa: " + qa;
     }
 
     public void updatePeriodicOrderProduct(String pId, boolean state) {
