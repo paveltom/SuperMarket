@@ -188,5 +188,7 @@ public class Supplier {
                 "contract: " + contract ;
     }
 
-
+    public void delete(){
+        contract.delete();
+    }
 }

@@ -65,7 +65,7 @@ public class DataBaseConn {
             return conn;
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            //System.out.println(e.getMessage());
             return null;
 
         }
@@ -93,7 +93,7 @@ public class DataBaseConn {
             return true;
 
         } catch (Exception e) {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            //System.err.println(e.getClass().getName() + ": " + e.getMessage());
             return false;
         }
     }
@@ -122,7 +122,7 @@ public class DataBaseConn {
             return res;
 
         } catch ( Exception e ) {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage() + ". Update method. On table: " + tableNAME);
+            //System.err.println(e.getClass().getName() + ": " + e.getMessage() + ". Update method. On table: " + tableNAME);
             return false;
         }
     }
@@ -151,7 +151,7 @@ public class DataBaseConn {
             return res;
 
         } catch ( Exception e ) {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage() + ". Delete method. On table: " + tableNAME);
+            ///System.err.println(e.getClass().getName() + ": " + e.getMessage() + ". Delete method. On table: " + tableNAME);
             return false;
         }
 
@@ -191,7 +191,7 @@ public class DataBaseConn {
             conn.close();
             return output;
         } catch ( Exception e ) {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage() + ". Select method. On table: " + tableNAME);
+            //System.err.println(e.getClass().getName() + ": " + e.getMessage() + ". Select method. On table: " + tableNAME);
             return null;
         }
     }

@@ -99,6 +99,7 @@ public class SupplierController {
     public void removeSupplier(String sId){
         Supplier s = sDao.get(sId);
         List<String> products = s.getContract().getOrderProducts();
+        s.delete();
         sDao.delete(s);
         for(String pId : products){
             updateBestSeller(pId);

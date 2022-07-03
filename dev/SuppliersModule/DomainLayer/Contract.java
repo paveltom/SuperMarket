@@ -1,5 +1,7 @@
 package SuppliersModule.DomainLayer;
 
+import DAL.Stock_Suppliers.DAOS.SupplierObjects.QuantityAgreementDao;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -40,7 +42,6 @@ public class Contract {
     public Contract(String sId, SupplyTime st, List<CatalogProduct> c, QuantityAgreement qa){
         this.sId = sId;
         supplyTime = st;
-
         if(c != null) {
             for (CatalogProduct p : c)
                 catalog.add(p);
@@ -109,6 +110,7 @@ public class Contract {
         if(getQa()==null)
             addQuantityAgreement(new QuantityAgreement(sId));
         qa.updateDiscount(pId, quantity, discount);
+
     }
     public Map<Integer, Float> getDiscount(String pId){
         if(!hasProduct(pId) || getQa() == null)
@@ -150,6 +152,14 @@ public class Contract {
         CatalogProduct cp = searchProduct(pId);
         if(cp!=null)
             cp.setInPeriodicOrder(state);
+    }
+
+    public void delete(){
+        for(CatalogProduct cp : catalog){
+            removeProduct(cp.getId());
+        }
+        supplyTime.delete();
+        qa.delete();
     }
 }
 

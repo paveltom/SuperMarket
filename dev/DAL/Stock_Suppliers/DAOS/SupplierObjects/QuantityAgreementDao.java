@@ -1,6 +1,7 @@
 package DAL.Stock_Suppliers.DAOS.SupplierObjects;
 
 import DAL.Stock_Suppliers.DAOS.DAO;
+import SuppliersModule.DomainLayer.QuantityAgreement;
 
 public class QuantityAgreementDao extends DAO {
 
@@ -17,6 +18,12 @@ public class QuantityAgreementDao extends DAO {
     public void removeDiscount(String sId, String pId, int quantity){
         String[] keys = {"supplier_id", "product_id", "quantity"};
         String[] keysVals = {sId, pId, String.valueOf(quantity)};
+        delete("QuantityAgreements", keys, keysVals);
+    }
+
+    public void delete(String sid){
+        String[] keys = {"supplier_id"};
+        String[] keysVals = {sid};
         delete("QuantityAgreements", keys, keysVals);
     }
 }

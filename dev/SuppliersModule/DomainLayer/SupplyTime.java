@@ -113,4 +113,8 @@ public class SupplyTime {
                 ", orderCycle=" + orderCycle +
                 ", daysAcc=" + daysAcc ;
     }
+
+    public void delete(){
+        dao.delete(this);
+    }
 }
