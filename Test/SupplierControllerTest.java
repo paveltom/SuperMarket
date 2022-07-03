@@ -17,7 +17,7 @@ public class SupplierControllerTest {
     }
 
     public void addSupplierTest(){
-        sc.addSupplier("18", "milkySupp", "adrress18", "swis12", true, false, "Moshe", "0524837824",
+        /*sc.addSupplier("18", "milkySupp", "adrress18", "swis12", true, false, "Moshe", "0524837824",
                 new boolean[]{false, false, false, false, false, false, false}, 5, 5, false,
                 "1", "118", 50);
 

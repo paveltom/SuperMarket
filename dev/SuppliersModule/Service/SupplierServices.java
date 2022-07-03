@@ -2,7 +2,6 @@ package SuppliersModule.Service;
 
 
 import SuppliersModule.DomainLayer.*;
-
 import java.util.List;
 import java.util.Map;
 
@@ -26,12 +25,14 @@ public class SupplierServices {
         }
     }
 
-    public Response addSupplier(String sId, String name, String address, String bankAccount, boolean cash, boolean credit, String contactName, String phoneNum,
-                                boolean[] supplyDays, int maxSupplyDays, int supplCycle, boolean deliveryService,
+    public Response addSupplier(String sId, String name, String address, String bankAccount, boolean cash, boolean credit, boolean[] workingDays,
+                                String contactName, String phoneNum,
+                                boolean[] orderingDays, int supplCycle,
                                 String pId, String catNumber, float price) {
         try {
-            sc.addSupplier(sId, name, address, bankAccount, cash, credit, contactName, phoneNum,
-                    supplyDays, maxSupplyDays, supplCycle, deliveryService,
+            sc.addSupplier(sId, name, address, bankAccount, cash, credit, workingDays,
+                    contactName, phoneNum,
+                    orderingDays, supplCycle,
                     pId, catNumber, price);
             return new Response();
         } catch (Exception e) {
@@ -54,22 +55,6 @@ public class SupplierServices {
             return new Response();
         } catch (Exception e) {
             return new Response(e.getMessage());
-        }
-    }
-
-    public ResponseT<boolean[]> getSupplyDays(String sId) {
-        try {
-            return ResponseT.FromValue(sc.getSupplyDays(sId));
-        } catch (Exception e) {
-            return ResponseT.FromError(e.getMessage());
-        }
-    }
-
-    public ResponseT<Integer> getSupplyMaxDays(String sId) {
-        try {
-            return ResponseT.FromValue(sc.getSupplyMaxDays(sId));
-        } catch (Exception e) {
-            return ResponseT.FromError(e.getMessage());
         }
     }
 
@@ -106,14 +91,6 @@ public class SupplierServices {
         }
     }
 
-    public Response setSupplyMaxDays(String sId, int supplyMaxDays) {
-        try {
-            sc.setMaxSupplyDays(sId, supplyMaxDays);
-            return new Response();
-        } catch (Exception e) {
-            return new Response(e.getMessage());
-        }
-    }
 
     public Response addProduct(String sId, String pId, String catalogNum, float price) {
         try {
@@ -177,17 +154,9 @@ public class SupplierServices {
         }
     }
 
-    public ResponseT<List<Supplier>> searchProduct(String pId) {
+    public Response setWeeklyOrdering(String sId, boolean[] days) {
         try {
-            return ResponseT.FromValue(sc.searchProduct(pId));
-        } catch (Exception e) {
-            return ResponseT.FromError(e.getMessage());
-        }
-    }
-
-    public Response changeDaysOfDelivery(String sId, int day, boolean state) {
-        try {
-            sc.changeDaysOfDelivery(sId, day, state);
+            sc.changeWeeklyOrdering(sId, days);
             return new Response();
         } catch (Exception e) {
             return new Response(e.getMessage());

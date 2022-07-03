@@ -10,6 +10,7 @@ public class Supplier {
     private final String address;
     private final String bankAccount;
     private final boolean[] paymentMethods = new boolean[2];
+    private final boolean[] workingDays;
     private final Map<String,String> contacts = new HashMap<>();
     private final SuppliersModule.DomainLayer.Contract contract;
     private final SuppliersModule.DomainLayer.OrderController oc;
@@ -31,11 +32,9 @@ public class Supplier {
     public boolean hasCreditPayment() {
         return paymentMethods[1];
     }
+    public boolean[] getWorkingDays() {return workingDays;}
     public boolean[] getSupplyDays() {
         return contract.getDaysOfDelivery();
-    }
-    public int getMaxSupplyDays() {
-        return contract.getMaxDeliveryDuration();
     }
     public int getSupplyCycle(){return contract.getOrderCycle();}
     public Contract getContract(){
@@ -53,9 +52,6 @@ public class Supplier {
     public List<Order> getOrders() {return orders;}
 
     // setters
-    public void setMaxSupplyDays(int maxSupplyDays) {
-        contract.setMaxDeliveryDuration(maxSupplyDays);
-    }
     public void setSupplyCycle(int supplyCycle){contract.setOrderCycle(supplyCycle);}
     public void addContact(String contactName, String phoneNum){
         contacts.put(contactName, phoneNum);
@@ -65,11 +61,12 @@ public class Supplier {
         contacts.remove(name);
         sDao.removeContact(sId, name);
     }
-    public void changeDaysOfDelivery(int day, boolean state) {contract.changeDaysOfDelivery(day, state);}
+    public void changeWeeklyOrdering(boolean[] days) {contract.changeWeeklyOrdering(days);}
 
     // constructor
-    public Supplier(String sId,String bankAccount, String name, String address, boolean cash, boolean credit, String contactName, String phoneNum,
-                    boolean[] supplyDays, int MaxSupplyDays, int supplCycle,
+    public Supplier(String sId, String name, String address, String bankAccount, boolean cash, boolean credit, boolean[] workingDays,
+                    String contactName, String phoneNum,
+                    boolean[] orderingDays, int supplCycle,
                     String pId, String catNumber, float price){
         sDao = new SupplierDao();
         this.sId = sId;
@@ -78,15 +75,17 @@ public class Supplier {
         this.bankAccount = bankAccount;
         this.paymentMethods[0] = cash;
         this.paymentMethods[1] = credit;
+        this.workingDays = workingDays;
         addContact(contactName, phoneNum);
-        contract = new Contract(sId, supplyDays, MaxSupplyDays, supplCycle, pId, catNumber, price);
+        contract = new Contract(sId, orderingDays, supplCycle, pId, catNumber, price);
         oc = OrderController.getInstance();
 
         sDao.insert(this);
     }
 
     //db
-    public Supplier(String sId, String name, String address, String bankAccount, boolean cash, boolean credit){
+    public Supplier(String sId, String name, String address, String bankAccount, boolean[] workingDays,
+                    boolean cash, boolean credit){
         sDao = new SupplierDao();
         this.sId = sId;
         this.name = name;
@@ -94,6 +93,7 @@ public class Supplier {
         this.bankAccount = bankAccount;
         this.paymentMethods[0] = cash;
         this.paymentMethods[1] = credit;
+        this.workingDays = workingDays;
         oc = OrderController.getInstance();
 
         SupplyTime st = sDao.getSupplyTimeFromDB(sId);
@@ -181,9 +181,9 @@ public class Supplier {
                 "name: " + name + '\t' +
                 "address: " + address + '\t' +
                 "bankAccount: " + bankAccount + '\t' +
-                "paymentMethods: " + Arrays.toString(paymentMethods)+
-                "\n contacts: " + contacts +  '\t' +
-                "\n contract: " + contract ;
+                "paymentMethods: " + Arrays.toString(paymentMethods) + "\n" +
+                "contacts: " + contacts + "\n" +
+                "contract: " + contract ;
     }
 
 

@@ -1,14 +1,13 @@
 package SuppliersModule.Presentation;
 
-import SuppliersModule.DomainLayer.CatalogProduct;
-import SuppliersModule.DomainLayer.Contract;
 import SuppliersModule.DomainLayer.Order;
 import SuppliersModule.DomainLayer.Supplier;
 import SuppliersModule.Service.Response;
 import SuppliersModule.Service.ResponseT;
 import SuppliersModule.Service.SupplierServices;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class SupplierCLI {
 
@@ -21,451 +20,474 @@ public class SupplierCLI {
     }
 
     public void run(){
-        displayMainMenu();
+        supplierManagement();
     }
 
-    public void displayMainMenu() {
+    private void supplierManagement() {
         System.out.println("\n at any stage insert “$” to roll back to the main menu " +
                 "\n at any stage insert “b” to go back to the previous window " +
                 "\n insert one of the following numbers to select action" +
-                "\npress 0 to exit suppliers system" +
-                "\n1. add supplier " +
-                "\n2. show suppliers" +
-                "\n3. search product"+
-                "\n4. end day");
-
+                "\n0. exit suppliers system" +
+                "\n1. Manage Suppliers " +
+                "\n2. Orders");
 
         String input = in.nextLine();
         switch (input) {
             case "0":
                 break;
             case "1":
-                addingSupplierWindow();
+                manageSuppliers();
                 break;
             case "2":
-                showSuppliersWindow();
-                break;
-            case "3":
-                searchProductSuppliersWindow();
-                break;
-            case "4":
-                Response r = ss.endDay();
-                if(r.ErrorOccurred())
-                    System.out.println("action failed" + r.getErrorMessage());
+                orders();
                 break;
             case "$":
             case "b":
-                displayMainMenu();
+                supplierManagement();
                 break;
             default:
-                System.out.println("incorrect input\n");
-                displayMainMenu();
+                System.out.println("incorrect input\n\n");
+                supplierManagement();
                 break;
         }
     }
 
-    private void addingSupplierWindow() {
-        System.out.println("\ninsert:" +
-                           "\nsupplier id, bank account, name, address, using cash?, using credit?, contact name, contact phone-number," +
-                           "\nsupply days, max supply days, supply cycle, " +
-                           "\nproduct id, catalog number, price" +
-                           "\ne.g 235 6456684 tara hagiborim-7-dimona n y yossi 0524679565 0100100 3 -1 y 13 1 10 ");
-
-        String input = in.nextLine();
-        if(input.equals("$") || input.equals("b"))
-            displayMainMenu();
-        else{
-            String[] splitted = input.split(" ");
-            if (splitted.length != 14 || (!splitted[4].equals("y") && !splitted[4].equals("n")) || (!splitted[5].equals("y") && !splitted[5].equals("n"))
-                        || splitted[8].length()!=7  ||(!isStringInt(splitted[9]) || Integer.parseInt(splitted[9]) < -1) || (!isStringInt(splitted[10]) || (Integer.parseInt(splitted[10]) < -1) || Integer.parseInt(splitted[10]) == 0)
-                        || (!isStringInt(splitted[11]) || Integer.parseInt(splitted[11]) < 0) || (!isStringFloat(splitted[12]) || Float.parseFloat(splitted[12]) <= 0)) {
-                System.out.println("incorrect input\n");
-                addingSupplierWindow();
-            } else {
-                boolean[] days = new boolean[7];
-                for(int i=0; i<7; i++){
-                    days[i] = splitted[8].charAt(i) != '0';
-                }
-                Response r = ss.addSupplier(splitted[0], splitted[1], splitted[2], splitted[3], splitted[4].equals("y"), splitted[5].equals("y"), splitted[6], splitted[7],
-                                            days, Integer.parseInt(splitted[9]), Integer.parseInt(splitted[10]), splitted[11].equals("y"),
-                                            splitted[12], splitted[13], Float.parseFloat(splitted[14]));
-                if (r.ErrorOccurred()) {
-                    System.out.println("action failed, " + r.getErrorMessage() + "\n");
-                    addingSupplierWindow();
-                } else {
-                    System.out.println("action succeed\n");
-                    displayMainMenu();
-                }
-            }
-        }
-    }
-
-    private void showSuppliersWindow() {
-        ResponseT<List<Supplier>> r = ss.getSuppliers();
-        if (r.ErrorOccurred()) {
-            System.out.println("action failed, " + r.getErrorMessage() + "\n");
-            displayMainMenu();
-        } else {
-            for (Supplier supp : r.getValue()) {
-                System.out.println(supp.toString());
-            }
-            System.out.println("insert supplier id to display its info");
-            String input = in.nextLine();
-            if(input.equals("$") || input.equals("b"))
-                displayMainMenu();
-            else {
-                List<Supplier> matchedSupp = r.getValue().stream().filter(supplier -> supplier.getsId().equals(input)).collect(Collectors.toList());
-                if (r.getValue().stream().noneMatch(supplier -> supplier.getsId().equals(input))) {
-                    System.out.println("incorrect input\n");
-                    showSuppliersWindow();
-                } else {
-                    supplierInfoWindow(input);
-                }
-            }
-        }
-    }
-
-    private void searchProductSuppliersWindow() {
-        System.out.println("\ninsert product id");
-
-        String input = in.nextLine();
-        if(input.equals("$") || input.equals("b"))
-            displayMainMenu();
-        else {
-            ResponseT<List<Supplier>> r = ss.searchProduct(input);
-            if (!r.ErrorOccurred()) {
-                for (Supplier s : r.getValue()) {
-                    System.out.println(s.getsId());
-                }
-            } else if (r.ErrorOccurred()) {
-                System.out.println("action failed, " + r.getErrorMessage() + "\n");
-                searchProductSuppliersWindow();
-            }
-        }
-    }
-
-    private void supplierInfoWindow(String suppId) {
-        System.out.println("\n1. display products" +
-                "\n2. display quantity agreement\n" +
-                "3. display supply time\n" +
-                "4. display contacts\n" +
-                "5. delete supplier" +
-                "6. show orders");
+    private void manageSuppliers(){
+        System.out.println( "1. Add suppliers\n" +
+                            "2. Remove supplier\n" +
+                            "3. Add contact\n" +
+                            "4. Update order cycle\n" +
+                            "5. Update Catalog\n" +
+                            "6. Show suppliers info");
 
         String input = in.nextLine();
         switch (input) {
+            case "$":
+            case "b":
+                supplierManagement();
+                break;
             case "1":
-                displayProductsWindow(suppId);
+                addSuppliers();
                 break;
             case "2":
-                displayQuantityAgreementWindow(suppId);
+                System.out.println("Insert supplier id\n");
+                String input2 = in.nextLine();
+                Response r = ss.removeSupplier(input2);
+                if(r.ErrorOccurred())
+                    System.out.println("Action failed: " + r.getErrorMessage() + "\n");
                 break;
             case "3":
-                displaySupplyTimeWindow(suppId);
+                addContact();
                 break;
             case "4":
-                displayContactsWindow(suppId);
+                updateOrderCycle();
                 break;
             case "5":
-                displayMainMenu();
+                updateCatalog();
                 break;
             case "6":
-                displayOrdersWindow(suppId);
-            case "$":
-                displayMainMenu();
-                break;
-            case "b":
-                showSuppliersWindow();
+                showSuppliers();
                 break;
             default:
-                System.out.println("incorrect input\n");
-                supplierInfoWindow(suppId);
+                System.out.println("incorrect input\n\n");
+                break;
+        }
+        manageSuppliers();
+    }
+
+    private void orders(){
+        System.out.println( "1. End day - make periodic orders\n" +
+                            "2. Get order\n" +
+                            "3. Get failed orders\n");
+
+        String input = in.nextLine();
+        switch (input) {
+            case "b":
+            case "$":
+                supplierManagement();
+                break;
+            case "1":
+                Response r = ss.endDay();
+                if(r.ErrorOccurred())
+                    System.out.println("Action Failed: " + r.getErrorMessage());
+                break;
+            case "2":
+                getOrders();
+                break;
+            case "3":
+                getFailedOrders();
+                break;
+            default:
+                System.out.println("incorrect input\n\n");
+                break;
+        }
+        orders();
+    }
+
+    private void updateOrderCycle(){
+        System.out.println( "1. Set a weekly ordering cycle\n" +
+                            "2. Set a fix number of days ordering cycle\n");
+
+        String input = in.nextLine();
+        switch (input) {
+            case "b":
+                manageSuppliers();
+            case "$":
+                supplierManagement();
+                break;
+            case "1":
+                setWeeklyCycle();
+                break;
+            case "2":
+                setFixDaysCycle();
+                break;
+            default:
+                System.out.println("incorrect input\n\n");
+                updateOrderCycle();
+                break;
+        }
+        updateOrderCycle();
+    }
+
+    private void updateCatalog(){
+        System.out.println( "1. Add product\n" +
+                            "2. Remove product\n" +
+                            "3. Update catalog number\n" +
+                            "4. Update product price\n" +
+                            "5. Update discount\n");
+
+        String input = in.nextLine();
+        switch (input) {
+            case "b":
+                manageSuppliers();
+            case "$":
+                supplierManagement();
+                break;
+            case "1":
+                addProduct();
+                break;
+            case "2":
+                removeProduct();
+                break;
+            case "3":
+                updateCatalogNumber();
+                break;
+            case "4":
+                updatePrice();
+                break;
+            case "5":
+                updateDiscount();
+                break;
+            default:
+                System.out.println("incorrect input\n\n");
+                updateCatalog();
                 break;
         }
     }
 
-    private void showProducts(List<CatalogProduct> products) {
-        String productsString = "\nproducts:\n";
-        for (CatalogProduct sp : products) {
-            System.out.println( sp  + "\n");
-        }
-    }
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    private void invalidproductAction(String sId){
-        System.out.println("invalid action");
-        displayProductsWindow(sId);
-    }
-
-    private void displayOrdersWindow(String sId) {
-        ResponseT<List<Order>> r = ss.getOrders(sId);
-        if(r.ErrorOccurred())
-            System.out.println("action failed: " + r.getErrorMessage());
-        else{
-            System.out.println("orders:\n");
-            for(Order order : r.getValue()){
-                System.out.println(order.toString());
-            }
-        }
-    }
-    private void displayProductsWindow(String sId) {
-        ResponseT<List<CatalogProduct>> p = ss.getCatalog(sId);
-        if (!p.ErrorOccurred())
-            showProducts(p.getValue());
-
-        System.out.print("Supplier id: " + sId + "\n");
-        System.out.println("\nto add product insert 1 and <product id, catalog number, price> => page refreshed with product added" +
-                "\ninsert 2 and product id to remove it from the supplier" +
-                "\ninsert 3, product id and price to update price" +
-                "\ninsert 4, product id and new catalog number to update catalog number");
-
-
+    private void getOrders(){
+        System.out.println("Insert supplier id\n");
         String input = in.nextLine();
-        String[] splitted = input.split(" ");
-
-        if(input.equals("$"))
-            displayMainMenu();
-        else if(input.equals("b"))
-            showSuppliersWindow();
-        else{
-            Response r;
-
-            switch (splitted[0]) {
-                case "1":
-                    if (splitted.length != 4 || !isStringFloat(splitted[3]))
-                        invalidproductAction(sId);
-                    r = ss.addProduct(sId, splitted[1], splitted[2], Float.parseFloat(splitted[3]));
-                    if (!r.ErrorOccurred()) {
-                        displayProductsWindow(sId);
-                    } else {
-                        System.out.println("action failed, " + r.getErrorMessage() + "\n");
-                        displayProductsWindow(sId);
-                    }
-                    break;
-                case "2":
-                    if (splitted.length != 2)
-                        invalidproductAction(sId);
-                    r = ss.removeProduct(sId, splitted[1]);
-                    if (!r.ErrorOccurred()) {
-                        displayProductsWindow(sId);
-                    } else {
-                        System.out.println("action failed, " + r.getErrorMessage() + "\n");
-                        displayProductsWindow(sId);
-                    }
-
-                    break;
-                case "3":
-                    if (splitted.length != 3)
-                        invalidproductAction(sId);
-                    if (!isStringFloat(splitted[2])) {
-                        System.out.println("action failed, price must be float" + "\n");
-                        displayProductsWindow(sId);
-                    }
-                    r = ss.updateProductPrice(sId, splitted[1], Float.parseFloat(splitted[2]));
-                    if (!r.ErrorOccurred()) {
-                        displayProductsWindow(sId);
-                    } else {
-                        System.out.println("action failed, " + r.getErrorMessage() + "\n");
-                        displayProductsWindow(sId);
-                    }
-
-                    break;
-                case "4":
-                    if (splitted.length != 3)
-                        invalidproductAction(sId);
-                    r = ss.updateProductCatalogNum(sId, splitted[1], splitted[2]);
-                    if (!r.ErrorOccurred()) {
-                        displayProductsWindow(sId);
-                    } else {
-                        System.out.println("action failed, " + r.getErrorMessage() + "\n");
-                        displayProductsWindow(sId);
-                    }
-                    break;
-                default:
-                    System.out.println("action failed, invalid argumets" + "\n");
-                    displayProductsWindow(sId);
-                    break;
-            }
+        ResponseT<List<Order>> r = ss.getOrders(input);
+        if(!r.ErrorOccurred()){
+            for (Order o : r.getValue())
+                System.out.println(o.toString()+"\n");
         }
-    }
-
-    private void printQuantityAgreementMap(Map<String, Map<Integer, Float>> m) {
-        if (m == null) {
-            System.out.print("no discounts");
-        } else {
-            Set<String> e1 = m.keySet();
-           for(String s: e1) {
-                System.out.print(s + "\n\t");
-                Map<Integer, Float> d = m.get(s);
-
-                if (d == null) {
-                    System.out.print("no discounts for this product\n");
-                } else {
-                    Set<Integer> e2 = d.keySet();
-                    for(Integer i: e2) {
-                        System.out.print("quantity: " + i + " discount: " + d.get(i) + "\n\t");
-                    }
-                }
-                System.out.println();
-            }
-        }
-    }
-
-    private void displayQuantityAgreementWindow(String suppId) {
-        ResponseT<Map<String, Map<Integer, Float>>> m1 = ss.getDiscounts(suppId);
-
-        if (m1.ErrorOccurred()) {
-            System.out.println("action failed: " + m1.getErrorMessage());
-            supplierInfoWindow(suppId);
-        }
-
-        System.out.println(" 1. discounts list:");
-        //print map 1
-        printQuantityAgreementMap(m1.getValue());
-
-        System.out.println("\nto update a discount enter product id, quantity and discount" +
-                            "\ne.g 5234 100 20\ne.g “153 30 0”");
-
-        String input = in.nextLine();
-        String[] splitted = input.split(" ");
-
-        if(input.equals("$") || input.equals("b"))
-            displayMainMenu();
+        else if (input.equals("b"))
+            orders();
+        else if (input.equals("$"))
+            supplierManagement();
         else {
-            if (splitted.length == 3) {
-                if (splitted[0].equals("1")) {
-                    Response action = ss.updateDiscount(suppId, splitted[0], Integer.parseInt(splitted[1]), Float.parseFloat(splitted[2]));
-                    if (action.ErrorOccurred()) {
-                        System.out.println("action faild: " + action.getErrorMessage());
-                    }
-                    displayQuantityAgreementWindow(suppId);
-                }
-            } else {
-                System.out.println("Invalid action");
-                displayQuantityAgreementWindow(suppId);
-            }
+            System.out.println("Action failed: " + r.getErrorMessage() + "\n");
+            getOrders();
         }
     }
 
-    private void displaySupplyTimeWindow(String suppId) {
-        ResponseT<Contract> r = ss.getContract(suppId);
-        if (r.ErrorOccurred()) {
-            System.out.println("action failed, " + r.getErrorMessage() + "\n");
-            supplierInfoWindow(suppId);
-        } else {
-            System.out.println(r.getValue().toString());
-            System.out.println("\ninsert a number and a following info to update" +
-                    "\ne.g 2 5 will change the max delivery days to 5" +
-                    "\n\n1. change delivery day (expecting a day in the week as a number between 1-7 and y/n)" +
-                    "\n2. change max delivery days (any not negative number or -1 for no max delivery days)" +
-                    "\n3. change supply cycle (any positive number or -1 for no supply cycle)");
+    private void getFailedOrders(){
+        throw new NotImplementedException();
+    }
 
-            String input = in.nextLine();
-            String[] splitted = input.split(" ");
+    private void addSuppliers() {
+        String sId, name, address,  bankAccount, contactName, phoneNum, catNumber, pId;
+        boolean cash, credit;
+        boolean[] workingDays, orderingDays = {false, false, false, false, false, false, false};
+        int orderCycle = -1;
+        float price;
 
-            switch (splitted[0]) {
-                case "1":
-                    try {
-                        if (!splitted[2].equals("y") && !splitted[2].equals("n")) {
-                            System.out.println("incorrect input\n");
-                            displaySupplyTimeWindow(suppId);
-                        } else {
-                            Response r2 = ss.changeDaysOfDelivery(suppId, Integer.parseInt(splitted[1]), splitted[2].equals("y"));
-                            if (r2.ErrorOccurred()) {
-                                System.out.println("incorrect input\n");
-                                displaySupplyTimeWindow(suppId);
-                            } else {
-                                System.out.println("action succeed\n");
-                                displaySupplyTimeWindow(suppId);
-                            }
-                        }
-                    } catch (Exception e) {
-                        System.out.println("incorrect input\n");
-                        displaySupplyTimeWindow(suppId);
-                    }
-                    break;
-                case "2":
-                    try {
-                        Response r2 = ss.setSupplyMaxDays(suppId, Integer.parseInt(splitted[1]));
-                        if (r2.ErrorOccurred()) {
-                            System.out.println("incorrect input\n");
-                            displaySupplyTimeWindow(suppId);
-                        } else {
-                            System.out.println("action succeed\n");
-                            displaySupplyTimeWindow(suppId);
-                        }
-                    } catch (Exception e) {
-                        System.out.println("incorrect input\n");
-                        displaySupplyTimeWindow(suppId);
-                    }
-                    break;
-                case "3":
-                    try {
-                        if (!isStringInt(splitted[1]) || Integer.parseInt(splitted[1]) == 0 || Integer.parseInt(splitted[1]) < 1) {
-                            System.out.println("incorrect input\n");
-                            displaySupplyTimeWindow(suppId);
-                        } else {
-                            Response r2 = ss.setSupplyCycle(suppId,  Integer.parseInt(splitted[1]));
-                            if (r2.ErrorOccurred()) {
-                                System.out.println("incorrect input\n");
-                                displaySupplyTimeWindow(suppId);
-                            } else {
-                                System.out.println("action succeed\n");
-                                displaySupplyTimeWindow(suppId);
-                            }
-                        }
-                    } catch (Exception e) {
-                        System.out.println("incorrect input\n");
-                        displaySupplyTimeWindow(suppId);
-                    }
-                    break;
-                case "$":
-                    displayMainMenu();
-                    break;
-                case "b":
-                    supplierInfoWindow(suppId);
-                    break;
-                default:
+        do {
+            System.out.println("insert supplier id\n");
+            sId = in.nextLine();
+            if (sId.isEmpty())
+                System.out.println("incorrect input\n");
+        }while (sId.isEmpty());
+
+        do {
+            System.out.println("insert bank account\n");
+            bankAccount = in.nextLine();
+            if (bankAccount.isEmpty())
+                System.out.println("incorrect input\n");
+        }while (bankAccount.isEmpty());
+
+        do {
+            System.out.println("insert name\n");
+            name = in.nextLine();
+            if (name.isEmpty())
+                System.out.println("incorrect input\n");
+        }while (name.isEmpty());
+
+        do {
+            System.out.println("insert address\n");
+            address = in.nextLine();
+            if (address.isEmpty())
+                System.out.println("incorrect input\n");
+        }while (address.isEmpty());
+
+        while (true) {
+            System.out.println("using cash? insert y/n\n");
+            String sCash = in.nextLine();
+            if(!(sCash.equals("y")) && !(sCash.equals("n")))
+                System.out.println("incorrect input\n");
+            else {
+                cash = sCash.equals("y");
+                break;
+            }
+        }
+
+        while (true) {
+            System.out.println("using credit? insert y/n\n");
+            String sCredit = in.nextLine();
+            if(!(sCredit.equals("y")) && !(sCredit.equals("n")))
+                System.out.println("incorrect input\n");
+            else {
+                credit = sCredit.equals("y");
+                break;
+            }
+        }
+
+        while (true) {
+            System.out.println("insert working days with 7 digits, 1 for working and 0 for not working, starting from Sunday, e.g 1111100\n");
+            String sWorkingDays = in.nextLine();
+            if(!isStringBoolean7(sWorkingDays))
+                System.out.println("incorrect input\n");
+            else {
+                workingDays = stringToBoolean7(sWorkingDays);
+                break;
+            }
+        }
+
+        do {
+            System.out.println("insert contact name\n");
+            contactName = in.nextLine();
+            if (contactName.isEmpty())
+                System.out.println("incorrect input\n");
+        }while (contactName.isEmpty());
+
+        do {
+            System.out.println("insert contact phone-number\n");
+            phoneNum = in.nextLine();
+            if (phoneNum.isEmpty())
+                System.out.println("incorrect input\n");
+        }while (phoneNum.isEmpty());
+
+        String choice = "";
+        do {
+            System.out.println("choose ordering cycle: \n" +
+                    "1. weekly \n" +
+                    "2. a number of fix days\n");
+            choice = in.nextLine();
+            if (!choice.equals("1") && !choice.equals("2"))
+                System.out.println("incorrect input\n");
+        }while (!choice.equals("1") && !choice.equals("2"));
+        if (choice.equals("1")){
+            while (true) {
+                System.out.println("insert order days with 7 digits, 1 for order day and 0 for not, starting from Sunday, e.g 1000100\n");
+                String sOrderingDays = in.nextLine();
+                if(!isStringBoolean7(sOrderingDays))
                     System.out.println("incorrect input\n");
-                    displaySupplyTimeWindow(suppId);
+                else {
+                    orderingDays = stringToBoolean7(sOrderingDays);
                     break;
-            }
-        }
-    }
-
-    private void displayContactsWindow(String suppId) {
-        System.out.println(" \nto add \"1\" and contact insert name and phone number\nto delete a contact enter \"2\" and contacts name");
-        ResponseT<Map<String, String>> p = ss.getContacts(suppId);
-        if (p.ErrorOccurred())
-            supplierInfoWindow(suppId);
-
-        String input = in.nextLine();
-        String[] splitted = input.split(" ");
-
-        if(splitted[0].equals("$")){
-            displayMainMenu();
-        }
-        else if(splitted[0].equals("b")){
-            showSuppliersWindow();
-        }
-        else{
-            if (splitted[0].equals("1")) {
-                if (splitted.length != 3) {
-                    System.out.println("Invalid input");
-                    displayContactsWindow(suppId);
                 }
-                Response action = ss.addContact(suppId, splitted[1], splitted[2]);
-                if (action.ErrorOccurred())
-                    System.out.println("action failed: " + action.getErrorMessage());
-            } else if (splitted[0].equals("2") && splitted.length == 2) {
-                Response action = ss.removeContact(suppId, splitted[1]);
-                if (action.ErrorOccurred())
-                    System.out.println("action failed: " + action.getErrorMessage());
             }
-            displayContactsWindow(suppId);
+        }
+        else {
+            while (true) {
+                System.out.println("insert a number of fix days\n");
+                String sCycle = in.nextLine();
+                if(!isStringInt(sCycle) || Integer.parseInt(sCycle) < 1)
+                    System.out.println("incorrect input\n");
+                else {
+                    orderCycle = Integer.parseInt(sCycle);
+                    break;
+                }
+            }
+        }
+
+        do {
+            System.out.println("insert product id\n");
+            pId = in.nextLine();
+            if (pId.isEmpty())
+                System.out.println("incorrect input\n");
+        }while (pId.isEmpty());
+
+        do {
+            System.out.println("insert catalog number\n");
+            catNumber = in.nextLine();
+            if (catNumber.isEmpty())
+                System.out.println("incorrect input\n");
+        }while (catNumber.isEmpty());
+
+        while (true) {
+            System.out.println("insert price\n");
+            String sPrice = in.nextLine();
+            if(!isStringFloat(sPrice) || Float.parseFloat(sPrice) <= 0)
+                System.out.println("incorrect input\n");
+            else {
+                price = Float.parseFloat(sPrice);
+                break;
+            }
+        }
+
+        Response r = ss.addSupplier(sId, name, address, bankAccount, cash, credit, workingDays, contactName, phoneNum,
+                                    orderingDays, orderCycle, pId, catNumber, price);
+
+        if (r.ErrorOccurred()) {
+            System.out.println("action failed: " + r.getErrorMessage() + "\n");
+            addSuppliers();
+        }
+        else
+            manageSuppliers();
+    }
+
+    private void addContact(){
+        System.out.println("Insert supplier id\n");
+        String sId = in.nextLine();
+        System.out.println("Insert contact name\n");
+        String name = in.nextLine();
+        System.out.println("Insert contact phone-number\n");
+        String phone = in.nextLine();
+        Response r = ss.addContact(sId, name, phone);
+        if(r.ErrorOccurred())
+            System.out.println("Action failed: " + r.getErrorMessage() + "\n");
+    }
+
+    private void showSuppliers() {
+        ResponseT<List<Supplier>> r = ss.getSuppliers();
+        if (r.ErrorOccurred())
+            System.out.println("Action failed: " + r.getErrorMessage() + "\n");
+        else {
+            for (Supplier supp : r.getValue()) {
+                System.out.println(supp.toString() + "\n");
+            }
         }
     }
 
+    private void setWeeklyCycle(){
+        System.out.println("Insert supplier id\n");
+        String sId = in.nextLine();
+        System.out.println("Insert order days with 7 digits, 1 for order day and 0 for not, starting from Sunday, e.g 1000100\n");
+        String ordersDays = in.nextLine();
+        if(isStringBoolean7(ordersDays)) {
+            Response r = ss.setWeeklyOrdering(sId, stringToBoolean7(ordersDays));
+            if (r.ErrorOccurred())
+                System.out.println("Action failed: " + r.getErrorMessage() + "\n");
+        }
+        else
+            System.out.println("Incorrect input\n");
+    }
 
+    private void setFixDaysCycle(){
+        System.out.println("Insert supplier id\n");
+        String sId = in.nextLine();
+        System.out.println("Insert a number of fix days\n");
+        String orderCycle = in.nextLine();
+        if(isStringInt(orderCycle)) {
+            Response r = ss.setSupplyCycle(sId, Integer.parseInt(orderCycle));
+            if (r.ErrorOccurred())
+                System.out.println("Action failed: " + r.getErrorMessage() + "\n");
+        }
+        else
+            System.out.println("Incorrect input\n");
+    }
+
+    private void addProduct() {
+        System.out.println("Insert supplier id\n");
+        String sId = in.nextLine();
+        System.out.println("Insert product id\n");
+        String pId = in.nextLine();
+        System.out.println("Insert catalog number\n");
+        String catNum = in.nextLine();
+        System.out.println("Insert price\n");
+        String price = in.nextLine();
+        if(isStringFloat(price)) {
+            Response r = ss.addProduct(sId, pId, catNum, Float.parseFloat(price));
+            if (r.ErrorOccurred())
+                System.out.println("Action failed: " + r.getErrorMessage() + "\n");
+        }
+        else
+            System.out.println("Incorrect input\n");
+    }
+
+    private void removeProduct() {
+        System.out.println("Insert supplier id\n");
+        String sId = in.nextLine();
+        System.out.println("Insert product id\n");
+        String pId = in.nextLine();
+        Response r = ss.removeProduct(sId, pId);
+        if (r.ErrorOccurred())
+            System.out.println("Action failed: " + r.getErrorMessage() + "\n");
+    }
+
+    private void updateCatalogNumber() {
+        System.out.println("Insert supplier id\n");
+        String sId = in.nextLine();
+        System.out.println("Insert product id\n");
+        String pId = in.nextLine();
+        System.out.println("Insert new catalog number\n");
+        String catNum = in.nextLine();
+        Response r = ss.updateProductCatalogNum(sId, pId, catNum);
+        if (r.ErrorOccurred())
+            System.out.println("Action failed: " + r.getErrorMessage() + "\n");
+    }
+
+    private void updatePrice() {
+        System.out.println("Insert supplier id\n");
+        String sId = in.nextLine();
+        System.out.println("Insert product id\n");
+        String pId = in.nextLine();
+        System.out.println("Insert new price\n");
+        String price = in.nextLine();
+        if(isStringFloat(price)) {
+            Response r = ss.updateProductPrice(sId, pId, Float.parseFloat(price));
+            if (r.ErrorOccurred())
+                System.out.println("Action failed: " + r.getErrorMessage() + "\n");
+        }
+        else
+            System.out.println("Invalid input\n");
+    }
+
+    private void updateDiscount() {
+        System.out.println("Insert supplier id\n");
+        String sId = in.nextLine();
+        System.out.println("Insert product id\n");
+        String pId = in.nextLine();
+        System.out.println("Insert quantity\n");
+        String quantity = in.nextLine();
+        System.out.println("Insert discount\n");
+        String discount = in.nextLine();
+        if(isStringInt(quantity) && isStringFloat(discount) && Integer.parseInt(quantity) > 0 && Float.parseFloat(discount) > 0) {
+            Response r = ss.updateDiscount(sId, pId, Integer.parseInt(quantity), Float.parseFloat(discount));
+            if (r.ErrorOccurred())
+                System.out.println("Action failed: " + r.getErrorMessage() + "\n");
+        }
+        else
+            System.out.println("Invalid input\n");
+
+    }
+
+//////////////////////////////////////////////////////////////////////////////
     private boolean isStringFloat(String testString) {
         try {
             float f = Float.parseFloat(testString);
@@ -482,6 +504,24 @@ public class SupplierCLI {
             return false;
         }
         return true;
+    }
+
+    private boolean isStringBoolean7(String testString){
+        if (testString == null || testString.length() != 7)
+            return false;
+        for(int i=0; i<7; i++){
+            if(testString.charAt(i) != '0' && testString.charAt(i) != '1')
+                return false;
+        }
+        return true;
+    }
+
+    private boolean[] stringToBoolean7(String testString){
+        boolean[] output = new boolean[7];
+        for(int i=0; i<7; i++){
+            output[i] = testString.charAt(i) == '1';
+        }
+        return output;
     }
 
 }

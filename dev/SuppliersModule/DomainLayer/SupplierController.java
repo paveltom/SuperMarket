@@ -35,13 +35,10 @@ public class SupplierController {
     public Contract getContract(String sId){return sDao.get(sId).getContract();}
     public List<CatalogProduct> getCatalog(String sId){return sDao.get(sId).getCatalog();}
     public QuantityAgreement getQa(String sId) {return sDao.get(sId).getQuantityAgreement();}
-    public boolean[] getSupplyDays(String sId) {return sDao.get(sId).getSupplyDays();}
-    public int getSupplyMaxDays(String sId) {return sDao.get(sId).getMaxSupplyDays();}
+    public boolean[] getOrderingDays(String sId) {return sDao.get(sId).getSupplyDays();}
     public int getSupplyCycle(String sId){return sDao.get(sId).getSupplyCycle();}
 
     //  setters
-    public void setMaxSupplyDays(String sId, int maxSupplyDays) {
-        sDao.get(sId).setMaxSupplyDays(maxSupplyDays);}
     public void setSupplyCycle(String sId, int supplyCycle) {
         sDao.get(sId).setSupplyCycle(supplyCycle);
         List<String> products = getSupplier(sId).getContract().getOrderProducts();
@@ -83,16 +80,17 @@ public class SupplierController {
 
     //  other methods
 
-    public void addSupplier(String sId, String name, String address, String bankAccount, boolean cash, boolean credit, String contactName, String phoneNum,
-                            boolean[] supplyDays, int maxSupplyDays, int supplCycle, boolean deliveryService,
+    public void addSupplier(String sId, String name, String address, String bankAccount, boolean cash, boolean credit, boolean[] workingDays,
+                            String contactName, String phoneNum,
+                            boolean[] orderingDays, int supplCycle,
                             String pId, String catNumber, float price){
         if(hasSupp(sId))
             throw new IllegalArgumentException("supplier with id " + sId + " already exist!");
         // TODO if(pdm.getProduct())
         //    throw new IllegalArgumentException("no such product in stock system, first add product at stock");
-        new Supplier(sId, name, address, bankAccount, cash, credit,
-                contactName, phoneNum, supplyDays, maxSupplyDays,
-                supplCycle, pId, catNumber, price);
+        new Supplier(sId, name, address, bankAccount, cash, credit,  workingDays,
+                contactName, phoneNum, orderingDays, supplCycle,
+                pId, catNumber, price);
 
         updateBestSeller(pId);
     }
@@ -168,8 +166,8 @@ public class SupplierController {
             throw new IllegalArgumentException("Supplier doesn't exists.");
     }
 
-    public void changeDaysOfDelivery(String sId, int day, boolean state) {
-        sDao.get(sId).changeDaysOfDelivery(day, state);
+    public void changeWeeklyOrdering(String sId, boolean[] days) {
+        sDao.get(sId).changeWeeklyOrdering(days);
         List<String> products = getSupplier(sId).getContract().getOrderProducts();
         for(String pId : products){
             updateBestSeller(pId);

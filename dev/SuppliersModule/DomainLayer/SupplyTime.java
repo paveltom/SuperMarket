@@ -5,8 +5,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 
 public class SupplyTime {
-    private boolean[] daysOfDelivery; //|7| from sunday:= 0 to saturday:=7
-    private int maxDeliveryDuration; // 0:= deliver the same day of order, -1:= only weekly deliver
+    private boolean[] orderingDays; //|7| from sunday:= 0 to saturday:=7
     private int orderCycle; //when no weekly deliver, determines the amount of days between orders
     private int daysAcc; //when no weekly deliver, determines the amount of days past from last order
     private String sId;
@@ -14,53 +13,36 @@ public class SupplyTime {
 
     //  getters
     public String getsId(){ return sId; }
-    public boolean[] getDaysOfDelivery() {
-        return daysOfDelivery;
-    }
-    public int getMaxDeliveryDuration() {
-        return maxDeliveryDuration;
+    public boolean[] getOrderingDays() {
+        return orderingDays;
     }
     public int getOrderCycle(){return orderCycle;}
     public int getDaysAcc() {return daysAcc;}
-    public boolean hasWeeklyDeliver(){
-        for(boolean day: daysOfDelivery) {if (day) return true;}
+    public boolean hasWeeklyOrdering(){
+        for(boolean day: orderingDays) {if (day) return true;}
         return false;
     }
-    private boolean hasCallDelivery(){return maxDeliveryDuration >= 0;}
 
     //  setters
-    private void setDaysOfDelivery(boolean[] daysOfDelivery) {
-        if (daysOfDelivery == null || daysOfDelivery.length != 7 )
+    private void setOrderingDays(boolean[] orderingDays) {
+        if (orderingDays == null || orderingDays.length != 7 )
             throw new IllegalArgumentException("incorrect format at days of delivery");
-        this.daysOfDelivery = daysOfDelivery;
+        this.orderingDays = orderingDays;
 
 
         dao.changeDaysOfDelivery(this);
     }
-    public void changeDaysOfDelivery(int day, boolean state) {
-        if (day > 7 || day < 1)
-            throw new IllegalArgumentException("day out of week range.");
-        boolean[] week = daysOfDelivery.clone();
-        week[day-1] = state;
-        setDaysOfDelivery(week);
-
+    public void changeWeeklyOrdering(boolean[] days) {
+        setOrderingDays(days);
         dao.changeDaysOfDelivery(this);
     }
-    public void setMaxDeliveryDuration(int maxDeliveryDuration) {
-        if(maxDeliveryDuration < -1)
-            throw new IllegalArgumentException("delivery duration must be -1 or greater");
-        if(maxDeliveryDuration == -1 & !hasWeeklyDeliver())
-            throw new IllegalArgumentException("missing delivery time options");
-        this.maxDeliveryDuration = maxDeliveryDuration;
 
-        dao.setMaxDeliveryDuration(this);
-    }
     public void setOrderCycle(int orderCycle){
         if(orderCycle == 0 | orderCycle < -1)
             throw new IllegalArgumentException("order cycle must be positive or -1");
-        if(orderCycle > 0 & hasWeeklyDeliver())
+        if(orderCycle > 0 & hasWeeklyOrdering())
             throw new IllegalArgumentException("order cycle is not an option when there is a weekly delivery");
-        if(orderCycle == -1 & !hasWeeklyDeliver())
+        if(orderCycle == -1 & !hasWeeklyOrdering())
             throw new IllegalArgumentException("order cycle is a must when there isn't a weekly delivery");
         this.orderCycle = orderCycle;
 
@@ -68,10 +50,9 @@ public class SupplyTime {
     }
 
     //  constructor
-    public SupplyTime(String sId, boolean[] daysOfDelivery, int maxDeliveryDuration, int orderCycle){
+    public SupplyTime(String sId, boolean[] daysOfDelivery, int orderCycle){
         dao = new SupplyTimeDao();
-        setDaysOfDelivery(daysOfDelivery);
-        setMaxDeliveryDuration(maxDeliveryDuration);
+        setOrderingDays(daysOfDelivery);
         setOrderCycle(orderCycle);
         daysAcc = orderCycle - 1; //if cycle delivery then an order would be placed at the end of the day
         this.sId = sId;
@@ -79,9 +60,8 @@ public class SupplyTime {
         dao.insert(this);
     }
     //constructor from db
-    public SupplyTime(String sId, boolean[] daysOfDelivery, int maxDeliveryDuration, int orderCycle, int daysAcc){
-        this.daysOfDelivery = daysOfDelivery;
-        this.maxDeliveryDuration = maxDeliveryDuration;
+    public SupplyTime(String sId, boolean[] daysOfDelivery, int orderCycle, int daysAcc){
+        this.orderingDays = daysOfDelivery;
         this.orderCycle = orderCycle;
         daysAcc = orderCycle - 1;
         this.sId = sId;
@@ -93,9 +73,9 @@ public class SupplyTime {
 
     //return true if tomorrow is a weekly delivery / it's the cyclic time to order from the supplier
     public boolean endDay(){
-        if (hasWeeklyDeliver()){
+        if (hasWeeklyOrdering()){
             int day = LocalDate.now().getDayOfWeek().getValue() % 7; //sunday:= 0
-            return daysOfDelivery[(day+1)%7];
+            return orderingDays[(day+1)%7];
         }
         else {
             daysAcc = (daysAcc + 1) % orderCycle;
@@ -104,7 +84,7 @@ public class SupplyTime {
     }
 
     public int getPeriodicOrderInterval(){ //returns the difference between the closest periodic order to the next
-        if(!hasWeeklyDeliver()){
+        if(!hasWeeklyOrdering()){
             return orderCycle;
         }
         else{
@@ -112,42 +92,27 @@ public class SupplyTime {
             int nextPeriodicDel = -1;
             int nextNextPeriodicDel = -1;
             for(int i=1; i<8; i++){
-                if (daysOfDelivery[(day+i)%7])
+                if (orderingDays[(day+i)%7])
                     nextPeriodicDel = i;
             }
             for(int i=nextPeriodicDel+1; i<nextPeriodicDel+8; i++){
-                if (daysOfDelivery[(day+i)%7])
+                if (orderingDays[(day+i)%7])
                     nextNextPeriodicDel = i;
             }
             return nextNextPeriodicDel - nextPeriodicDel;
         }
     }
 
-    public int getDaysForShortageOrder() { //returns the difference between the closest available order arrival and the next periodic order arrival
-        if(!hasWeeklyDeliver()){
+    public int getDaysForShortageOrder() { //returns the difference between the closest available order to the next one
+        if(!hasWeeklyOrdering()){
             return orderCycle - daysAcc;
         }
-        else if(!hasCallDelivery()) {
+        else
             return getPeriodicOrderInterval();
-        }
-        else{ //has both delivery options,check what comes first and choose by that
-            int day = LocalDate.now().getDayOfWeek().getValue() % 7; //sunday:= 0
-            int nextPeriodicDel = -1;
-            for(int i=1; i<8; i++){
-                if (daysOfDelivery[(day+i)%7])
-                    nextPeriodicDel = i;
-            }
-            if(maxDeliveryDuration < nextPeriodicDel){
-                return nextPeriodicDel - maxDeliveryDuration;
-            }
-            else
-                return getPeriodicOrderInterval();
-        }
     }
 
     public String toString() {
-        return  "daysOfDelivery=" + Arrays.toString(daysOfDelivery) +
-                "\n maxDeliveryDuration=" + maxDeliveryDuration +
+        return  "daysOfDelivery=" + Arrays.toString(orderingDays) +
                 ", orderCycle=" + orderCycle +
                 ", daysAcc=" + daysAcc ;
     }

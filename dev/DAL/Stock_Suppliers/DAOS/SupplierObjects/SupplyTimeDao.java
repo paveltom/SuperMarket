@@ -8,7 +8,7 @@ public class SupplyTimeDao extends DAO {
     public SupplyTimeDao(){}
 
     public void insert(SupplyTime st){
-        String[] params = {st.getsId(), Arrays.toString(st.getDaysOfDelivery()), String.valueOf(st.getMaxDeliveryDuration()),
+        String[] params = {st.getsId(), Arrays.toString(st.getOrderingDays()), "String.valueOf(st.getMaxDeliveryDuration())", //todo delete the green
                 String.valueOf(st.getOrderCycle()), String.valueOf(st.getDaysAcc())};
         insert("SupplyTimes", params);
     }
@@ -22,13 +22,13 @@ public class SupplyTimeDao extends DAO {
     public void changeDaysOfDelivery(SupplyTime st) {
         String[] keys = {"supplier_id"};
         String[] keysVals = {st.getsId()};
-        update("SupplyTimes", keys, keysVals, "daysOfDelivery", String.valueOf(st.getDaysOfDelivery()));
+        update("SupplyTimes", keys, keysVals, "daysOfDelivery", String.valueOf(st.getOrderingDays()));
     }
 
     public void setMaxDeliveryDuration(SupplyTime st) {
         String[] keys = {"supplier_id"};
         String[] keysVals = {st.getsId()};
-        update("SupplyTimes", keys, keysVals, "maxDeliveryDuration", String.valueOf(st.getMaxDeliveryDuration()));
+        update("SupplyTimes", keys, keysVals, "maxDeliveryDuration", "String.valueOf(st.getMaxDeliveryDuration())"); //todo delete the green
     }
 
     public void setOrderCycle(SupplyTime st) {

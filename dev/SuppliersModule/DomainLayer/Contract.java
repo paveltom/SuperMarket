@@ -11,10 +11,7 @@ public class Contract {
     // getters
     public String getsId(){return sId;}
     public boolean[] getDaysOfDelivery() {
-        return supplyTime.getDaysOfDelivery();
-    }
-    public int getMaxDeliveryDuration() {
-        return supplyTime.getMaxDeliveryDuration();
+        return supplyTime.getOrderingDays();
     }
     public int getOrderCycle(){return supplyTime.getOrderCycle();}
     public List<CatalogProduct> getCatalog() {
@@ -28,15 +25,14 @@ public class Contract {
     }
 
     //setters
-    public void changeDaysOfDelivery(int day, boolean state) {supplyTime.changeDaysOfDelivery(day, state);}
-    public void setMaxDeliveryDuration(int maxDeliveryDuration) { supplyTime.setMaxDeliveryDuration(maxDeliveryDuration);}
+    public void changeWeeklyOrdering(boolean[] days) {supplyTime.changeWeeklyOrdering(days);}
     public void setOrderCycle(int orderCycle) { supplyTime.setOrderCycle(orderCycle);}
 
     //  constructor
-    public Contract( String sId, boolean[] daysOfDelivery, int maxDeliveryDuration, int orderCycle,
+    public Contract( String sId, boolean[] orderingDays, int orderCycle,
                     String pId, String catalogNum, float price){
         this.sId = sId;
-        supplyTime = new SupplyTime(sId, daysOfDelivery, maxDeliveryDuration, orderCycle);
+        supplyTime = new SupplyTime(sId, orderingDays, orderCycle);
         catalog.add(new CatalogProduct(sId, pId, catalogNum, price));
     }
 
@@ -110,7 +106,7 @@ public class Contract {
         if(!hasProduct(pId))
             throw new IllegalArgumentException("product not exist.");
         if(getQa()==null)
-            addQuantityAgreement(new QuantityAgreement(sId)); //TODO make contract the only creator of qa according to grasp
+            addQuantityAgreement(new QuantityAgreement(sId));
         qa.updateDiscount(pId, quantity, discount);
     }
     public Map<Integer, Float> getDiscount(String pId){

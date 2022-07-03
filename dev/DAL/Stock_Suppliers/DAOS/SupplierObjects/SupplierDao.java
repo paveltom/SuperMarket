@@ -50,8 +50,8 @@ public class SupplierDao extends DAO {
             List<Supplier> output = new ArrayList<>();
 
             if(st != null) {
-                for (String[] s : st) {
-                    Supplier sup = new Supplier(s[0], s[2], s[3], s[1], Boolean.valueOf(s[4]), Boolean.valueOf(s[5]));
+                for (String[] s : st) { //todo add working days
+                    Supplier sup = new Supplier(s[0], s[2], s[3], s[1], null, Boolean.valueOf(s[4]), Boolean.valueOf(s[5]));
                     suppliersIdentityMap.cache(sup);
                     output.add(0, sup);
                 }
@@ -73,8 +73,8 @@ public class SupplierDao extends DAO {
             if(dbs.isEmpty())
                 throw new IllegalArgumentException("no suchSupplier with id " + sId);
             else{
-                String[] str = dbs.get(0);
-                s = new Supplier(str[0], str[1], str[2], str[3], Boolean.valueOf(str[4]), Boolean.valueOf(str[5]));
+                String[] str = dbs.get(0); //todo add working days
+                s = new Supplier(str[0], str[1], str[2], str[3], null, Boolean.valueOf(str[4]), Boolean.valueOf(str[5]));
                 suppliersIdentityMap.cache(s);
             }
         }
@@ -96,7 +96,8 @@ public class SupplierDao extends DAO {
             daysOfDelivery[i] = Boolean.valueOf(splitDaysOfDelivery[i]);
         }
 
-        return new SupplyTime(s[0], daysOfDelivery, Integer.valueOf(s[2]), Integer.valueOf(s[3]), Integer.valueOf(s[4]));
+        // todo: exclude maxDeliveryDay from dal
+        return new SupplyTime(s[0], daysOfDelivery, Integer.valueOf(s[3]), Integer.valueOf(s[4]));
     }
 
     public List<CatalogProduct> getCatalogProductsFromDB(Supplier s){
