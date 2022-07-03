@@ -50,7 +50,7 @@ public class ProductDao extends DAO {
         //assuming uniqe pid's
         try {
             return new Product(p.get(0)[1], p.get(0)[2], Integer.parseInt(p.get(0)[3]),
-                    Integer.parseInt(p.get(0)[4]), Integer.parseInt(p.get(0)[5]), true);
+                    Integer.parseInt(p.get(0)[4]), Integer.parseInt(p.get(0)[5]), 5);//todo
         } catch (NumberFormatException e) {
             throw new NumberFormatException();
         }
