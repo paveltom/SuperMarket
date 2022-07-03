@@ -19,9 +19,22 @@ public class ItemDao extends DAO {
         setAttribute(i, "amount", String.valueOf(i.getAmount()));
     }
 
+    public void setProductId(Item i){
+        setAttribute(i, "product_id", i.getProductID());
+    }
+
+    public void setLocation(Item i){
+        setAttribute(i, "location", i.getLocation());
+    }
+
+    public void setExpireDate(Item i){
+        setAttribute(i, "expireDate", String.valueOf(i.getExpireDate()));
+    }
+
     public void setExpired(Item i){
         setAttribute(i, "isExpired", String.valueOf(i.isExpired()));
     }
+
     public void setDefect(Item i){
         setAttribute(i, "isDefect", String.valueOf(i.isDefect()));
     }

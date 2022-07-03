@@ -50,7 +50,7 @@ public class ProductDao extends DAO {
         //assuming uniqe pid's
         try {
             return new Product(p.get(0)[1], p.get(0)[2], Integer.parseInt(p.get(0)[3]),
-                    Integer.parseInt(p.get(0)[4]), Integer.parseInt(p.get(0)[6]), true);
+                    Integer.parseInt(p.get(0)[4]), Integer.parseInt(p.get(0)[5]), true);
         } catch (NumberFormatException e) {
             throw new NumberFormatException();
         }
@@ -71,10 +71,39 @@ public class ProductDao extends DAO {
         identityMap.remove(p);
     }
 
-    public void updateAmount(Product p){
+    private void setAttribute(Product p, String attribute, String value){
         String[] keys = {"product_id"};
         String[] keysVals = {p.getID()};
-        update("Products", keys, keysVals, "amount", String.valueOf(p.getAmount()));
+        update("Products", keys, keysVals, attribute, String.valueOf(value));
+
+    }
+
+    public void updateAmount(Product p){
+        setAttribute(p, "amount", String.valueOf(p.getAmount()));
+    }
+
+    public void setID(Product p){
+        setAttribute(p, "product_id", p.getID());
+    }
+
+    public void setName(Product p){
+        setAttribute(p, "name", p.getName());
+    }
+
+    public void setManufacturer(Product p){
+        setAttribute(p, "manufacturer", p.getManufacturer());
+    }
+
+    public void setAmountToNotify(Product p){
+        setAttribute(p, "amountToNotify", String.valueOf(p.getAmountToNotify()));
+    }
+
+    public void setCategoryID(Product p){
+        setAttribute(p, "categoryID", String.valueOf(p.getCategoryID()));
+    }
+
+    public void setDemand(Product p){
+        setAttribute(p, "demand", String.valueOf(p.getDemand()));
     }
 
 
@@ -104,7 +133,6 @@ public class ProductDao extends DAO {
         }
     }
 
-
     public List<Category> loadCategories(){
         List<Category> cats = new LinkedList();
         List<String[]> sFromDB = load("Category", null, null);
@@ -128,7 +156,6 @@ public class ProductDao extends DAO {
 
         return cats;
     }
-
 
     public List<Discount> loadDiscounts(){
         List<String[]> sFromDB = load("Discounts", null, null);

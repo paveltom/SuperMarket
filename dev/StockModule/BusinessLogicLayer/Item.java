@@ -93,29 +93,35 @@ public class Item {
         return expireDate;
     }
 
-    // todo: add dao
+
     public void setProductID(String productID) {
         this.productID = productID;
+        dao.setProductId(this);
     }
 
     public void setLocation(String location) {
         this.location = location;
+        dao.setLocation(this);
     }
 
     public void setExpireDate(Date expireDate) {
         this.expireDate = expireDate;
+        dao.setExpireDate(this);
     }
 
     public void setDefect(boolean defect) {
         isDefect = defect;
+        dao.setDefect(this);
     }
 
     public void setExpired(boolean expired) {
         isExpired = expired;
+        dao.setExpired(this);
     }
 
     public void setAmount(int amount) {
         this.amount = amount;
+        dao.setAmount(this);
     }
 
     public boolean updateAttribute(int Attribute, Object Value){
