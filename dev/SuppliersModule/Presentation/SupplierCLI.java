@@ -217,38 +217,38 @@ public class SupplierCLI {
         float price;
 
         do {
-            System.out.println("insert supplier id\n");
+            System.out.println("insert supplier id");
             sId = in.nextLine();
             if (sId.isEmpty())
-                System.out.println("incorrect input\n");
+                System.out.println("incorrect input");
         }while (sId.isEmpty());
 
         do {
-            System.out.println("insert bank account\n");
+            System.out.println("insert bank account");
             bankAccount = in.nextLine();
             if (bankAccount.isEmpty())
-                System.out.println("incorrect input\n");
+                System.out.println("incorrect input");
         }while (bankAccount.isEmpty());
 
         do {
-            System.out.println("insert name\n");
+            System.out.println("insert name");
             name = in.nextLine();
             if (name.isEmpty())
-                System.out.println("incorrect input\n");
+                System.out.println("incorrect input");
         }while (name.isEmpty());
 
         do {
-            System.out.println("insert address\n");
+            System.out.println("insert address");
             address = in.nextLine();
             if (address.isEmpty())
-                System.out.println("incorrect input\n");
+                System.out.println("incorrect input");
         }while (address.isEmpty());
 
         while (true) {
-            System.out.println("using cash? insert y/n\n");
+            System.out.println("using cash? insert y/n");
             String sCash = in.nextLine();
             if(!(sCash.equals("y")) && !(sCash.equals("n")))
-                System.out.println("incorrect input\n");
+                System.out.println("incorrect input");
             else {
                 cash = sCash.equals("y");
                 break;
@@ -256,10 +256,10 @@ public class SupplierCLI {
         }
 
         while (true) {
-            System.out.println("using credit? insert y/n\n");
+            System.out.println("using credit? insert y/n");
             String sCredit = in.nextLine();
             if(!(sCredit.equals("y")) && !(sCredit.equals("n")))
-                System.out.println("incorrect input\n");
+                System.out.println("incorrect input");
             else {
                 credit = sCredit.equals("y");
                 break;
@@ -267,10 +267,10 @@ public class SupplierCLI {
         }
 
         while (true) {
-            System.out.println("insert working days with 7 digits, 1 for working and 0 for not working, starting from Sunday, e.g 1111100\n");
+            System.out.println("insert working days with 7 digits, 1 for working and 0 for not working, starting from Sunday, e.g 1111100");
             String sWorkingDays = in.nextLine();
             if(!isStringBoolean7(sWorkingDays))
-                System.out.println("incorrect input\n");
+                System.out.println("incorrect input");
             else {
                 workingDays = stringToBoolean7(sWorkingDays);
                 break;
@@ -278,34 +278,34 @@ public class SupplierCLI {
         }
 
         do {
-            System.out.println("insert contact name\n");
+            System.out.println("insert contact name");
             contactName = in.nextLine();
             if (contactName.isEmpty())
-                System.out.println("incorrect input\n");
+                System.out.println("incorrect input");
         }while (contactName.isEmpty());
 
         do {
-            System.out.println("insert contact phone-number\n");
+            System.out.println("insert contact phone-number");
             phoneNum = in.nextLine();
             if (phoneNum.isEmpty())
-                System.out.println("incorrect input\n");
+                System.out.println("incorrect input");
         }while (phoneNum.isEmpty());
 
-        String choice = "";
+        String choice;
         do {
             System.out.println("choose ordering cycle: \n" +
                     "1. weekly \n" +
                     "2. a number of fix days\n");
             choice = in.nextLine();
             if (!choice.equals("1") && !choice.equals("2"))
-                System.out.println("incorrect input\n");
+                System.out.println("incorrect input");
         }while (!choice.equals("1") && !choice.equals("2"));
         if (choice.equals("1")){
             while (true) {
-                System.out.println("insert order days with 7 digits, 1 for order day and 0 for not, starting from Sunday, e.g 1000100\n");
+                System.out.println("insert order days with 7 digits, 1 for order day and 0 for not, starting from Sunday, e.g 1000100");
                 String sOrderingDays = in.nextLine();
                 if(!isStringBoolean7(sOrderingDays))
-                    System.out.println("incorrect input\n");
+                    System.out.println("incorrect input");
                 else {
                     orderingDays = stringToBoolean7(sOrderingDays);
                     break;
@@ -314,10 +314,10 @@ public class SupplierCLI {
         }
         else {
             while (true) {
-                System.out.println("insert a number of fix days\n");
+                System.out.println("insert a number of fix days");
                 String sCycle = in.nextLine();
                 if(!isStringInt(sCycle) || Integer.parseInt(sCycle) < 1)
-                    System.out.println("incorrect input\n");
+                    System.out.println("incorrect input");
                 else {
                     orderCycle = Integer.parseInt(sCycle);
                     break;
@@ -326,24 +326,24 @@ public class SupplierCLI {
         }
 
         do {
-            System.out.println("insert product id\n");
+            System.out.println("insert product id");
             pId = in.nextLine();
             if (pId.isEmpty())
-                System.out.println("incorrect input\n");
+                System.out.println("incorrect input");
         }while (pId.isEmpty());
 
         do {
-            System.out.println("insert catalog number\n");
+            System.out.println("insert catalog number");
             catNumber = in.nextLine();
             if (catNumber.isEmpty())
-                System.out.println("incorrect input\n");
+                System.out.println("incorrect input");
         }while (catNumber.isEmpty());
 
         while (true) {
-            System.out.println("insert price\n");
+            System.out.println("insert price");
             String sPrice = in.nextLine();
             if(!isStringFloat(sPrice) || Float.parseFloat(sPrice) <= 0)
-                System.out.println("incorrect input\n");
+                System.out.println("incorrect input");
             else {
                 price = Float.parseFloat(sPrice);
                 break;
@@ -353,12 +353,10 @@ public class SupplierCLI {
         Response r = ss.addSupplier(sId, name, address, bankAccount, cash, credit, workingDays, contactName, phoneNum,
                                     orderingDays, orderCycle, pId, catNumber, price);
 
-        if (r.ErrorOccurred()) {
+        if (r.ErrorOccurred())
             System.out.println("action failed: " + r.getErrorMessage() + "\n");
-            addSuppliers();
-        }
-        else
-            manageSuppliers();
+
+        manageSuppliers();
     }
 
     private void addContact(){
@@ -490,7 +488,7 @@ public class SupplierCLI {
 //////////////////////////////////////////////////////////////////////////////
     private boolean isStringFloat(String testString) {
         try {
-            float f = Float.parseFloat(testString);
+            Float.parseFloat(testString);
         } catch (Exception e) {
             return false;
         }
@@ -499,7 +497,7 @@ public class SupplierCLI {
 
     private boolean isStringInt(String testString) {
         try {
-            int i = Integer.parseInt(testString);
+            Integer.parseInt(testString);
         } catch (Exception e) {
             return false;
         }
