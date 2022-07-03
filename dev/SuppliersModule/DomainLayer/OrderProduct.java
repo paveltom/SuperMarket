@@ -57,12 +57,12 @@ public class OrderProduct {
         dao.setFinalPrice(this);
     }
 
-    public OrderProduct(String sId, String oId, String id, float catalogPrice, int amount, float discount, float finalPrice) {
+    public OrderProduct(String sId, String oId, String pId, float catalogPrice, int amount, float discount, float finalPrice) {
         if(catalogPrice <= 0 )
             throw new IllegalArgumentException("price of product must be positive");
 
         dao = new OrderProductDao();
-        this.id = id;
+        this.id = pId;
         this.catalogPrice = catalogPrice;
         this.amount = amount;
         this.discount = discount;
