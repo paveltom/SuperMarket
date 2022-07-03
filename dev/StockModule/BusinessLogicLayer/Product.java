@@ -141,7 +141,8 @@ public class Product {
 
     public void setWeight(double weight) {
         this.weight = weight;
-        dao.setWeight(this);
+        //todo
+        //dao.setWeight(this);
     }
 
     public void setAmount(int amount) {
