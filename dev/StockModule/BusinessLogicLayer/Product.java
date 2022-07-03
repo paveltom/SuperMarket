@@ -20,7 +20,7 @@ public class Product {
     public Product(String name, String manufacturer, int amountToNotify, int categoryID, int demand)
     {
         dao = new ProductDao();
-        this.ID = (name+manufacturer).replaceAll(" ", "_");
+        this.ID = (name+manufacturer);
         this.name = name;
         this.manufacturer = manufacturer;
         this.amount = 0;
