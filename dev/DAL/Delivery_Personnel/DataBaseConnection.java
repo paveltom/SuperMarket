@@ -271,13 +271,6 @@ public class DataBaseConnection {
                 " PRIMARY KEY(Id)" + ");";
 
 
-
-
-
-
-
-
-
         String stockSupCategory = "CREATE TABLE Category(" +
                 "category_id TEXT," +
                 "name TEXT," +
@@ -350,6 +343,7 @@ public class DataBaseConnection {
                 "name TEXT, " +
                 "manufacturer TEXT, " +
                 "amountToNotify TEXT, " +
+                "weight TEXT, " +
                 "categoryID TEXT, " +
                 "demand TEXT, " +
                 "PRIMARY KEY(product_id));";
@@ -378,6 +372,11 @@ public class DataBaseConnection {
                 "orderCycle TEXT, " +
                 "daysAcc TEXT," +
                 "PRIMARY KEY(supplier_id));";
+
+        String stockSupSupplyDeliveryErrors = "CREATE TABLE DeliveryErrors (" +
+                "order_id, " +
+                "msg, " +
+                "PRIMARY KEY(order_id));";
 
 
 
@@ -410,6 +409,7 @@ public class DataBaseConnection {
             stmt.execute(stockSupQuantityAgreements);
             stmt.execute(stockSupSuppliers);
             stmt.execute(stockSupSupplyTimes);
+            stmt.execute(stockSupSupplyDeliveryErrors);
 
             System.out.println("DB and Tables created successfully...");
             stmt.close();
