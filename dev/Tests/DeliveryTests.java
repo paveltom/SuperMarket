@@ -27,6 +27,8 @@ public class DeliveryTests {
     Service service;
     PersonelModule.BusinessLayer.ServiceLayer.Service perService;
 
+    private boolean[] supplierDays = {true, true, true, true, true, true, true};
+
     @Before
     public void setUp() throws Exception {
         DALController.getInstance().deleteDB();
@@ -56,7 +58,7 @@ public class DeliveryTests {
         assertFalse(history.getErrorOccurred());
         assertFalse(history.getValue().contains("Order:"));
 
-        ResponseT<String> res = service.deliver(facadeSiteNumber(1, "Golan"), facadeSiteNumber(2, "Golan"), "135792468", listOfFacProducts(), facadeDate(0));
+        ResponseT<String> res = service.deliver(facadeSiteNumber(1, "Golan"), facadeSiteNumber(2, "Golan"), "135792468", listOfFacProducts(), facadeDate(0), supplierDays);
         assertFalse(res.getErrorOccurred());
 
         res = service.getDeliveryHistory();
@@ -75,10 +77,10 @@ public class DeliveryTests {
         assertFalse(history.getErrorOccurred());
         assertFalse(history.getValue().contains("Order:"));
 
-        ResponseT<String> res1 = service.deliver(facadeSiteNumber(1, "Golan"), facadeSiteNumber(2, "Golan"), "135792468", listOfFacProducts(), facadeDate(0));
+        ResponseT<String> res1 = service.deliver(facadeSiteNumber(1, "Golan"), facadeSiteNumber(2, "Golan"), "135792468", listOfFacProducts(), facadeDate(0), supplierDays);
         assertFalse(res1.getErrorOccurred());
 
-        ResponseT<String> res2 = service.deliver(facadeSiteNumber(3, "Negev"), facadeSiteNumber(4, "Negev"), "135792468", listOfFacProducts(), facadeDate(0));
+        ResponseT<String> res2 = service.deliver(facadeSiteNumber(3, "Negev"), facadeSiteNumber(4, "Negev"), "135792468", listOfFacProducts(), facadeDate(0), supplierDays);
         assertTrue(res2.getErrorOccurred()); // Fail: Unable to deliver: There is no available driver
 
         history = service.getDeliveryHistory();
@@ -99,7 +101,7 @@ public class DeliveryTests {
         assertFalse(history.getErrorOccurred());
         assertFalse(history.getValue().contains("Order:"));
 
-        ResponseT<String> res = service.deliver(facadeSiteNumber(1, "Golan"), facadeSiteNumber(2, "Golan"), "135792468", listOfFacProducts(), facadeDate(0));
+        ResponseT<String> res = service.deliver(facadeSiteNumber(1, "Golan"), facadeSiteNumber(2, "Golan"), "135792468", listOfFacProducts(), facadeDate(0), supplierDays);
         assertTrue(res.getErrorOccurred());
     }
 
@@ -112,7 +114,7 @@ public class DeliveryTests {
         assertFalse(history.getErrorOccurred());
         assertFalse(history.getValue().contains("Order:"));
 
-        ResponseT<String> res = service.deliver(facadeSiteNumber(1, "Golan"), facadeSiteNumber(2, "Golan"), "135792468", listOfFacProducts(), facadeDate(0));
+        ResponseT<String> res = service.deliver(facadeSiteNumber(1, "Golan"), facadeSiteNumber(2, "Golan"), "135792468", listOfFacProducts(), facadeDate(0), supplierDays);
         assertTrue(res.getErrorOccurred());
     }
 
@@ -125,7 +127,7 @@ public class DeliveryTests {
         assertFalse(history.getErrorOccurred());
         assertFalse(history.getValue().contains("Order:"));
 
-        ResponseT<String> res = service.deliver(facadeSiteNumber(1, "Golan"), facadeSiteNumber(2, "Golan"), "135792468", listOfFacProducts(), facadeDate(0));
+        ResponseT<String> res = service.deliver(facadeSiteNumber(1, "Golan"), facadeSiteNumber(2, "Golan"), "135792468", listOfFacProducts(), facadeDate(0), supplierDays);
         assertTrue(res.getErrorOccurred());
     }
 
@@ -138,7 +140,7 @@ public class DeliveryTests {
         assertFalse(history.getErrorOccurred());
         assertFalse(history.getValue().contains("Order:"));
 
-        ResponseT<String> res = service.deliver(facadeSiteNumber(1, "Golan"), facadeSiteNumber(2, "Golan"), "135792468", listOfFacProducts(), facadeDate(0));
+        ResponseT<String> res = service.deliver(facadeSiteNumber(1, "Golan"), facadeSiteNumber(2, "Golan"), "135792468", listOfFacProducts(), facadeDate(0), supplierDays);
         assertFalse(res.getErrorOccurred());
 
         history = service.getDeliveryHistory();
@@ -160,7 +162,7 @@ public class DeliveryTests {
         assertFalse(history.getErrorOccurred());
         assertFalse(history.getValue().contains("Order:"));
 
-        ResponseT<String> res = service.deliver(facadeSiteNumber(1, "Golan"), facadeSiteNumber(2, "Golan"), "135792468", listOfFacProducts(), facadeDate(0));
+        ResponseT<String> res = service.deliver(facadeSiteNumber(1, "Golan"), facadeSiteNumber(2, "Golan"), "135792468", listOfFacProducts(), facadeDate(0), supplierDays);
         assertFalse(res.getErrorOccurred());
         String[] included = {"Order: 135792468", "Supplier", "testAddress1", "testContact1", "01234567891",
                                                  "Client", "testAddress2", "testContact2", "01234567892",
@@ -281,7 +283,7 @@ public class DeliveryTests {
 
         service.addConstraints("987654321", facDate, 0);
         service.addConstraints("987654321", facDate, 1);
-        ResponseT<String> res = service.deliver(facadeSiteNumber(1, "Golan"), facadeSiteNumber(2, "Golan"), "135792468", listOfFacProducts(), facDate);
+        ResponseT<String> res = service.deliver(facadeSiteNumber(1, "Golan"), facadeSiteNumber(2, "Golan"), "135792468", listOfFacProducts(), facDate, supplierDays);
 
         assertFalse(res.getErrorOccurred());
 

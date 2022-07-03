@@ -139,7 +139,7 @@ public class PresentationController {
         // Creating list of products
         operateOutput("-----------Enter product ID and its amount.-----------");
         operateOutput("-----------Enter 0 at any Product Id to FINISH----------");
-        operateOutput("-----------Enter 0 at any Amount to CANCEL----------");
+        operateOutput("-----------Enter 0 at any Amount to CANCEL the delivery order----------");
         Map<Integer, Integer> products = new HashMap<Integer, Integer>() {{
             put(123, 1000);
             put(456, 500);
@@ -182,15 +182,34 @@ public class PresentationController {
             }
 
         }
-
         if(productList.size() == 0) return 0;
+
+        boolean[] allDaySupplier = {true, true, true, true, true, true, true};
+        boolean[] supplierWorkingDays = null;
+
+        operateOutput("-----------Enter supplier's working days array (exmpl: 0011100)----------");
+        operateOutput("***Enter 0 to cancel the delivery order");
+        operateOutput("***Enter 1 if the supplier works every day");
+
+        while(supplierWorkingDays == null) {
+            String input = operateInput("");
+            if (input.equals("0")) return 0;
+            if (input.equals("1")) {
+                supplierWorkingDays = allDaySupplier;
+                break;
+            }
+            supplierWorkingDays = checkSupplierWorkingDaysInput(input);
+            if (supplierWorkingDays == null) {
+                operateOutput("Bad input. Try again...");
+            }
+        }
 
         LocalDate currTime = LocalDate.now();
         FacadeDate facDate = new FacadeDate(currTime.getDayOfMonth(), currTime.getMonthValue(), currTime.getYear());
 
         String id = Long.toUnsignedString(System.currentTimeMillis()); //unique order Id
         //String id = Integer.toUnsignedString((int)System.currentTimeMillis()); //unique order Id
-        ResponseT<String> res = service.deliver(origin, destination, id, productList, facDate);
+        ResponseT<String> res = service.deliver(origin, destination, id, productList, facDate, supplierWorkingDays);
         if(res.getErrorOccurred()){
             operateOutput("Cannot add this delivery. " + res.getErrorMessage());
             return 0;
@@ -198,6 +217,19 @@ public class PresentationController {
         operateOutput(res.getValue());
         operateOutput("");
         return 0;
+    }
+
+    private boolean[] checkSupplierWorkingDaysInput(String input){
+        boolean[] out = {true, true, true, true, true, true, true};
+        String line = input.replaceAll(" ", "");
+        if(line.length() != 7) return null;
+        for(int i = 0; i < out.length; i++){
+            if(line.charAt(i) != '1') {
+                if (line.charAt(i) == '0') out[i] = false;
+                else return null;
+            }
+        }
+        return out;
     }
 
     public boolean checkAddDeliverySiteInput(int i, String input){
