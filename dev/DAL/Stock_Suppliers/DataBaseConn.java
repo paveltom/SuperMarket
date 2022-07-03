@@ -11,7 +11,7 @@ public class DataBaseConn {
     private String[] supplyTimes = {"supplier_id", "orderingDays", "orderCycle", "daysAcc"};
     private String[] contacts = {"supplier_id", "contactName", "phoneNum"};
     private String[] product_order = {"supplier_id", "product_id", "order_id", "quantity", "discount", "finalPrice", "catalogPrice"};
-    private String[] products = {"product_id", "name", "manufacturer", "amountToNotify", "categoryID", "demand"};
+    private String[] products = {"product_id", "name", "manufacturer", "amountToNotify", "categoryID", "demand", "weight"};
     private String[] product_contract = {"supplier_id", "product_id", "price", "is_periodic_order", "catalogNum"};
     private String[] quantityAgreements = {"supplier_id", "product_id", "quantity", "discount"};
     private String[] discounts = {"discount_id", "product_id", "discountStartDate", "discountEndDate", "discountAmount", "discountType"};

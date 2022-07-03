@@ -34,7 +34,7 @@ public class Product {
     }
 
     //db
-    public Product(String name, String manufacturer,double weight, int amountToNotify,  int categoryID, int demand, boolean isFromDB) {
+    public Product(String name, String manufacturer, int amountToNotify,  int categoryID, int demand,double weight, boolean isFromDB) {
         this.dao = new ProductDao();
         this.ID = name + manufacturer;
         this.name = name;
