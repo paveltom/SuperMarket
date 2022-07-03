@@ -125,7 +125,7 @@ public class ProductDao extends DAO {
     private Item makeItem(String[] s){
         try {
             return new Item(s[1], s[0],
-                    new SimpleDateFormat("dd/MM/yyyy").parse(s[2]),
+                    new SimpleDateFormat("E MMM dd HH:mm:ss Z yyyy").parse(s[2]),
                     Boolean.parseBoolean(s[3]), Boolean.parseBoolean(s[4]), Integer.parseInt(s[5]),
                     true);
         } catch (ParseException e) {
@@ -166,8 +166,8 @@ public class ProductDao extends DAO {
                 int id = Integer.valueOf(s[0]);
                 String pid = s[1];
                 try {
-                    Date startd = new SimpleDateFormat("dd/MM/yyyy").parse(s[2]);
-                    Date endd = new SimpleDateFormat("dd/MM/yyyy").parse(s[3]);
+                    Date startd = new SimpleDateFormat("E MMM dd HH:mm:ss Z yyyy").parse(s[2]);
+                    Date endd = new SimpleDateFormat("E MMM dd HH:mm:ss Z yyyy").parse(s[3]);
                     int amount = Integer.valueOf(s[4]);
                     Type t = Type.PERCENT;
                     if (s[4].equals("1"))
