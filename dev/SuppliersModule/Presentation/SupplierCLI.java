@@ -475,7 +475,7 @@ public class SupplierCLI {
         String quantity = in.nextLine();
         System.out.println("Insert discount\n");
         String discount = in.nextLine();
-        if(isStringInt(quantity) && isStringFloat(discount) && Integer.parseInt(quantity) > 0 && Float.parseFloat(discount) > 0) {
+        if(isStringInt(quantity) && isStringFloat(discount) && Integer.parseInt(quantity) > 0 && Float.parseFloat(discount) >= 0) {
             Response r = ss.updateDiscount(sId, pId, Integer.parseInt(quantity), Float.parseFloat(discount));
             if (r.ErrorOccurred())
                 System.out.println("Action failed: " + r.getErrorMessage() + "\n");
