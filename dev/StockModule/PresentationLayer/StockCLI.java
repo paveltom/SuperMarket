@@ -430,8 +430,11 @@ public class StockCLI {
                     ExitStockModule();
                     break;
                 }
+                default: {
+                    System.out.println("Invalid input, try again");
+                }
             }
-            System.out.println("Invalid input, try again");
+
         }
     }
 
