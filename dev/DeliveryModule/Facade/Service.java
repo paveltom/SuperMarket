@@ -39,6 +39,8 @@ public class Service implements IService{
         return deliveryService.getDeliveryHistory();
     }
 
+    public ResponseT<String> getFailedDeliveriesHistory(){ return deliveryService.getFailedDeliveriesHistory();}
+
     public Response addDriver(FacadeDriver facadeDriver){
         return deliveryResourcesService.addDriver(facadeDriver);
     }

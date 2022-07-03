@@ -167,6 +167,7 @@ public class PresentationController {
                 while (!productMap.containsKey(productId)) {
                     operateOutput("No such product...");
                     productId = operateInput("Product ID: ");
+                    if(productId.equals("0")) return 0;
                 }
                 productAmount = Integer.parseInt(operateInput("Amount: "));
                 if (productAmount == 0) return 0;
@@ -177,7 +178,7 @@ public class PresentationController {
                 }
 
                 operateOutput("Product weight: " + productMap.get(productId).getWeight() + ". Total: " + (productMap.get(productId).getWeight()*productAmount));
-                FacadeProduct currProduct = new FacadeProduct(Integer.parseInt(productId), productAmount, productMap.get(productId).getWeight());
+                FacadeProduct currProduct = new FacadeProduct(productId, productAmount, productMap.get(productId).getWeight());
                 productList.add(currProduct);
                 operateOutput("");
                 productId = operateInput("Product ID: ");
@@ -473,6 +474,13 @@ public class PresentationController {
         return  res;
     }
 
+    private int getFailedDeliveriesHistory(){
+        ResponseT<String> res = service.getFailedDeliveriesHistory();
+        if(res.getErrorOccurred()) return 1;
+        operateOutput(res.getValue());
+        return 0;
+    }
+
 
     private void setMenus(){
         String[] resourcesMenuStrings = {"Exit", "Back", "Add truck", "Remove truck", "Show all drivers", "Show all trucks", "Get driver by ID", "Get truck by license plate"};
@@ -489,12 +497,13 @@ public class PresentationController {
         resourceMenu = new CallableMenu(resourceOpts, resourcesMenuStrings);
 
 
-        String[] deliveryMenuStrings = {"Exit", "Back", "New delivery", "Show deliveries history", "Cancel delivery", "Show shipping zones"};
+        String[] deliveryMenuStrings = {"Exit", "Back", "New delivery", "Show deliveries history", "Cancel delivery", "Show shipping zones", "Show failed deliveries"};
         Map<Integer, CallableMenu> deliveryOpts = new HashMap<Integer, CallableMenu>(){{
             put(2, new CallableMenu(() -> addDelivery()));
             put(3, new CallableMenu(() -> getDeliveriesHistory()));
             put(4, new CallableMenu(() -> cancelDelivery()));
             put(5, new CallableMenu(() -> showShippingZones()));
+            put(6, new CallableMenu(() -> getFailedDeliveriesHistory()));
         }};
         deliveryMenu = new CallableMenu(deliveryOpts, deliveryMenuStrings);
 

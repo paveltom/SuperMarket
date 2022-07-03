@@ -28,8 +28,8 @@ public class DeliveryControllerTest {
     final double TRUCK_NET_WEIGHT = 1000000.00, TRUCK_LOAD_WEIGHT = 4500000.00,
             P1_WEIGHT = 2502.55, P2_WEIGHT = 354.123;
     final String TRUCK_LICENSE_NUMBER = "496351";
-    final int P1_AMOUNT = 2000, P1_ID = 12, P2_AMOUNT = 78, P2_ID = 27;
-
+    final int P1_AMOUNT = 2000, P2_AMOUNT = 78;
+    final String P1_ID = "12", P2_ID = "27";
     final Site supplier = new Site(srcZone, srcAddr, srcName, srcCell);
     final Site client = new Site(dstZone, dstAddr, dstName, dstCell);
 
@@ -413,7 +413,7 @@ public class DeliveryControllerTest {
         testObj.AddTruck(TRUCK_LOAD_WEIGHT, TRUCK_NET_WEIGHT, TRUCK_LICENSE_NUMBER, TRUCK_MODEL, srcZone);
 
         Date prev_date = null;
-        int norders = 32;
+        int norders = 28;
         while (norders-- > 0)
         {
             DeliveryOrder deliveryOrder = new DeliveryOrder(supplier, client, String.valueOf(norders), products, submissionDate);
@@ -428,9 +428,9 @@ public class DeliveryControllerTest {
         }
         // expect next available delivery date to be one week later than submissionDate
         Receipt r = testObj.Deliver(new DeliveryOrder(supplier, client, String.valueOf(--norders), products, submissionDate));
+        System.out.println(r);
         assertEquals(RetCode.FailedDelivery_CannotDeliverWithinAWeek, r.Status);
     }
-
 
     @Test
     public void clear()
