@@ -47,9 +47,11 @@ public class CategoryDao extends DAO {
         int[][] relations = new int[sFromDB.size()][2];
 
         int i = 0;
-        for(String[] s : sFromDB){
-            relations[i][0] = Integer.valueOf(s[0]);
-            relations[i][1] = Integer.valueOf(s[1]);
+        if(sFromDB != null) {
+            for (String[] s : sFromDB) {
+                relations[i][0] = Integer.valueOf(s[0]);
+                relations[i][1] = Integer.valueOf(s[1]);
+            }
         }
 
         return relations;
