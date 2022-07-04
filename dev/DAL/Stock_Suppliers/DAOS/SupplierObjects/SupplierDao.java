@@ -105,8 +105,10 @@ public class SupplierDao extends DAO {
         String[] paramsWV = {s.getsId()};
         List<String[]> sFromDB = load("Product_Contract", paramsW, paramsWV);
 
-        for(String[] p : sFromDB){
-            output.add(0, makeCatalogProduct(p));
+        if(sFromDB != null) {
+            for (String[] p : sFromDB) {
+                output.add(0, makeCatalogProduct(p));
+            }
         }
 
         return output;
@@ -139,8 +141,10 @@ public class SupplierDao extends DAO {
         String[] paramsWV = {sId};
         List<String[]> sFromDB = load("Orders", paramsW, paramsWV);
 
-        for(String[] o : sFromDB){
-            output.add(0, makeOrder(o));
+        if(sFromDB != null) {
+            for (String[] o : sFromDB) {
+                output.add(0, makeOrder(o));
+            }
         }
 
         return output;
@@ -162,8 +166,10 @@ public class SupplierDao extends DAO {
         List<String[]> st = load("Contacts",paramsW, paramsWV);
 
         Map<String,String> contacts = new Hashtable<>();
-        for(String[] s : st){
-            contacts.put(s[1], s[2]);
+        if(st!=null) {
+            for (String[] s : st) {
+                contacts.put(s[1], s[2]);
+            }
         }
 
         return contacts;
