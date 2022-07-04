@@ -139,6 +139,8 @@ public class Supplier {
         List<String> cp = contract.endDay();
         if(cp != null && !cp.isEmpty()) {
             Map<String, Integer> prodQuantities = oc.orderPeriodic(cp, contract.getPeriodicOrderInterval());
+            if(prodQuantities.isEmpty())
+               return;
             String phone = contacts.entrySet().stream().findFirst().get().getValue();
             Order order = new Order(sId+LocalDate.now(), sId, name, address, LocalDate.now(), phone);
             for (Map.Entry<String, Integer> entry : prodQuantities.entrySet()) {
